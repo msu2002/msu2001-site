@@ -766,6 +766,34 @@
     }
     return res.replace(/\s+/g, " ").trim();
   };
+  let _ocr = null;
+  function loadScriptOnce(src) { return new Promise((res, rej) => { const s = document.createElement("script"); s.src = src; s.onload = res; s.onerror = () => rej(new Error("تعذّر تحميل ملفات التعرف الضوئي (مجلد ocr)")); document.head.appendChild(s); }); }
+  async function getOcr() {
+    if (_ocr) return _ocr;
+    if (!window.Tesseract) await loadScriptOnce("ocr/tesseract.min.js");
+    const base = new URL("ocr/", location.href).href.replace(/\/$/, "");
+    _ocr = await window.Tesseract.createWorker(["ara", "eng"], 1, { workerPath: base + "/worker.min.js", corePath: base, langPath: base, gzip: true, logger: () => {} });
+    return _ocr;
+  }
+  async function ocrItems(pdf, pi, W, H) {
+    const sc = Math.min(300 / 72, 3200 / Math.max(W, H)), c = await renderPage(pdf, pi, sc), w = await getOcr(), out = [];
+    /* erase long straight lines (table borders) so they don't confuse recognition */
+    { const cx = c.getContext("2d", { willReadFrequently: true }), id = cx.getImageData(0, 0, c.width, c.height), a = id.data, cw = c.width, ch = c.height, minRun = Math.round(sc * 90), dark = (i) => (a[i] + a[i + 1] + a[i + 2]) / 3 < 140;
+      for (let y = 0; y < ch; y++) { let s = -1; for (let x = 0; x <= cw; x++) { const d = x < cw && dark((y * cw + x) * 4); if (d && s < 0) s = x; else if (!d && s >= 0) { if (x - s >= minRun) for (let k = s; k < x; k++) { const i = (y * cw + k) * 4; a[i] = a[i + 1] = a[i + 2] = 255; } s = -1; } } }
+      for (let x = 0; x < cw; x++) { let s = -1; for (let y = 0; y <= ch; y++) { const d = y < ch && dark((y * cw + x) * 4); if (d && s < 0) s = y; else if (!d && s >= 0) { if (y - s >= minRun) for (let k = s; k < y; k++) { const i = (k * cw + x) * 4; a[i] = a[i + 1] = a[i + 2] = 255; } s = -1; } } }
+      cx.putImageData(id, 0, 0); }
+    const res = await w.recognize(c);
+    const med = (a) => { const s = a.slice().sort((x, y) => x - y); return s[Math.floor(s.length / 2)]; };
+    for (const ln of res.data.lines || []) {
+      let ws = (ln.words || []).filter((x) => x.text && /[\p{L}\p{N}]/u.test(x.text) && x.confidence > 25); if (!ws.length) continue;
+      const arN = ws.filter((x) => /[\u0600-\u06FF]/.test(x.text)).length;
+      if (arN >= ws.length / 2) ws = ws.filter((x) => /[\u0600-\u06FF\d]/.test(x.text) || x.confidence >= 85 || x.text.length > 5);
+      if (!ws.length) continue;
+      const hh = med(ws.map((x) => x.bbox.y1 - x.bbox.y0)) / sc, size = Math.max(6, Math.min(40, hh * 0.85)), base = med(ws.map((x) => x.bbox.y1)) / sc - size * 0.22;
+      for (const x of ws) out.push({ str: x.text.trim(), x: x.bbox.x0 / sc, y: base, w: (x.bbox.x1 - x.bbox.x0) / sc, size, real: "" });
+    }
+    return out;
+  }
   async function op_toword(p) {
     const f = getF(p.id), pdf = await getPdf(p.id), n = pdf.numPages, pagesSel = parsePages(p.pages, n), log = [];
     const zip = new JSZip(), rels = [], media = []; let relN = 10, imgN = 0, docPr = 1; const body = [];
@@ -774,8 +802,8 @@
     for (const pi of pagesSel) {
       const page = await pdf.getPage(pi + 1), vp = page.getViewport({ scale: 1 }), W = vp.width, H = vp.height;
       const tc = await page.getTextContent();
-      const { rects, ol } = await pageImages(page, vp);
-      const items = [];
+      let { rects } = await pageImages(page, vp);
+      let items = [];
       for (const t of tc.items) {
         if (!t.str || !t.str.trim()) continue;
         const tr = t.transform, size = Math.hypot(tr[2], tr[3]) || Math.abs(tr[3]) || 10;
@@ -783,7 +811,11 @@
         let real = ""; try { if (page.commonObjs.has(t.fontName)) real = page.commonObjs.get(t.fontName).name || ""; } catch (e) {}
         items.push({ str: t.str, x: tr[4], y: H - tr[5], w: t.width, size, real });
       }
-      const chars = items.reduce((s, it) => s + it.str.trim().length, 0);
+      let chars = items.reduce((s, it) => s + it.str.trim().length, 0), ocrPage = false;
+      if (chars < 20 && p.ocr !== false) {
+        try { const oi = await ocrItems(pdf, pi, W, H); if (oi.reduce((s, it) => s + it.str.length, 0) >= 5) { items = oi; rects = []; ocrPage = true; chars = 99; log.push(`الصفحة ${pi + 1}: صفحة ممسوحة — حُوّلت بالتعرّف الضوئي (OCR) إلى نص قابل للتعديل، فراجع النص.`); } }
+        catch (err) { log.push(`تعذّر التعرّف الضوئي للصفحة ${pi + 1}: ${err.message}`); }
+      }
       const sec = { top: 28, left: 28, right: 28, bottom: 14 };
       const paras = [];
       let curY = sec.top;
@@ -813,10 +845,10 @@
         const big = L.items.reduce((m, i) => (i.str.trim().length > (m ? m.str.trim().length : 0) ? i : m), null); L.real = big ? big.real : "";
         L.bold = /bold|black|heavy|demi/i.test(L.real); L.italic = /italic|oblique/i.test(L.real);
         L.segs = []; let cur = [L.items[0]];
-        for (let k = 1; k < L.items.length; k++) { const pv = L.items[k - 1], it = L.items[k]; if (it.x - (pv.x + pv.w) > 1.6 * L.size) { L.segs.push(cur); cur = []; } cur.push(it); }
+        for (let k = 1; k < L.items.length; k++) { const pv = L.items[k - 1], it = L.items[k]; if (it.x - (pv.x + pv.w) > 2.0 * L.size) { L.segs.push(cur); cur = []; } cur.push(it); }
         L.segs.push(cur);
         L.segs = L.segs.map((s) => { const x0 = Math.min(...s.map((i) => i.x)), x1 = Math.max(...s.map((i) => i.x + i.w)), t = s.map((i) => i.str).join(""), rt = hasArabic(t); return { items: s, x0, x1, text: joinItems(s, rt), rtl: rt }; });
-        L.text = L.segs.length === 1 ? L.segs[0].text : null;
+        L.text = L.segs.length === 1 ? L.segs[0].text : joinItems(L.items, L.rtl);
       }
       const minX = Math.max(10, Math.min(...lines.map((l) => l.x0))), maxX = Math.min(W - 10, Math.max(...lines.map((l) => l.x1)));
       sec.left = Math.max(10, Math.min(minX, W / 2 - 40)); sec.right = Math.max(10, W - maxX); sec.top = Math.max(10, Math.min(lines[0].y - lines[0].size * 1.0, 200)); curY = sec.top;
