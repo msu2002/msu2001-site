@@ -164,7 +164,7 @@ canvas#sigpad{width:100%;height:130px;border:1px solid var(--line);border-radius
   <button class="btn" id="aboutclose">إغلاق</button>
 </div></div>
 
-<script src="lib/pdf.min.js"></script><script src="lib/pdf-lib.min.js"></script><script src="lib/jszip.min.js"></script><script src="engine.js?v=4"></script>
+<script src="lib/pdf.min.js"></script><script src="lib/pdf-lib.min.js"></script><script src="lib/jszip.min.js"></script><script src="engine.js?v=6"></script>
 <script>
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const state={doc:null,page:0,tool:null,pwd:""};
@@ -178,6 +178,8 @@ const TOOLS=[
  ["addtext","🔤","إضافة عبارة أو اسم"],
  ["compress","🗜️","ضغط ملفات PDF"],
  ["imgtool","📐","ضغط الصور وتغيير مقاساتها"],
+ ["enhance","✨","تحسين الصورة وإزالة العلامة"],
+ ["word","📄","PDF إلى Word"],
 ];
 function h(tag,attrs={},...kids){const e=document.createElement(tag);for(const[k,v]of Object.entries(attrs||{})){if(tag==="img"&&k==="src"&&typeof v==="string"&&v.startsWith("thumb:")){const[,i,p,d]=v.split(":");e.setAttribute("src","data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==");window.thumbURL(i,+p,+d).then(u=>e.setAttribute("src",u)).catch(()=>{});continue}if(k==="class")e.className=v;else if(k.startsWith("on"))e.addEventListener(k.slice(2),v);else if(k==="html")e.innerHTML=v;else if(v===true)e.setAttribute(k,"");else if(v!==false&&v!=null)e.setAttribute(k,v)}for(const c of kids.flat()){if(c==null)continue;e.append(c.nodeType?c:document.createTextNode(c))}return e}
 async function api(path,opt){const r=await fetch(path,opt);let j;try{j=await r.json()}catch(e){j={error:"تعذر الاتصال بالبرنامج"}}if(!r.ok)throw new Error(j.error||"خطأ");return j}
@@ -234,7 +236,7 @@ function resultCard(res,{extra}={}){
   if(res.log&&res.log.length)card.append(h("div",{class:"log"},res.log.join("\n")));
   const row=h("div",{class:"row"});
   row.append(h("a",{class:"btn fix",href:dlUrl(res.id),download:res.name,style:"text-decoration:none"},"⬇ تنزيل الملف"));
-  if(!/\.(zip|png|jpg)$/i.test(res.name)){row.append(h("button",{class:"btn ghost fix",onclick:async()=>{const d=await api("/api/info?id="+res.id);useDoc(d)}},"متابعة العمل على هذا الملف"))}
+  if(!/\.(zip|png|jpg|docx)$/i.test(res.name)){row.append(h("button",{class:"btn ghost fix",onclick:async()=>{const d=await api("/api/info?id="+res.id);useDoc(d)}},"متابعة العمل على هذا الملف"))}
   card.append(row);if(extra)card.append(extra);return card}
 async function run(btn,box,fn){
   box.innerHTML="";btn.disabled=true;btn.parentElement.classList.add("busy");
@@ -503,6 +505,47 @@ views.imgtool=p=>{
     if(r)box.append(resultCard(r))}},"تنفيذ");
   p.append(h("div",{class:"card",style:"margin-top:12px"},list,field("طريقة تغيير المقاس",mode),dyn,field("الصيغة الناتجة",ft),h("label",{},"الجودة"),h("div",{class:"flexh"},q,ql),h("div",{style:"margin-top:14px"},btn,progEl()),box));
   draw();
+};
+
+views.word=p=>{
+  p.append(...head("تحويل PDF إلى Word","يستخرج النصوص (عربي وإنجليزي) والجداول والشعارات إلى ملف Word قابل للتعديل، مع الحفاظ على أماكنها وأحجام الخطوط قدر الإمكان."));
+  p.append(docBar(()=>go("word")));
+  if(!state.doc)return;
+  const box=h("div"),pages=h("input",{type:"text",placeholder:"كل الصفحات (أو مثال: 1-3,5)"});
+  const btn=h("button",{class:"btn",onclick:async()=>{const r=await run(btn,box,()=>post("toword",{id:state.doc.id,pages:pages.value}));if(r)box.append(resultCard(r,{extra:h("div",{class:"tip"},"الصفحات الممسوحة ضوئيًا (صور) تُوضع كصورة لأنها لا تحتوي نصًا. افتح الملف في Word وراجع الجداول والخطوط.")}))}},"تحويل إلى Word");
+  p.append(h("div",{class:"grid"},h("div",{class:"card"},field("الصفحات",pages),h("div",{style:"margin-top:14px"},btn,progEl()),box),
+    h("div",{class:"stage-wrap"},h("div",{class:"stage"},h("img",{class:"pg",src:thumb(state.doc.id,0,70)})))));
+};
+
+let enhFiles=[];
+views.enhance=p=>{
+  p.append(...head("تحسين الصورة","ارفع صورة أو مستندًا مصوّرًا: أزل العلامة المائية الرمادية، وخفّف الرمادي قبل الطباعة، ونظّف الخلفية والظلال. المعالجة على جهازك."));
+  const prev=h("div",{class:"card",style:"margin-top:12px;display:none"}),list=h("ul",{class:"list"});
+  const cb=(l,c)=>{const i=h("input",{type:"checkbox"});if(c)i.checked=true;return [i,h("label",{style:"display:inline;font-weight:400;margin-inline-start:6px"},l)]};
+  const sl=(min,max,v)=>{const i=h("input",{type:"range",min,max,value:v}),t=h("span",{class:"hint"},fmt(v)+"٪");i.oninput=()=>{t.textContent=fmt(+i.value)+"٪";sched()};return [i,t]};
+  const preset=h("select",{},h("option",{value:""},"— اختر إعدادًا جاهزًا —"),h("option",{value:"wm"},"إزالة العلامة المائية الرمادية"),h("option",{value:"print"},"تجهيز للطباعة (تخفيف الرمادي وتوفير الحبر)"),h("option",{value:"scan"},"مستند ممسوح: خلفية بيضاء ونص واضح"),h("option",{value:"bw"},"أبيض وأسود حاد"));
+  const gray=sl(0,100,0),contrast=sl(0,100,0),darken=sl(0,100,0),sharp=sl(0,100,0);
+  const light=cb("إزالة الألوان الفاتحة أيضًا (علامة مائية ملوّنة باهتة)"),stamps=cb("إزالة الأختام والأحبار الملوّنة"),flat=cb("تسوية الإضاءة وإزالة الظلال وتدرّج الخلفية"),ink=cb("وضع توفير الحبر (تفتيح الألوان للطباعة)");
+  const mode=h("select",{},h("option",{value:"color"},"ملوّن"),h("option",{value:"gray"},"تدرّج رمادي"),h("option",{value:"bw"},"أبيض وأسود"));
+  const rot=h("select",{},h("option",{value:0},"بدون تدوير"),h("option",{value:90},"90° يمين"),h("option",{value:180},"180°"),h("option",{value:270},"90° يسار"));
+  const ft=h("select",{},h("option",{value:"jpg"},"JPG"),h("option",{value:"png"},"PNG (بدون فقد)"),h("option",{value:"pdf"},"PDF جاهز للطباعة"));
+  [light,stamps,flat,ink].forEach(x=>x[0].onchange=()=>sched());mode.onchange=sched;rot.onchange=sched;
+  const opts=()=>({gray:+gray[0].value,contrast:+contrast[0].value,darken:+darken[0].value,sharpen:+sharp[0].value,lightColor:light[0].checked,stamps:stamps[0].checked,flatten:flat[0].checked,ink:ink[0].checked,mode:mode.value,rotate:+rot.value,format:ft.value});
+  const set=(g,c,d,s,l,st,f,i,m)=>{gray[0].value=g;contrast[0].value=c;darken[0].value=d;sharp[0].value=s;light[0].checked=l;stamps[0].checked=st;flat[0].checked=f;ink[0].checked=i;mode.value=m;[gray,contrast,darken,sharp].forEach(x=>x[1].textContent=fmt(+x[0].value)+"٪");sched()};
+  preset.onchange=()=>{const v=preset.value;if(v==="wm")set(60,10,10,0,true,false,false,false,"color");if(v==="print")set(70,10,0,0,true,false,false,true,"color");if(v==="scan")set(40,35,25,40,true,false,true,false,"color");if(v==="bw")set(60,0,0,30,true,false,true,false,"bw")};
+  const imgB=h("img",{style:"width:100%;border-radius:8px;background:#fff"}),imgA=h("img",{style:"width:100%;border-radius:8px;background:#fff"});
+  const pv=h("div",{class:"row"},h("div",{},h("label",{},"قبل"),imgB),h("div",{},h("label",{},"بعد (معاينة مباشرة)"),imgA));
+  prev.append(pv);
+  let tm=0,seq=0;
+  function sched(){clearTimeout(tm);tm=setTimeout(async()=>{if(!enhFiles.length){prev.style.display="none";return}const my=++seq;prev.style.display="";try{const r=await enhancePreview(enhFiles[0],opts(),760);if(my===seq){imgB.src=r.before;imgA.src=r.after}}catch(e){}},200)}
+  const draw=()=>{list.innerHTML="";enhFiles.forEach((f,i)=>list.append(h("li",{},h("span",{class:"chip"},fmt(i+1)),h("span",{class:"nm",title:f.name},f.name),h("button",{class:"btn ghost sm",onclick:()=>{enhFiles.splice(i,1);draw();sched()}},"حذف"))))};
+  p.append(dropZone(fs=>{enhFiles.push(...fs.filter(f=>/^image\//.test(f.type)));draw();sched()},{multiple:true,accept:"image/*",title:"اسحب الصور هنا أو اضغط للاختيار",sub:"المعاينة تظهر لأول صورة، والتطبيق على كل الصور"}));
+  const box=h("div");
+  const btn=h("button",{class:"btn",onclick:async()=>{if(!enhFiles.length)return alert("اختر صورة أولًا");const r=await run(btn,box,()=>runEnhanceTool(enhFiles,opts()));if(r)box.append(resultCard(r))}},"تحسين وحفظ");
+  const lab=(t,x)=>h("div",{style:"margin-top:8px"},h("label",{},t),h("div",{class:"flexh"},x[0],x[1]));
+  const chk=x=>h("div",{style:"margin-top:6px"},...x);
+  p.append(prev,h("div",{class:"card",style:"margin-top:12px"},list,field("إعداد جاهز",preset),lab("إزالة الرمادي الفاتح / العلامة المائية",gray),chk(light),chk(stamps),chk(flat),chk(ink),lab("زيادة التباين",contrast),lab("تغميق النص الباهت",darken),lab("زيادة الحدّة والوضوح",sharp),h("div",{class:"row",style:"margin-top:8px"},field("نمط الألوان",mode),field("تدوير",rot)),field("الصيغة الناتجة",ft),h("div",{style:"margin-top:14px"},btn,progEl()),box));
+  draw();sched();
 };
 
 go("watermark");

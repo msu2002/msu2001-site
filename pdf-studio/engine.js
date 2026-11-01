@@ -14,7 +14,7 @@
   /* ---------- helpers ---------- */
   const safeName = (s) => String(s || "").replace(/[\\/:*?"<>|\r\n]+/g, " ").trim().slice(0, 80) || "ملف";
   const baseOf = (n) => n.replace(/\.[^.]+$/, "");
-  const MIME = { pdf: "application/pdf", zip: "application/zip", png: "image/png", jpg: "image/jpeg" };
+  const MIME = { pdf: "application/pdf", zip: "application/zip", png: "image/png", jpg: "image/jpeg", docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" };
   function register(bytes, name, kind) {
     const id = "f" + ++_id;
     FILES.set(id, { id, bytes, name, kind: kind || "pdf", pdf: null, url: null });
@@ -654,6 +654,281 @@
   }
   function fmtSize(b) { return b > 1048576 ? (b / 1048576).toFixed(2) + " م.ب" : Math.round(b / 1024) + " ك.ب"; }
 
+  /* ---------- image enhance (remove watermark gray, clean scans, print-ready) ---------- */
+  function bgDivide(c, block) {
+    const W = c.width, H = c.height, ctx = c.getContext("2d", { willReadFrequently: true }), d = ctx.getImageData(0, 0, W, H), a = d.data;
+    const sw = Math.max(2, Math.ceil(W / block)), sh = Math.max(2, Math.ceil(H / block));
+    const m = new Uint8Array(sw * sh * 3), st = Math.max(1, Math.floor(block / 6));
+    for (let by = 0; by < sh; by++) for (let bx = 0; bx < sw; bx++) {
+      let r = 0, g = 0, b = 0;
+      const y1 = Math.min(H, (by + 1) * block), x1 = Math.min(W, (bx + 1) * block);
+      for (let y = by * block; y < y1; y += st) for (let x = bx * block; x < x1; x += st) { const i = (y * W + x) * 4; if (a[i] > r) r = a[i]; if (a[i + 1] > g) g = a[i + 1]; if (a[i + 2] > b) b = a[i + 2]; }
+      const o = (by * sw + bx) * 3; m[o] = r; m[o + 1] = g; m[o + 2] = b;
+    }
+    const sc = newCanvas(sw, sh), sx = sc.getContext("2d"), sd = sx.createImageData(sw, sh);
+    for (let i = 0, j = 0; i < sw * sh; i++, j += 4) { sd.data[j] = m[i * 3]; sd.data[j + 1] = m[i * 3 + 1]; sd.data[j + 2] = m[i * 3 + 2]; sd.data[j + 3] = 255; }
+    sx.putImageData(sd, 0, 0);
+    const bc = newCanvas(W, H), bx2 = bc.getContext("2d", { willReadFrequently: true }); bx2.imageSmoothingEnabled = true; bx2.imageSmoothingQuality = "high"; bx2.drawImage(sc, 0, 0, W, H);
+    const b = bx2.getImageData(0, 0, W, H).data;
+    for (let i = 0; i < a.length; i += 4) for (let k = 0; k < 3; k++) { const bg = Math.max(b[i + k], 90); a[i + k] = Math.min(255, a[i + k] * 255 / bg); }
+    ctx.putImageData(d, 0, 0);
+  }
+  function enhanceCanvas(src, o, scale) {
+    let c = src;
+    if (o.rotate) { const r = o.rotate % 360, sw = r === 90 || r === 270, n = newCanvas(sw ? c.height : c.width, sw ? c.width : c.height), x = n.getContext("2d"); x.translate(n.width / 2, n.height / 2); x.rotate(r * Math.PI / 180); x.drawImage(c, -c.width / 2, -c.height / 2); c = n; }
+    else { const n = newCanvas(c.width, c.height); n.getContext("2d").drawImage(c, 0, 0); c = n; }
+    const W = c.width, H = c.height;
+    if (o.flatten) bgDivide(c, Math.max(6, Math.round(24 * (scale || 1))));
+    const ctx = c.getContext("2d", { willReadFrequently: true }), d = ctx.getImageData(0, 0, W, H), a = d.data;
+    const s = Math.min(100, Math.max(0, o.gray || 0)), lo = 215 - 0.6 * s - (o.lightColor ? 35 : 0), hi = 235 - 0.35 * s - (o.lightColor ? 20 : 0), rng = Math.max(1, hi - lo), tol = o.lightColor ? 48 : 12;
+    const bp = (o.contrast || 0) * 0.7, gam = 1 + (o.darken || 0) / 60, grayOut = o.mode === "gray" || o.mode === "bw";
+    for (let i = 0; i < a.length; i += 4) {
+      let r = a[i], g = a[i + 1], b = a[i + 2];
+      const mx = Math.max(r, g, b), mn = Math.min(r, g, b), ch = mx - mn;
+      if (s > 0) { const lu = (r + g + b) / 3; if (ch <= tol && lu > lo) { const k = lu >= hi ? 1 : (lu - lo) / rng; r += (255 - r) * k; g += (255 - g) * k; b += (255 - b) * k; } }
+      if (o.stamps && ch >= 18) { const k = Math.min(1, (ch - 18) / 25); r += (255 - r) * k; g += (255 - g) * k; b += (255 - b) * k; }
+      if (o.ink) { const lu = (r + g + b) / 3; if (lu > 70) { const k = 0.35 * Math.min(1, (lu - 70) / 80); r += (255 - r) * k; g += (255 - g) * k; b += (255 - b) * k; } }
+      if (grayOut) { const lu = 0.299 * r + 0.587 * g + 0.114 * b; r = g = b = lu; }
+      if (bp > 0) { const f = 255 / (255 - bp); r = (r - bp) * f; g = (g - bp) * f; b = (b - bp) * f; }
+      if (gam !== 1) { r = 255 * Math.pow(Math.max(0, r) / 255, gam); g = 255 * Math.pow(Math.max(0, g) / 255, gam); b = 255 * Math.pow(Math.max(0, b) / 255, gam); }
+      if (o.mode === "bw") { const t = (r - 100) / 80; const v = t <= 0 ? 0 : t >= 1 ? 255 : t * t * (3 - 2 * t) * 255; r = g = b = v; }
+      a[i] = r < 0 ? 0 : r > 255 ? 255 : r; a[i + 1] = g < 0 ? 0 : g > 255 ? 255 : g; a[i + 2] = b < 0 ? 0 : b > 255 ? 255 : b;
+    }
+    if (o.sharpen) {
+      const amt = o.sharpen / 100 * 1.2, cp = new Uint8ClampedArray(a);
+      for (let y = 1; y < H - 1; y++) for (let x = 1; x < W - 1; x++) { const i = (y * W + x) * 4; for (let k = 0; k < 3; k++) { const v = cp[i + k] * (1 + 4 * amt) - amt * (cp[i + k - 4] + cp[i + k + 4] + cp[i + k - W * 4] + cp[i + k + W * 4]); a[i + k] = v < 0 ? 0 : v > 255 ? 255 : v; } }
+    }
+    ctx.putImageData(d, 0, 0); return c;
+  }
+  window.enhancePreview = async function (file, o, maxSide) {
+    const url = URL.createObjectURL(file);
+    try {
+      const img = await loadImg(url), w = img.naturalWidth, h = img.naturalHeight, k = Math.min(1, (maxSide || 700) / Math.max(w, h));
+      const c = newCanvas(w * k, h * k); c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      const r = enhanceCanvas(c, o, k);
+      return { before: c.toDataURL("image/jpeg", 0.85), after: r.toDataURL("image/jpeg", 0.9) };
+    } finally { URL.revokeObjectURL(url); }
+  };
+  window.runEnhanceTool = async function (files, o) {
+    const fmt = o.format || "jpg", mime = fmt === "png" ? "image/png" : "image/jpeg", out = [], log = [];
+    for (const file of files) {
+      const url = URL.createObjectURL(file);
+      try {
+        const img = await loadImg(url), c = newCanvas(img.naturalWidth, img.naturalHeight); c.getContext("2d").drawImage(img, 0, 0);
+        const r = enhanceCanvas(c, o, 1), bytes = await canvasBytes(r, fmt === "pdf" ? "image/jpeg" : mime, 0.93);
+        out.push([baseOf(safeName(file.name)) + "_محسّنة." + (fmt === "pdf" ? "jpg" : fmt), bytes, r.width, r.height]);
+        log.push(`${file.name}: ${r.width}×${r.height} ← ${fmtSize(bytes.length)}`);
+      } finally { URL.revokeObjectURL(url); }
+      await tick();
+    }
+    if (!out.length) throw new ApiError("اختر صورة واحدة على الأقل");
+    if (fmt === "pdf") {
+      const doc = await PDFDocument.create();
+      for (const [, bytes, w, h] of out) { const emb = await doc.embedJpg(bytes), W = w * 72 / 150, H = h * 72 / 150, pg = doc.addPage([W, H]); pg.drawImage(emb, { x: 0, y: 0, width: W, height: H }); }
+      doc.setProducer(APP); const name = "صور_محسّنة.pdf";
+      return { id: register(await doc.save(), name, "pdf"), name, log };
+    }
+    if (out.length === 1) return { id: register(out[0][1], out[0][0], fmt), name: out[0][0], log };
+    const zip = new JSZip(); out.forEach(([n, d]) => zip.file(n, d));
+    const name = "صور_محسّنة.zip";
+    return { id: register(await zip.generateAsync({ type: "uint8array", compression: "STORE" }), name, "zip"), name, log };
+  };
+
+  /* ---------- PDF -> Word (.docx) ---------- */
+  const xe = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, "");
+  const WORDFONTS = ["Arial", "Times New Roman", "Calibri", "Cambria", "Tahoma", "Traditional Arabic", "Simplified Arabic", "Sakkal Majalla", "Courier New", "Segoe UI", "Arabic Typesetting", "Verdana", "Georgia", "Simplified Arabic Fixed"];
+  function wordFont(real, arabic) {
+    const n = String(real || "").replace(/^[A-Z]{6}\+/, "").replace(/[-,_ ](Bold|Italic|Regular|Oblique|BoldItalic|MT|PS)+.*$/i, "").replace(/\s+/g, "").toLowerCase();
+    for (const f of WORDFONTS) if (n && n.indexOf(f.replace(/\s+/g, "").toLowerCase()) === 0) return f;
+    if (/sakkal|majalla/.test(n)) return "Sakkal Majalla";
+    if (/times|serif|georgia/.test(n)) return arabic ? "Traditional Arabic" : "Times New Roman";
+    return "Arial";
+  }
+  const mulM = (m, n) => [m[0] * n[0] + m[1] * n[2], m[0] * n[1] + m[1] * n[3], m[2] * n[0] + m[3] * n[2], m[2] * n[1] + m[3] * n[3], m[4] * n[0] + m[5] * n[2] + n[4], m[4] * n[1] + m[5] * n[3] + n[5]];
+  async function pageImages(page, vp) {
+    const ol = await page.getOperatorList(), O = pdfjsLib.OPS, st = []; let ctm = vp.transform.slice(); const rects = [];
+    const add = () => { const xs = [], ys = []; for (const [x, y] of [[0, 0], [1, 0], [0, 1], [1, 1]]) { xs.push(ctm[0] * x + ctm[2] * y + ctm[4]); ys.push(ctm[1] * x + ctm[3] * y + ctm[5]); } rects.push({ x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) }); };
+    for (let i = 0; i < ol.fnArray.length; i++) {
+      const fn = ol.fnArray[i], a = ol.argsArray[i];
+      if (fn === O.save) st.push(ctm.slice()); else if (fn === O.restore) { if (st.length) ctm = st.pop(); }
+      else if (fn === O.transform) ctm = mulM(a, ctm);
+      else if (fn === O.paintFormXObjectBegin) { st.push(ctm.slice()); if (a && a[0]) ctm = mulM(a[0], ctm); }
+      else if (fn === O.paintFormXObjectEnd) { if (st.length) ctm = st.pop(); }
+      else if (fn === O.paintImageXObject || fn === O.paintInlineImageXObject || fn === O.paintImageMaskXObject || fn === O.paintJpegXObject) add();
+    }
+    return { rects, ol };
+  }
+  const joinItems = (its, rtl) => {
+    const a = its.slice().sort((p, q) => p.x - q.x), seq = rtl ? a.slice().reverse() : a; let res = "";
+    for (let k = 0; k < seq.length; k++) {
+      const it = seq[k]; res += it.str;
+      if (k < seq.length - 1) { const nx = seq[k + 1], gap = rtl ? it.x - (nx.x + nx.w) : nx.x - (it.x + it.w); if (gap > 0.2 * Math.max(it.size, 1) && !/\s$/.test(it.str) && !/^\s/.test(nx.str)) res += " "; }
+    }
+    return res.replace(/\s+/g, " ").trim();
+  };
+  async function op_toword(p) {
+    const f = getF(p.id), pdf = await getPdf(p.id), n = pdf.numPages, pagesSel = parsePages(p.pages, n), log = [];
+    const zip = new JSZip(), rels = [], media = []; let relN = 10, imgN = 0, docPr = 1; const body = [];
+    const twp = (pt) => Math.round(pt * 20);
+    const font = (it) => it;
+    for (const pi of pagesSel) {
+      const page = await pdf.getPage(pi + 1), vp = page.getViewport({ scale: 1 }), W = vp.width, H = vp.height;
+      const tc = await page.getTextContent();
+      const { rects, ol } = await pageImages(page, vp);
+      const items = [];
+      for (const t of tc.items) {
+        if (!t.str || !t.str.trim()) continue;
+        const tr = t.transform, size = Math.hypot(tr[2], tr[3]) || Math.abs(tr[3]) || 10;
+        if (Math.abs(tr[1]) > 0.35 * Math.abs(tr[0]) && Math.abs(tr[0]) > 0 || (Math.abs(tr[0]) < 0.01 && Math.abs(tr[1]) > 0)) continue;
+        let real = ""; try { if (page.commonObjs.has(t.fontName)) real = page.commonObjs.get(t.fontName).name || ""; } catch (e) {}
+        items.push({ str: t.str, x: tr[4], y: H - tr[5], w: t.width, size, real });
+      }
+      const chars = items.reduce((s, it) => s + it.str.trim().length, 0);
+      const sec = { top: 28, left: 28, right: 28, bottom: 14 };
+      const paras = [];
+      let curY = sec.top;
+      const addAnchor = (xml) => xml;
+      /* ---- scanned page: image fallback ---- */
+      if (chars < 20) {
+        const sc = Math.min(200 / 72, 3000 / Math.max(W, H)), c = await renderPage(pdf, pi, sc), bytes = await canvasBytes(c, "image/jpeg", 0.9);
+        const name = `img${++imgN}.jpg`; zip.file("word/media/" + name, bytes); const rid = "rId" + (++relN); rels.push(`<Relationship Id="${rid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/${name}"/>`);
+        paras.push(`<w:p><w:pPr><w:spacing w:before="0" w:after="0" w:line="20" w:lineRule="exact"/></w:pPr>${anchorXml(rid, 0, 0, W, H, ++docPr)}</w:p>`);
+        log.push(`الصفحة ${pi + 1}: صفحة ممسوحة ضوئيًا (بلا نص) — وُضعت كصورة. لتحويلها إلى نص قابل للتعديل تحتاج التعرّف الضوئي (OCR).`);
+        body.push(pageBlock(paras, W, H, { top: 0, left: 0, right: 0, bottom: 0 }));
+        continue;
+      }
+      /* ---- lines ---- */
+      items.sort((a, b) => a.y - b.y || a.x - b.x);
+      const lines = [];
+      for (const it of items) {
+        let L = null; for (let k = lines.length - 1; k >= 0 && k >= lines.length - 6; k--) if (Math.abs(lines[k].y - it.y) < 0.45 * Math.max(it.size, lines[k].size)) { L = lines[k]; break; }
+        if (!L) { L = { y: it.y, size: it.size, items: [] }; lines.push(L); }
+        L.items.push(it); if (it.size > L.size) L.size = it.size;
+      }
+      lines.sort((a, b) => a.y - b.y);
+      for (const L of lines) {
+        L.items.sort((a, b) => a.x - b.x);
+        L.x0 = Math.min(...L.items.map((i) => i.x)); L.x1 = Math.max(...L.items.map((i) => i.x + i.w));
+        const tot = L.items.map((i) => i.str).join(""); L.ar = (tot.match(/[֐-ࣿיִ-﻿]/g) || []).length; L.rtl = L.ar > 0 && L.ar >= tot.replace(/\s/g, "").length * 0.4;
+        const big = L.items.reduce((m, i) => (i.str.trim().length > (m ? m.str.trim().length : 0) ? i : m), null); L.real = big ? big.real : "";
+        L.bold = /bold|black|heavy|demi/i.test(L.real); L.italic = /italic|oblique/i.test(L.real);
+        L.segs = []; let cur = [L.items[0]];
+        for (let k = 1; k < L.items.length; k++) { const pv = L.items[k - 1], it = L.items[k]; if (it.x - (pv.x + pv.w) > 1.6 * L.size) { L.segs.push(cur); cur = []; } cur.push(it); }
+        L.segs.push(cur);
+        L.segs = L.segs.map((s) => { const x0 = Math.min(...s.map((i) => i.x)), x1 = Math.max(...s.map((i) => i.x + i.w)), t = s.map((i) => i.str).join(""), rt = hasArabic(t); return { items: s, x0, x1, text: joinItems(s, rt), rtl: rt }; });
+        L.text = L.segs.length === 1 ? L.segs[0].text : null;
+      }
+      const minX = Math.max(10, Math.min(...lines.map((l) => l.x0))), maxX = Math.min(W - 10, Math.max(...lines.map((l) => l.x1)));
+      sec.left = Math.max(10, Math.min(minX, W / 2 - 40)); sec.right = Math.max(10, W - maxX); sec.top = Math.max(10, Math.min(lines[0].y - lines[0].size * 1.0, 200)); curY = sec.top;
+      const contentW = W - sec.left - sec.right;
+      /* ---- images (logos etc.) ---- */
+      const imgs = rects.filter((r) => r.x1 - r.x0 > 6 && r.y1 - r.y0 > 6 && (r.x1 - r.x0) * (r.y1 - r.y0) < 0.85 * W * H);
+      const uniq = []; for (const r of imgs) if (!uniq.some((u) => Math.abs(u.x0 - r.x0) < 2 && Math.abs(u.y0 - r.y0) < 2 && Math.abs(u.x1 - r.x1) < 2 && Math.abs(u.y1 - r.y1) < 2)) uniq.push(r);
+      let anchors = "";
+      if (uniq.length) {
+        const sc = 200 / 72, full = await renderPage(pdf, pi, sc);
+        for (const r of uniq.slice(0, 30)) {
+          const x0 = Math.max(0, r.x0), y0 = Math.max(0, r.y0), x1 = Math.min(W, r.x1), y1 = Math.min(H, r.y1);
+          const c = newCanvas((x1 - x0) * sc, (y1 - y0) * sc); c.getContext("2d").drawImage(full, x0 * sc, y0 * sc, c.width, c.height, 0, 0, c.width, c.height);
+          const name = `img${++imgN}.png`; zip.file("word/media/" + name, await canvasBytes(c, "image/png")); const rid = "rId" + (++relN);
+          rels.push(`<Relationship Id="${rid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/${name}"/>`);
+          anchors += anchorXml(rid, x0, y0, x1 - x0, y1 - y0, ++docPr);
+        }
+        paras.push(`<w:p><w:pPr><w:spacing w:before="0" w:after="0" w:line="20" w:lineRule="exact"/></w:pPr>${anchors}</w:p>`); curY += 1;
+      }
+      /* ---- build blocks: tables + paragraphs ---- */
+      const blocks = []; let i = 0;
+      while (i < lines.length) {
+        if (lines[i].segs.length >= 2) {
+          let j = i; while (j < lines.length && lines[j].segs.length >= 2 && (j === i || lines[j].y - lines[j - 1].y < 3.2 * lines[j].size)) j++;
+          const rows = lines.slice(i, j), ncolMax = Math.max(...rows.map((r) => r.segs.length));
+          if (rows.length >= 3 || (rows.length >= 2 && ncolMax >= 3)) { blocks.push({ type: "table", rows }); i = j; continue; }
+        }
+        blocks.push({ type: "line", L: lines[i] }); i++;
+      }
+      /* merge lines into paragraphs */
+      const items2 = []; let prevB = null;
+      for (const b of blocks) {
+        if (b.type === "line") {
+          const L = b.L, pv = prevB && prevB.type === "para" ? prevB : null;
+          const startsList = /^\s*([•\-–·▪●○◦]|\d+[.)\-]|[A-Za-z][.)]|[٠-٩]+[.)\-])\s*/.test(L.text || "");
+          const centered = Math.abs((L.x0 + L.x1) / 2 - W / 2) < 0.04 * W && L.x0 - sec.left > 0.08 * W;
+          L.center = centered;
+          if (pv && !startsList && !centered && !pv.center && pv.rtl === L.rtl && Math.abs(pv.size - L.size) < 1.2 && L.y - pv.lastY <= 1.6 * L.size && (pv.lastX1 - pv.lastX0) >= 0.72 * contentW && Math.abs(pv.lastX0 - L.x0) < 0.2 * contentW + 25) {
+            pv.text += " " + (L.text || ""); pv.lastY = L.y; pv.lastX0 = L.x0; pv.lastX1 = L.x1; pv.nlines++; continue;
+          }
+          const P = { type: "para", text: L.text || "", rtl: L.rtl, size: L.size, real: L.real, bold: L.bold, italic: L.italic, x0: L.x0, x1: L.x1, y: L.y, lastY: L.y, lastX0: L.x0, lastX1: L.x1, nlines: 1, center: centered };
+          items2.push(P); prevB = P;
+        } else { items2.push(b); prevB = b; }
+      }
+      /* ---- emit ---- */
+      let lastBottom = curY;
+      for (const b of items2) {
+        if (b.type === "para") {
+          const lh = b.size * 1.25, top = b.y - b.size * 0.95, before = Math.max(0, top - lastBottom);
+          const hasAr = hasArabic(b.text), fnt = wordFont(b.real, hasAr), sz = Math.max(2, Math.round(b.size * 2));
+          let ppr = `<w:spacing w:before="${twp(before)}" w:after="0" w:line="${twp(lh)}" w:lineRule="atLeast"/>`;
+          if (b.rtl) ppr = "<w:bidi/>" + ppr; else { const ind = b.x0 - sec.left; if (ind > 8 && !b.center) ppr += `<w:ind w:left="${twp(ind)}"/>`; }
+          if (b.center) ppr += '<w:jc w:val="center"/>';
+          else if (b.rtl) { const ind = (W - sec.right) - b.x1; if (ind > 14) ppr += `<w:ind w:left="${twp(ind)}"/>`; }
+          const rpr = `<w:rFonts w:ascii="${fnt}" w:hAnsi="${fnt}" w:cs="${fnt}" w:eastAsia="${fnt}"/>${b.bold ? "<w:b/><w:bCs/>" : ""}${b.italic ? "<w:i/><w:iCs/>" : ""}<w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/>${b.rtl ? "<w:rtl/>" : ""}${hasAr ? '<w:lang w:bidi="ar-SA"/>' : ""}`;
+          paras.push(`<w:p><w:pPr>${ppr}</w:pPr><w:r><w:rPr>${rpr}</w:rPr><w:t xml:space="preserve">${xe(b.text)}</w:t></w:r></w:p>`);
+          lastBottom = Math.max(top, lastBottom) + b.nlines * lh;
+        } else {
+          const rows = b.rows, segsAll = []; rows.forEach((r) => r.segs.forEach((s) => segsAll.push(s)));
+          segsAll.sort((a, c) => a.x0 - c.x0);
+          const cols = []; for (const s of segsAll) { const l = cols[cols.length - 1]; if (l && s.x0 < l.x1 - 1) { l.x1 = Math.max(l.x1, s.x1); } else cols.push({ x0: s.x0, x1: s.x1 }); }
+          const rtlT = rows.filter((r) => r.rtl).length > rows.length / 2;
+          let tx0 = cols[0].x0, widths = cols.map((c, k) => (k < cols.length - 1 ? cols[k + 1].x0 : c.x1 + 4) - c.x0);
+          if ((cols[cols.length - 1].x1 - cols[0].x0) > 0.5 * contentW && cols.length > 1) {
+            const ed = [sec.left]; for (let k = 0; k < cols.length - 1; k++) ed.push((cols[k].x1 + cols[k + 1].x0) / 2); ed.push(W - sec.right);
+            tx0 = sec.left; widths = cols.map((_, k) => ed[k + 1] - ed[k]);
+          }
+          const order = cols.map((_, k) => k); if (rtlT) order.reverse();
+          const top = rows[0].y - rows[0].size * 0.95, before = Math.max(0, top - lastBottom);
+          if (before > 6) paras.push(`<w:p><w:pPr><w:spacing w:before="0" w:after="0" w:line="${twp(before)}" w:lineRule="exact"/></w:pPr></w:p>`);
+          let xml = `<w:tbl><w:tblPr><w:tblW w:w="${twp(widths.reduce((a, c) => a + c, 0))}" w:type="dxa"/>${rtlT ? "<w:bidiVisual/>" : `<w:tblInd w:w="${twp(Math.max(0, tx0 - sec.left))}" w:type="dxa"/>`}<w:tblBorders>${["top", "left", "bottom", "right", "insideH", "insideV"].map((s) => `<w:${s} w:val="single" w:sz="4" w:space="0" w:color="808080"/>`).join("")}</w:tblBorders><w:tblLayout w:type="fixed"/><w:tblCellMar><w:left w:w="60" w:type="dxa"/><w:right w:w="60" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>${order.map((k) => `<w:gridCol w:w="${twp(widths[k])}"/>`).join("")}</w:tblGrid>`;
+          for (const r of rows) {
+            xml += "<w:tr>";
+            for (const k of order) {
+              const c = cols[k], cell = r.segs.filter((s) => (s.x0 + s.x1) / 2 >= c.x0 - 1 && (s.x0 + s.x1) / 2 <= c.x1 + 1 || s.x0 >= c.x0 - 1 && s.x0 < (k < cols.length - 1 ? cols[k + 1].x0 : 1e9) - 1);
+              const txt = cell.map((s) => s.text).join(" "), ar = hasArabic(txt), fnt = wordFont(r.real, ar), sz = Math.max(2, Math.round(r.size * 2));
+              xml += `<w:tc><w:tcPr><w:tcW w:w="${twp(widths[k])}" w:type="dxa"/></w:tcPr><w:p><w:pPr>${ar ? "<w:bidi/>" : ""}<w:spacing w:before="20" w:after="20"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${fnt}" w:hAnsi="${fnt}" w:cs="${fnt}"/>${r.bold ? "<w:b/><w:bCs/>" : ""}<w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/>${ar ? "<w:rtl/>" : ""}</w:rPr><w:t xml:space="preserve">${xe(txt)}</w:t></w:r></w:p></w:tc>`;
+            }
+            xml += "</w:tr>";
+          }
+          xml += "</w:tbl>"; paras.push(xml);
+          const last = rows[rows.length - 1]; lastBottom = last.y + last.size * 0.3 + 6;
+        }
+      }
+      body.push(pageBlock(paras, W, H, sec));
+      await tick();
+    }
+    if (!body.length) throw new ApiError("لم أجد صفحات للتحويل");
+    const NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"';
+    /* last section's properties go at the end of the body */
+    const last = body[body.length - 1];
+    const docXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document ${NS}><w:body>${body.map((b, k) => (k < body.length - 1 ? b.paras + `<w:p><w:pPr><w:spacing w:before="0" w:after="0" w:line="20" w:lineRule="exact"/>${b.sect}</w:pPr></w:p>` : b.paras + b.sect)).join("")}</w:body></w:document>`;
+    zip.file("word/document.xml", docXml);
+    zip.file("[Content_Types].xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="png" ContentType="image/png"/><Default Extension="jpg" ContentType="image/jpeg"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>`);
+    zip.file("_rels/.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`);
+    zip.file("word/_rels/document.xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>${rels.join("")}</Relationships>`);
+    zip.file("word/styles.xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial" w:eastAsia="Arial"/><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style></w:styles>`);
+    const bytes = await zip.generateAsync({ type: "uint8array", compression: "DEFLATE" });
+    const name = baseOf(f.name) + ".docx";
+    log.unshift(`حُوّلت ${pagesSel.length} صفحة: النصوص والجداول قابلة للتعديل، والشعارات والصور كصور مثبّتة في أماكنها.`);
+    return { id: register(bytes, name, "docx"), name, log };
+  }
+  function anchorXml(rid, x, y, w, h, id) {
+    const E = (v) => Math.round(v * 12700);
+    return `<w:r><w:drawing><wp:anchor distT="0" distB="0" distL="0" distR="0" simplePos="0" relativeHeight="${251658240 + id}" behindDoc="0" locked="0" layoutInCell="1" allowOverlap="1"><wp:simplePos x="0" y="0"/><wp:positionH relativeFrom="page"><wp:posOffset>${E(x)}</wp:posOffset></wp:positionH><wp:positionV relativeFrom="page"><wp:posOffset>${E(y)}</wp:posOffset></wp:positionV><wp:extent cx="${E(w)}" cy="${E(h)}"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:wrapNone/><wp:docPr id="${id}" name="Picture ${id}"/><wp:cNvGraphicFramePr/><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic><pic:nvPicPr><pic:cNvPr id="${id}" name="Picture ${id}"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="${rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${E(w)}" cy="${E(h)}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:anchor></w:drawing></w:r>`;
+  }
+  function pageBlock(paras, W, H, sec) {
+    const t = (v) => Math.round(v * 20);
+    const sect = `<w:sectPr><w:pgSz w:w="${t(W)}" w:h="${t(H)}"/><w:pgMar w:top="${t(sec.top)}" w:right="${t(sec.right)}" w:bottom="${t(sec.bottom)}" w:left="${t(sec.left)}" w:header="0" w:footer="0" w:gutter="0"/></w:sectPr>`;
+    return { paras: paras.join(""), sect };
+  }
+
   /* ---------- image compress / resize (runs directly from the UI) ---------- */
   window.runImageTool = async function (files, o) {
     const fmt = o.format || "jpg", mime = fmt === "png" ? "image/png" : fmt === "webp" ? "image/webp" : "image/jpeg", out = [], log = [];
@@ -683,7 +958,7 @@
     return { id: register(await zip.generateAsync({ type: "uint8array", compression: "STORE" }), name, "zip"), name, log };
   };
 
-  const OPS = { compresspdf: op_compresspdf, watermark: op_watermark, signature_clean: op_signature_clean, sign: op_sign, merge: op_merge, split: op_split, toimages: op_toimages, edittext: op_edittext, addtext: op_addtext };
+  const OPS = { compresspdf: op_compresspdf, watermark: op_watermark, signature_clean: op_signature_clean, sign: op_sign, merge: op_merge, split: op_split, toimages: op_toimages, edittext: op_edittext, addtext: op_addtext, toword: op_toword };
 
   /* ---------- fetch router: the UI talks to /api/* exactly as before, but it is all local ---------- */
   const realFetch = window.fetch.bind(window);
