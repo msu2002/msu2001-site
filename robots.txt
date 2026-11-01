@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://msu2001.com/sitemap.xml
