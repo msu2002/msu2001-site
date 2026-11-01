@@ -106,15 +106,15 @@
   };
 
   /* ---------- text → image (browser shapes Arabic natively) ---------- */
-  async function ensureFont(bold) {
+  async function ensureFont(bold, fam) {
     try {
-      await Promise.race([document.fonts.load((bold ? "700" : "400") + ' 40px "Noto Naskh Arabic"', "عربي"), new Promise((r) => setTimeout(r, 2500))]);
+      await Promise.race([document.fonts.load((bold ? "700" : "400") + ' 40px "' + (fam || "Amiri") + '"', "عربي"), new Promise((r) => setTimeout(r, 3000))]);
     } catch (e) {}
   }
-  async function textImage(text, size, color, bold, align, angle) {
-    await ensureFont(bold);
+  async function textImage(text, size, color, bold, align, angle, fam) {
+    await ensureFont(bold, fam);
     const S = 4, px = size * S, lines = String(text).split("\n"), rtl = hasArabic(text);
-    const font = (bold ? "700 " : "400 ") + px + "px " + FONT;
+    const font = (bold ? "700 " : "400 ") + px + "px " + (fam ? '"' + fam + '",' : "") + FONT;
     const m = newCanvas(10, 10).getContext("2d"); m.font = font; m.direction = rtl ? "rtl" : "ltr";
     const lh = px * 1.45, pad = px * 0.25;
     const w = Math.ceil(Math.max(...lines.map((l) => m.measureText(l).width), px * 0.5) + pad * 2), h = Math.ceil(lines.length * lh + pad * 2);
@@ -340,7 +340,7 @@
       for (const e of by[pno]) {
         if (!(e.text || "").trim()) continue;
         const [x0, y0, x1, y1] = e.rect, size = +e.size || 12, hh = y1 - y0;
-        const ti = await textImage(e.text, size, e.color, e.bold, e.align || "right", 0);
+        const ti = await textImage(e.text, size, e.color, e.bold, e.align || "right", 0, e.font);
         const emb = await doc.embedPng(ti.bytes);
         let x = e.align === "left" ? x0 : e.align === "center" ? (x0 + x1) / 2 - ti.w / 2 : x1 - ti.w;
         const yc = (y0 + y1) / 2, y = H - (yc + ti.h / 2);
@@ -363,7 +363,7 @@
         if (p.arabicDigits) { num = toArabicDigits(num); tot = toArabicDigits(tot); }
         t = (text || "{n}").replace(/\{n\}/g, num).replace(/\{total\}/g, tot);
       }
-      const ti = await textImage(t, size, p.color, p.bold, "center", kind === "pagenum" ? 0 : angle);
+      const ti = await textImage(t, size, p.color, p.bold, "center", kind === "pagenum" ? 0 : angle, p.font);
       const emb = await doc.embedPng(ti.bytes), w = ti.w, h = ti.h;
       const pos = kind === "pagenum" || kind === "footer" ? p.pos || "bottom-center" : kind === "header" ? p.pos || "top-center" : p.pos || "custom";
       const m = 24; let x, y;

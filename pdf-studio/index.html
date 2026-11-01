@@ -7,6 +7,32 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f6b5c'/%3E%3Cpath d='M18 10h20l10 10v34H18z' fill='%23fff'/%3E%3Cpath d='M38 10v10h10' fill='%23cfe8e2'/%3E%3Cpath d='M24 34h16M24 41h16M24 27h8' stroke='%230f6b5c' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
 <style>
+@font-face{font-family:'Amiri';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/amiri-400.woff2) format('woff2')}
+@font-face{font-family:'Amiri';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/amiri-700.woff2) format('woff2')}
+@font-face{font-family:'Noto Naskh Arabic';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/noto-naskh-arabic-400.woff2) format('woff2')}
+@font-face{font-family:'Noto Naskh Arabic';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/noto-naskh-arabic-700.woff2) format('woff2')}
+@font-face{font-family:'Scheherazade New';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/scheherazade-new-400.woff2) format('woff2')}
+@font-face{font-family:'Scheherazade New';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/scheherazade-new-700.woff2) format('woff2')}
+@font-face{font-family:'Lateef';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/lateef-400.woff2) format('woff2')}
+@font-face{font-family:'Lateef';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/lateef-700.woff2) format('woff2')}
+@font-face{font-family:'Markazi Text';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/markazi-text-400.woff2) format('woff2')}
+@font-face{font-family:'Markazi Text';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/markazi-text-700.woff2) format('woff2')}
+@font-face{font-family:'Aref Ruqaa';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/aref-ruqaa-400.woff2) format('woff2')}
+@font-face{font-family:'Aref Ruqaa';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/aref-ruqaa-700.woff2) format('woff2')}
+@font-face{font-family:'Cairo';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/cairo-400.woff2) format('woff2')}
+@font-face{font-family:'Cairo';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/cairo-700.woff2) format('woff2')}
+@font-face{font-family:'Tajawal';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/tajawal-400.woff2) format('woff2')}
+@font-face{font-family:'Tajawal';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/tajawal-700.woff2) format('woff2')}
+@font-face{font-family:'Almarai';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/almarai-400.woff2) format('woff2')}
+@font-face{font-family:'Almarai';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/almarai-700.woff2) format('woff2')}
+@font-face{font-family:'IBM Plex Sans Arabic';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/ibm-plex-sans-arabic-400.woff2) format('woff2')}
+@font-face{font-family:'IBM Plex Sans Arabic';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/ibm-plex-sans-arabic-700.woff2) format('woff2')}
+@font-face{font-family:'Noto Kufi Arabic';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/noto-kufi-arabic-400.woff2) format('woff2')}
+@font-face{font-family:'Noto Kufi Arabic';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/noto-kufi-arabic-700.woff2) format('woff2')}
+@font-face{font-family:'Reem Kufi';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/reem-kufi-400.woff2) format('woff2')}
+@font-face{font-family:'Reem Kufi';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/reem-kufi-700.woff2) format('woff2')}
+@font-face{font-family:'El Messiri';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/el-messiri-400.woff2) format('woff2')}
+@font-face{font-family:'El Messiri';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/el-messiri-700.woff2) format('woff2')}
 :root{
   --bg:#f3f5f4; --surface:#fff; --surface2:#eef2f0; --fg:#18231f; --muted:#5d6d67; --line:#d8e0dc;
   --accent:#0f6b5c; --accent-fg:#fff; --accent-soft:#dcefea; --danger:#b3261e; --ok:#1b7a43; --shadow:0 1px 2px rgba(0,0,0,.06),0 6px 20px rgba(0,0,0,.06);
@@ -218,6 +244,25 @@ function head(t,l){return [h("h2",{},t),h("p",{class:"lead"},l)]}
 function field(label,el){return h("div",{},h("label",{},label),el)}
 function pagesField(id="rng"){return field("الصفحات (اتركه فارغًا للكل)",h("input",{type:"text",id,placeholder:"مثال: 1-3, 5, 8-"}))}
 
+const FONTS=[
+ ["Amiri","أميري — نسخ كلاسيكي (مناسب للخطابات الرسمية)"],
+ ["Noto Naskh Arabic","نوتو نسخ — واضح للطباعة"],
+ ["Scheherazade New","شهرزاد — نسخ تقليدي"],
+ ["Lateef","لطيف — نسخ مدوّر"],
+ ["Markazi Text","مركزي — خط كتب رصين"],
+ ["Aref Ruqaa","عارف رقعة — خط الرقعة"],
+ ["Cairo","القاهرة — عصري"],
+ ["Tajawal","تجوال — عصري بسيط"],
+ ["Almarai","المرعي — عصري"],
+ ["IBM Plex Sans Arabic","آي بي إم — عصري رسمي"],
+ ["Noto Kufi Arabic","نوتو كوفي"],
+ ["Reem Kufi","ريم كوفي — للعناوين"],
+ ["El Messiri","المسيري — للعناوين"],
+ ["Traditional Arabic","Traditional Arabic (خط النظام إن وُجد)"],
+ ["Simplified Arabic","Simplified Arabic (خط النظام إن وُجد)"],
+ ["Sakkal Majalla","Sakkal Majalla (خط النظام إن وُجد)"]];
+function fontSelect(def="Amiri"){const s=h("select",{},FONTS.map(([v,l])=>h("option",{value:v,style:`font-family:'${v}'`},l)));s.value=def;return s}
+function fontWarm(f){try{document.fonts.load("400 18px '"+f+"'","عربي");document.fonts.load("700 18px '"+f+"'","عربي")}catch(e){}}
 const views={};
 
 // ===================== watermark =====================
@@ -336,7 +381,7 @@ views.images=p=>{
 };
 
 // ===================== edit text =====================
-let edits=[];
+let edits=[],lastFont="Amiri";
 views.edit=p=>{
   p.append(...head("تعديل النص","اضغط على أي سطر في الصفحة لتعديله. للملفات الممسوحة ضوئيًا (بدون نص): فعّل «التحديد اليدوي» وارسم مستطيلًا فوق الكلمة أو السطر المراد استبداله. المعاينة تظهر على الصفحة قبل الحفظ."));
   p.append(docBar(()=>go("edit")));
@@ -351,14 +396,14 @@ views.edit=p=>{
   const paintPending=()=>{if(!ovR)return;$$(".pv",ovR).forEach(x=>x.remove());const H=stR.getBoundingClientRect().height;if(!H)return;
     const items=edits.filter(e=>e.page===state.page&&!(live&&sel&&e.key===sel.key));if(live)items.push(live);
     items.forEach(e=>{const [x0,y0,x1,y1]=e.rect;const al=e.align||"right";
-      ovR.append(h("div",{class:"pv",style:`position:absolute;left:${(x0-1.5)/PW*100}%;top:${(y0-1.5)/PH*100}%;width:${(x1-x0+3)/PW*100}%;height:${(y1-y0+3)/PH*100}%;background:#fff;display:flex;align-items:center;justify-content:${al==="left"?"flex-start":al==="center"?"center":"flex-end"};overflow:visible;pointer-events:none;color:${e.color};font-weight:${e.bold?700:400};font-size:${e.size/PH*H}px;line-height:1;white-space:pre;font-family:'Noto Naskh Arabic','Tajawal',Tahoma,sans-serif;direction:${isAr(e.text||"")?"rtl":"ltr"}`},e.text||""))})};
+      ovR.append(h("div",{class:"pv",style:`position:absolute;left:${(x0-1.5)/PW*100}%;top:${(y0-1.5)/PH*100}%;width:${(x1-x0+3)/PW*100}%;height:${(y1-y0+3)/PH*100}%;background:#fff;display:flex;align-items:center;justify-content:${al==="left"?"flex-start":al==="center"?"center":"flex-end"};overflow:visible;pointer-events:none;color:${e.color};font-weight:${e.bold?700:400};font-size:${e.size/PH*H}px;line-height:1;white-space:pre;font-family:'${e.font||lastFont}','Noto Naskh Arabic',Tahoma,sans-serif;direction:${isAr(e.text||"")?"rtl":"ltr"}`},e.text||""))})};
   const paintList=()=>{listEl.innerHTML="";edits.forEach((e,i)=>listEl.append(h("li",{},h("span",{class:"chip"},"ص "+fmt(e.page+1)),h("span",{class:"nm"},e.text||"(حذف)"),h("button",{class:"btn ghost sm",onclick:()=>{edits.splice(i,1);paintList();rend()}},"إلغاء"))))};
-  const openForm=(s)=>{sel=s;form.innerHTML="";const t=h("textarea",{},"");t.value=s.text;const sz=h("input",{type:"number",value:s.size,min:4,max:200,step:.5}),cl=h("input",{type:"color",value:s.color}),bd=h("input",{type:"checkbox"});bd.checked=s.bold;
+  const openForm=(s)=>{sel=s;form.innerHTML="";const t=h("textarea",{},"");t.value=s.text;const sz=h("input",{type:"number",value:s.size,min:4,max:200,step:.5}),cl=h("input",{type:"color",value:s.color}),bd=h("input",{type:"checkbox"}),fnt=fontSelect(s.font||lastFont);bd.checked=s.bold;
     const align=h("select",{},h("option",{value:"right"},"يمين"),h("option",{value:"center"},"وسط"),h("option",{value:"left"},"يسار"));
-    const upd=()=>{live={page:state.page,key:s.key,rect:s.rect,text:t.value,size:+sz.value||12,color:cl.value,bold:bd.checked,align:align.value};paintPending()};
-    [t,sz,cl].forEach(e=>e.addEventListener("input",upd));[bd,align].forEach(e=>e.addEventListener("change",upd));
-    form.append(h("b",{},"تعديل السطر"),field("النص الجديد (اتركه فارغًا للحذف)",t),h("div",{class:"row"},field("الحجم",sz),field("اللون",cl),field("المحاذاة",align)),h("div",{class:"flexh",style:"margin-top:6px"},bd,h("span",{},"عريض")),
-      h("div",{class:"row",style:"margin-top:12px"},h("button",{class:"btn fix",onclick:()=>{const old=edits.findIndex(e=>e.page===state.page&&e.key===s.key);const e={page:state.page,key:s.key,rect:s.rect,text:t.value,size:+sz.value,color:cl.value,bold:bd.checked,align:align.value};if(old>=0)edits[old]=e;else edits.push(e);live=null;sel=null;paintList();rend();form.innerHTML="";form.append(h("div",{class:"hint"},"تمت إضافة التعديل وظهرت معاينته على الصفحة. اختر موضعًا آخر أو احفظ الملف."))}},"إضافة التعديل"),
+    const upd=()=>{fontWarm(fnt.value);lastFont=fnt.value;live={page:state.page,key:s.key,rect:s.rect,text:t.value,size:+sz.value||12,color:cl.value,bold:bd.checked,align:align.value,font:fnt.value};paintPending();setTimeout(paintPending,400)};
+    [t,sz,cl].forEach(e=>e.addEventListener("input",upd));[bd,align,fnt].forEach(e=>e.addEventListener("change",upd));
+    form.append(h("b",{},"تعديل السطر"),field("النص الجديد (اتركه فارغًا للحذف)",t),field("نوع الخط",fnt),h("div",{class:"row"},field("الحجم",sz),field("اللون",cl),field("المحاذاة",align)),h("div",{class:"flexh",style:"margin-top:6px"},bd,h("span",{},"عريض")),
+      h("div",{class:"row",style:"margin-top:12px"},h("button",{class:"btn fix",onclick:()=>{const old=edits.findIndex(e=>e.page===state.page&&e.key===s.key);const e={page:state.page,key:s.key,rect:s.rect,text:t.value,size:+sz.value,color:cl.value,bold:bd.checked,align:align.value,font:fnt.value};if(old>=0)edits[old]=e;else edits.push(e);live=null;sel=null;paintList();rend();form.innerHTML="";form.append(h("div",{class:"hint"},"تمت إضافة التعديل وظهرت معاينته على الصفحة. اختر موضعًا آخر أو احفظ الملف."))}},"إضافة التعديل"),
         h("button",{class:"btn ghost fix",onclick:()=>{live=null;sel=null;paintPending();form.innerHTML="";form.append(h("div",{class:"hint"},"أُلغي التحديد."))}},"إلغاء")));
     upd()};
   const rend=async()=>{stage.innerHTML="";live=null;stage.append(pagerEl(()=>{sel=null;rend()}));
@@ -389,7 +434,7 @@ views.addtext=p=>{
   if(!state.doc)return;
   let kind="free",pos="middle-center",cust=null;const box=h("div");
   const kinds=[["free","نص حر"],["pagenum","ترقيم"],["header","ترويسة"],["footer","تذييل"]];
-  const seg=h("div",{class:"seg"}),txt=h("textarea",{placeholder:"اكتب العبارة أو الاسم هنا"}),size=h("input",{type:"number",value:24,min:6,max:300}),col=h("input",{type:"color",value:"#000000"}),
+  const fnt=fontSelect("Amiri"),seg=h("div",{class:"seg"}),txt=h("textarea",{placeholder:"اكتب العبارة أو الاسم هنا"}),size=h("input",{type:"number",value:24,min:6,max:300}),col=h("input",{type:"color",value:"#000000"}),
     op=h("input",{type:"range",min:10,max:100,value:100}),ang=h("input",{type:"range",min:-90,max:90,value:0}),bold=h("input",{type:"checkbox"}),ar=h("input",{type:"checkbox"}),rng=pagesField("rng");
   const posGrid=h("div",{class:"posgrid"});const P=["top-left","top-center","top-right","middle-left","middle-center","middle-right","bottom-left","bottom-center","bottom-right"];
   const paintPos=()=>{posGrid.innerHTML="";P.forEach(k=>posGrid.append(h("button",{"aria-pressed":pos===k&&!cust,onclick:()=>{pos=k;cust=null;paintPos();mark()}})))};
@@ -408,18 +453,18 @@ views.addtext=p=>{
       const left=isC?cust[0]*100+"%":hz==="left"?m/PW*100+"%":hz==="center"?"50%":"auto",right=!isC&&hz==="right"?m/PW*100+"%":"auto";
       const top=isC?cust[1]*100+"%":v==="top"?m/PH*100+"%":v==="middle"?"50%":"auto",bottom=!isC&&v==="bottom"?m/PH*100+"%":"auto";
       const tx=(isC||hz==="center")?"-50%":"0",ty=(isC||v==="middle")?"-50%":"0",rot=kind==="pagenum"?0:+ang.value;
-      const d=h("div",{style:`position:absolute;left:${left};right:${right};top:${top};bottom:${bottom};transform:translate(${tx},${ty}) rotate(${-rot}deg);white-space:pre;text-align:center;line-height:1.45;pointer-events:none;color:${col.value};opacity:${op.value/100};font-weight:${bold.checked?700:400};font-size:${size.value/PH*H}px;font-family:'Noto Naskh Arabic','Tajawal',Tahoma,sans-serif;direction:${/[\u0590-\u08FF\uFB1D-\uFEFF]/.test(t)?"rtl":"ltr"};outline:1px dashed rgba(15,107,92,.55)`},t);
+      const d=h("div",{style:`position:absolute;left:${left};right:${right};top:${top};bottom:${bottom};transform:translate(${tx},${ty}) rotate(${-rot}deg);white-space:pre;text-align:center;line-height:1.45;pointer-events:none;color:${col.value};opacity:${op.value/100};font-weight:${bold.checked?700:400};font-size:${size.value/PH*H}px;font-family:'${fnt.value}','Noto Naskh Arabic',Tahoma,sans-serif;direction:${/[\u0590-\u08FF\uFB1D-\uFEFF]/.test(t)?"rtl":"ltr"};outline:1px dashed rgba(15,107,92,.55)`},t);
       ov.append(d)}
     if(cust&&kind==="free")ov.append(h("div",{class:"marker",style:`left:${cust[0]*100}%;top:${cust[1]*100}%`}))};
-  [txt,size,col,op,ang].forEach(e=>e.addEventListener("input",mark));[bold,ar].forEach(e=>e.addEventListener("change",mark));
+  [txt,size,col,op,ang].forEach(e=>e.addEventListener("input",mark));[bold,ar].forEach(e=>e.addEventListener("change",mark));fnt.addEventListener("change",()=>{fontWarm(fnt.value);mark();setTimeout(mark,400)});fontWarm(fnt.value);
   const rend=()=>{stage.innerHTML="";stage.append(pagerEl(rend));ov=h("div",{class:"ov"});st=h("div",{class:"stage"},h("img",{class:"pg",src:thumb(state.doc.id,state.page,90),onload:mark}),ov);stage.append(st);
     stage.append(h("div",{class:"tip"},"المعاينة أعلاه تقريبية لمكان النص وحجمه؛ يظهر النص الفعلي في الملف الناتج بعد التطبيق."));
     api("/api/psize?id="+state.doc.id+"&page="+state.page).then(r=>{PW=r.w;PH=r.h;mark()}).catch(()=>{});
     ov.onclick=e=>{if(kind!=="free")return;const r=st.getBoundingClientRect();cust=[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height];paintPos();mark()};mark()};
   const btn=h("button",{class:"btn",onclick:async()=>{if(kind!=="pagenum"&&!txt.value.trim())return alert("اكتب النص أولًا");
-    const body={id:state.doc.id,password:state.pwd,kind,text:txt.value,size:+size.value,color:col.value,bold:bold.checked,opacity:op.value/100,angle:+ang.value,range:rng.value,arabicDigits:ar.checked,pos:cust?"custom":pos};if(cust){body.x=cust[0];body.y=cust[1]}
+    const body={id:state.doc.id,password:state.pwd,kind,text:txt.value,size:+size.value,color:col.value,bold:bold.checked,opacity:op.value/100,angle:+ang.value,range:rng.value,arabicDigits:ar.checked,font:fnt.value,pos:cust?"custom":pos};if(cust){body.x=cust[0];body.y=cust[1]}
     const r=await run(btn,box,()=>post("addtext",body));if(r)box.append(resultCard(r,{extra:h("div",{class:"row",style:"margin-top:10px"},h("img",{src:thumb(r.id,state.page,60),style:"max-width:260px;border:1px solid var(--line)"}))}))}},"تطبيق على الملف");
-  p.append(h("div",{class:"grid"},h("div",{class:"card"},seg,field("النص",txt),tweak,h("div",{class:"row"},field("الحجم",size),field("اللون",col)),field("الشفافية",op),field("الدوران (للنص الحر)",ang),h("div",{class:"flexh",style:"margin-top:6px"},bold,h("span",{},"عريض")),h("label",{},"الموضع"),posGrid,rng,h("div",{style:"margin-top:14px"},btn,progEl()),box),stage));
+  p.append(h("div",{class:"grid"},h("div",{class:"card"},seg,field("النص",txt),field("نوع الخط",fnt),tweak,h("div",{class:"row"},field("الحجم",size),field("اللون",col)),field("الشفافية",op),field("الدوران (للنص الحر)",ang),h("div",{class:"flexh",style:"margin-top:6px"},bold,h("span",{},"عريض")),h("label",{},"الموضع"),posGrid,rng,h("div",{style:"margin-top:14px"},btn,progEl()),box),stage));
   showKind();rend();
 };
 
