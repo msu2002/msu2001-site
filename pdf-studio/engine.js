@@ -420,6 +420,14 @@
     const w = Math.hypot(+m[1], +m[2]), h = Math.hypot(+m[3], +m[4]);
     return w * h >= 0.5 * W * H;
   }
+  function areaAt(mk, idx, W, H) {
+    const seg = mk.slice(Math.max(0, idx - 200), idx);
+    const m = /([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+cm\s*$/.exec(seg);
+    if (!m) return null;
+    return Math.abs(+m[1] * +m[4] - +m[2] * +m[3]) / (W * H);
+  }
+  const STAMPRE = /stamp|seal|ختم|أختام|اختام|approved|received|paid|void|معتمد|مستلم/i;
+  const STAMP_ANN = new Set(["/Stamp", "/FreeText", "/Ink", "/Square", "/Circle", "/Polygon", "/PolyLine", "/Line", "/Caret", "/Highlight", "/Underline", "/StrikeOut", "/Squiggly"]);
   async function cleanVector(doc, opt, log) {
     const ctx = doc.context, pages = doc.getPages(), n = pages.length;
     function cleanForm(ref, W, H, depth, seen, WMre) {
@@ -433,7 +441,10 @@
         const o = ctx.lookup(v), dict = o && (o.dict || o), sub = dict && dict.get && dict.get(PDFName.of("Subtype")), ss = sub ? sub.toString() : "";
         const alpha = !!(dict && dict.get && (dict.get(PDFName.of("SMask")) || dict.get(PDFName.of("Mask"))));
         const re = new RegExp(esc(k.toString()) + "\\s+Do\\b", "g"); let m;
-        while ((m = re.exec(mk))) { if (WMre.test(k.toString()) || (ss === "/Image" && alpha && coversPage(mk, m.index, W, H))) ranges.push([m.index, m.index + m[0].length]); }
+        while ((m = re.exec(mk))) {
+          const ar = ss === "/Image" ? areaAt(mk, m.index, W, H) : null;
+          if (WMre.test(k.toString()) || (opt.stamps && STAMPRE.test(k.toString())) || (ss === "/Image" && alpha && coversPage(mk, m.index, W, H)) || (ss === "/Image" && opt.stamps && alpha && ar !== null && ar <= 0.4) || (ss === "/Image" && opt.allImages && ar !== null && ar >= 0.12 && ar < 0.8)) ranges.push([m.index, m.index + m[0].length]);
+        }
         if (ss === "/Form" && !WMre.test(k.toString())) cnt += cleanForm(v, W, H, depth + 1, seen, WMre);
       }
       if (ranges.length) {
@@ -452,7 +463,7 @@
       const keep = [];
       for (const r of an.asArray()) {
         const d = ctx.lookup(r, PDFDict), st = d && d.get(PDFName.of("Subtype")), ss = st ? st.toString() : "";
-        if (ss === "/Watermark" || (opt.stamps && ss === "/Stamp")) removed++; else keep.push(r);
+        if (ss === "/Watermark" || (opt.stamps && STAMP_ANN.has(ss))) removed++; else keep.push(r);
       }
       if (keep.length !== an.size()) pg.node.set(PDFName.of("Annots"), ctx.obj(keep));
     }
@@ -460,7 +471,7 @@
     const ocg = new Set();
     try {
       const props = doc.catalog.lookup(PDFName.of("OCProperties"), PDFDict), arr = props && props.lookup(PDFName.of("OCGs"), PDFArray);
-      if (arr) for (const r of arr.asArray()) { const d = ctx.lookup(r, PDFDict), nm = d && d.lookup(PDFName.of("Name")); const t = nm && nm.decodeText ? nm.decodeText() : ""; if (WM.test(t)) ocg.add(r.toString()); }
+      if (arr) for (const r of arr.asArray()) { const d = ctx.lookup(r, PDFDict), nm = d && d.lookup(PDFName.of("Name")); const t = nm && nm.decodeText ? nm.decodeText() : ""; if (WM.test(t) || (opt.stamps && STAMPRE.test(t))) ocg.add(r.toString()); }
     } catch (e) {}
     /* collect per-page info */
     const info = [], useCount = new Map();
@@ -504,6 +515,13 @@
         const auto = b.diag && b.key.length >= 3 && (keyPages.get(b.key) || new Set()).size >= need;
         if (byUser || auto) ranges.push([b.a, b.b]);
       }
+      /* tagged Artifact watermark blocks (Acrobat style) */
+      { const re = /\/Artifact\s*<<[^>]*?\/Subtype\s*\/Watermark[^>]*?>>\s*BDC/g; let m;
+        while ((m = re.exec(mk))) {
+          const tok = /\b(BDC|BMC|EMC)\b/g; tok.lastIndex = m.index + m[0].length; let d = 1, t, end = -1;
+          while ((t = tok.exec(mk))) { if (t[1] === "EMC") d--; else d++; if (d === 0) { end = t.index + 3; break; } }
+          if (end > 0) ranges.push([m.index, end]);
+        } }
       /* optional content blocks */
       for (const nm of info[i].oc) {
         const re = new RegExp("\\/OC\\s+" + esc(nm) + "\\s+BDC", "g"); let m;
@@ -514,12 +532,27 @@
         }
       }
       /* XObjects: named watermark, or repeated images with transparency */
+      const { width: PWd, height: PHt } = pages[i].getSize();
+      /* does the page have a full-page base image (scan)? remember where it is drawn */
+      let baseAt = -1;
+      if (opt.allImages) for (const x of info[i].xo) if (x.sub === "/Image" && !x.alpha) {
+        const re = new RegExp(esc(x.name) + "\\s+Do\\b", "g"); let m;
+        while ((m = re.exec(mk))) { const ar = areaAt(mk, m.index, PWd, PHt); if (ar !== null && ar >= 0.8 && (baseAt < 0 || m.index < baseAt)) baseAt = m.index; }
+      }
       for (const x of info[i].xo) {
         const rep = useCount.get(x.key) >= need && n >= 2;
-        const kill = WM.test(x.name) || (x.sub === "/Image" && rep && (x.alpha || opt.allImages));
+        const kill = WM.test(x.name) || (opt.stamps && STAMPRE.test(x.name)) || (x.sub === "/Image" && rep && (x.alpha || opt.allImages));
         const re = new RegExp(esc(x.name) + "\\s+Do\\b", "g"); let m;
-        const { width: PWd, height: PHt } = pages[i].getSize();
-        while ((m = re.exec(mk))) { if (kill || (x.sub === "/Image" && x.alpha && coversPage(mk, m.index, PWd, PHt))) ranges.push([m.index, m.index + m[0].length]); }
+        while ((m = re.exec(mk))) {
+          let k2 = kill || (x.sub === "/Image" && x.alpha && coversPage(mk, m.index, PWd, PHt));
+          if (!k2 && x.sub === "/Image") {
+            const ar = areaAt(mk, m.index, PWd, PHt);
+            if (opt.stamps && x.alpha && ar !== null && ar <= 0.4) k2 = true;
+            if (opt.allImages && ar !== null && ar >= 0.1 && baseAt >= 0 && m.index > baseAt) k2 = true;
+            if (opt.allImages && x.alpha && ar !== null && ar >= 0.1) k2 = true;
+          }
+          if (k2) ranges.push([m.index, m.index + m[0].length]);
+        }
         if (x.sub === "/Form" && !WM.test(x.name)) { const f = cleanForm(x.ref, PWd, PHt, 0, new Set(), WM); if (f) { removed += f; touched.add(i); } }
       }
       if (!ranges.length) continue;
@@ -543,6 +576,16 @@
     }
     ctx.putImageData(d, 0, 0); return ch;
   }
+  async function stampCanvas(c) {
+    const ctx = c.getContext("2d", { willReadFrequently: true }), d = ctx.getImageData(0, 0, c.width, c.height), a = d.data; let ch = 0;
+    for (let i = 0; i < a.length; i += 4) {
+      const r = a[i], g = a[i + 1], b = a[i + 2], mx = Math.max(r, g, b), mn = Math.min(r, g, b), chroma = mx - mn;
+      if (chroma < 18) continue;
+      const k = Math.min(1, (chroma - 18) / 25);
+      a[i] = r + (255 - r) * k; a[i + 1] = g + (255 - g) * k; a[i + 2] = b + (255 - b) * k; ch++;
+    }
+    ctx.putImageData(d, 0, 0); return ch;
+  }
   async function op_watermark(p) {
     const f = getF(p.id), log = [], pdf = await getPdf(p.id), n = pdf.numPages;
     const texts = String(p.texts || "").split(/[;؛\n]/).map((s) => s.trim()).filter(Boolean);
@@ -555,7 +598,7 @@
     const wash = new Set();
     for (let i = 0; i < n; i++) {
       if (p.aggressive) { wash.add(i); continue; }
-      if (p.scan === false || touched.has(i)) continue;
+      if (p.scan === false && !p.stamps || (touched.has(i) && !p.stamps)) continue;
       const page = await rp.getPage(i + 1);
       const tc = await page.getTextContent(), chars = tc.items.reduce((s, it) => s + (it.str || "").trim().length, 0);
       if (chars > 20) continue;
@@ -568,7 +611,8 @@
       for (let i = 0; i < n; i++) {
         if (wash.has(i)) {
           const [W, H] = await pageSize(rp, i), sc = Math.min(200 / 72, 4200 / Math.max(W, H)), c = await renderPage(rp, i, sc);
-          await washCanvas(c, 170, 215, 8);
+          if (p.aggressive) await washCanvas(c, 140, 200, 45); else await washCanvas(c, 170, 215, 8);
+          if (p.stamps) await stampCanvas(c);
           const emb = await out.embedJpg(await canvasBytes(c, "image/jpeg", 0.92)), pg = out.addPage([W, H]);
           pg.drawImage(emb, { x: 0, y: 0, width: W, height: H });
         } else { const [cp] = await out.copyPages(doc, [i]); out.addPage(cp); }
