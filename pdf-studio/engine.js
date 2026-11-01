@@ -380,6 +380,28 @@
     return { ...r, pages: idx.length };
   }
 
+
+  /* ---------- fill / annotate PDF (free text placed on pages) ---------- */
+  window.pdfjsDoc = (id) => getPdf(id);
+  async function op_fillpdf(p) {
+    const f = getF(p.id), doc = await loadLib(p.id), by = {};
+    for (const it of p.items || []) if ((it.text || "").trim()) (by[it.page] = by[it.page] || []).push(it);
+    let n = 0;
+    for (const pno of Object.keys(by)) {
+      const pg = doc.getPage(+pno), H = pg.getSize().height;
+      if (pg.getRotation().angle) throw new ApiError("الكتابة على الصفحات المدوّرة غير مدعومة. دوّر الصفحة أولًا.");
+      for (const it of by[pno]) {
+        const rtl = hasArabic(it.text), ti = await textImage(it.text, +it.size || 12, it.color, it.bold, rtl ? "right" : "left", 0, it.font);
+        const emb = await doc.embedPng(ti.bytes);
+        const x = rtl ? it.x + (+it.w || ti.w) - ti.w : it.x;
+        pg.drawImage(emb, { x, y: H - it.y - ti.h, width: ti.w, height: ti.h });
+        n++; await tick();
+      }
+    }
+    const r = await finalize(doc, p.id, baseOf(f.name) + "_معبّأ.pdf");
+    return { ...r, items: n };
+  }
+
   /* ---------- watermark removal ---------- */
   const u8str = (u) => { let s = ""; for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return s; };
   const strU8 = (s) => { const u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i) & 255; return u; };
@@ -770,9 +792,10 @@
   function loadScriptOnce(src) { return new Promise((res, rej) => { const s = document.createElement("script"); s.src = src; s.onload = res; s.onerror = () => rej(new Error("تعذّر تحميل ملفات التعرف الضوئي (مجلد ocr)")); document.head.appendChild(s); }); }
   async function getOcr() {
     if (_ocr) return _ocr;
-    if (!window.Tesseract) await loadScriptOnce("ocr/tesseract.min.js");
-    const base = new URL("ocr/", location.href).href.replace(/\/$/, "");
-    _ocr = await window.Tesseract.createWorker(["ara", "eng"], 1, { workerPath: base + "/worker.min.js", corePath: base, langPath: base, gzip: true, logger: () => {} });
+    let local = false; try { local = (await fetch("ocr/ara.traineddata.gz", { method: "HEAD" })).ok; } catch (e) {}
+    if (!window.Tesseract) await loadScriptOnce(local ? "ocr/tesseract.min.js" : "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js");
+    if (local) { const base = new URL("ocr/", location.href).href.replace(/\/$/, ""); _ocr = await window.Tesseract.createWorker(["ara", "eng"], 1, { workerPath: base + "/worker.min.js", corePath: base, langPath: base, gzip: true, logger: () => {} }); }
+    else _ocr = await window.Tesseract.createWorker(["ara", "eng"], 1, { logger: () => {} });
     return _ocr;
   }
   async function ocrItems(pdf, pi, W, H) {
@@ -990,7 +1013,7 @@
     return { id: register(await zip.generateAsync({ type: "uint8array", compression: "STORE" }), name, "zip"), name, log };
   };
 
-  const OPS = { compresspdf: op_compresspdf, watermark: op_watermark, signature_clean: op_signature_clean, sign: op_sign, merge: op_merge, split: op_split, toimages: op_toimages, edittext: op_edittext, addtext: op_addtext, toword: op_toword };
+  const OPS = { compresspdf: op_compresspdf, watermark: op_watermark, signature_clean: op_signature_clean, sign: op_sign, merge: op_merge, split: op_split, toimages: op_toimages, edittext: op_edittext, addtext: op_addtext, toword: op_toword, fillpdf: op_fillpdf };
 
   /* ---------- fetch router: the UI talks to /api/* exactly as before, but it is all local ---------- */
   const realFetch = window.fetch.bind(window);
