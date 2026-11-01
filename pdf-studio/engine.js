@@ -413,10 +413,39 @@
     }
     return s;
   }
+  function coversPage(mk, idx, W, H) {
+    const seg = mk.slice(Math.max(0, idx - 200), idx);
+    const m = /([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+cm\s*$/.exec(seg);
+    if (!m) return false;
+    const w = Math.hypot(+m[1], +m[2]), h = Math.hypot(+m[3], +m[4]);
+    return w * h >= 0.5 * W * H;
+  }
   async function cleanVector(doc, opt, log) {
     const ctx = doc.context, pages = doc.getPages(), n = pages.length;
+    function cleanForm(ref, W, H, depth, seen, WMre) {
+      if (depth > 3 || seen.has(ref.toString())) return 0; seen.add(ref.toString());
+      const st = ctx.lookup(ref); if (!(st instanceof PDFRawStream)) return 0;
+      const res = st.dict.lookup(PDFName.of("Resources")), xo = res && res.lookup && res.lookup(PDFName.of("XObject"));
+      if (!(xo instanceof PDFDict)) return 0;
+      let src; try { src = u8str(decodePDFRawStream(st).decode()); } catch (e) { return 0; }
+      const mk = maskStrings(src), ranges = []; let cnt = 0;
+      for (const [k, v] of xo.entries()) {
+        const o = ctx.lookup(v), dict = o && (o.dict || o), sub = dict && dict.get && dict.get(PDFName.of("Subtype")), ss = sub ? sub.toString() : "";
+        const alpha = !!(dict && dict.get && (dict.get(PDFName.of("SMask")) || dict.get(PDFName.of("Mask"))));
+        const re = new RegExp(esc(k.toString()) + "\\s+Do\\b", "g"); let m;
+        while ((m = re.exec(mk))) { if (WMre.test(k.toString()) || (ss === "/Image" && alpha && coversPage(mk, m.index, W, H))) ranges.push([m.index, m.index + m[0].length]); }
+        if (ss === "/Form" && !WMre.test(k.toString())) cnt += cleanForm(v, W, H, depth + 1, seen, WMre);
+      }
+      if (ranges.length) {
+        ranges.sort((a, b) => a[0] - b[0]);
+        let out = "", pos = 0; for (const [a, b] of ranges) { if (a < pos) continue; out += src.slice(pos, a) + " "; pos = b; } out += src.slice(pos);
+        const keep = {}; for (const [k, v] of st.dict.entries()) { const nm = k.decodeText(); if (!["Length", "Filter", "DecodeParms"].includes(nm)) keep[nm] = v; }
+        ctx.assign(ref, ctx.flateStream(strU8(out), keep)); cnt += ranges.length;
+      }
+      return cnt;
+    }
     const WM = /watermark|علامة|مائي|مسودة|draft|confidential|سري/i;
-    let removed = 0;
+    let removed = 0; const touched = new Set();
     /* annotations */
     for (const pg of pages) {
       const an = pg.node.Annots(); if (!an) continue;
@@ -441,7 +470,7 @@
       if (x instanceof PDFDict) for (const [k, v] of x.entries()) {
         const o = ctx.lookup(v), dict = o && (o.dict || o), st = dict && dict.get && dict.get(PDFName.of("Subtype")), ss = st ? st.toString() : "";
         const alpha = !!(dict && dict.get && (dict.get(PDFName.of("SMask")) || dict.get(PDFName.of("Mask"))));
-        const key = v.toString(); xo.push({ name: k.toString(), key, sub: ss, alpha });
+        const key = v.toString(); xo.push({ name: k.toString(), key, sub: ss, alpha, ref: v });
         useCount.set(key, (useCount.get(key) || 0) + 1);
       }
       if (pr instanceof PDFDict) for (const [k, v] of pr.entries()) if (ocg.has(v.toString())) oc.push(k.toString());
@@ -488,19 +517,20 @@
       for (const x of info[i].xo) {
         const rep = useCount.get(x.key) >= need && n >= 2;
         const kill = WM.test(x.name) || (x.sub === "/Image" && rep && (x.alpha || opt.allImages));
-        if (!kill) continue;
         const re = new RegExp(esc(x.name) + "\\s+Do\\b", "g"); let m;
-        while ((m = re.exec(mk))) ranges.push([m.index, m.index + m[0].length]);
+        const { width: PWd, height: PHt } = pages[i].getSize();
+        while ((m = re.exec(mk))) { if (kill || (x.sub === "/Image" && x.alpha && coversPage(mk, m.index, PWd, PHt))) ranges.push([m.index, m.index + m[0].length]); }
+        if (x.sub === "/Form" && !WM.test(x.name)) { const f = cleanForm(x.ref, PWd, PHt, 0, new Set(), WM); if (f) { removed += f; touched.add(i); } }
       }
       if (!ranges.length) continue;
       ranges.sort((a, b) => a[0] - b[0]);
       const merged = []; for (const r of ranges) { const l = merged[merged.length - 1]; if (l && r[0] < l[1]) l[1] = Math.max(l[1], r[1]); else merged.push([...r]); }
       let out = "", pos = 0; for (const [a, b] of merged) { out += s.slice(pos, a) + " "; pos = b; } out += s.slice(pos);
       pages[i].node.set(PDFName.of("Contents"), ctx.register(ctx.flateStream(strU8(out))));
-      removed += merged.length;
+      removed += merged.length; touched.add(i);
     }
     if (removed) log.push(`حُذف ${removed} عنصرًا من طبقات العلامة المائية.`);
-    return removed;
+    return { removed, touched };
   }
   async function washCanvas(c, lo, hi, tol) {
     const ctx = c.getContext("2d", { willReadFrequently: true }), d = ctx.getImageData(0, 0, c.width, c.height), a = d.data, rng = hi - lo; let ch = 0;
@@ -517,14 +547,16 @@
     const f = getF(p.id), log = [], pdf = await getPdf(p.id), n = pdf.numPages;
     const texts = String(p.texts || "").split(/[;؛\n]/).map((s) => s.trim()).filter(Boolean);
     const doc = await loadLib(p.id);
-    let vec = 0;
-    try { vec = await cleanVector(doc, { texts, stamps: !!p.stamps, allImages: !!p.allImages }, log); }
+    let vec = 0, touched = new Set();
+    try { const cv = await cleanVector(doc, { texts, stamps: !!p.stamps, allImages: !!p.allImages }, log); vec = cv.removed; touched = cv.touched; }
     catch (e) { log.push("تعذّر تنظيف طبقات الملف: " + e.message); }
+    let rp = pdf;
+    if (vec) { try { rp = await pdfjsLib.getDocument({ data: (await doc.save()).slice(), isEvalSupported: false }).promise; } catch (e) { rp = pdf; } }
     const wash = new Set();
     for (let i = 0; i < n; i++) {
       if (p.aggressive) { wash.add(i); continue; }
-      if (p.scan === false) continue;
-      const page = await pdf.getPage(i + 1);
+      if (p.scan === false || touched.has(i)) continue;
+      const page = await rp.getPage(i + 1);
       const tc = await page.getTextContent(), chars = tc.items.reduce((s, it) => s + (it.str || "").trim().length, 0);
       if (chars > 20) continue;
       const ol = await page.getOperatorList(), O = pdfjsLib.OPS;
@@ -535,7 +567,7 @@
       out = await PDFDocument.create();
       for (let i = 0; i < n; i++) {
         if (wash.has(i)) {
-          const [W, H] = await pageSize(pdf, i), sc = Math.min(200 / 72, 4200 / Math.max(W, H)), c = await renderPage(pdf, i, sc);
+          const [W, H] = await pageSize(rp, i), sc = Math.min(200 / 72, 4200 / Math.max(W, H)), c = await renderPage(rp, i, sc);
           await washCanvas(c, 170, 215, 8);
           const emb = await out.embedJpg(await canvasBytes(c, "image/jpeg", 0.92)), pg = out.addPage([W, H]);
           pg.drawImage(emb, { x: 0, y: 0, width: W, height: H });
