@@ -338,26 +338,47 @@ views.images=p=>{
 // ===================== edit text =====================
 let edits=[];
 views.edit=p=>{
-  p.append(...head("تعديل النص","اضغط على أي سطر في الصفحة لتعديله. التعديلات تُحفظ في ملف جديد ولا يُمس الأصل."));
+  p.append(...head("تعديل النص","اضغط على أي سطر في الصفحة لتعديله. للملفات الممسوحة ضوئيًا (بدون نص): فعّل «التحديد اليدوي» وارسم مستطيلًا فوق الكلمة أو السطر المراد استبداله. المعاينة تظهر على الصفحة قبل الحفظ."));
   p.append(docBar(()=>go("edit")));
   if(!state.doc)return;
   edits=[];
-  const box=h("div"),stage=h("div",{class:"stage-wrap"}),form=h("div",{class:"card"},h("div",{class:"hint"},"اختر سطرًا من الصفحة…"));
-  let spans=[],sel=null;
+  const box=h("div"),stage=h("div",{class:"stage-wrap"}),form=h("div",{class:"card"},h("div",{class:"hint"},"اختر سطرًا من الصفحة، أو فعّل التحديد اليدوي وارسم مستطيلًا…"));
+  let spans=[],sel=null,PW=595,PH=842,manual=false,ovR=null,stR=null,live=null;
+  const mchk=h("input",{type:"checkbox"});
+  const manualRow=h("div",{class:"card flexh"},mchk,h("span",{},"التحديد اليدوي (للملفات الممسوحة ضوئيًا): ارسم مستطيلًا فوق الجزء المراد تغييره"));
   const listEl=h("ul",{class:"list"});
+  const isAr=t=>/[\u0590-\u08FF\uFB1D-\uFEFF]/.test(t);
+  const paintPending=()=>{if(!ovR)return;$$(".pv",ovR).forEach(x=>x.remove());const H=stR.getBoundingClientRect().height;if(!H)return;
+    const items=edits.filter(e=>e.page===state.page&&!(live&&sel&&e.key===sel.key));if(live)items.push(live);
+    items.forEach(e=>{const [x0,y0,x1,y1]=e.rect;const al=e.align||"right";
+      ovR.append(h("div",{class:"pv",style:`position:absolute;left:${(x0-1.5)/PW*100}%;top:${(y0-1.5)/PH*100}%;width:${(x1-x0+3)/PW*100}%;height:${(y1-y0+3)/PH*100}%;background:#fff;display:flex;align-items:center;justify-content:${al==="left"?"flex-start":al==="center"?"center":"flex-end"};overflow:visible;pointer-events:none;color:${e.color};font-weight:${e.bold?700:400};font-size:${e.size/PH*H}px;line-height:1;white-space:pre;font-family:'Noto Naskh Arabic','Tajawal',Tahoma,sans-serif;direction:${isAr(e.text||"")?"rtl":"ltr"}`},e.text||""))})};
   const paintList=()=>{listEl.innerHTML="";edits.forEach((e,i)=>listEl.append(h("li",{},h("span",{class:"chip"},"ص "+fmt(e.page+1)),h("span",{class:"nm"},e.text||"(حذف)"),h("button",{class:"btn ghost sm",onclick:()=>{edits.splice(i,1);paintList();rend()}},"إلغاء"))))};
   const openForm=(s)=>{sel=s;form.innerHTML="";const t=h("textarea",{},"");t.value=s.text;const sz=h("input",{type:"number",value:s.size,min:4,max:200,step:.5}),cl=h("input",{type:"color",value:s.color}),bd=h("input",{type:"checkbox"});bd.checked=s.bold;
     const align=h("select",{},h("option",{value:"right"},"يمين"),h("option",{value:"center"},"وسط"),h("option",{value:"left"},"يسار"));
+    const upd=()=>{live={page:state.page,key:s.key,rect:s.rect,text:t.value,size:+sz.value||12,color:cl.value,bold:bd.checked,align:align.value};paintPending()};
+    [t,sz,cl].forEach(e=>e.addEventListener("input",upd));[bd,align].forEach(e=>e.addEventListener("change",upd));
     form.append(h("b",{},"تعديل السطر"),field("النص الجديد (اتركه فارغًا للحذف)",t),h("div",{class:"row"},field("الحجم",sz),field("اللون",cl),field("المحاذاة",align)),h("div",{class:"flexh",style:"margin-top:6px"},bd,h("span",{},"عريض")),
-      h("div",{class:"row",style:"margin-top:12px"},h("button",{class:"btn fix",onclick:()=>{const old=edits.findIndex(e=>e.page===state.page&&e.key===s.key);const e={page:state.page,key:s.key,rect:s.rect,text:t.value,size:+sz.value,color:cl.value,bold:bd.checked,align:align.value};if(old>=0)edits[old]=e;else edits.push(e);paintList();rend();form.innerHTML="";form.append(h("div",{class:"hint"},"تمت إضافة التعديل، اختر سطرًا آخر أو احفظ الملف."))}},"إضافة التعديل")))};
-  const rend=async()=>{stage.innerHTML="";stage.append(pagerEl(()=>{sel=null;rend()}));
-    const st=h("div",{class:"stage"},h("img",{class:"pg",src:thumb(state.doc.id,state.page,100)}));const ov=h("div",{class:"ov"});st.append(ov);stage.append(st);
-    try{const r=await api(`/api/spans?id=${state.doc.id}&page=${state.page}&password=${encodeURIComponent(state.pwd)}`);spans=r.spans;
-      if(!spans.length)stage.append(h("div",{class:"tip"},"لا توجد نصوص قابلة للتعديل في هذه الصفحة (قد تكون ممسوحة ضوئيًا)."));
+      h("div",{class:"row",style:"margin-top:12px"},h("button",{class:"btn fix",onclick:()=>{const old=edits.findIndex(e=>e.page===state.page&&e.key===s.key);const e={page:state.page,key:s.key,rect:s.rect,text:t.value,size:+sz.value,color:cl.value,bold:bd.checked,align:align.value};if(old>=0)edits[old]=e;else edits.push(e);live=null;sel=null;paintList();rend();form.innerHTML="";form.append(h("div",{class:"hint"},"تمت إضافة التعديل وظهرت معاينته على الصفحة. اختر موضعًا آخر أو احفظ الملف."))}},"إضافة التعديل"),
+        h("button",{class:"btn ghost fix",onclick:()=>{live=null;sel=null;paintPending();form.innerHTML="";form.append(h("div",{class:"hint"},"أُلغي التحديد."))}},"إلغاء")));
+    upd()};
+  const rend=async()=>{stage.innerHTML="";live=null;stage.append(pagerEl(()=>{sel=null;rend()}));
+    const img=h("img",{class:"pg",src:thumb(state.doc.id,state.page,100),onload:()=>paintPending()});const st=h("div",{class:"stage"},img);const ov=h("div",{class:"ov"});st.append(ov);stage.append(st);ovR=ov;stR=st;
+    const drawL=h("div",{style:"position:absolute;inset:0;cursor:crosshair;touch-action:none;display:"+(manual?"block":"none")});
+    try{const sz=await api("/api/psize?id="+state.doc.id+"&page="+state.page);PW=sz.w;PH=sz.h;
+      const r=await api(`/api/spans?id=${state.doc.id}&page=${state.page}&password=${encodeURIComponent(state.pwd)}`);spans=r.spans;
+      if(!spans.length){manual=true;mchk.checked=true;drawL.style.display="block";stage.append(h("div",{class:"tip"},"لا يوجد نص قابل للتحديد في هذه الصفحة (ملف ممسوح ضوئيًا). فُعّل التحديد اليدوي: ارسم مستطيلًا فوق الجزء الذي تريد استبداله."))}
       spans.forEach((s,i)=>{s.key=i+":"+s.rect.map(v=>Math.round(v)).join(",");const [x0,y0,x1,y1]=s.bbox;const done=edits.some(e=>e.page===state.page&&e.key===s.key);
-        const b=h("div",{class:"span-box"+(done?" done":""),title:s.text,style:`left:${x0*100}%;top:${y0*100}%;width:${(x1-x0)*100}%;height:${(y1-y0)*100}%`,onclick:()=>{$$(".span-box",ov).forEach(x=>x.classList.remove("sel"));b.classList.add("sel");const ex=edits.find(e=>e.page===state.page&&e.key===s.key);openForm(ex?{...s,text:ex.text,size:ex.size,color:ex.color,bold:ex.bold}:s)}});ov.append(b)})}catch(e){stage.append(h("div",{class:"err"},e.message))}};
+        const b=h("div",{class:"span-box"+(done?" done":""),title:s.text,style:`left:${x0*100}%;top:${y0*100}%;width:${(x1-x0)*100}%;height:${(y1-y0)*100}%`,onclick:()=>{$$(".span-box",ov).forEach(x=>x.classList.remove("sel"));b.classList.add("sel");const ex=edits.find(e=>e.page===state.page&&e.key===s.key);openForm(ex?{...s,text:ex.text,size:ex.size,color:ex.color,bold:ex.bold}:s)}});ov.append(b)});
+      ov.append(drawL);
+      let a0=null,tmp=null;const frac=e=>{const r=st.getBoundingClientRect();return[Math.min(Math.max((e.clientX-r.left)/r.width,0),1),Math.min(Math.max((e.clientY-r.top)/r.height,0),1)]};
+      drawL.onpointerdown=e=>{drawL.setPointerCapture(e.pointerId);a0=frac(e);tmp=h("div",{class:"span-box sel"});ov.append(tmp)};
+      drawL.onpointermove=e=>{if(!a0)return;const c=frac(e);tmp.style.left=Math.min(a0[0],c[0])*100+"%";tmp.style.top=Math.min(a0[1],c[1])*100+"%";tmp.style.width=Math.abs(c[0]-a0[0])*100+"%";tmp.style.height=Math.abs(c[1]-a0[1])*100+"%"};
+      drawL.onpointerup=e=>{if(!a0)return;const c=frac(e),x0=Math.min(a0[0],c[0])*PW,x1=Math.max(a0[0],c[0])*PW,y0=Math.min(a0[1],c[1])*PH,y1=Math.max(a0[1],c[1])*PH;a0=null;tmp.remove();
+        if(x1-x0<6||y1-y0<6)return;openForm({text:"",size:Math.max(6,Math.round((y1-y0)*0.55*10)/10),color:"#000000",bold:false,rect:[x0,y0,x1,y1],key:"m"+Date.now()})};
+      mchk.onchange=()=>{manual=mchk.checked;drawL.style.display=manual?"block":"none"};
+      paintPending()}catch(e){stage.append(h("div",{class:"err"},e.message))}};
   const btn=h("button",{class:"btn",onclick:async()=>{if(!edits.length)return alert("لا توجد تعديلات");const r=await run(btn,box,()=>post("edittext",{id:state.doc.id,password:state.pwd,edits}));if(r)box.append(resultCard(r))}},"حفظ الملف المعدَّل");
-  p.append(h("div",{class:"grid"},h("div",{},form,h("div",{class:"card"},h("b",{},"التعديلات المعلّقة"),listEl,h("div",{style:"margin-top:12px"},btn,progEl()),box),h("div",{class:"tip"},"ملاحظة: يُغطّى السطر القديم ويُكتب الجديد بخط عربي قد يختلف عن خط الأصل، ويُدرج كصورة. الملفات الممسوحة ضوئيًا لا تحتوي نصًا قابلًا للتعديل.")),stage));
+  p.append(h("div",{class:"grid"},h("div",{},manualRow,form,h("div",{class:"card"},h("b",{},"التعديلات المعلّقة"),listEl,h("div",{style:"margin-top:12px"},btn,progEl()),box),h("div",{class:"tip"},"ملاحظة: يُغطّى الجزء القديم باللون الأبيض ويُكتب الجديد بخط عربي قد يختلف عن خط الأصل، ويُدرج كصورة. الملفات الممسوحة ضوئيًا تحتاج التحديد اليدوي.")),stage));
   rend();
 };
 
@@ -366,7 +387,7 @@ views.addtext=p=>{
   p.append(...head("إضافة عبارة أو اسم","أضف نصًا حرًا أو ختمًا أو ترقيمًا للصفحات أو ترويسة وتذييلًا."));
   p.append(docBar(()=>go("addtext")));
   if(!state.doc)return;
-  let kind="free",pos="bottom-center",cust=null;const box=h("div");
+  let kind="free",pos="middle-center",cust=null;const box=h("div");
   const kinds=[["free","نص حر"],["pagenum","ترقيم"],["header","ترويسة"],["footer","تذييل"]];
   const seg=h("div",{class:"seg"}),txt=h("textarea",{placeholder:"اكتب العبارة أو الاسم هنا"}),size=h("input",{type:"number",value:24,min:6,max:300}),col=h("input",{type:"color",value:"#000000"}),
     op=h("input",{type:"range",min:10,max:100,value:100}),ang=h("input",{type:"range",min:-90,max:90,value:0}),bold=h("input",{type:"checkbox"}),ar=h("input",{type:"checkbox"}),rng=pagesField("rng");
@@ -377,9 +398,23 @@ views.addtext=p=>{
     tweak.innerHTML="";
     if(kind==="pagenum"){if(!txt.value||txt.value==="")txt.value="{n}";tweak.append(h("div",{class:"tip"},"استخدم {n} لرقم الصفحة و{total} للعدد الكلي. مثال: صفحة {n} من {total}"),h("div",{class:"flexh",style:"margin-top:6px"},ar,h("span",{},"أرقام عربية (١، ٢، ٣)")))}
     if(kind==="free")tweak.append(h("div",{class:"tip"},"اضغط على الصفحة لتحديد مكان النص بدقة."));paintPos();mark()};
-  const stage=h("div",{class:"stage-wrap"});let st,ov,mk;
-  const mark=()=>{if(!ov)return;ov.innerHTML="";if(cust){mk=h("div",{class:"marker",style:`left:${cust[0]*100}%;top:${cust[1]*100}%`});ov.append(mk)}};
-  const rend=()=>{stage.innerHTML="";stage.append(pagerEl(rend));ov=h("div",{class:"ov"});st=h("div",{class:"stage"},h("img",{class:"pg",src:thumb(state.doc.id,state.page,90)}),ov);stage.append(st);
+  const stage=h("div",{class:"stage-wrap"});let st,ov,PW=595,PH=842;
+  const toAr=x=>String(x).replace(/[0-9]/g,d=>"٠١٢٣٤٥٦٧٨٩"[d]);
+  const curText=()=>{let t=txt.value;if(kind==="pagenum"){let n=String(state.page+1),tot=String(state.doc.pages);if(ar.checked){n=toAr(n);tot=toAr(tot)}t=(t||"{n}").replace(/\{n\}/g,n).replace(/\{total\}/g,tot)}return t};
+  const mark=()=>{if(!ov||!st)return;ov.innerHTML="";const H=st.getBoundingClientRect().height;if(!H)return;
+    const t=curText();
+    if(t.trim()){
+      const [v,hz]=(cust&&kind==="free"?"middle-center":pos).split("-"),isC=!!(cust&&kind==="free"),m=24;
+      const left=isC?cust[0]*100+"%":hz==="left"?m/PW*100+"%":hz==="center"?"50%":"auto",right=!isC&&hz==="right"?m/PW*100+"%":"auto";
+      const top=isC?cust[1]*100+"%":v==="top"?m/PH*100+"%":v==="middle"?"50%":"auto",bottom=!isC&&v==="bottom"?m/PH*100+"%":"auto";
+      const tx=(isC||hz==="center")?"-50%":"0",ty=(isC||v==="middle")?"-50%":"0",rot=kind==="pagenum"?0:+ang.value;
+      const d=h("div",{style:`position:absolute;left:${left};right:${right};top:${top};bottom:${bottom};transform:translate(${tx},${ty}) rotate(${-rot}deg);white-space:pre;text-align:center;line-height:1.45;pointer-events:none;color:${col.value};opacity:${op.value/100};font-weight:${bold.checked?700:400};font-size:${size.value/PH*H}px;font-family:'Noto Naskh Arabic','Tajawal',Tahoma,sans-serif;direction:${/[\u0590-\u08FF\uFB1D-\uFEFF]/.test(t)?"rtl":"ltr"};outline:1px dashed rgba(15,107,92,.55)`},t);
+      ov.append(d)}
+    if(cust&&kind==="free")ov.append(h("div",{class:"marker",style:`left:${cust[0]*100}%;top:${cust[1]*100}%`}))};
+  [txt,size,col,op,ang].forEach(e=>e.addEventListener("input",mark));[bold,ar].forEach(e=>e.addEventListener("change",mark));
+  const rend=()=>{stage.innerHTML="";stage.append(pagerEl(rend));ov=h("div",{class:"ov"});st=h("div",{class:"stage"},h("img",{class:"pg",src:thumb(state.doc.id,state.page,90),onload:mark}),ov);stage.append(st);
+    stage.append(h("div",{class:"tip"},"المعاينة أعلاه تقريبية لمكان النص وحجمه؛ يظهر النص الفعلي في الملف الناتج بعد التطبيق."));
+    api("/api/psize?id="+state.doc.id+"&page="+state.page).then(r=>{PW=r.w;PH=r.h;mark()}).catch(()=>{});
     ov.onclick=e=>{if(kind!=="free")return;const r=st.getBoundingClientRect();cust=[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height];paintPos();mark()};mark()};
   const btn=h("button",{class:"btn",onclick:async()=>{if(kind!=="pagenum"&&!txt.value.trim())return alert("اكتب النص أولًا");
     const body={id:state.doc.id,password:state.pwd,kind,text:txt.value,size:+size.value,color:col.value,bold:bold.checked,opacity:op.value/100,angle:+ang.value,range:rng.value,arabicDigits:ar.checked,pos:cust?"custom":pos};if(cust){body.x=cust[0];body.y=cust[1]}

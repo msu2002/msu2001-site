@@ -618,6 +618,7 @@
     try {
       if (path === "/api/ping") return J({ ok: true });
       if (path === "/api/upload") return J(await api_upload(q, opt.body));
+      if (path === "/api/psize") { const pdf = await getPdf(q.get("id")); const [w, h] = await pageSize(pdf, +q.get("page") || 0); return J({ w, h }); }
       if (path === "/api/info") return J(await info_of(q.get("id")));
       if (path === "/api/spans") return J(await api_spans(q));
       if (path.startsWith("/api/op/")) {
