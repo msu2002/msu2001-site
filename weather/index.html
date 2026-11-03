@@ -8,13 +8,13 @@
 <meta name="theme-color" content="#08130b">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23005c29'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle'%3E%E2%9B%88%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@500;600;700;800&family=Noto+Naskh+Arabic:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script>try{if(/[?&]embed=1/.test(location.search))document.documentElement.className="emb"}catch(e){}</script>
 <style>
 :root{--bg:#08130b;--card:#0f1d13;--card2:#13261a;--line:rgba(197,155,63,.28);--gold:#e8c87a;--green:#005c29;--lg:#4ade80;--tx:#faf7f2;--mu:#d9c3a3;--blue:#5fb4ff;--warn:#f5b84b;--yel:#ffe27a}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;background:radial-gradient(1200px 600px at 80% -10%,#10361f,transparent) no-repeat,var(--bg);color:var(--tx);font-family:Cairo,system-ui,sans-serif;min-height:100vh}
+body{margin:0;background:radial-gradient(1200px 600px at 80% -10%,#10361f,transparent) no-repeat,var(--bg);color:var(--tx);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;min-height:100vh}
 .wrap{max-width:1240px;margin:0 auto;padding:22px 16px 48px}
 a{color:var(--gold)}
 .back{display:inline-flex;gap:6px;align-items:center;font-size:13px;text-decoration:none;margin-bottom:14px}
@@ -63,6 +63,46 @@ h1{margin:6px 0 0;font-size:clamp(24px,4vw,32px);font-weight:800}h1 em{color:var
 .err{color:#ff9d9d;font-size:13px;padding:10px;display:none}
 .skel{opacity:.5}
 html.emb{background:#08130b}.dark-base{filter:invert(1) hue-rotate(180deg) brightness(.78) contrast(.92) saturate(.55)}.leaflet-container{background:#0a1a12}.emb .back{display:none}.emb body{background:transparent;min-height:0}.emb .wrap{padding:8px 16px 16px}
+h1,h3,.hh,.stage h4{font-family:"Noto Naskh Arabic",Amiri,serif}
+.hubhead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px;margin:6px 0 14px}
+.hh{margin:0;font-size:clamp(22px,3.4vw,28px);font-weight:700}.hh em{color:var(--gold);font-style:normal}
+.seg{display:flex;gap:4px;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:16px;padding:4px}.seg button{font:inherit;cursor:pointer;border:0;background:none;color:var(--mu);font-size:12.5px;padding:7px 14px;border-radius:12px}.seg button.on{background:var(--gold);color:#08130b;font-weight:700}
+.stages{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px}.stages.two{grid-template-columns:1fr 1fr}
+.stage{position:relative;height:640px;border-radius:26px;overflow:hidden;border:1px solid var(--line);background:#0a1a12}
+.stages.two .stage{height:600px}
+.stage .lmap,.stage .sfr{position:absolute;inset:0;width:100%;height:100%;border:0}.stage .sfr{display:none;background:#0a1a12}
+.glass{position:absolute;z-index:500;background:rgba(10,26,15,.76);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:18px}
+.tabsx{top:14px;left:50%;transform:translateX(-50%);display:flex;gap:4px;padding:5px;max-width:calc(100% - 24px);overflow-x:auto;scrollbar-width:none}.tabsx::-webkit-scrollbar{display:none}
+.tabsx button{font:inherit;cursor:pointer;border:0;background:none;white-space:nowrap;padding:8px 12px;border-radius:13px;font-size:13px;color:var(--mu);display:flex;gap:6px;align-items:center}
+.tabsx button.on{background:linear-gradient(135deg,#0a7a3a,#005c29);color:#fff;font-weight:700;box-shadow:0 0 0 1px rgba(74,222,128,.5)}
+.mod{top:74px;inset-inline-start:14px;width:250px;padding:13px 14px}.mod h4{margin:0 0 4px;font-size:17px}.mod p{margin:0;font-size:12px;color:var(--mu);line-height:1.75}
+.mod .b{display:inline-block;margin-top:8px;font-size:11px;padding:3px 10px;border-radius:99px;background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.4)}
+.legx{top:262px;inset-inline-start:14px;width:250px;padding:11px 14px;font-size:12px;color:var(--mu)}.bar{height:9px;border-radius:5px;background:linear-gradient(90deg,#7fe3ff,#4ade80,#f5d142,#f59e0b,#ef4444,#d946ef);margin:7px 0 3px}
+.nowp{top:74px;inset-inline-end:14px;width:230px;padding:13px 14px}.nowp small{color:var(--mu);font-size:12px}.nowp .t{font-size:42px;font-weight:700;color:var(--gold);line-height:1.05}
+.nowp .r{display:flex;justify-content:space-between;font-size:12.5px;color:var(--mu);margin-top:6px}.nowp .r b{color:#fff}
+.alertx{top:74px;left:50%;transform:translateX(-50%);padding:8px 16px;font-size:12.5px;display:none;gap:8px;align-items:center;border-color:rgba(245,184,75,.6);max-width:calc(100% - 560px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.alertx b{color:#f5b84b}
+.tools{top:250px;inset-inline-end:14px;display:flex;flex-direction:column;gap:2px;padding:5px;width:50px;align-items:center}.tools button{font:inherit;cursor:pointer;border:0;background:none;color:var(--tx);width:38px;height:38px;border-radius:11px;font-size:17px}.tools button:hover{background:rgba(232,200,122,.2)}
+.subs{bottom:16px;left:50%;transform:translateX(-50%);display:none;gap:4px;padding:5px;max-width:calc(100% - 24px);overflow-x:auto}.subs button{font:inherit;cursor:pointer;border:0;background:none;white-space:nowrap;padding:7px 13px;border-radius:12px;font-size:12.5px;color:var(--mu)}.subs button.on{background:var(--gold);color:#08130b;font-weight:700}
+.tl{bottom:14px;inset-inline:14px;padding:10px 14px;display:flex;align-items:center;gap:12px;font-size:12.5px;color:var(--mu)}
+.tl button{font:inherit;cursor:pointer;border:0;width:36px;height:36px;border-radius:50%;background:var(--gold);color:#08130b;font-size:14px;flex:none}.tl input{flex:1;accent-color:var(--gold)}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
+.stage .leaflet-control-attribution{background:rgba(8,19,11,.7);color:var(--mu);font-size:10px}.stage .leaflet-control-attribution a{color:var(--gold)}.stage .leaflet-tooltip{background:rgba(8,19,11,.92);color:#fff;border:1px solid var(--line);font-weight:700}
+@media(max-width:1100px){.stages.two{grid-template-columns:1fr}.quick{grid-template-columns:1fr 1fr}.alertx{max-width:calc(100% - 28px);top:128px}}
+@media(max-width:760px){.stage,.stages.two .stage{height:560px}.nowp,.legx,.tools{display:none}.mod{inset-inline:10px;width:auto;top:66px;padding:10px 12px}.mod p{display:none}.mod h4{margin:0;display:inline}.mod .b{margin:0 8px 0 0}.quick{grid-template-columns:1fr}.alertx{top:112px}.tl{inset-inline:10px;bottom:10px}}
+
+.offc{display:inline-flex;gap:7px;align-items:center;text-decoration:none;font-size:13px;font-weight:700;color:#ffd98a;background:linear-gradient(90deg,rgba(245,184,75,.2),rgba(245,184,75,.06));border:1px solid rgba(245,184,75,.6);border-radius:14px;padding:8px 14px}.offc:hover{background:rgba(245,184,75,.28)}
+.offi{top:14px;inset-inline-end:14px;display:flex;align-items:center;gap:6px;padding:8px 11px;text-decoration:none;color:#ffd98a;font-size:16px;border-color:rgba(245,184,75,.65)}.offi em{font-style:normal;font-size:11.5px;font-weight:700}
+@media(max-width:1100px){.offi em{display:none}.offi{padding:8px 10px}.tabsx{max-width:calc(100% - 130px);left:auto;transform:none;inset-inline-start:14px}}
+
+.study{display:flex;gap:14px;align-items:center;flex-wrap:wrap;border-radius:18px;padding:14px 16px;margin-bottom:16px;background:linear-gradient(90deg,rgba(74,222,128,.12),rgba(74,222,128,.03));border:1px solid rgba(74,222,128,.45)}
+.study .si{width:46px;height:46px;border-radius:14px;background:rgba(74,222,128,.15);display:flex;align-items:center;justify-content:center;font-size:24px;flex:none}.study .sb{flex:1;min-width:220px}.study b{font-size:17px}.study p{margin:3px 0 0;font-size:13px;color:var(--mu);line-height:1.7}
+.schips{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}.schips span{font-size:11.5px;padding:3px 10px;border-radius:99px;border:1px solid var(--line);background:rgba(0,0,0,.3);color:var(--tx)}
+.study .sact{display:flex;flex-direction:column;align-items:flex-end;gap:4px}.study .sact .btn{margin:0}
+.study[data-s=remote],.study[data-s=partial]{background:linear-gradient(90deg,rgba(245,184,75,.2),rgba(245,184,75,.05));border-color:rgba(245,184,75,.7)}.study[data-s=remote] .si,.study[data-s=partial] .si{background:rgba(245,184,75,.2)}
+.study[data-s=full]{background:linear-gradient(90deg,rgba(239,68,68,.22),rgba(239,68,68,.05));border-color:rgba(239,68,68,.7)}.study[data-s=full] .si{background:rgba(239,68,68,.2)}
+
+.stages.two .nowp{display:none}.stages.two .tabsx button{padding:7px 9px;font-size:12px}.stages.two .tabsx{max-width:calc(100% - 128px);left:auto;transform:none;inset-inline-start:14px}.stages.two .offi em{display:none}.stages.two .mod p{display:none}.stages.two .legx{top:150px}.stages.two .tools{top:150px}.stages.two .alertx{max-width:calc(100% - 28px);top:128px}
+
 @media(max-width:980px){.row,.radarwrap{grid-template-columns:1fr}.days{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:560px){.days{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.temp{font-size:58px}.mapbox{height:340px}}
 </style>
@@ -74,6 +114,7 @@ html.emb{background:#08130b}.dark-base{filter:invert(1) hue-rotate(180deg) brigh
 <div class="city" id="cities" role="tablist" aria-label="المدينة"></div></div>
 
 <div class="alert" id="alert" role="status" aria-live="polite"><div class="ic" id="aic">🌧️</div><div><b id="atitle"></b><p id="atext"></p></div><span class="chip" id="achip"></span></div>
+<div class="study" id="study" data-s="none" role="status" aria-live="polite"><div class="si" id="sti">🏫</div><div class="sb"><div class="lbl">تعليق الدراسة · محافظة الرس</div><b id="stt">جارٍ التحقق…</b><p id="stp"></p><div class="schips" id="stc"></div></div><div class="sact"><a id="stl" class="btn" href="https://moe.gov.sa" target="_blank" rel="noopener">القرار الرسمي ↗</a><span class="lbl" id="stu"></span></div></div>
 <div class="err" id="err">تعذّر تحميل بيانات الطقس الآن. تأكد من الاتصال بالإنترنت وحدّث الصفحة.</div>
 
 <div class="row">
@@ -94,27 +135,18 @@ html.emb{background:#08130b}.dark-base{filter:invert(1) hue-rotate(180deg) brigh
 <div class="sech"><h3>توقعات ٧ أيام</h3><span>العظمى / الصغرى · كمية الأمطار واحتمالها</span></div>
 <div class="days" id="days"></div>
 
-<div class="card" id="radar" style="margin-bottom:16px">
- <div class="hl"><h3 style="font-size:19px">الرادار المباشر لـ<span id="cname3">الرس</span></h3>
-  <div class="tabs" role="tablist"><button class="on" data-t="rain">🌧️ الأمطار</button><button data-t="light">⚡ البروق</button><button data-t="wind">🌀 الرياح والسحب</button><button data-t="sat">🛰️ القمر الصناعي</button><a href="https://www.ncm.gov.sa" target="_blank" rel="noopener" style="font-size:12.5px;margin-inline-start:6px">المصدر الرسمي: المركز الوطني للأرصاد ↗</a></div></div>
- <div class="radarwrap">
-  <div>
-   <div class="mapbox"><div id="map"></div><iframe id="frame" title="خريطة" loading="lazy"></iframe>
-    <div class="pill" id="mpill">رادار الأمطار</div>
-    <div class="ctl" id="ctl"><button id="play" aria-label="تشغيل">▶</button><input id="slider" type="range" min="0" max="0" value="0" aria-label="الزمن"><span id="ftime">—</span></div></div>
-   <div class="lgnd" id="lgnd"><span><i style="background:rgba(74,222,128,.7)"></i>مطر خفيف</span><span><i style="background:rgba(245,184,75,.9)"></i>متوسط</span><span><i style="background:rgba(239,68,68,.9)"></i>غزير</span><span style="margin-inline-start:auto">الدوائر: ٢٥ · ٥٠ · ١٠٠ كم</span></div>
-  </div>
-  <div class="side">
-   <div class="box"><div class="lbl">هل ستمطر خلال ساعتين؟</div><div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><b class="v" id="soon">—</b><span class="lbl" id="soon2"></span></div></div>
-   <div class="box th"><div class="lbl">⚡ نشاط الرعد المتوقع (٢٤ ساعة)</div><div class="v" id="thr">—</div><div class="lbl" id="thr2" style="margin-top:4px"></div>
-    <a class="btn" id="liveL" href="#" target="_blank" rel="noopener">افتح رادار البروق المباشر ↗</a></div>
-   <div class="box"><div class="lbl">قاعدة الأمان للمدرسة ⚡</div><div style="font-size:12.5px;line-height:1.8;margin-top:2px">عند وقوع صاعقة داخل <b style="color:var(--yel)">١٠ كم</b> يُوقف النشاط الخارجي، ويُستأنف بعد <b style="color:var(--yel)">٣٠ دقيقة</b> من آخر صاعقة أو رعد مسموع.</div></div>
-   <div class="box"><div class="lbl">جودة الهواء والغبار</div><div class="v" style="font-size:20px;color:var(--gold)" id="aq">—</div><div class="meter"><i id="aqm" style="inset-inline-start:0"></i></div><div class="lbl" id="aq2"></div></div>
-  </div>
- </div>
- <div class="src">🔎 الأمطار: رادار المركز الوطني للأرصاد عبر <a href="https://www.rainviewer.com" target="_blank" rel="noopener">RainViewer</a> · التوقعات وجودة الهواء: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> · الرياح والسحب والأقمار: <a href="https://www.windy.com" target="_blank" rel="noopener">Windy</a> · البرق المباشر: <a href="https://www.blitzortung.org" target="_blank" rel="noopener">Blitzortung</a>. هذه نماذج مساعدة وليست إنذاراً رسمياً، والإنذار المعتمد يصدر من المركز الوطني للأرصاد.</div>
+<div class="hubhead"><div><h2 class="hh">مركز <em>الطقس والنماذج</em> — <span id="cname3">الرس</span></h2><div class="sub">خريطة بملء العرض · بدّل النموذج من الأعلى · كل شيء داخل الصفحة وعلى المدينة مباشرة</div></div>
+<a class="offc" href="https://ncm.gov.sa" target="_blank" rel="noopener"><span>⚠️</span> التحذيرات الرسمية · المركز الوطني للأرصاد ↗</a>
+<div class="seg" id="seg"><button class="on" data-m="1">عرض واحد</button><button data-m="2">مقارنة نموذجين</button></div></div>
+<div id="stages" class="stages"></div>
+<div class="quick">
+ <div class="box"><div class="lbl">هل ستمطر خلال ساعتين؟</div><div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><b class="v" id="soon">—</b><span class="lbl" id="soon2"></span></div></div>
+ <div class="box th"><div class="lbl">⚡ نشاط الرعد المتوقع (٢٤ ساعة)</div><div class="v" id="thr">—</div><div class="lbl" id="thr2" style="margin-top:4px"></div>
+  <a class="btn" id="liveL" href="#" target="_blank" rel="noopener">افتح رادار البروق المباشر ↗</a></div>
+ <div class="box"><div class="lbl">قاعدة الأمان للمدرسة ⚡</div><div style="font-size:12.5px;line-height:1.8;margin-top:2px">عند وقوع صاعقة داخل <b style="color:var(--yel)">١٠ كم</b> يُوقف النشاط الخارجي، ويُستأنف بعد <b style="color:var(--yel)">٣٠ دقيقة</b> من آخر صاعقة أو رعد مسموع.</div></div>
+ <div class="box"><div class="lbl">جودة الهواء والغبار</div><div class="v" style="font-size:20px;color:var(--gold)" id="aq">—</div><div class="meter"><i id="aqm" style="inset-inline-start:0"></i></div><div class="lbl" id="aq2"></div></div>
 </div>
-</div>
+<div class="src">🔎 الأمطار: رادار المركز الوطني للأرصاد عبر <a href="https://www.rainviewer.com" target="_blank" rel="noopener">RainViewer</a> · التوقعات وجودة الهواء: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> · الخرائط والنماذج العددية والأقمار: <a href="https://www.windy.com" target="_blank" rel="noopener">Windy</a> · البرق المباشر: <a href="https://www.blitzortung.org" target="_blank" rel="noopener">Blitzortung</a>. هذه نماذج مساعدة وليست إنذاراً رسمياً، والإنذار المعتمد يصدر من <a href="https://www.ncm.gov.sa" target="_blank" rel="noopener">المركز الوطني للأرصاد</a>.</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 (function(){
@@ -173,9 +205,9 @@ function chart(i0){
  for(var k=0;k<n;k++){var h=Math.max(3,P[k]*1.5);s+='<rect x="'+(xs(k)-8)+'" y="'+(200-h)+'" width="16" height="'+h+'" rx="2" fill="rgba(95,180,255,.55)"/>'}
  var path='';for(var k=0;k<n;k++){path+=(k?'L':'M')+xs(k).toFixed(1)+' '+ty(T[k]).toFixed(1)}
  s+='<path d="'+path+'" fill="none" stroke="#e8c87a" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>';
- for(var k=0;k<n;k+=6){s+='<circle cx="'+xs(k)+'" cy="'+ty(T[k])+'" r="4" fill="#e8c87a"/><text x="'+xs(k)+'" y="'+(ty(T[k])-10)+'" fill="#faf7f2" font-size="12" font-family="Cairo" text-anchor="middle">'+N(T[k])+'°</text>'}
+ for(var k=0;k<n;k+=6){s+='<circle cx="'+xs(k)+'" cy="'+ty(T[k])+'" r="4" fill="#e8c87a"/><text x="'+xs(k)+'" y="'+(ty(T[k])-10)+'" fill="#faf7f2" font-size="12" font-family="IBM Plex Sans Arabic" text-anchor="middle">'+N(T[k])+'°</text>'}
  for(var k=0;k<n;k++){if(thunderHour(i0+k))s+='<text x="'+xs(k)+'" y="'+(ty(T[k])+26)+'" font-size="14" text-anchor="middle">⚡</text>'}
- for(var k=0;k<n;k+=3){var t=H.time[i0+k];s+='<text x="'+xs(k)+'" y="236" fill="#d9c3a3" font-size="12" font-family="Cairo" text-anchor="middle">'+(k?N(hh(t))+' '+ampm(t):'الآن')+'</text>'}
+ for(var k=0;k<n;k+=3){var t=H.time[i0+k];s+='<text x="'+xs(k)+'" y="236" fill="#d9c3a3" font-size="12" font-family="IBM Plex Sans Arabic" text-anchor="middle">'+(k?N(hh(t))+' '+ampm(t):'الآن')+'</text>'}
  $('chart').innerHTML=s;
 }
 function dayThunder(di){var H=DATA.hourly,t=false;for(var i=0;i<H.time.length;i++){if(H.time[i].slice(0,10)===DATA.daily.time[di]&&thunderHour(i)){t=true;break}}return t}
@@ -215,48 +247,105 @@ function air(){
 }
 function liveLink(){$('liveL').href='https://map.blitzortung.org/#8/'+cur.lat.toFixed(2)+'/'+cur.lon.toFixed(2)}
 
-/* ---------- radar ---------- */
-function initMap(){
- if(map||!window.L)return;
- map=L.map('map',{zoomControl:true,attributionControl:true,minZoom:4,maxZoom:10}).setView([cur.lat,cur.lon],7);
- L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© مساهمو OpenStreetMap',maxZoom:19,className:'dark-base'}).addTo(map);
+/* ---------- hub ---------- */
+var TABS=[
+ {k:'rain',i:'🌧️',n:'رادار المطر',d:'رادار المركز الوطني للأرصاد (محطة القصيم) عبر RainViewer. يُظهر شدة الهطول وحركته.',b:'● مباشر · كل ١٠ دقائق'},
+ {k:'light',i:'⚡',n:'البروق',d:'الصواعق المباشرة حول المدينة من شبكة Blitzortung.',b:'● مباشر'},
+ {k:'maps',i:'🗺️',n:'خرائط الطقس',d:'حرارة ورياح وسحب وضغط وأمطار على خريطة واحدة (Windy).',b:'نموذج ECMWF',subs:[['temp','حرارة'],['wind','رياح'],['clouds','سحب'],['pressure','ضغط'],['rain','أمطار']]},
+ {k:'model',i:'🧮',n:'النموذج العددي',d:'مقارنة نماذج التنبؤ العددي للأمطار حتى ٧ أيام. حرّك الشريط الزمني أسفل الخريطة.',b:'توقعات ٧ أيام',subs:[['ecmwf','ECMWF'],['icon','ICON'],['gfs','GFS']]},
+ {k:'sat',i:'🛰️',n:'الأقمار الصناعية',d:'صور الأقمار الصناعية للسحب فوق المنطقة.',b:'● شبه مباشر'},
+ {k:'detail',i:'📍',n:'تفصيلي',d:'توقع نقطي ساعة بساعة للمدينة. المس الخريطة لتغيير النقطة.',b:'ساعة بساعة'},
+ {k:'now',i:'🌡️',n:'الآن',d:'درجات الحرارة الحالية على الخريطة حول المدينة.',b:'● حي'}
+];
+var FR=null;
+function getFrames(){if(!FR)FR=fetch('https://api.rainviewer.com/public/weather-maps.json').then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){var f=(j.radar.past||[]).concat(j.radar.nowcast||[]);if(!f.length)throw 0;return{host:j.host,frames:f,past:(j.radar.past||[]).length}});return FR}
+function windy(o,p,d){var l=cur.lat.toFixed(3),n=cur.lon.toFixed(3);return 'https://embed.windy.com/embed2.html?lat='+l+'&lon='+n+'&detailLat='+l+'&detailLon='+n+'&zoom=8&level=surface&overlay='+o+'&product='+p+'&menu=&message=true&marker=true&calendar=now&type=map&location=coordinates&detail='+(d?'true':'')+'&metricWind=km%2Fh&metricTemp=%C2%B0C'}
+var STAGES=[];
+function Stage(parent,tab){
+ var me=this;me.tab=tab;me.sub={maps:'temp',model:'ecmwf'};me.map=null;me.ring=null;me.layers=[];me.frames=[];me.fidx=0;me.timer=null;
+ var el=document.createElement('div');el.className='stage';
+ el.innerHTML='<div class="lmap"></div><iframe class="sfr" title="خريطة" loading="lazy" allow="fullscreen"></iframe>'+
+  '<a class="glass offi" href="https://ncm.gov.sa" target="_blank" rel="noopener" title="التحذيرات الرسمية من المركز الوطني للأرصاد" aria-label="التحذيرات الرسمية">⚠️<em>تحذيرات رسمية</em></a>'+
+  '<div class="glass tabsx" role="tablist"></div><div class="glass alertx"></div>'+
+  '<div class="glass mod"><h4></h4><p></p><span class="b"></span></div>'+
+  '<div class="glass legx">شدة الهطول (ملم/س)<div class="bar"></div><div style="display:flex;justify-content:space-between"><span>٠٫١</span><span>١٠</span><span>٥٠+</span></div></div>'+
+  '<div class="glass nowp"><small class="nl"></small><div class="t"></div><small class="nc"></small><div class="r"><span>الرياح</span><b class="nw"></b></div><div class="r"><span>الرطوبة</span><b class="nh"></b></div><div class="r"><span>مطر قادم</span><b class="nr"></b></div></div>'+
+  '<div class="glass tools"><button data-a="in" aria-label="تكبير">＋</button><button data-a="out" aria-label="تصغير">－</button><button data-a="loc" aria-label="مركز المدينة">◎</button><button data-a="fs" aria-label="ملء الشاشة">⛶</button></div>'+
+  '<div class="glass subs"></div>'+
+  '<div class="glass tl"><button class="pl" aria-label="تشغيل">▶</button><input class="sl" type="range" min="0" max="0" value="0" aria-label="الزمن"><span class="ft">—</span></div>';
+ parent.appendChild(el);me.el=el;
+ var q=function(s){return el.querySelector(s)};me.q=q;
+ var tb=q('.tabsx');TABS.forEach(function(t){var b=document.createElement('button');b.dataset.k=t.k;b.innerHTML='<span>'+t.i+'</span>'+t.n;b.onclick=function(){me.setTab(t.k)};tb.appendChild(b)});
+ q('.sl').oninput=function(){me.stop();me.show(+this.value)};
+ q('.pl').onclick=function(){if(me.timer){me.stop();return}q('.pl').textContent='❚❚';me.timer=setInterval(function(){me.show((me.fidx+1)%me.frames.length)},650)};
+ q('.tools').onclick=function(e){var a=e.target.getAttribute('data-a');if(!a)return;if(a==='fs'){var f=el.requestFullscreen||el.webkitRequestFullscreen;if(f)f.call(el);return}if(!me.map)return;if(a==='in')me.map.zoomIn();else if(a==='out')me.map.zoomOut();else me.map.setView([cur.lat,cur.lon],7)};
+ me.setTab(tab);
 }
-function mapCenter(){
- if(!map)return;map.setView([cur.lat,cur.lon],7);
- if(ringLayer)ringLayer.remove();ringLayer=L.layerGroup().addTo(map);
- [[25000,'٢٥ كم'],[50000,'٥٠ كم'],[100000,'١٠٠ كم']].forEach(function(r){L.circle([cur.lat,cur.lon],{radius:r[0],color:'#e8c87a',weight:1,opacity:.5,dashArray:'4 6',fill:false,interactive:false}).addTo(ringLayer)});
- L.circleMarker([cur.lat,cur.lon],{radius:7,color:'#08130b',weight:2,fillColor:'#e8c87a',fillOpacity:1}).bindTooltip(cur.n,{permanent:true,direction:'right',offset:[8,0]}).addTo(ringLayer);
+Stage.prototype.stop=function(){clearInterval(this.timer);this.timer=null;this.q('.pl').textContent='▶'};
+Stage.prototype.show=function(i){var me=this;if(!me.frames.length)return;me.fidx=i;me.layers.forEach(function(l,k){l.setOpacity(k===i?.75:0)});me.q('.sl').value=i;var m=Math.round((me.frames[i].time*1000-Date.now())/60000);me.q('.ft').textContent=(m>1?'بعد '+N(m)+' د':m>=-1?'الآن':'قبل '+N(-m)+' د')};
+Stage.prototype.initMap=function(){
+ var me=this;if(me.map||!window.L)return;
+ me.map=L.map(me.q('.lmap'),{zoomControl:false,attributionControl:true,minZoom:4,maxZoom:10}).setView([cur.lat,cur.lon],7);
+ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© مساهمو OpenStreetMap',maxZoom:19,className:'dark-base'}).addTo(me.map);
+ me.center();
+ getFrames().then(function(r){me.frames=r.frames;r.frames.forEach(function(f){me.layers.push(L.tileLayer(r.host+f.path+'/256/{z}/{x}/{y}/2/1_1.png',{opacity:0,maxNativeZoom:7,maxZoom:10,zIndex:5}).addTo(me.map))});me.q('.sl').max=r.frames.length-1;me.show(r.past-1)}).catch(function(){me.q('.ft').textContent='الرادار غير متاح حالياً'});
+};
+Stage.prototype.center=function(){
+ var me=this;if(!me.map)return;me.map.setView([cur.lat,cur.lon],7);
+ if(me.ring)me.ring.remove();me.ring=L.layerGroup().addTo(me.map);
+ [25000,50000,100000].forEach(function(r){L.circle([cur.lat,cur.lon],{radius:r,color:'#e8c87a',weight:1,opacity:.55,dashArray:'4 6',fill:false,interactive:false}).addTo(me.ring)});
+ L.circleMarker([cur.lat,cur.lon],{radius:8,color:'#08130b',weight:3,fillColor:'#e8c87a',fillOpacity:1}).bindTooltip(cur.n,{permanent:true,direction:'right',offset:[10,-14]}).addTo(me.ring);
+};
+Stage.prototype.setTab=function(k){
+ var me=this,T=TABS.filter(function(t){return t.k===k})[0],q=me.q;me.tab=k;me.stop();
+ [].forEach.call(q('.tabsx').children,function(b){b.className=b.dataset.k===k?'on':''});
+ q('.mod h4').textContent=T.i+' '+T.n;q('.mod p').textContent=T.d;q('.mod .b').textContent=T.b;
+ var rain=k==='rain';q('.lmap').style.display=rain?'block':'none';q('.sfr').style.display=rain?'none':'block';
+ q('.tl').style.display=rain?'flex':'none';q('.legx').style.display=rain?'block':'none';q('.tools').style.display=rain?'flex':'none';
+ var sb=q('.subs');sb.innerHTML='';sb.style.display=T.subs?'flex':'none';
+ if(T.subs)T.subs.forEach(function(s){var b=document.createElement('button');b.textContent=s[1];b.className=me.sub[k]===s[0]?'on':'';b.onclick=function(){me.sub[k]=s[0];[].forEach.call(sb.children,function(x){x.className=''});b.className='on';me.load()};sb.appendChild(b)});
+ if(rain){me.initMap();if(me.map)setTimeout(function(){me.map.invalidateSize()},60)}else me.load();
+ me.panels();
+};
+Stage.prototype.load=function(){
+ var me=this,k=me.tab,f=me.q('.sfr'),u='';
+ if(k==='light')u='https://map.blitzortung.org/#8/'+cur.lat.toFixed(2)+'/'+cur.lon.toFixed(2);
+ else if(k==='maps')u=windy(me.sub.maps,'ecmwf');
+ else if(k==='model')u=windy('rain',me.sub.model);
+ else if(k==='sat')u=windy('satellite','ecmwf');
+ else if(k==='detail')u=windy('rain','ecmwf',true);
+ else if(k==='now')u=windy('temp','ecmwf');
+ if(u&&f.getAttribute('data-u')!==u){f.setAttribute('data-u',u);f.src=u}
+};
+Stage.prototype.panels=function(){
+ var me=this,q=me.q;if(!DATA)return;var C=DATA.current,H=DATA.hourly,i0=DATA.i0,w=wc(C.weather_code);
+ q('.nl').textContent='الآن في '+cur.n;q('.nowp .t').textContent=N(C.temperature_2m)+'°';q('.nc').textContent=w[1];
+ q('.nw').textContent=N(C.wind_speed_10m)+' كم/س';q('.nh').textContent=N(C.relative_humidity_2m)+'٪';
+ var f=-1;for(var k=0;k<48;k++){if((H.precipitation_probability[i0+k]||0)>=50||(H.precipitation[i0+k]||0)>=0.2){f=k;break}}
+ q('.nr').textContent=f<0?'لا · ٤٨ س':(f<1?'الآن':'بعد '+N(f)+' س');
+ var a=q('.alertx');if(f>=0&&me.tab==='rain'){a.style.display='flex';a.innerHTML='⚠️ <b>أمطار متوقعة</b> '+(f<1?'الآن':'بعد نحو '+N(f)+' ساعة')+' في '+cur.n+' (توقع، وليس رصداً)'}else a.style.display='none';
+};
+Stage.prototype.recenter=function(){var me=this;me.center();me.q('.sfr').removeAttribute('data-u');if(me.tab!=='rain')me.load();me.panels()};
+function buildHub(m){
+ var box=$('stages');STAGES.forEach(function(s){s.stop()});box.innerHTML='';STAGES=[];box.className='stages'+(m===2?' two':'');
+ STAGES.push(new Stage(box,'rain'));if(m===2)STAGES.push(new Stage(box,'maps'));
 }
-function initRadar(){initMap();mapCenter();loadFrames()}
-function loadFrames(){
- layers.forEach(function(l){l.remove()});layers=[];frames=[];clearInterval(timer);timer=null;$('play').textContent='▶';
- if(!map)return;
- fetch('https://api.rainviewer.com/public/weather-maps.json').then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
-  rvHost=j.host;frames=(j.radar.past||[]).concat(j.radar.nowcast||[]);
-  if(!frames.length)throw 0;
-  frames.forEach(function(f){layers.push(L.tileLayer(rvHost+f.path+'/256/{z}/{x}/{y}/2/1_1.png',{opacity:0,maxNativeZoom:7,maxZoom:10,zIndex:5}))});
-  layers.forEach(function(l){l.addTo(map)});
-  var past=(j.radar.past||[]).length;$('slider').max=frames.length-1;fidx=past-1;show(fidx);
-  $('mpill').textContent='رادار الأمطار · محطة القصيم (المركز الوطني للأرصاد)';
- }).catch(function(){$('ftime').textContent='الرادار غير متاح حالياً';$('mpill').textContent='تعذّر تحميل طبقة الرادار · جرّب لاحقاً'});
-}
-function show(i){
- if(!frames.length)return;fidx=i;layers.forEach(function(l,k){l.setOpacity(k===i?.75:0)});$('slider').value=i;
- var t=new Date(frames[i].time*1000);var m=Math.round((t-Date.now())/60000);
- $('ftime').textContent=(m>1?'بعد '+N(m)+' د':m>=-1?'الآن':'قبل '+N(-m)+' د');
-}
-$('slider').oninput=function(){stop();show(+this.value)};
-function stop(){clearInterval(timer);timer=null;$('play').textContent='▶'}
-$('play').onclick=function(){if(timer){stop();return}$('play').textContent='❚❚';timer=setInterval(function(){show((fidx+1)%frames.length)},650)};
-function windy(o){var l=cur.lat.toFixed(3),n=cur.lon.toFixed(3);return 'https://embed.windy.com/embed2.html?lat='+l+'&lon='+n+'&detailLat='+l+'&detailLon='+n+'&zoom=7&level=surface&overlay='+o+'&product=ecmwf&menu=&message=true&marker=true&calendar=now&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C'}
-document.querySelectorAll('.tabs button').forEach(function(b){b.onclick=function(){
- document.querySelectorAll('.tabs button').forEach(function(x){x.className=''});b.className='on';tab=b.dataset.t;
- var f=$('frame'),m=$('map'),ctl=$('ctl'),lg=$('lgnd');stop();
- if(tab==='rain'){f.style.display='none';m.style.display='block';ctl.style.display='flex';lg.style.display='flex';$('mpill').textContent='رادار الأمطار';if(map)setTimeout(function(){map.invalidateSize()},50)}
- else if(tab==='light'){f.style.display='block';m.style.display='none';ctl.style.display='none';lg.style.display='none';f.src='https://map.blitzortung.org/#8/'+cur.lat.toFixed(2)+'/'+cur.lon.toFixed(2);$('mpill').textContent='رادار البروق المباشر · Blitzortung'}
- else{f.style.display='block';m.style.display='none';ctl.style.display='none';lg.style.display='none';f.src=windy(tab==='wind'?'wind':'satellite');$('mpill').textContent=tab==='wind'?'الرياح والسحب · Windy':'القمر الصناعي · Windy'}
-}});
+function hubUpdate(){if(!STAGES.length)buildHub(1);else STAGES.forEach(function(s){s.recenter()})}
+function initRadar(){hubUpdate()}
+document.querySelectorAll('#seg button').forEach(function(b){b.onclick=function(){document.querySelectorAll('#seg button').forEach(function(x){x.className=''});b.className='on';buildHub(+b.dataset.m)}});
 load();setInterval(load,15*60*1000);
+var STY={none:['✅','لا يوجد قرار رسمي بتعليق الدراسة حالياً'],remote:['🏠','تعليق الدراسة الحضورية — التحول إلى التعليم عن بُعد'],full:['⛔','تعليق الدراسة بالكامل (حضوري وعن بُعد)'],partial:['⚠️','تعليق جزئي للدراسة']};
+function loadStudy(){
+ fetch('/weather/study.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){
+  var st=STY[d.status]?d.status:'none',x=STY[st],e=$('study');e.setAttribute('data-s',st);$('sti').textContent=x[0];
+  $('stt').textContent=d.title||x[1];$('stp').textContent=st==='none'?'تابع القرارات الصادرة من وزارة التعليم وإدارة التعليم، ولا تعتمد على التوقعات وحدها.':(d.note||'');
+  var c=$('stc');c.innerHTML='';if(st!=='none'){[d.type,d.date].concat(d.audience||[]).forEach(function(t){if(!t)return;var sp=document.createElement('span');sp.textContent=t;c.appendChild(sp)});if(d.issuedBy){var sp2=document.createElement('span');sp2.textContent='الجهة: '+d.issuedBy;c.appendChild(sp2)}}
+  if(d.sourceUrl&&/^https:\/\//.test(d.sourceUrl))$('stl').href=d.sourceUrl;
+  $('stu').textContent=d.updated?('آخر تحديث للحالة: '+new Date(d.updated).toLocaleString('ar-SA',{dateStyle:'medium',timeStyle:'short'})):'';
+ }).catch(function(){$('stt').textContent='تعذّر تحميل حالة التعليق';$('stp').textContent='راجع قرارات وزارة التعليم مباشرة.'});
+}
+loadStudy();
+setInterval(loadStudy,5*60*1000);
 if(window.parent!==window){var _h=0,_s=function(){var h=document.documentElement.scrollHeight;if(h!==_h){_h=h;try{parent.postMessage({wxh:h},location.origin)}catch(e){}}};if(window.ResizeObserver)new ResizeObserver(_s).observe(document.body);window.addEventListener('load',_s);setInterval(_s,1500)}
 })();
 </script>
