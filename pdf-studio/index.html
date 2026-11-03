@@ -1,6 +1,45 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-<head>
+<head><script>(function(){
+var SALT="4b6600ebe1e065dfca42db8f7e671c66",HASH="520d11fbf2cac51502d6b2588e18731d8eaab0e9d992ee67875516360c7f9ecf",MODE="page",KEY="msu_gate_ok";
+var hex=function(s){var a=new Uint8Array(s.length/2);for(var i=0;i<a.length;i++)a[i]=parseInt(s.substr(i*2,2),16);return a;};
+var enc=new TextEncoder();
+function deriveBits(pw,salt){return crypto.subtle.importKey("raw",enc.encode(pw),"PBKDF2",false,["deriveBits"]).then(function(k){return crypto.subtle.deriveBits({name:"PBKDF2",salt:salt,iterations:300000,hash:"SHA-256"},k,256);});}
+function check(pw){return deriveBits(pw,hex(SALT)).then(function(b){var a=new Uint8Array(b),h=hex(HASH);if(a.length!==h.length)return false;var d=0;for(var i=0;i<a.length;i++)d|=a[i]^h[i];return d===0;});}
+function decryptTool(pw){return fetch("/tools/pdf-watermark-remover.enc",{cache:"no-store"}).then(function(r){return r.arrayBuffer();}).then(function(ab){var buf=new Uint8Array(ab),salt=buf.slice(0,16),iv=buf.slice(16,28),data=buf.slice(28);
+ return crypto.subtle.importKey("raw",enc.encode(pw),"PBKDF2",false,["deriveKey"]).then(function(k){return crypto.subtle.deriveKey({name:"PBKDF2",salt:salt,iterations:300000,hash:"SHA-256"},k,{name:"AES-GCM",length:256},false,["decrypt"]);}).then(function(key){return crypto.subtle.decrypt({name:"AES-GCM",iv:iv},key,data);});});}
+var store={get:function(){try{return sessionStorage.getItem(KEY)}catch(e){return null}},set:function(v){try{sessionStorage.setItem(KEY,v)}catch(e){}}};
+var css="#msu-gate{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 50% 30%,#0f3a1f,#07110a 70%);font-family:Tajawal,Cairo,system-ui,sans-serif;direction:rtl;color:#faf7f2}#msu-gate .b{width:100%;max-width:380px;text-align:center;background:rgba(255,255,255,.05);border:1px solid rgba(197,155,63,.45);border-radius:24px;padding:28px 22px;box-shadow:0 20px 60px rgba(0,0,0,.5)}#msu-gate .i{width:72px;height:72px;margin:0 auto 14px;border-radius:22px;background:linear-gradient(135deg,#005c29,#0a3319);border:1px solid rgba(197,155,63,.5);display:flex;align-items:center;justify-content:center}#msu-gate h2{margin:0 0 6px;font-size:22px;font-weight:800}#msu-gate p{margin:0 0 16px;font-size:14px;color:#d9c3a3}#msu-gate input{width:100%;box-sizing:border-box;text-align:center;letter-spacing:.2em;font-size:18px;padding:12px 14px;border-radius:12px;border:1px solid rgba(197,155,63,.5);background:rgba(0,0,0,.35);color:#faf7f2;outline:none;direction:ltr}#msu-gate input:focus{border-color:#4ade80}#msu-gate button.g{margin-top:12px;width:100%;padding:12px;border-radius:12px;border:1px solid rgba(74,222,128,.4);background:#005c29;color:#fff;font:700 16px inherit;font-family:inherit;cursor:pointer}#msu-gate button.g:disabled{opacity:.6}#msu-gate .e{min-height:22px;margin-top:10px;color:#f87171;font-weight:700;font-size:14px}#msu-gate a{display:inline-block;margin-top:14px;color:#e8c87a;font-size:13px;text-decoration:none}";
+var ov=null;
+function build(title,sub,onSubmit,showBack){
+ if(ov)return;var st=document.createElement("style");st.id="msu-gate-css";st.textContent=css;document.head.appendChild(st);
+ ov=document.createElement("div");ov.id="msu-gate";ov.setAttribute("role","dialog");ov.setAttribute("aria-modal","true");
+ ov.innerHTML='<form class="b" autocomplete="off"><div class="i"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#e8c87a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><h2></h2><p></p><input type="password" placeholder="الرقم السري" autocomplete="off" aria-label="الرقم السري"><div class="e" role="alert"></div><button class="g" type="submit">دخول</button>'+(showBack?'<a href="/">العودة إلى الصفحة الرئيسية</a>':'')+'</form>';
+ ov.querySelector("h2").textContent=title;ov.querySelector("p").textContent=sub;
+ var f=ov.querySelector("form"),inp=ov.querySelector("input"),er=ov.querySelector(".e"),bt=ov.querySelector("button.g");
+ f.addEventListener("submit",function(e){e.preventDefault();var v=inp.value.trim();if(!v||bt.disabled)return;bt.disabled=true;bt.textContent="جارٍ التحقق…";er.textContent="";
+  onSubmit(v).then(function(ok){if(ok){close();}else{er.textContent="الرقم السري غير صحيح";inp.select();}}).catch(function(){er.textContent="الرقم السري غير صحيح";}).then(function(){bt.disabled=false;bt.textContent="دخول";});});
+ document.body.appendChild(ov);document.documentElement.style.overflow="hidden";setTimeout(function(){inp.focus()},50);
+}
+function close(){if(ov){ov.remove();ov=null;var s=document.getElementById("msu-gate-css");if(s)s.remove();document.documentElement.style.overflow="";}}
+function ready(fn){if(document.body)fn();else document.addEventListener("DOMContentLoaded",fn);}
+if(MODE==="page"){
+ if(store.get()!=="1"){
+  var early=document.createElement("style");early.id="msu-gate-early";early.textContent="body>*:not(#msu-gate){visibility:hidden!important}";document.head.appendChild(early);
+  ready(function(){build("هذه الصفحة محمية","أدخل الرقم السري للدخول.",function(pw){return check(pw).then(function(ok){if(ok){store.set("1");var e=document.getElementById("msu-gate-early");if(e)e.remove();}return ok;});},true);});
+ }
+}else{
+ var pwMem=null,TITLE="أداة إزالة العلامة المائية من PDF";
+ function onTools(){var hs=document.querySelectorAll("h1");for(var i=0;i<hs.length;i++){if(hs[i].textContent.indexOf(TITLE)>-1)return true;}return false;}
+ function ask(after){build("صفحة الأدوات محمية","أدخل الرقم السري للدخول وتحميل الأداة.",function(pw){return decryptTool(pw).then(function(){pwMem=pw;store.set("1");if(after)after(pw);return true;});},false);}
+ var queued=false;function tick(){queued=false;if(onTools()&&!pwMem&&!ov)ask();else if(!onTools()&&ov){close();}}
+ new MutationObserver(function(){if(!queued){queued=true;requestAnimationFrame(tick);}}).observe(document.documentElement,{childList:true,subtree:true});
+ document.addEventListener("click",function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href$="pdf-watermark-remover.zip"]');if(!a)return;e.preventDefault();e.stopPropagation();
+  var go=function(pw){decryptTool(pw).then(function(buf){var u=URL.createObjectURL(new Blob([buf],{type:"application/zip"}));var l=document.createElement("a");l.href=u;l.download="pdf-watermark-remover.zip";document.body.appendChild(l);l.click();l.remove();setTimeout(function(){URL.revokeObjectURL(u)},4000);});};
+  if(pwMem)go(pwMem);else ask(go);},true);
+}
+})();
+</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>محرر PDF عربي مجاني — فهد بن عبدالله الجروان</title>
