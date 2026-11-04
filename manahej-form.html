@@ -208,7 +208,7 @@ const safe=s=>(s||'بدون_اسم').trim().replace(/[\\/:*?"<>|\s]+/g,'_');
 function b64(blob){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(',')[1]);r.onerror=()=>rej(new Error('تعذّر تجهيز الملف.'));r.readAsDataURL(blob)})}
 async function sendToDrive(name,pdfBlob,data){
   if(!SAVE_URL)throw new Error('لم يتم ربط الحفظ بعد، يمكنك الآن تصدير PDF أو طباعته.');
-  const body=JSON.stringify({name,pdf:await b64(pdfBlob),json:JSON.stringify(data,null,2)});
+  const body=JSON.stringify({target:'manahej',name,pdf:await b64(pdfBlob),json:JSON.stringify(data,null,2)});
   let r;try{r=await fetch(SAVE_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body})}catch(e){throw new Error('تعذّر الاتصال، تأكد من الإنترنت وحاول مرة أخرى.')}
   let j;try{j=await r.json()}catch(e){throw new Error('لم يصل تأكيد الحفظ، لا تعتمد عليه وحاول مرة أخرى.')}
   if(!j||!j.ok)throw new Error('تعذّر حفظ البيانات، حاول مرة أخرى لاحقاً.');
@@ -220,7 +220,7 @@ $('#btnPdf').onclick=async()=>{ if(!validate())return; msg('جاري تجهيز 
   try{const pdf=toPdf(await snapshot());pdf.save('استمارة_'+safe($('#name').value)+'.pdf');msg('تم تصدير الملف ✔','ok')}catch(e){msg(e.message,'bad')}};
 $('#btnSave').onclick=async()=>{ if(!validate())return; $('#btnSave').disabled=true; msg('جاري الحفظ والإرسال…');
   try{
-    const pdf=toPdf(await snapshot()), blob=pdf.output('blob'), base=safe($('#name').value)+'_'+new Date().toISOString().slice(0,10);
+    const pdf=toPdf(await snapshot()), blob=pdf.output('blob'), base='استمارة إنهاء المناهج - '+$('#name').value.replace(/\s+/g,' ').trim();
     await sendToDrive(base,blob,collect());
     msg('تم حفظ الاستمارة بنجاح ✔','ok');
   }catch(e){msg(e.message,'bad')}finally{$('#btnSave').disabled=false}};
