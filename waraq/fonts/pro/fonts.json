@@ -1,0 +1,123 @@
+[
+ {
+  "k": "noto",
+  "ar": "نوتو سنس عربي (الافتراضي)",
+  "en": "Noto Sans Arabic",
+  "d": "الخط الافتراضي في ورق",
+  "f400": "NotoSansArabic.ttf",
+  "f700": "noto-sans-arabic-arabic-700-normal.woff2",
+  "dir": ""
+ },
+ {
+  "k": "amiri",
+  "ar": "أميري",
+  "en": "Amiri",
+  "d": "نسخ كلاسيكي — للخطابات والمحتوى الرسمي",
+  "f400": "pro/amiri-400.ttf",
+  "f700": "pro/amiri-700.ttf"
+ },
+ {
+  "k": "naskh",
+  "ar": "نوتو نسخ",
+  "en": "Noto Naskh Arabic",
+  "d": "نسخ واضح — للمعاملات والتقارير",
+  "f400": "pro/naskh-400.ttf",
+  "f700": "pro/naskh-700.ttf"
+ },
+ {
+  "k": "scheherazade",
+  "ar": "شهرزاد الجديد",
+  "en": "Scheherazade New",
+  "d": "نسخ تقليدي — للنصوص الدينية والعلمية",
+  "f400": "pro/scheherazade-400.ttf",
+  "f700": "pro/scheherazade-700.ttf"
+ },
+ {
+  "k": "ruqaa",
+  "ar": "عارف رقعة",
+  "en": "Aref Ruqaa",
+  "d": "خط الرقعة — للعناوين والشهادات",
+  "f400": "pro/ruqaa-400.ttf",
+  "f700": "pro/ruqaa-700.ttf"
+ },
+ {
+  "k": "kufi",
+  "ar": "نوتو كوفي",
+  "en": "Noto Kufi Arabic",
+  "d": "كوفي حديث — للعناوين",
+  "f400": "pro/kufi-400.ttf",
+  "f700": "pro/kufi-700.ttf"
+ },
+ {
+  "k": "reem",
+  "ar": "ريم كوفي",
+  "en": "Reem Kufi",
+  "d": "كوفي زخرفي — لعناوين الشهادات",
+  "f400": "pro/reem-400.ttf",
+  "f700": "pro/reem-700.ttf"
+ },
+ {
+  "k": "messiri",
+  "ar": "المسيري",
+  "en": "El Messiri",
+  "d": "عناوين رسمية أنيقة",
+  "f400": "pro/messiri-400.ttf",
+  "f700": "pro/messiri-700.ttf"
+ },
+ {
+  "k": "markazi",
+  "ar": "مركزي",
+  "en": "Markazi Text",
+  "d": "نسخ للنصوص الطويلة",
+  "f400": "pro/markazi-400.ttf",
+  "f700": "pro/markazi-700.ttf"
+ },
+ {
+  "k": "cairo",
+  "ar": "القاهرة",
+  "en": "Cairo",
+  "d": "واجهات ونماذج حديثة",
+  "f400": "pro/cairo-400.ttf",
+  "f700": "pro/cairo-700.ttf"
+ },
+ {
+  "k": "tajawal",
+  "ar": "تجوّل",
+  "en": "Tajawal",
+  "d": "خفيف ومقروء للجداول",
+  "f400": "pro/tajawal-400.ttf",
+  "f700": "pro/tajawal-700.ttf"
+ },
+ {
+  "k": "plex",
+  "ar": "آي بي إم بلكس عربي",
+  "en": "IBM Plex Sans Arabic",
+  "d": "رسمي مؤسسي للتقارير",
+  "f400": "pro/plex-400.ttf",
+  "f700": "pro/plex-700.ttf"
+ },
+ {
+  "k": "almarai",
+  "ar": "المراعي",
+  "en": "Almarai",
+  "d": "واضح للأوراق المطبوعة",
+  "f400": "pro/almarai-400.ttf",
+  "f700": "pro/almarai-700.ttf"
+ },
+ {
+  "k": "mada",
+  "ar": "مدى",
+  "en": "Mada",
+  "d": "بسيط ومقروء",
+  "f400": "pro/mada-400.ttf",
+  "f700": "pro/mada-700.ttf"
+ },
+ {
+  "k": "lateef",
+  "ar": "لطيف",
+  "en": "Lateef",
+  "d": "نسخ منسوخ بخط اليد المنسق",
+  "f400": "pro/lateef-400.ttf",
+  "f700": "pro/lateef-700.ttf"
+ }
+]

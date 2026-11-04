@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><script>try{var t=localStorage.getItem("waraq-studio-theme");if(t==="light")document.documentElement.setAttribute("data-theme","light")}catch(e){}</script><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ورق — الاستوديو: التوقيع والختم وإزالة العلامة</title>
+<style>
+@font-face{font-family:Waraq;src:url(../fonts/noto-sans-arabic-arabic-400-normal.woff2);font-weight:400}
+@font-face{font-family:Waraq;src:url(../fonts/noto-sans-arabic-arabic-700-normal.woff2);font-weight:700}
+:root{--t:#087f8c;--td:#066c77;--ink:#1a3444;--mut:#637781;--bd:#e0e8ed;--bd2:#cddbe0;--bg:#f5f8fa;--panel:#fff;--card:#fff;--soft:#f3f7f8;--hov:#f0f6f8;--stage1:#dfeaed;--stage2:#cfdde1;--sel:#e6f4f5;--acc:#087f8c;--warnbg:#fdf3dc;--warnink:#7a4e00;--tabs:#eaf1f3;--chk:#f1f5f6}
+:root:not([data-theme=light]){--t:#0a93a1;--td:#0c7f8b;--ink:#e4eef1;--mut:#9bb2ba;--bd:#26394238;--bd:#273b44;--bd2:#33505b;--bg:#0d181d;--panel:#142229;--card:#182a32;--soft:#1b2e37;--hov:#1d333d;--stage1:#0b1418;--stage2:#101d23;--sel:#12363c;--acc:#35c2cf;--warnbg:#3a2f12;--warnink:#f0cf86;--tabs:#1b2e37;--chk:#233741;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;font-family:Waraq,Arial,sans-serif;color:var(--ink);background:var(--bg);height:100vh;display:flex;flex-direction:column}
+button,input,select{font:inherit}button{cursor:pointer}
+header{height:62px;flex:none;background:var(--panel);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:12px;padding:0 20px;box-shadow:0 1px 0 rgba(8,127,140,.06)}
+header h1{font-size:19px;margin:0;color:var(--acc)}header a{color:var(--acc);text-decoration:none;font-size:14px}
+.sp{flex:1}
+.btn{height:38px;padding:0 16px;border-radius:10px;border:1px solid var(--bd2);background:var(--card);font-weight:600;font-size:14px;color:var(--ink)}
+.btn:hover{background:var(--hov)}.btn.p{background:var(--t);border-color:var(--t);color:#fff}.btn.p:hover{background:var(--td)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.tabs{display:flex;gap:4px;background:var(--tabs);border-radius:12px;padding:4px}
+.tab{border:0;background:none;padding:8px 18px;border-radius:9px;font-weight:700;font-size:14px;color:var(--mut)}
+.tab.on{background:var(--panel);color:var(--acc);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+main{flex:1;display:flex;min-height:0}
+.side{width:340px;flex:none;background:var(--panel);border-left:1px solid var(--bd);overflow:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.side.r{border-left:0;border-right:1px solid var(--bd);width:300px}
+h3{margin:0;font-size:13px;color:var(--mut);font-weight:700}
+.stage{flex:1;min-width:0;overflow:auto;background:linear-gradient(180deg,var(--stage1),var(--stage2));padding:20px 24px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.nav{display:flex;align-items:center;gap:8px;background:var(--panel);color:var(--ink);border-radius:10px;padding:6px 10px;font-size:14px}
+.nav button{width:32px;height:32px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--ink);font-size:16px}
+.sheet{position:relative;background:#fff;box-shadow:0 8px 30px rgba(10,50,60,.2);touch-action:none;direction:ltr}
+.sheet canvas{display:block;width:100%;height:auto}
+.layer{position:absolute;inset:0}
+.ov{position:absolute;cursor:move;outline:1.5px dashed transparent;user-select:none}
+.ov.sel{outline-color:var(--t)}.ov img{width:100%;display:block;pointer-events:none}
+.ov .hd{position:absolute;right:-7px;bottom:-7px;width:14px;height:14px;background:#fff;border:2px solid var(--t);border-radius:4px;cursor:nwse-resize;display:none}
+.ov.sel .hd{display:block}
+.ov .x{position:absolute;left:-9px;top:-9px;width:20px;height:20px;border-radius:50%;background:#b3261e;color:#fff;border:0;font-size:13px;line-height:20px;padding:0;display:none}
+.ov.sel .x{display:block}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:6px 11px;border:1px solid var(--bd2);border-radius:999px;font-size:12.5px;background:var(--card);color:var(--ink)}
+.chip.on{background:var(--t);color:#fff;border-color:var(--t)}
+.card{border:1px solid var(--bd);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;background:var(--card)}
+.assets{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.asset{border:1.5px solid var(--bd);border-radius:10px;height:70px;display:flex;align-items:center;justify-content:center;background:repeating-conic-gradient(var(--chk) 0 25%,var(--card) 0 50%) 0 0/14px 14px;position:relative;cursor:pointer;padding:4px}
+.asset:hover{border-color:var(--t)}.asset img{max-width:100%;max-height:100%}
+.asset u{position:absolute;top:2px;left:4px;font-size:10px;color:#b3261e;text-decoration:none;background:#fff;border-radius:6px;padding:0 4px}
+.row{display:flex;align-items:center;gap:8px;font-size:13px;flex-wrap:wrap}
+input[type=text],select,textarea{border:1px solid var(--bd2);border-radius:8px;padding:7px 9px;font-size:13px;width:100%;background:var(--card);color:var(--ink)}
+input[type=range]{flex:1;accent-color:var(--t)}
+.note{font-size:12px;color:var(--mut);line-height:1.7;background:var(--soft);border-radius:10px;padding:9px 11px}
+.warn{background:var(--warnbg)!important;color:var(--warnink)!important}
+.kind{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.k{border:1.5px solid var(--bd);border-radius:12px;padding:9px;font-weight:700;font-size:13.5px;background:var(--card);color:var(--ink);text-align:right}
+.k small{display:block;font-weight:400;color:var(--mut);font-size:11.5px}
+.k.on{border-color:var(--acc);background:var(--sel)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-left:6px}
+.op{border:1px solid var(--bd);border-radius:12px;padding:9px 11px;font-size:13px;display:flex;flex-direction:column;gap:6px;background:var(--card)}
+.op.off{opacity:.5}
+.op .r{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.op select{width:auto;padding:4px 6px;font-size:12px}
+.msg{position:fixed;bottom:18px;right:50%;transform:translateX(50%);background:#1a3444;color:#fff;padding:10px 18px;border-radius:12px;font-size:14px;z-index:99;display:none;max-width:80vw}
+.drop{border:2px dashed var(--bd2);border-radius:16px;padding:60px 40px;text-align:center;background:var(--panel);max-width:520px;margin:60px auto}
+.modal{position:fixed;inset:0;background:rgba(10,40,50,.5);display:none;align-items:center;justify-content:center;z-index:50}
+.modal.open{display:flex}.modal .box{background:var(--panel);color:var(--ink);border-radius:16px;padding:16px;width:640px;max-width:96vw;display:flex;flex-direction:column;gap:10px}
+#pad{border:1.5px solid #cddbe0;border-radius:12px;width:100%;height:220px;touch-action:none;background:#fff;cursor:crosshair}
+.sw{width:26px;height:26px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #c9d6da;padding:0}.sw.on{box-shadow:0 0 0 2px var(--t)}
+.cmp{display:flex;gap:6px}
+</style>
+</head>
+<body>
+<header>
+  <h1>ورق · الاستوديو</h1>
+  <div class="tabs"><button class="tab on" data-t="add">توقيع وختم واسم</button><button class="tab" data-t="rem">إزالة العلامة</button></div>
+  <span class="sp"></span>
+  <span id="fname" style="font-size:13px;color:var(--mut)"></span>
+  <label class="btn">فتح ملف<input id="file" type="file" accept="application/pdf,image/*" hidden></label>
+  <button class="btn" id="undo">تراجع</button>
+  <button class="btn p" id="save" disabled>حفظ نسخة جديدة</button>
+  <button class="btn" id="theme" title="تبديل الوضع">☾ ليلي</button><a href="../">الرئيسية</a>
+</header>
+<main>
+  <aside class="side" id="left"></aside>
+  <section class="stage" id="stage">
+    <div class="drop" id="drop"><h2 style="margin:0 0 8px">افتح ملف PDF أو صورة</h2><p style="color:var(--mut);margin:0 0 16px">اسحب الملف هنا أو اضغط «فتح ملف». المعالجة كلها على جهازك، والأصل لا يتغير.</p><label class="btn p" style="display:inline-flex;align-items:center">اختيار ملف<input id="file2" type="file" accept="application/pdf,image/*" hidden></label></div>
+  </section>
+  <aside class="side r" id="right"></aside>
+</main>
+<div class="modal" id="padm"><div class="box"><b>ارسم توقيعك</b><canvas id="pad" width="1200" height="440"></canvas>
+  <div class="row"><span>اللون</span><span id="padcols"></span><span>السماكة</span><input type="range" id="padw" min="2" max="14" value="5"><button class="btn" id="padclr">مسح</button><span class="sp"></span><button class="btn" id="padx">إلغاء</button><button class="btn p" id="pads">حفظ التوقيع</button></div></div></div>
+<div class="msg" id="msg"></div>
+<script src="pdf-lib.min.js"></script><script src="pdf.min.js"></script><script src="studio.js"></script>
+</body></html>

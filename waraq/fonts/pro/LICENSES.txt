@@ -1,0 +1,5 @@
+الخطوط في هذا المجلد مفتوحة المصدر بترخيص SIL Open Font License 1.1 (https://openfontlicense.org)
+وهي موزعة عبر مشروع Google Fonts: Amiri, Noto Naskh Arabic, Scheherazade New, Aref Ruqaa, Noto Kufi Arabic,
+Reem Kufi, El Messiri, Markazi Text, Cairo, Tajawal, IBM Plex Sans Arabic, Almarai, Mada, Lateef.
+يسمح الترخيص بالاستخدام والطباعة والتضمين في المستندات والتوزيع مع الحزمة، ولا يسمح ببيع الخط وحده.
+حقوق كل خط لأصحابه الأصليين المذكورين في مشروع Google Fonts.
