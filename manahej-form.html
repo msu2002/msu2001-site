@@ -149,7 +149,7 @@ document.querySelectorAll('#status3 input').forEach(r=>r.onchange=()=>{
 });
 const hij=new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura',{dateStyle:'long'}).format(new Date());
 const greg=new Date().toLocaleDateString('ar-SA-u-ca-gregory',{dateStyle:'long'});
-$('#today').textContent=hij+" هـ  —  "+greg;
+$('#today').textContent=hij.replace(/\s*هـ\s*$/,"")+" هـ  —  "+greg;
 
 /* ---------- التوقيع ---------- */
 const pad=$('#pad'), ctx=pad.getContext('2d'); let mode='draw', drawing=false, signed=false;
