@@ -14,7 +14,7 @@ W.register('home', {
       W.dropZone({ id: 'hdz', title: 'اسحب ملفك هنا لنبدأ', sub: 'PDF أو صور (PNG, JPG, WebP) — وسنقترح لك الأداة المناسبة', btn: 'اختيار ملف' }) +
       '<h3 style="margin:26px 0 12px">الأدوات</h3><div class="grid g3">';
     TOOLS.forEach(function (t) { h += '<a class="tool" href="#/' + t[0] + '"><div class="ti">' + W.ic(t[1]) + '</div><b>' + t[2] + '</b><p>' + t[3] + '</p></a>'; });
-    h += '<a class="tool" href="' + W.ROOT + '"><span class="tag">النسخة السابقة</span><div class="ti">' + W.ic('book') + '</div><b>أدوات المدرسة الأخرى</b><p>التقارير والشواهد، نسخة الطالب والمعلم، التلوين، قوالب المدرسة، والطباعة.</p></a></div>' +
+    h += '<a class="tool" href="' + W.ROOT + '?old=1"><span class="tag">النسخة السابقة</span><div class="ti">' + W.ic('book') + '</div><b>أدوات المدرسة الأخرى</b><p>التقارير والشواهد، نسخة الطالب والمعلم، التلوين، قوالب المدرسة، والطباعة.</p></a></div>' +
       '<div class="note" style="margin-top:18px;display:flex;gap:10px;align-items:center">' + W.ic('shield') + '<span>خصوصيتك محفوظة: الملفات لا تغادر جهازك، ويمكنك استخدام الأدوات بلا حساب.</span></div></div>';
     v.innerHTML = h;
     W.bindDrop('hdz', 'application/pdf,image/*', true, function (files) {
