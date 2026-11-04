@@ -280,7 +280,7 @@ preparePrint();
 const SAVE_URL = "https://script.google.com/macros/s/AKfycbyvyxaULB4v5EAvwSbPMQUePke0di-6XMFTIaQbb4pn1RkxbTvjNJacmMsziQJwAlkxHw/exec";
 function b64(blob){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(',')[1]);r.onerror=()=>rej(new Error('تعذّر تجهيز الملف.'));r.readAsDataURL(blob)})}
 async function sendToDrive(name,pdfBlob,data){
-  const body=JSON.stringify({name,pdf:await b64(pdfBlob),json:JSON.stringify(data,null,2)});
+  const body=JSON.stringify({target:'contract',name,pdf:await b64(pdfBlob),json:JSON.stringify(data,null,2)});
   let r;try{r=await fetch(SAVE_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body})}catch(e){throw new Error('تعذّر الاتصال، تأكد من الإنترنت وحاول مرة أخرى.')}
   let j;try{j=await r.json()}catch(e){throw new Error('لم يصل تأكيد الحفظ، لا تعتمد عليه وحاول مرة أخرى.')}
   if(!j||!j.ok)throw new Error('تعذّر حفظ البيانات، حاول مرة أخرى لاحقاً.');
@@ -304,7 +304,7 @@ $('save-drive').addEventListener('click',async()=>{
     pdf.addImage(canvas.toDataURL('image/jpeg',0.92),'JPEG',(W-w)/2,0,w,h);
     const nm=$('student-name').value.trim();
     const data={student:nm,grade:$('grade').value,section:$('section').value,guardian:$('guardian-name').value.trim(),mobile:$('mobile').value.trim(),studentDate:hijriDate($('student-date').value),guardianDate:hijriDate($('guardian-date').value),savedAt:new Date().toISOString()};
-    await sendToDrive('عقد السلوك الرقمي - '+nm,pdf.output('blob'),data);
+    await sendToDrive(['عقد السلوك الرقمي',nm,$('grade').value,$('section').value.trim()].map(x=>String(x).replace(/\s+/g,' ').trim()).join(' - '),pdf.output('blob'),data);
     showToast('تم حفظ العقد في سجل المدرسة بنجاح ✓');hasChanges=false;
   }catch(e){showToast(e.message||'تعذّر الحفظ.')}
   finally{host.remove();saving=false;btn.disabled=false;btn.innerHTML=old}
