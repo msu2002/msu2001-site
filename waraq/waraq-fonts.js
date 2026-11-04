@@ -138,3 +138,19 @@ function init(){
 }
 init();
 })();
+
+/* ورق · الوضع الليلي للتطبيق الرئيسي (مشترك مع الاستوديو) */
+(function(){
+  var KEY='waraq-studio-theme';
+  function get(){try{var v=localStorage.getItem(KEY);return v==='light'?'light':'dark';}catch(e){return 'dark';}}
+  function apply(t){var r=document.documentElement;if(t==='dark')r.setAttribute('data-wq-dark','1');else r.removeAttribute('data-wq-dark');var b=document.getElementById('wqd-btn');if(b)b.innerHTML=t==='dark'?'<span style="font-size:17px">☀</span> نهاري':'<span style="font-size:17px">☾</span> ليلي';}
+  var st=document.createElement('style');
+  st.textContent='html[data-wq-dark]{filter:invert(.92) hue-rotate(180deg);background:#fff}'+
+  'html[data-wq-dark] img,html[data-wq-dark] video,html[data-wq-dark] canvas,html[data-wq-dark] svg image,html[data-wq-dark] iframe,html[data-wq-dark] #wqf-btn,html[data-wq-dark] #wqs-btn,html[data-wq-dark] #wqd-btn,html[data-wq-dark] [style*="background-image"]{filter:invert(1) hue-rotate(180deg)}'+
+  'html[data-wq-dark] canvas{filter:none}'+
+  '#wqd-btn{position:fixed;left:268px;bottom:16px;z-index:2147483000;height:44px;padding:0 16px;border-radius:999px;border:1.5px solid #087f8c;background:#fff;color:#087f8c;font:600 15px Waraq,Arial,sans-serif;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 6px 20px rgba(8,127,140,.2)}';
+  (document.head||document.documentElement).appendChild(st);
+  apply(get());
+  function mk(){if(document.getElementById('wqd-btn'))return;var b=document.createElement('button');b.id='wqd-btn';b.type='button';b.title='تبديل الوضع الليلي والنهاري';b.onclick=function(){var n=get()==='dark'?'light':'dark';try{localStorage.setItem(KEY,n);}catch(e){}apply(n);};document.body.appendChild(b);apply(get());}
+  if(document.body)mk();else document.addEventListener('DOMContentLoaded',mk);
+})();
