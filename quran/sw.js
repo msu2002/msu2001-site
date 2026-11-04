@@ -1,7 +1,7 @@
 /* This service worker controls ONLY its own directory. External audio/tafsir are not cached here. */
 const SCOPE = new URL(self.registration.scope);
 const CACHE =
-  "quran-tool-" + SCOPE.pathname.replace(/[^a-z0-9]/gi, "_") + "-v1.0.0";
+  "quran-tool-" + SCOPE.pathname.replace(/[^a-z0-9]/gi, "_") + "-v1.1.0";
 const SHELL = [
   "./",
   "./index.html",
@@ -14,6 +14,10 @@ const SHELL = [
   "./js/quran.js",
   "./js/worship.js",
   "./js/settings.js",
+  "./js/reciters.js",
+  "./js/reciter-picker.js",
+  "./js/meanings.js",
+  "./data/meanings.json",
   "./vendor/adhan.js",
   "./data/quran.json",
   "./data/adhkar.json",

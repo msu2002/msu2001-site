@@ -2367,3 +2367,43 @@ textarea::placeholder {
 .quran-view > .reading-source {
   overflow-wrap: anywhere;
 }
+
+/* Reciter picker */
+.reciter-picker { display: flex; flex-direction: column; gap: 12px; margin: 8px 0 4px; }
+.rp-current { padding: 10px 14px; border: 1px solid color-mix(in srgb, var(--accent), transparent 60%); background: var(--accent-bg); border-radius: 12px; font-size: 12px; }
+.rp-search-icon { position: absolute; inset-inline-start: 13px; color: var(--muted); display: inline-flex; }
+.rp-search-icon .icon { width: 19px; height: 19px; }
+.rp-favs { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.rp-favs[hidden] { display: none !important; }
+.rp-chip { cursor: pointer; background: var(--gold-bg); color: var(--gold); border-color: transparent; }
+.rp-chip.pill-accent { background: var(--accent-bg); color: var(--accent); }
+.rp-list { list-style: none; margin: 0; padding: 0; max-height: 300px; overflow: auto; display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--border); border-radius: 12px; padding: 6px; background: var(--surface); }
+.rp-row { display: flex; align-items: stretch; gap: 6px; border-radius: 10px; }
+.rp-row.is-active .rp-pick { border-color: var(--accent); background: var(--accent-bg); }
+.rp-pick { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--panel); color: var(--text); text-align: start; }
+.rp-name { font-weight: 700; font-size: 13px; }
+.rp-badges { display: flex; flex-wrap: wrap; gap: 4px; }
+.rp-badges .pill { font-size: 9px; padding: 1px 7px; }
+.rp-star { font-size: 18px; color: var(--muted); }
+.rp-star.is-active { color: var(--gold); border-color: var(--gold); background: var(--gold-bg); }
+.rp-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.rp-note { margin: 0; }
+@media (max-width: 767px) { .rp-options { grid-template-columns: 1fr; } }
+
+/* Word meanings */
+.meaning-tools { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; margin-bottom: 14px; }
+.meaning-tools .field { min-width: 220px; flex: 1; }
+.meaning-list { display: flex; flex-direction: column; gap: 14px; }
+.meaning-card { display: flex; flex-direction: row-reverse; gap: 14px; align-items: stretch; padding: 16px; }
+.meaning-body { flex: 1; min-width: 0; }
+.meaning-side { align-self: flex-start; position: sticky; top: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-width: 76px; padding: 10px 8px; border-radius: 14px; background: var(--gold-bg); border: 1px solid color-mix(in srgb, var(--gold), transparent 70%); }
+.meaning-side .button { font-size: 10px; padding: 5px 8px; min-height: 30px; }
+.meaning-num { font-size: 24px; font-weight: 700; color: var(--gold); }
+.meaning-item { padding: 8px 2px 12px; border-bottom: 1px dashed var(--border); }
+.meaning-item:last-of-type { border-bottom: 0; }
+.meaning-item hr { border: 0; border-top: 1px solid var(--border); margin: 8px 0; }
+.meaning-word { font-family: AmiriText, serif; font-size: 25px; line-height: 1.9; color: var(--accent); font-weight: 700; }
+.meaning-text { font-family: AmiriText, serif; font-size: 22px; line-height: 1.9; }
+.meaning-source a { color: var(--gold); }
+.meaning-count { margin: 6px 0 12px; }
+@media (max-width: 767px) { .meaning-card { padding: 12px; gap: 10px; } .meaning-side { min-width: 58px; } .meaning-word { font-size: 22px; } .meaning-text { font-size: 19px; } }

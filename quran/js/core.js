@@ -1,5 +1,6 @@
 /* Quran website tool — shared utilities. No framework or service account required. */
 export const VERSION = "1.0.0";
+import { DEFAULT_RECITER, isValidReciter } from "./reciters.js";
 export const STORAGE_PREFIX = "quran-tool:v1:";
 export const DEFAULT_SETTINGS = Object.freeze({
   theme: "dark",
@@ -8,7 +9,7 @@ export const DEFAULT_SETTINGS = Object.freeze({
   location: null,
   method: "UmmAlQura",
   madhab: "Shafi",
-  reciter: "Alafasy_128kbps",
+  reciter: DEFAULT_RECITER,
   readingMode: "verses",
 });
 
@@ -85,14 +86,7 @@ export function validateSettings(input) {
   if (["UmmAlQura", "MuslimWorldLeague", "Egyptian"].includes(input.method))
     result.method = input.method;
   if (["Shafi", "Hanafi"].includes(input.madhab)) result.madhab = input.madhab;
-  if (
-    [
-      "Alafasy_128kbps",
-      "Abdurrahmaan_As-Sudais_192kbps",
-      "Husary_128kbps",
-    ].includes(input.reciter)
-  )
-    result.reciter = input.reciter;
+  if (isValidReciter(input.reciter)) result.reciter = input.reciter;
   if (["verses", "continuous"].includes(input.readingMode))
     result.readingMode = input.readingMode;
   const location = input.location;
@@ -164,6 +158,7 @@ export function loadQuran() {
 
 const iconPaths = {
   home: '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/>',
+  words: '<path d="M4 7h16M4 12h10M4 17h16"/><path d="m18 14 2 2 3-4"/>',
   book: '<path d="M12 5C8 2 4 3 2 4v16c4-2 7-1 10 1 3-2 6-3 10-1V4c-2-1-6-2-10 1Zm0 0v16"/>',
   moon: '<path d="M21 12.5A9 9 0 1 1 11.5 3 7 7 0 0 0 21 12.5Z"/>',
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.4 1.4m11.2 11.2L19 19M5 19l1.4-1.4M17.6 6.4 19 5"/>',

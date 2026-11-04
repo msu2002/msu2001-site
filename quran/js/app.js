@@ -23,6 +23,13 @@ import {
   getPrayerSummary,
 } from "./worship.js";
 import { renderSettings } from "./settings.js";
+import {
+  loadMeanings,
+  ayahMeanings,
+  wordsHTML,
+  creditHTML,
+  renderMeanings,
+} from "./meanings.js";
 
 const settings = validateSettings(store.get("settings", {}));
 const main = document.getElementById("main-content");
@@ -55,6 +62,7 @@ const ctx = {
     return saved;
   },
   openTafsir,
+  openMeanings,
   play(sura, ayah) {
     return audioPlayer?.play(sura, ayah);
   },
@@ -164,7 +172,7 @@ async function renderRoute() {
       link.setAttribute("aria-current", "page");
     else link.removeAttribute("aria-current");
   });
-  document.title = `${{ home: "الرئيسية", quran: "القرآن الكريم", prayer: "مواقيت الصلاة", dhikr: "الأذكار", settings: "الإعدادات", qibla: "اتجاه القبلة", tasbih: "المسبحة", more: "المزيد", quiz: "معرفة السور" }[route] || "المصحف"} — المصحف`;
+  document.title = `${{ home: "الرئيسية", quran: "القرآن الكريم", prayer: "مواقيت الصلاة", dhikr: "الأذكار", settings: "الإعدادات", qibla: "اتجاه القبلة", tasbih: "المسبحة", more: "المزيد", quiz: "معرفة السور", meanings: "معاني الكلمات" }[route] || "المصحف"} — المصحف`;
   window.scrollTo({ top: 0, behavior: "instant" });
   main.innerHTML =
     '<div class="loading-state" role="status"><span class="loading-ring"></span><p>تحميل…</p></div>';
@@ -186,6 +194,7 @@ async function renderRoute() {
       tasbih: renderTasbih,
       more: renderMore,
       quiz: renderQuiz,
+      meanings: renderMeanings,
     };
     if (!views[route]) {
       main.innerHTML = `<div class="empty-state"><h1>الصفحة غير موجودة</h1><p>اختر أحد تبويبات المصحف.</p><a class="button" href="#/home">الرئيسية</a></div>`;
@@ -222,6 +231,26 @@ async function tafsirSource() {
       version: null,
       sourceUrl: "https://quranenc.com",
     }
+  );
+}
+async function openMeanings(sura, ayah) {
+  sura = Number(sura);
+  ayah = Number(ayah);
+  const verse = ctx.data.surahs[sura - 1]?.ayahs[ayah - 1];
+  if (!verse) return;
+  openDialog(
+    `معاني الكلمات · ${ctx.data.surahs[sura - 1].name} · الآية ${arabicNum(ayah)}`,
+    `<div class="tafsir-verse">${escapeHTML(verse.text)}</div><div id="meanings-body" role="status"><span class="loading-ring"></span></div>`
+  );
+  const data = await loadMeanings();
+  const holder = document.getElementById("meanings-body");
+  if (!holder) return;
+  const m = ayahMeanings(data, sura, ayah);
+  holder.innerHTML = m
+    ? `<div class="meaning-list">${wordsHTML(escapeHTML, m.words)}</div>${creditHTML(escapeHTML, data, m.book)}<div class="form-actions"><a class="button button-secondary" href="#/meanings?sura=${sura}" data-close-dialog>كل معاني السورة</a></div>`
+    : `<div class="notice">${data ? "لا تتوفر معانٍ لكلمات هذه الآية في المصدر." : "تعذر تحميل بيانات معاني الكلمات."}</div>`;
+  holder.querySelector("[data-close-dialog]")?.addEventListener("click", () =>
+    document.getElementById("app-dialog")?.close()
   );
 }
 async function openTafsir(sura, ayah) {

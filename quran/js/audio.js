@@ -1,47 +1,12 @@
 import { escapeHTML, icon, formatDuration } from "./core.js";
+import {
+  resolveReciter,
+  DEFAULT_RECITER,
+  ayahUrl,
+  surahUrl,
+  describe,
+} from "./reciters.js";
 
-export const RECITERS = [
-  { id: "Alafasy_128kbps", name: "مشاري العفاسي" },
-  { id: "Abdurrahmaan_As-Sudais_192kbps", name: "عبدالرحمن السديس" },
-  { id: "Saood_ash-Shuraym_128kbps", name: "سعود الشريم" },
-  { id: "MaherAlMuaiqly128kbps", name: "ماهر المعيقلي" },
-  { id: "Yasser_Ad-Dussary_128kbps", name: "ياسر الدوسري" },
-  { id: "Salah_Al_Budair_128kbps", name: "صلاح البدير" },
-  { id: "Ghamadi_40kbps", name: "سعد الغامدي" },
-  { id: "Hudhaify_128kbps", name: "علي الحذيفي" },
-  { id: "Muhsin_Al_Qasim_192kbps", name: "محسن القاسم" },
-  { id: "Abdullaah_3awwaad_Al-Juhaynee_128kbps", name: "عبدالله عواد الجهني" },
-  { id: "Khaalid_Abdullaah_al-Qahtaanee_192kbps", name: "خالد القحطاني" },
-  { id: "Nasser_Alqatami_128kbps", name: "ناصر القطامي" },
-  { id: "Abu_Bakr_Ash-Shaatree_128kbps", name: "أبو بكر الشاطري" },
-  { id: "Hani_Rifai_192kbps", name: "هاني الرفاعي" },
-  { id: "ahmed_ibn_ali_al_ajamy_128kbps", name: "أحمد بن علي العجمي" },
-  { id: "Abdullah_Basfar_192kbps", name: "عبدالله بصفر" },
-  { id: "Salaah_AbdulRahman_Bukhatir_128kbps", name: "صلاح بوخاطر" },
-  { id: "Abdullah_Matroud_128kbps", name: "عبدالله مطرود" },
-  { id: "Ahmed_Neana_128kbps", name: "أحمد نعينع" },
-  { id: "Muhammad_AbdulKareem_128kbps", name: "محمد عبدالكريم" },
-  { id: "khalefa_al_tunaiji_64kbps", name: "خليفة الطنيجي" },
-  { id: "Fares_Abbad_64kbps", name: "فارس عبّاد" },
-  { id: "Ali_Jaber_64kbps", name: "علي جابر" },
-  { id: "Ayman_Sowaid_64kbps", name: "أيمن سويد" },
-  { id: "Akram_AlAlaqimy_128kbps", name: "أكرم العلاقمي" },
-  { id: "Yaser_Salamah_128kbps", name: "ياسر سلامة" },
-  { id: "Sahl_Yassin_128kbps", name: "سهل ياسين" },
-  { id: "Husary_128kbps", name: "محمود خليل الحصري (مرتل)" },
-  { id: "Husary_128kbps_Mujawwad", name: "محمود خليل الحصري (مجوّد)" },
-  { id: "Husary_Muallim_128kbps", name: "محمود خليل الحصري (المعلّم)" },
-  { id: "Abdul_Basit_Murattal_192kbps", name: "عبدالباسط عبدالصمد (مرتل)" },
-  { id: "Abdul_Basit_Mujawwad_128kbps", name: "عبدالباسط عبدالصمد (مجوّد)" },
-  { id: "Minshawy_Murattal_128kbps", name: "محمد صديق المنشاوي (مرتل)" },
-  { id: "Minshawy_Mujawwad_192kbps", name: "محمد صديق المنشاوي (مجوّد)" },
-  { id: "Mohammad_al_Tablaway_128kbps", name: "محمد الطبلاوي" },
-  { id: "Muhammad_Ayyoub_128kbps", name: "محمد أيوب" },
-  { id: "Muhammad_Jibreel_128kbps", name: "محمد جبريل" },
-  { id: "Mustafa_Ismail_48kbps", name: "مصطفى إسماعيل" },
-  { id: "mahmoud_ali_al_banna_32kbps", name: "محمود علي البنا" },
-  { id: "Ali_Hajjaj_AlSuesy_128kbps", name: "علي حجاج السويسي" },
-];
 
 export function createAudioPlayer(ctx) {
   const audio = document.getElementById("recitation");
@@ -54,7 +19,7 @@ export function createAudioPlayer(ctx) {
   let current = null;
   let repeat = false;
   let sequence = 0;
-  let activeReciter = RECITERS[0];
+  let activeReciter = { name: "" };
 
   function updateButton() {
     toggle.innerHTML = icon(audio.paused ? "play" : "pause");
@@ -88,15 +53,23 @@ export function createAudioPlayer(ctx) {
     if (!verse) return ctx.notify("تعذر العثور على الآية المحددة.", "error");
     const token = ++sequence;
     audio.pause();
-    current = { sura, ayah };
-    const reciter =
-      RECITERS.find(r => r.id === ctx.settings.reciter) || RECITERS[0];
+    const sel =
+      resolveReciter(ctx.settings.reciter) || resolveReciter(DEFAULT_RECITER);
+    const reciter = { name: describe(sel) };
     activeReciter = reciter;
-    title.textContent = `${ctx.data.surahs[sura - 1].name} · الآية ${ctx.num(ayah)}`;
+    const surahName = ctx.data.surahs[sura - 1].name;
+    if (sel.mode === "s") {
+      current = { sura, ayah: null, surah: true };
+      title.textContent = `${surahName} · سورة كاملة`;
+    } else {
+      current = { sura, ayah };
+      title.textContent = `${surahName} · الآية ${ctx.num(ayah)}`;
+    }
     setStatus(`تحميل · ${reciter.name}`);
     player.hidden = false;
     document.body.classList.add("has-audio");
-    audio.src = `https://everyayah.com/data/${reciter.id}/${String(sura).padStart(3, "0")}${String(ayah).padStart(3, "0")}.mp3`;
+    audio.src =
+      sel.mode === "s" ? surahUrl(sel, sura) : ayahUrl(sel, sura, ayah);
     audio.load();
     highlight();
     try {
@@ -124,6 +97,17 @@ export function createAudioPlayer(ctx) {
 
   function move(direction) {
     if (!current) return;
+    if (current.surah) {
+      const next = current.sura + direction;
+      if (next < 1) return;
+      if (next > 114) {
+        audio.pause();
+        setStatus("انتهت التلاوة.");
+        return;
+      }
+      play(next, 1);
+      return;
+    }
     let { sura, ayah } = current;
     ayah += direction;
     if (ayah > ctx.data.surahs[sura - 1].ayahs.length) {
@@ -251,9 +235,3 @@ export function createAudioPlayer(ctx) {
   return { play, current: () => current, refreshHighlight: highlight };
 }
 
-export function reciterOptions(selected) {
-  return RECITERS.map(
-    r =>
-      `<option value="${r.id}" ${r.id === selected ? "selected" : ""}>${escapeHTML(r.name)}</option>`
-  ).join("");
-}

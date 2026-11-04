@@ -206,6 +206,9 @@ export async function renderQuran(container, ctx) {
       <button type="button" class="button button-secondary button-icon" data-action="tafsir"
         data-sura="${esc(sura)}" data-ayah="${esc(ayah)}" aria-label="${esc(`تفسير ${location}`)}" title="تفسير الآية">
         ${icon("book")}<span class="sr-only">تفسير</span></button>
+      <button type="button" class="button button-secondary button-icon" data-action="meanings"
+        data-sura="${esc(sura)}" data-ayah="${esc(ayah)}" aria-label="${esc(`معاني كلمات ${location}`)}" title="معاني الكلمات">
+        ${icon("words")}<span class="sr-only">معاني الكلمات</span></button>
       <button type="button" class="button button-secondary button-icon" data-action="play"
         data-sura="${esc(sura)}" data-ayah="${esc(ayah)}" aria-label="${esc(`استماع إلى ${location}`)}" title="استماع إلى الآية">
         ${icon("play")}<span class="sr-only">استماع</span></button>
@@ -407,6 +410,7 @@ export async function renderQuran(container, ctx) {
             <span class="pill">حجم الخط <span data-font-size>${number(state.fontSize)}</span></span>
             <button class="button button-icon button-secondary" type="button" data-action="font-larger" aria-label="تكبير خط القرآن" title="تكبير الخط">${icon("plus")}<span class="sr-only">تكبير</span></button>
             <button class="button button-gold" type="button" data-action="save-progress">حفظ موضع القراءة</button>
+            <a class="button button-secondary" href="#/meanings?sura=${esc(surah.number)}">${icon("words")} معاني كلمات السورة</a>
           </div>
           <form data-form="jump" class="verse-actions" aria-label="الانتقال إلى آية محددة">
             <div class="field"><label for="${prefix}-jump-sura">السورة</label>
@@ -705,11 +709,16 @@ export async function renderQuran(container, ctx) {
         toggleBookmark(sura, ayah);
         break;
       case "tafsir":
+      case "meanings":
       case "play": {
         if (!findAyah(sura, ayah)) return;
         saveSelection(sura, ayah);
         const callback =
-          button.dataset.action === "tafsir" ? ctx.openTafsir : ctx.play;
+          button.dataset.action === "tafsir"
+            ? ctx.openTafsir
+            : button.dataset.action === "meanings"
+              ? ctx.openMeanings
+              : ctx.play;
         if (typeof callback !== "function") {
           notify("هذه الأداة غير متاحة حاليًا.", "error");
           return;

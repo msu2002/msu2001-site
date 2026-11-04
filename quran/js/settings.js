@@ -1,3 +1,5 @@
+import { isValidReciter } from "./reciters.js";
+import { mountReciterPicker } from "./reciter-picker.js";
 import {
   DEFAULT_SETTINGS,
   store,
@@ -11,48 +13,6 @@ import {
 const BACKUP_APP = "quran-tool";
 const BACKUP_SCHEMA = "quran-tool-backup:v1";
 const MAX_BACKUP_BYTES = 2 * 1024 * 1024;
-const RECITERS = [
-  ["Alafasy_128kbps", "مشاري العفاسي"],
-  ["Abdurrahmaan_As-Sudais_192kbps", "عبدالرحمن السديس"],
-  ["Saood_ash-Shuraym_128kbps", "سعود الشريم"],
-  ["MaherAlMuaiqly128kbps", "ماهر المعيقلي"],
-  ["Yasser_Ad-Dussary_128kbps", "ياسر الدوسري"],
-  ["Salah_Al_Budair_128kbps", "صلاح البدير"],
-  ["Ghamadi_40kbps", "سعد الغامدي"],
-  ["Hudhaify_128kbps", "علي الحذيفي"],
-  ["Muhsin_Al_Qasim_192kbps", "محسن القاسم"],
-  ["Abdullaah_3awwaad_Al-Juhaynee_128kbps", "عبدالله عواد الجهني"],
-  ["Khaalid_Abdullaah_al-Qahtaanee_192kbps", "خالد القحطاني"],
-  ["Nasser_Alqatami_128kbps", "ناصر القطامي"],
-  ["Abu_Bakr_Ash-Shaatree_128kbps", "أبو بكر الشاطري"],
-  ["Hani_Rifai_192kbps", "هاني الرفاعي"],
-  ["ahmed_ibn_ali_al_ajamy_128kbps", "أحمد بن علي العجمي"],
-  ["Abdullah_Basfar_192kbps", "عبدالله بصفر"],
-  ["Salaah_AbdulRahman_Bukhatir_128kbps", "صلاح بوخاطر"],
-  ["Abdullah_Matroud_128kbps", "عبدالله مطرود"],
-  ["Ahmed_Neana_128kbps", "أحمد نعينع"],
-  ["Muhammad_AbdulKareem_128kbps", "محمد عبدالكريم"],
-  ["khalefa_al_tunaiji_64kbps", "خليفة الطنيجي"],
-  ["Fares_Abbad_64kbps", "فارس عبّاد"],
-  ["Ali_Jaber_64kbps", "علي جابر"],
-  ["Ayman_Sowaid_64kbps", "أيمن سويد"],
-  ["Akram_AlAlaqimy_128kbps", "أكرم العلاقمي"],
-  ["Yaser_Salamah_128kbps", "ياسر سلامة"],
-  ["Sahl_Yassin_128kbps", "سهل ياسين"],
-  ["Husary_128kbps", "محمود خليل الحصري (مرتل)"],
-  ["Husary_128kbps_Mujawwad", "محمود خليل الحصري (مجوّد)"],
-  ["Husary_Muallim_128kbps", "محمود خليل الحصري (المعلّم)"],
-  ["Abdul_Basit_Murattal_192kbps", "عبدالباسط عبدالصمد (مرتل)"],
-  ["Abdul_Basit_Mujawwad_128kbps", "عبدالباسط عبدالصمد (مجوّد)"],
-  ["Minshawy_Murattal_128kbps", "محمد صديق المنشاوي (مرتل)"],
-  ["Minshawy_Mujawwad_192kbps", "محمد صديق المنشاوي (مجوّد)"],
-  ["Mohammad_al_Tablaway_128kbps", "محمد الطبلاوي"],
-  ["Muhammad_Ayyoub_128kbps", "محمد أيوب"],
-  ["Muhammad_Jibreel_128kbps", "محمد جبريل"],
-  ["Mustafa_Ismail_48kbps", "مصطفى إسماعيل"],
-  ["mahmoud_ali_al_banna_32kbps", "محمود علي البنا"],
-  ["Ali_Hajjaj_AlSuesy_128kbps", "علي حجاج السويسي"],
-];
 const CITY_IDS = [
   "rass",
   "riyadh",
@@ -129,7 +89,7 @@ function strictSettings(value) {
     value.fontSize < 22 ||
     value.fontSize > 46 ||
     !["verses", "continuous"].includes(value.readingMode) ||
-    !RECITERS.some(([id]) => id === value.reciter) ||
+    !isValidReciter(value.reciter) ||
     !CITY_IDS.includes(value.city) ||
     !Object.hasOwn(METHODS, value.method) ||
     !["Shafi", "Hanafi"].includes(value.madhab)
@@ -279,7 +239,8 @@ export function renderSettings(container, ctx) {
             ],
             current.readingMode
           )}</select></div>
-          <div class="setting-row"><div><label for="qsettings-reciter"><strong>القارئ</strong></label><small>التلاوة من EveryAyah؛ تحتاج اتصالًا عند الطلب</small></div><select id="qsettings-reciter" class="select" data-setting="reciter">${options(RECITERS, current.reciter)}</select></div>
+          <div class="setting-row reciter-head"><div><strong>القارئ والتلاوة</strong><small>ابحث بالاسم، وأضف المفضلين، واختر نوع التسجيل والجودة وطريقة الاستماع. يُحفظ اختيارك تلقائيًا.</small></div></div>
+          <div data-reciter-host></div>
           <p class="muted" data-settings-status role="status" aria-live="polite"></p>
         </section>
         <section class="panel settings-section" aria-labelledby="qsettings-prayer-title">
@@ -729,6 +690,20 @@ export function renderSettings(container, ctx) {
       .finally(() => setBackupBusy(false));
   }
 
+  const reciterHost = find("[data-reciter-host]");
+  if (reciterHost)
+    mountReciterPicker(reciterHost, {
+      ctx,
+      value: current.reciter,
+      onSelect: async id => {
+        try {
+          await saveSettings({ reciter: id });
+          report("[data-settings-status]", "حُفظ اختيار القارئ.", false, false);
+        } catch (error) {
+          report("[data-settings-status]", error.message || "تعذر حفظ الإعدادات.", true);
+        }
+      },
+    });
   container.addEventListener("click", onClick);
   container.addEventListener("change", onChange);
   container.addEventListener("input", onInput);
