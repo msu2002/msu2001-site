@@ -364,6 +364,21 @@ body[data-theme="dark"] .footer-brand{color:#c1d5af}
 .pagination>nav{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;max-width:100%}
 @media(max-width:600px){.book-format{font-size:8px;max-width:100%;padding:1px 0}.detail-grid>div{grid-template-columns:95px minmax(0,1fr);gap:12px}.pagination>nav{gap:5px}.card-note{font-size:10px}.badge{font-size:9px}}
 
+
+.quick-access{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 16px;padding:12px 14px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.quick-access b{font-size:12px;color:var(--muted,#666);margin-inline-end:4px}
+.qa-chip{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:600;cursor:pointer;min-height:40px}
+.qa-chip small{font-size:11px;opacity:.7;font-weight:500}
+.qa-chip:hover{border-color:#7fa28a}
+.qa-chip.active{background:#1f5a43;border-color:#1f5a43;color:#fff}
+.book-visual.has-cover{min-height:330px;padding:0 20px 18px;justify-content:flex-end;background:#e9eee6}
+.book-visual.has-cover:before{display:none}
+.book-visual.has-cover:after{inset:auto 0 0 0;top:auto;width:auto;height:55%;border:0;border-radius:0;background:linear-gradient(transparent,rgba(10,30,20,.86))}
+.cover-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;z-index:-2;background:#e9eee6}
+.book-visual.has-cover .book-type,.book-visual.has-cover .book-year,.book-visual.has-cover .book-format,.book-visual.has-cover .book-spine{display:none}
+.book-visual.has-cover .book-grade,.book-visual.has-cover .book-subject{color:#fff;position:relative;z-index:1;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.book-visual.has-cover .book-subject{font-size:21px;padding-inline-end:0}
+body[data-view="list"] .book-visual.has-cover,.list-view .book-visual.has-cover{min-height:250px}
 </style>
 </head>
 <body data-view="grid" data-theme="light">
@@ -464,6 +479,7 @@ body[data-theme="dark"] .footer-brand{color:#c1d5af}
       </section>
 
       <section class="catalog-section" aria-labelledby="results-heading">
+        <div class="quick-access" id="quick-access" role="group" aria-label="وصول سريع حسب الصف"><b>تصفّح سريع:</b><button type="button" class="qa-chip active" data-grade="all">الكل <small data-qa="all"></small></button><button type="button" class="qa-chip" data-grade="1">الصف الأول <small data-qa="1"></small></button><button type="button" class="qa-chip" data-grade="2">الصف الثاني <small data-qa="2"></small></button><button type="button" class="qa-chip" data-grade="3">الصف الثالث <small data-qa="3"></small></button><button type="button" class="qa-chip" data-grade="4">الصف الرابع <small data-qa="4"></small></button><button type="button" class="qa-chip" data-grade="5">الصف الخامس <small data-qa="5"></small></button><button type="button" class="qa-chip" data-grade="6">الصف السادس <small data-qa="6"></small></button></div>
         <div class="results-toolbar"><div class="results-title"><h2 id="results-heading">كل المصادر</h2><span class="results-count-label" aria-live="polite" aria-atomic="true"><span id="results-count">210</span> مصدر</span></div><div class="results-tools"><div class="sort-field"><label for="sort-select">الترتيب</label><select id="sort-select"><option value="original">ترتيب الفهرس</option><option value="title">اسم الكتاب</option><option value="grade">الصف الدراسي</option><option value="verified">حالة التحقق</option></select></div><div class="view-switch" role="group" aria-label="طريقة عرض المصادر"><button class="icon-button active" type="button" data-view="grid" aria-pressed="true" aria-label="عرض شبكة" title="عرض شبكة"><svg class="icon" aria-hidden="true"><use href="#icon-grid"/></svg></button><button class="icon-button" type="button" data-view="list" aria-pressed="false" aria-label="عرض قائمة" title="عرض قائمة"><svg class="icon" aria-hidden="true"><use href="#icon-list"/></svg></button></div><button id="export-button" class="export-button" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-download"/></svg><span>تصدير النتائج</span></button></div></div>
         <div class="results-context"><span>المصدر والطبعة موضّحان في كل سجل</span><span class="context-legend"><span class="legend-dot" aria-hidden="true"></span>ادعاء المصدر لا يعني تحققًا مستقلًا</span></div>
         <noscript><p class="noscript-notice">يلزم تفعيل JavaScript للبحث وعرض المصادر. يمكنك <a href="data/catalog.csv" download>تنزيل الفهرس بصيغة CSV</a>.</p></noscript>
@@ -6288,6 +6304,28 @@ window.LIBRARY_SITE_CONFIG = {
     if (!safe) return '';
     return '<a class="button '+cls+'" href="'+E(safe)+'" target="_blank" rel="noopener noreferrer">'+E(label)+icon('arrow')+'<\/a>';
   }
+  function driveId(u) { const m=String(u).match(/drive\.google\.com\/file\/d\/([\w-]+)/)||String(u).match(/[?&]id=([\w-]+)/); return /drive\.(usercontent\.)?google\.com/.test(u)&&m?m[1]:''; }
+  function extUrls(u) {
+    const id=driveId(u);
+    if (id) return {dl:'https://drive.google.com/uc?export=download&id='+id, view:'https://drive.google.com/file/d/'+id+'/preview', open:'https://drive.google.com/file/d/'+id+'/view'};
+    return {dl:u, view:'https://docs.google.com/viewer?embedded=true&url='+encodeURIComponent(u), open:u};
+  }
+  function extActions(record) {
+    const pdf=record.drive_id?'https://drive.google.com/file/d/'+record.drive_id+'/view':L.safeExternal(record.pdf_url); if (!pdf) return '';
+    const x=extUrls(pdf);
+    return '<a class="button primary" href="'+E(x.dl)+'" target="_blank" rel="noopener noreferrer" download="'+E(record.id+'.pdf')+'" title="تحميل مباشر للملف">'+icon('download')+'تحميل مباشر</a>'+
+      '<button type="button" class="button secondary" data-view-ext="'+E(record.id)+'" title="معاينة الملف دون تحميله">'+icon('eye')+'معاينة</button>';
+  }
+  function openExtViewer(id) {
+    const r=byId.get(id), pdf=r&&(r.drive_id?'https://drive.google.com/file/d/'+r.drive_id+'/view':L.safeExternal(r.pdf_url)); if (!pdf) return;
+    const x=extUrls(pdf);
+    closeDialog('details-dialog');
+    $('viewer-title').textContent=r.title;
+    $('pdf-frame').src=x.view;
+    $('viewer-download').href=x.dl; $('viewer-download').removeAttribute('download');
+    $('viewer-open').href=x.open;
+    openDialog('viewer-dialog');
+  }
   function localActions(record) {
     const local = localFor(record);
     if (!local || local.status !== 'ready') return '';
@@ -6305,13 +6343,13 @@ window.LIBRARY_SITE_CONFIG = {
     let hostingNotice = '';
     if (local && !hosted) hostingNotice = '<p class="hosting-status '+(local.status==='error'?'error':'')+'">'+E(local.message)+'<\/p>';
     return '<article class="book-card" data-tone="'+record.grade+'" data-id="'+E(record.id)+'">'+
-      '<div class="book-visual" aria-hidden="true"><span class="book-spine"><\/span><span class="book-type">'+icon('book')+E(L.kinds[record.kind])+'<\/span><span class="book-grade">الصف '+E(L.grades[record.grade])+'<\/span><span class="book-subject">'+E(record.subject)+'<\/span><div class="book-year">السنة / الطبعة في البيانات<br>'+E(year)+'<\/div><span class="book-format">رمز المادة · ليس غلافًا أصليًا<\/span><\/div>'+
+      '<div class="book-visual'+(record.drive_id?' has-cover':'')+'" aria-hidden="true">'+(record.drive_id?'<img class="cover-img" loading="lazy" alt="" src="https://drive.google.com/thumbnail?id='+E(record.drive_id)+'&sz=w500" onerror="this.parentNode.classList.remove(\'has-cover\');this.remove()">':'')+'<span class="book-spine"><\/span><span class="book-type">'+icon('book')+E(L.kinds[record.kind])+'<\/span><span class="book-grade">الصف '+E(L.grades[record.grade])+'<\/span><span class="book-subject">'+E(record.subject)+'<\/span><div class="book-year">السنة / الطبعة في البيانات<br>'+E(year)+'<\/div><span class="book-format">رمز المادة · ليس غلافًا أصليًا<\/span><\/div>'+
       '<div class="card-body"><div class="card-heading"><h3>'+E(record.title)+'<\/h3><button type="button" class="favorite-button '+(saved?'is-saved':'')+'" data-favorite="'+E(record.id)+'" aria-pressed="'+saved+'" aria-label="'+(saved?'إزالة من المفضلة: ':'حفظ في المفضلة: ')+E(record.title)+'">'+icon('heart')+'<\/button><\/div>'+
       '<div class="card-meta">'+E(L.kinds[record.kind])+' · '+E(term)+'<\/div>'+
-      '<div class="badges"><span class="badge '+E(record.edition_status)+'">'+E(edition)+'<\/span><span class="badge '+(hosted?'hosted':'external')+'">'+(hosted?'ملف مستضاف على موقعك':(pdf?'PDF خارجي':'صفحة مصدر خارجية'))+'<\/span><\/div>'+
+      '<div class="badges"><span class="badge '+E(record.edition_status)+'">'+E(edition)+'<\/span><span class="badge '+(hosted?'hosted':'external')+'">'+(hosted?'ملف مستضاف على موقعك':(record.drive_id?'ملف PDF جاهز':pdf?'PDF خارجي':'صفحة مصدر خارجية'))+'<\/span><\/div>'+
       '<p class="card-note">'+E(L.rights[record.rights_status]||L.rights.unclear)+'<\/p>'+
       '<div class="card-source">المصدر: '+E(record.source_name)+' <span>· '+(record.official?'مصدر رسمي':'مصدر غير رسمي')+'<\/span><\/div>'+hostingNotice+
-      '<div class="card-actions">'+(hosted?localActions(record):(pdf?link(pdf,'فتح PDF الخارجي','primary'):link(record.source_url,'فتح المصدر','primary')))+
+      '<div class="card-actions">'+(hosted?localActions(record):(pdf?extActions(record):link(record.source_url,'فتح المصدر','primary')))+
       '<button type="button" class="details-button" data-details="'+E(record.id)+'">'+icon('info')+'التفاصيل<\/button><\/div><\/div><\/article>';
   }
   function syncControls() {
@@ -6421,7 +6459,7 @@ window.LIBRARY_SITE_CONFIG = {
     html+=detailText('دليل حقوق النشر',r.rights_evidence);
     html+=detailText('ملاحظات المصدر',r.notes);
     if (local) html+=detailText('الملف المحلي',local.status==='ready'?'تم التحقق من وجود الملف وترويسة PDF. إقرار حقوق النشر من صاحب الموقع: '+local.rightsNote:local.message);
-    html+='<div class="detail-actions">'+localActions(r)+link(r.source_url,'فتح صفحة المصدر')+link(r.pdf_url,'فتح PDF الخارجي')+'<\/div><p class="card-note">روابط المصدر الخارجية تفتح في تبويب جديد. لا يُعد توفر الرابط إذنًا بإعادة نشر الملف.<\/p>';
+    html+='<div class="detail-actions">'+localActions(r)+(local?.status==='ready'?'':extActions(r))+link(r.source_url,'فتح صفحة المصدر')+'<\/div><p class="card-note">روابط المصدر الخارجية تفتح في تبويب جديد. لا يُعد توفر الرابط إذنًا بإعادة نشر الملف.<\/p>';
     $('details-content').innerHTML=html;
     openDialog('details-dialog');
   }
@@ -6554,6 +6592,7 @@ window.LIBRARY_SITE_CONFIG = {
     if (button.dataset.favorite) toggleFavorite(button.dataset.favorite);
     if (button.dataset.details) openDetails(button.dataset.details);
     if (button.dataset.viewPdf) openViewer(button.dataset.viewPdf);
+    if (button.dataset.viewExt) openExtViewer(button.dataset.viewExt);
     if (button.dataset.closeDialog) closeDialog(button.dataset.closeDialog);
     if (button.dataset.grade) {state.grade=button.dataset.grade;state.favorites=false;state.page=1;render();mobileMenu(false);}
     if (button.dataset.kind) {state.kind=button.dataset.kind;state.page=1;render();}
@@ -6570,6 +6609,19 @@ window.LIBRARY_SITE_CONFIG = {
   });
   window.LibraryApp={state,records,localStatus,filtered,render,inspectPDF};
   render();
+  (function(){const c={all:records.length};records.forEach(r=>c[r.grade]=(c[r.grade]||0)+1);document.querySelectorAll('[data-qa]').forEach(e=>e.textContent=c[e.dataset.qa]||0);})();
+  (function loadDriveMap(){
+    const SHEET='https://docs.google.com/spreadsheets/d/1ZaD5P-gHeqJDwRX2Tcwy6dWb47CLDSGmxcNtn2m5CKA/gviz/tq?tqx=out:csv&sheet='+encodeURIComponent('الورقة1');
+    function parse(t){const rows=[];let r=[],c='',q=false;for(let i=0;i<t.length;i++){const ch=t[i];if(q){if(ch==='"'){if(t[i+1]==='"'){c+='"';i++;}else q=false;}else c+=ch;}else if(ch==='"')q=true;else if(ch===','){r.push(c);c='';}else if(ch==='\n'){r.push(c);rows.push(r);r=[];c='';}else if(ch!=='\r')c+=ch;}if(c||r.length){r.push(c);rows.push(r);}return rows;}
+    const norm=x=>{x=String(x||'').replace(/\s+/g,' ').trim().replace(/\\&/g,'&');try{x=decodeURIComponent(x);}catch(e){}return x;};
+    fetch(SHEET).then(r=>r.ok?r.text():Promise.reject()).then(t=>{
+      const rows=parse(t).slice(1),byUrl=new Map();
+      rows.forEach(c=>{const m=String(c[7]||'').match(/\/d\/([\w-]+)/);if(!m)return;byUrl.set(norm(c[8]),m[1]);});
+      let n=0;
+      records.forEach(r=>{const id=r.pdf_url&&byUrl.get(norm(r.pdf_url));if(id){r.drive_id=id;n++;}});
+      if(n)render();
+    }).catch(()=>{});
+  })();
   prepareLocalFiles().catch(()=>toast('تعذر إتمام التحقق من الملفات المحلية. الروابط الخارجية لم تتغير.'));
 })();
 
