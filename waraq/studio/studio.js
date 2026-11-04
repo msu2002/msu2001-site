@@ -21,6 +21,7 @@ var KINDS = {
 };
 var uid = function () { return 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); };
 function msg(t, ms) { var m = $('#msg'); m.textContent = t; m.style.display = 'block'; clearTimeout(msg.t); msg.t = setTimeout(function () { m.style.display = 'none'; }, ms || 3500); }
+function arPages(n) { return n === 1 ? 'صفحة واحدة' : n === 2 ? 'صفحتان' : n <= 10 ? n + ' صفحات' : n + ' صفحة'; }
 function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 function toHex(c) { return '#' + c.map(function (v) { return ('0' + Math.round(v).toString(16)).slice(-2); }).join(''); }
 function fromHex(h) { return [1, 3, 5].map(function (i) { return parseInt(h.substr(i, 2), 16); }); }
@@ -478,7 +479,7 @@ async function exportFile() {
       }
     }
     var bytes = await out.save(); download(new Blob([bytes], { type: 'application/pdf' }), base + '-ورق.pdf');
-    msg(rasterized ? 'تم الحفظ. تحولت ' + rasterized + ' صفحة معالَجة إلى صورة، وبقية الصفحات كما هي.' : 'تم حفظ الملف.', 5000);
+    msg(rasterized ? 'تم الحفظ. ' + (rasterized === 1 ? 'تحوّلت صفحة واحدة معالَجة إلى صورة' : rasterized === 2 ? 'تحوّلت صفحتان معالَجتان إلى صورتين' : 'تحوّلت ' + arPages(rasterized) + ' معالَجة إلى صور') + '، وبقية الصفحات كما هي.' : 'تم حفظ الملف.', 5000);
   } catch (e) { console.error(e); msg('تعذر الحفظ: ' + (e.message || e), 6000); }
   finally { btn.disabled = false; btn.textContent = old; }
 }
