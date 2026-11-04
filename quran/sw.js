@@ -1,7 +1,7 @@
 /* This service worker controls ONLY its own directory. External audio/tafsir are not cached here. */
 const SCOPE = new URL(self.registration.scope);
 const CACHE =
-  "quran-tool-" + SCOPE.pathname.replace(/[^a-z0-9]/gi, "_") + "-v1.1.0";
+  "quran-tool-" + SCOPE.pathname.replace(/[^a-z0-9]/gi, "_") + "-v1.1.1";
 const SHELL = [
   "./",
   "./index.html",
@@ -32,14 +32,19 @@ const SHELL = [
 ].map(path => new URL(path, SCOPE).href);
 async function prepare() {
   const cache = await caches.open(CACHE);
-  await cache.addAll(SHELL);
+  await Promise.all(SHELL.map(async u => { const r = await fetch(u, { cache: "reload" }); if (!r.ok) throw new Error(u); await cache.put(u, r); }));
   return { ok: true, files: SHELL.length, available: true };
 }
 self.addEventListener("install", event => {
-  event.waitUntil(prepare());
+  event.waitUntil(prepare().then(() => self.skipWaiting()));
 });
 self.addEventListener("activate", event => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches
+      .keys()
+      .then(keys => Promise.all(keys.filter(k => k.startsWith("quran-tool-") && k !== CACHE).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
+  );
 });
 self.addEventListener("message", event => {
   if (event.data?.type === "PREPARE_OFFLINE")
@@ -76,14 +81,18 @@ self.addEventListener("fetch", event => {
     return;
   }
   if (!SHELL.includes(url.href)) return;
-  // Cache-first keeps locally licensed content usable without a network request.
+  // Network-first so updates appear immediately; the cache keeps the tool usable offline.
   event.respondWith(
     caches.open(CACHE).then(async cache => {
-      const saved = await cache.match(request);
-      if (saved) return saved;
-      const response = await fetch(request);
-      if (response.ok) await cache.put(request, response.clone());
-      return response;
+      try {
+        const response = await fetch(request, { cache: "no-cache" });
+        if (response.ok) await cache.put(request, response.clone());
+        return response;
+      } catch (e) {
+        const saved = await cache.match(request);
+        if (saved) return saved;
+        throw e;
+      }
     })
   );
 });
