@@ -1,0 +1,15 @@
+# مصادر أداة المصحف وحقوقها
+
+النص القرآني: مشروع Tanzil، مع إحالة ظاهرة في الواجهة وإشعار الترخيص داخل البيانات والحزمة. الترخيص CC BY 3.0 كما يصفه المصدر، مع شرط نسخ النص حرفيًا وعدم تغييره. التطبيع في البحث يطبق على الفهرس فقط، لا النص المعروض أو المنسوخ. قرأت ترخيص https://tanzil.net/docs/text_license بتاريخ 4 نوفمبر 2026. إشعار Copyright الخاص بنسخة Tanzil المضمّنة محفوظ حرفيًا داخل مصدر البيانات وملف ترخيصه، مع شروط المصدر والرابط والتحديث. التفاصيل الفنية للملف في وثيقة مصدر البيانات المرفقة.
+
+التفسير العربي: QuranEnc، التفسير الميسر بالمفتاح arabic_moyassar. الوثائق https://quranenc.com/en/home/api تتيح endpoint آية /api/v1/translation/aya/{key}/{sura}/{ayah} وسورة /api/v1/translation/sura/{key}/{sura}. اختبرت https://quranenc.com/api/v1/translation/aya/arabic_moyassar/1/1 ونجح JSON مع result.translation وCORS Access-Control-Allow-Origin: *. البحث عن قائمة /translations/list/ar أعاد [] فلا نعتمد نتيجته لنفي وجود التفسير. شروط المصدر: عدم تعديل أو زيادة أو حذف، إظهار المصدر والناشر والإصدار ومعلومات النص، ملاحظات وتحديثات إلى المصدر، وعدم الإعلانات غير المناسبة. لا ننسب التفسير لمؤلف توليدي أو نجعله نص القرآن.
+
+المواقيت: https://github.com/batoulapps/adhan-js ، مكتبة Adhan إصدار مثبت 4.4.3، MIT ورخصتها مرفقة vendor/Adhan-LICENSE.txt. تُحسب أوقات مطلقة وتعرض بالمنطقة الزمنية المختارة؛ لا نفترض أن زمن الجهاز هو زمن المدينة. مكتبة محلية، لا API صلاة أو اتصال إجباري. الحساب لا يساوي اعتماد تقويم جهة رسمية؛ يُراجع مع جدول المسجد والبلد.
+
+خط Amiri Quran وAmiri: https://github.com/aliftype/amiri ، OFL 1.1. أُخذت الملفات من توزيعة النظام مع إشعار copyright والرخصة المرفقة fonts/Amiri-COPYRIGHT.txt. خط الواجهة Noto Sans Arabic المستخدم سابقًا محليًا مع رخصته fonts/Noto-LICENSE.txt. لا تنزيل Google Fonts أثناء التشغيل.
+
+التلاوة: EveryAyah، https://everyayah.com/ يتيح ملفات MP3 للآيات وروابط recitations.js. تُستعمل روابط بث من المصدر فقط، مع اسم قارئ وإحالة ظاهرة؛ لا توجد في هذه الحزمة ملفات الصوت ولا ادعاء بحق إعادة توزيع تسجيلاتها كملفات محلية. اختبرت GET Range للآية 001001 من Alafasy_128kbps وAbdurrahmaan_As-Sudais_192kbps وHusary_128kbps، عاد 206 audio/mpeg. لا يثبت ذلك دوام خدمة أو صلاحية تنزيل وتوزيع تسجيلات. الطلبات الصوتية تصل إلى جهة خارجية عند ضغط تشغيل وقد ترى عنوان IP وما يرسله المتصفح.
+
+مرجع الشكل: صور https://play.google.com/store/apps/details?id=com.almoshaf.alelectrony&pli=1&hl=ar. الواجهة المبرمجة مستقلة مستلهمة الكحلي/البطاقات الزرقاء/الذهبي/الفيروزي والتبويبات؛ لا شعار المطور أو شيفرته أو صور المتجر داخل الحزمة، وليست نسخة رسمية أو تابعة له.
+
+قيود Safari/PWA: https://support.apple.com/guide/iphone/open-as-web-app-iphea86e5236/ios ، https://webkit.org/blog/13878/web-push-for-web-apps-on-ios-and-ipados/ ، https://webkit.org/blog/14403/updates-to-storage-policy/ ، https://developer.mozilla.org/en-US/docs/Web/API/Media_Session_API ، https://developer.mozilla.org/en-US/docs/Web/API/Device_orientation_events/Detecting_device_orientation. أذان كامل أثناء إغلاق الصفحة أو منبه دقيق محلي دون إنترنت غير منفذ، ولا تسجل الأداة أنها وفّرته. الإضافة للشاشة الرئيسية ليست نشر App Store. الحفظ قد يمحوه النظام، وتشغيل الخلفية والحساسات يحتاج فحص أجهزة فعلية.

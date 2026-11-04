@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#08172d" />
+    <meta
+      name="description"
+      content="أداة المصحف للموقع: قراءة القرآن والبحث والتفسير والاستماع، ومواقيت الصلاة والأذكار. واجهة عربية مناسبة للهاتف والتابلت."
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <title>المصحف — قراءة وذكر</title>
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link
+      rel="preload"
+      href="./fonts/ui-regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./js/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">انتقل إلى المحتوى</a>
+    <div class="app-shell">
+      <header class="app-header">
+        <a href="#/home" class="brand" aria-label="المصحف — الرئيسية">
+          <span class="brand-mark" aria-hidden="true"
+            ><svg viewBox="0 0 32 32" fill="none">
+              <path
+                d="M16 7C11 3 5 4 3 5v21c5-2 9-1 13 2 4-3 8-4 13-2V5c-2-1-8-2-13 2Zm0 0v21"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linejoin="round"
+              /></svg
+          ></span>
+          <span><strong>المصحف</strong><small>قراءة وذكر</small></span>
+        </a>
+        <div class="header-actions">
+          <button
+            id="global-search"
+            class="button-icon"
+            type="button"
+            aria-label="البحث في القرآن"
+          >
+            <span data-icon="search"></span>
+          </button>
+          <div class="theme-switch" aria-label="مظهر الأداة">
+            <button type="button" data-theme="light" aria-label="الوضع النهاري">
+              <span data-icon="sun"></span>
+            </button>
+            <button type="button" data-theme="dark" aria-label="الوضع الليلي">
+              <span data-icon="moon"></span>
+            </button>
+          </div>
+        </div>
+      </header>
+      <nav class="primary-nav" aria-label="التنقل الرئيسي">
+        <a href="#/home" data-nav="home"
+          ><span data-icon="home"></span><span>الرئيسية</span></a
+        >
+        <a href="#/quran" data-nav="quran"
+          ><span data-icon="book"></span><span>القرآن</span></a
+        >
+        <a href="#/prayer" data-nav="prayer"
+          ><span data-icon="moon"></span><span>المواقيت</span></a
+        >
+        <a href="#/dhikr" data-nav="dhikr"
+          ><span data-icon="hand"></span><span>الأذكار</span></a
+        >
+        <a href="#/settings" data-nav="settings"
+          ><span data-icon="settings"></span><span>الإعدادات</span></a
+        >
+      </nav>
+      <main id="main-content" class="main-content" tabindex="-1">
+        <div class="loading-state" role="status">
+          <span class="loading-ring"></span>
+          <h1>نُجهّز مساحة القراءة</h1>
+          <p>تحميل النص القرآني من الملفات المحلية…</p>
+        </div>
+      </main>
+      <footer class="app-footer">
+        <span
+          >نص القرآن:
+          <a href="https://tanzil.net" target="_blank" rel="noopener noreferrer"
+            >مشروع تنزيل Tanzil</a
+          ></span
+        ><span>أداة ويب مستقلة · ليست التطبيق الرسمي لأندرويد</span>
+      </footer>
+    </div>
+    <aside
+      id="audio-player"
+      class="audio-player"
+      hidden
+      aria-label="مشغل التلاوة"
+    >
+      <div class="audio-meta">
+        <span class="audio-status-dot" aria-hidden="true"></span>
+        <div>
+          <strong id="audio-title">التلاوة</strong
+          ><small id="audio-status">اختر آية للاستماع</small>
+        </div>
+      </div>
+      <div class="audio-controls">
+        <button id="audio-prev" class="button-icon" aria-label="الآية السابقة">
+          <span data-icon="previous"></span></button
+        ><button
+          id="audio-toggle"
+          class="button-icon audio-toggle"
+          aria-label="تشغيل التلاوة"
+        >
+          <span data-icon="play"></span></button
+        ><button id="audio-next" class="button-icon" aria-label="الآية التالية">
+          <span data-icon="next"></span></button
+        ><button
+          id="audio-repeat"
+          class="button-icon"
+          aria-label="تكرار الآية"
+          aria-pressed="false"
+        >
+          <span data-icon="repeat"></span></button
+        ><button
+          id="audio-close"
+          class="button-icon"
+          aria-label="إغلاق التلاوة"
+        >
+          <span data-icon="close"></span>
+        </button>
+      </div>
+      <label class="sr-only" for="audio-seek">موضع التلاوة</label
+      ><input
+        id="audio-seek"
+        type="range"
+        min="0"
+        max="100"
+        value="0"
+        step="0.1"
+      />
+      <div class="audio-time">
+        <span id="audio-elapsed">0:00</span
+        ><a
+          href="https://everyayah.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >المصدر: EveryAyah · بث عبر الإنترنت</a
+        ><span id="audio-duration">0:00</span>
+      </div>
+      <audio id="recitation" preload="none" playsinline></audio>
+    </aside>
+    <dialog id="app-dialog" class="app-dialog" aria-labelledby="dialog-title">
+      <div class="dialog-header">
+        <h2 id="dialog-title"></h2>
+        <button
+          class="button-icon"
+          id="dialog-close"
+          aria-label="إغلاق النافذة"
+        >
+          <span data-icon="close"></span>
+        </button>
+      </div>
+      <div id="dialog-content"></div>
+    </dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+    <div id="connection-status" class="connection-status" role="status" hidden>
+      دون إنترنت · النص المحمّل متاح؛ التلاوة والتفسير غير المحفوظ يحتاجان
+      اتصالًا.
+    </div>
+    <noscript
+      ><div class="notice">
+        هذه الأداة تحتاج JavaScript للقراءة والبحث والحساب المحلي. فعّل
+        JavaScript ثم أعد تحميل الصفحة. لا تُنشأ آيات أو أوقات صلاة من صور
+        التصميم.
+      </div></noscript
+    >
+  </body>
+</html>
