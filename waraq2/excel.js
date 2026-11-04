@@ -6,6 +6,7 @@ var ORDER = ['sheetPr', 'dimension', 'sheetViews', 'sheetFormatPr', 'cols', 'she
 
 function init() { return { file: null, zip: null, sheets: [], sel: {}, text: W.settings().wm_text || 'معتز بن عبدالله العواجي', color: W.settings().wm_color || '#808080', op: 22, size: 50, angle: -35, font: W.settings().wm_font || 'Tajawal', bold: true, tile: false, ov: true, hdr: false, bg: false, busy: false }; }
 
+function zipPut(z, n, d) { return d === undefined ? z.file(n) : z.file(n, d, { createFolders: false }); }
 function loadZip() {
   if (window.JSZip) return Promise.resolve();
   return new Promise(function (res, rej) { var s = document.createElement('script'); s.src = 'jszip.min.js'; s.onload = res; s.onerror = function () { rej(new Error('تعذر تحميل مكتبة الضغط')); }; document.head.appendChild(s); });
@@ -86,16 +87,16 @@ function headerFooter(xml) {
 }
 function vml(n) {
   return '<xml xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">' +
-    '<o:shapelayout v:ext="edit"><o:idmap v:ext="edit" data="' + (n + 20) + '"/></o:shapelayout>' +
+    '<o:shapelayout v:ext="edit"><o:idmap v:ext="edit" data="1"/></o:shapelayout>' +
     '<v:shapetype id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t" path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f"><v:stroke joinstyle="miter"/>' +
     '<v:formulas><v:f eqn="if lineDrawn pixelLineWidth 0"/><v:f eqn="sum @0 1 0"/><v:f eqn="sum 0 0 @1"/><v:f eqn="prod @2 1 2"/><v:f eqn="prod @3 21600 pixelWidth"/><v:f eqn="prod @3 21600 pixelHeight"/><v:f eqn="sum @0 0 1"/><v:f eqn="prod @6 1 2"/><v:f eqn="prod @7 21600 pixelWidth"/><v:f eqn="sum @8 21600 0"/><v:f eqn="prod @7 21600 pixelHeight"/><v:f eqn="sum @10 21600 0"/></v:formulas>' +
     '<v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/><o:lock v:ext="edit" aspectratio="t"/></v:shapetype>' +
-    '<v:shape id="CH" o:spid="_x0000_s' + (n * 10 + 2049) + '" type="#_x0000_t75" style="position:absolute;margin-left:0;margin-top:0;width:520pt;height:700pt;z-index:1"><v:imagedata o:relid="rId1" o:title="watermark"/><o:lock v:ext="edit" rotation="t"/></v:shape></xml>';
+    '<v:shape id="CH" o:spid="_x0000_s1025" type="#_x0000_t75" style="position:absolute;margin-left:0;margin-top:0;width:520pt;height:700pt;z-index:1"><v:imagedata o:relid="rId1" o:title="watermark"/><o:lock v:ext="edit" rotation="t"/></v:shape></xml>';
 }
 function relsDoc(items) { return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' + items + '</Relationships>'; }
 
 async function readWorkbook(zip) {
-  var wbx = await zip.file('xl/workbook.xml').async('string'), rel = await zip.file('xl/_rels/workbook.xml.rels').async('string');
+  var wbx = await zipPut(zip, 'xl/workbook.xml').async('string'), rel = await zipPut(zip, 'xl/_rels/workbook.xml.rels').async('string');
   var rels = {}; (rel.match(/<Relationship\b[^>]*>/g) || []).forEach(function (t) { var id = /\bId="([^"]+)"/.exec(t), tg = /\bTarget="([^"]+)"/.exec(t), ty = /\bType="([^"]+)"/.exec(t); if (id && tg) rels[id[1]] = { t: tg[1], ty: ty ? ty[1] : '' }; });
   var out = [];
   (wbx.match(/<sheet\b[^>]*>/g) || []).forEach(function (t) {
@@ -110,34 +111,37 @@ async function readWorkbook(zip) {
 
 async function apply() {
   var o = { text: S.text.trim(), color: S.color, op: S.op, size: S.size, angle: S.angle, font: S.font, bold: S.bold, tile: S.tile };
-  var zip = await JSZip.loadAsync(await W.bytes(S.file)), ct = await zip.file('[Content_Types].xml').async('string');
-  var ovBlob = S.ov ? await ovPng(o) : null; if (ovBlob) zip.file('xl/media/wm_ov.png', ovBlob);
+  var zip = await JSZip.loadAsync(await W.bytes(S.file)), ct = await zipPut(zip, '[Content_Types].xml').async('string');
+  var ovBlob = S.ov ? await ovPng(o) : null; if (ovBlob) zipPut(zip, 'xl/media/wm_ov.png', ovBlob);
   var hdrPng = S.hdr ? await headerPng(o) : null, bgBlob = S.bg ? await bgPng(o) : null, n = 0, skipped = [];
-  if (hdrPng) zip.file('xl/media/wm_hdr.png', hdrPng);
-  if (bgBlob) zip.file('xl/media/wm_bg.png', bgBlob);
+  if (hdrPng) zipPut(zip, 'xl/media/wm_hdr.png', hdrPng);
+  if (bgBlob) zipPut(zip, 'xl/media/wm_bg.png', bgBlob);
   for (var i = 0; i < S.sheets.length; i++) {
     var sh = S.sheets[i]; if (!S.sel[i]) continue;
-    var f = zip.file(sh.path); if (!f) continue;
-    var xml = await f.async('string'), rp = sh.path.replace(/([^/]+)$/, '_rels/$1.rels'), relx = zip.file(rp) ? await zip.file(rp).async('string') : relsDoc('');
+    var f = zipPut(zip, sh.path); if (!f) continue;
+    var xml = await f.async('string'), rp = sh.path.replace(/([^/]+)$/, '_rels/$1.rels'), relx = zipPut(zip, rp) ? await zipPut(zip, rp).async('string') : relsDoc('');
     n++;
     if (!/<worksheet[^>]*xmlns:r=/.test(xml)) xml = xml.replace(/<worksheet\b/, '<worksheet xmlns:r="' + NS_REL + '"');
     var add = '', hasHF = /<legacyDrawingHF\b/.test(xml);
     if (S.ov) {
       var ov = overlay(zip, xml, relx, n, extent(xml));
-      if (ov.hasDrawing && !(ov.existing && zip.file(ov.existing))) skipped.push(sh.name + ' (طبقة)');
+      if (ov.hasDrawing && !(ov.existing && zipPut(zip, ov.existing))) skipped.push(sh.name + ' (طبقة)');
       else if (ov.existing) {
-        var dx = await zip.file(ov.existing).async('string');
-        dx = dx.replace(/<\/((?:\w+:)?wsDr)>\s*$/, function (m0, tg) { return ov.pics + '</' + tg + '>'; });
-        zip.file(ov.existing, dx);
-        var drp = ov.existing.replace(/([^/]+)$/, '_rels/$1.rels'), drx = zip.file(drp) ? await zip.file(drp).async('string') : relsDoc('');
+        var dx = await zipPut(zip, ov.existing).async('string');
+        dx = dx.replace(/<xdr:absoluteAnchor\b[^>]*>[\s\S]*?<\/xdr:absoluteAnchor>/g, function (m0) { return m0.indexOf('name="WM ') > -1 ? '' : m0; });
+        var mx = 0; (dx.match(/<(?:\w+:)?cNvPr\b[^>]*\bid="(\d+)"/g) || []).forEach(function (t) { mx = Math.max(mx, +/id="(\d+)"/.exec(t)[1]); });
+        var pics2 = ov.pics.replace(/<xdr:cNvPr id="\d+"/g, function () { mx++; return '<xdr:cNvPr id="' + mx + '"'; });
+        dx = dx.replace(/<\/((?:\w+:)?wsDr)>\s*$/, function (m0, tg) { return pics2 + '</' + tg + '>'; });
+        zipPut(zip, ov.existing, dx);
+        var drp = ov.existing.replace(/([^/]+)$/, '_rels/$1.rels'), drx = zipPut(zip, drp) ? await zipPut(zip, drp).async('string') : relsDoc('');
         drx = drx.replace(/<Relationship\b[^>]*Id="rIdWMI"[^>]*\/>/g, '');
         var irel = '<Relationship Id="rIdWMI" Type="' + NS_REL + '/image" Target="../media/wm_ov.png"/>';
         drx = /<\/Relationships>/.test(drx) ? drx.replace('</Relationships>', irel + '</Relationships>') : drx.replace(/<Relationships([^>]*)\/>/, '<Relationships$1>' + irel + '</Relationships>');
-        zip.file(drp, drx);
+        zipPut(zip, drp, drx);
       } else {
         var np = 'xl/drawings/drawingWM' + n + '.xml';
-        zip.file(np, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">' + ov.pics + '</xdr:wsDr>');
-        zip.file('xl/drawings/_rels/drawingWM' + n + '.xml.rels', relsDoc('<Relationship Id="rIdWMI" Type="' + NS_REL + '/image" Target="../media/wm_ov.png"/>'));
+        zipPut(zip, np, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">' + ov.pics + '</xdr:wsDr>');
+        zipPut(zip, 'xl/drawings/_rels/drawingWM' + n + '.xml.rels', relsDoc('<Relationship Id="rIdWMI" Type="' + NS_REL + '/image" Target="../media/wm_ov.png"/>'));
         ct = ct.replace('</Types>', '<Override PartName="/' + np + '" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml"/></Types>');
         xml = put(xml, 'drawing', '<drawing r:id="rIdWMD"/>');
         add += '<Relationship Id="rIdWMD" Type="' + NS_REL + '/drawing" Target="../drawings/drawingWM' + n + '.xml"/>';
@@ -149,8 +153,8 @@ async function apply() {
         xml = headerFooter(xml);
         xml = put(xml, 'legacyDrawingHF', '<legacyDrawingHF r:id="rIdWMH"/>');
         var vp = 'xl/drawings/vmlDrawingWM' + n + '.vml';
-        zip.file(vp, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' + vml(n));
-        zip.file('xl/drawings/_rels/vmlDrawingWM' + n + '.vml.rels', relsDoc('<Relationship Id="rId1" Type="' + NS_REL + '/image" Target="../media/wm_hdr.png"/>'));
+        zipPut(zip, vp, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' + vml(n));
+        zipPut(zip, 'xl/drawings/_rels/vmlDrawingWM' + n + '.vml.rels', relsDoc('<Relationship Id="rId1" Type="' + NS_REL + '/image" Target="../media/wm_hdr.png"/>'));
         add += '<Relationship Id="rIdWMH" Type="' + NS_REL + '/vmlDrawing" Target="../drawings/vmlDrawingWM' + n + '.vml"/>';
       }
     }
@@ -159,14 +163,14 @@ async function apply() {
       xml = put(xml, 'picture', '<picture r:id="rIdWMB"/>');
       add += '<Relationship Id="rIdWMB" Type="' + NS_REL + '/image" Target="../media/wm_bg.png"/>';
     }
-    relx = relx.replace(/<Relationship\b[^>]*Id="rIdWM[HB]"[^>]*\/>/g, '');
+    ['rIdWMH', 'rIdWMB', 'rIdWMD'].forEach(function (id) { if (new RegExp('Id="' + id + '"').test(add)) relx = relx.replace(new RegExp('<Relationship\\b[^>]*Id="' + id + '"[^>]*/>', 'g'), ''); });
     relx = /<\/Relationships>/.test(relx) ? relx.replace('</Relationships>', add + '</Relationships>') : relx.replace(/<Relationships([^>]*)\/>/, '<Relationships$1>' + add + '</Relationships>');
-    zip.file(sh.path, xml); zip.file(rp, relx);
+    zipPut(zip, sh.path, xml); zipPut(zip, rp, relx);
   }
   if (!n) throw new Error('اختر ورقة واحدة على الأقل');
   if (!/Extension="png"/i.test(ct)) ct = ct.replace(/(<Types\b[^>]*>)/, '$1<Default Extension="png" ContentType="image/png"/>');
   if (!/Extension="vml"/i.test(ct)) ct = ct.replace(/(<Types\b[^>]*>)/, '$1<Default Extension="vml" ContentType="application/vnd.openxmlformats-officedocument.vmlDrawing"/>');
-  zip.file('[Content_Types].xml', ct);
+  zipPut(zip, '[Content_Types].xml', ct);
   var blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', mimeType: S.file.type || 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
   return { blob: blob, n: n, skipped: skipped };
 }
@@ -189,7 +193,7 @@ async function open(f) {
   try {
     await loadZip(); try { await document.fonts.load('700 40px Tajawal'); } catch (e2) {}
     var zip = await JSZip.loadAsync(await W.bytes(f));
-    if (!zip.file('xl/workbook.xml')) throw new Error('ليس ملف Excel صالحًا');
+    if (!zipPut(zip, 'xl/workbook.xml')) throw new Error('ليس ملف Excel صالحًا');
     var sheets = await readWorkbook(zip); if (!sheets.length) throw new Error('لا توجد أوراق عمل في الملف');
     S.file = f; S.zip = zip; S.sheets = sheets; S.sel = {}; sheets.forEach(function (s, i) { S.sel[i] = true; });
     shell();
