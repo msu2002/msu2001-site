@@ -5,13 +5,13 @@ var $ = function (s, r) { return (r || document).querySelector(s); };
 var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 var PL = window.PDFLib, pdfjs = window.pdfjsLib;
 pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.js';
-var PREVIEW_W = 780;
+var PREVIEW_W = 1000;
 
 var S = {
   tab: 'add', kind: null, bytes: null, name: '', pdf: null, pages: 0, cur: 1, img: null,
   baseCache: {}, overlays: [], sel: null, ops: [], undo: [], fonts: [], assets: [],
   set: { kind: 'watermark', mode: 'color', color: [185, 185, 185], tol: 40, grow: 2, scope: 'all', range: '', pick: false },
-  show: 'after', resCache: null
+  show: 'after', resCache: null, zoom: 1
 };
 var KINDS = {
   watermark: { ar: 'علامة', sub: 'نص أو صورة باهتة', col: '#788894', rgb: [185, 185, 185], mode: 'color', scope: 'all' },
@@ -56,7 +56,7 @@ async function openFile(f) {
     S.name = f.name; S.bytes = new Uint8Array(buf); S.baseCache = {}; S.overlays = []; S.ops = []; S.undo = []; S.sel = null; S.cur = 1;
     if (/pdf$/i.test(f.type) || /\.pdf$/i.test(f.name)) {
       S.kind = 'pdf'; S.pdf = await pdfjs.getDocument({ data: S.bytes.slice(), cMapUrl: '../pdf/cmaps/', cMapPacked: true, standardFontDataUrl: '../pdf/standard_fonts/' }).promise;
-      S.pages = S.pdf.numPages; S.img = null;
+      S.pages = S.pdf.numPages; S.img = null; S.wm = null; runWm();
     } else {
       S.kind = 'img'; S.pdf = null; S.pages = 1;
       S.img = await loadImg(URL.createObjectURL(new Blob([S.bytes], { type: f.type || 'image/png' })));
@@ -154,7 +154,16 @@ function renderLeft() {
         '<div class="r"><select data-sc>' + SCOPES.map(function (s) { return '<option value="' + s[0] + '"' + (o.scope === s[0] ? ' selected' : '') + '>' + s[1] + '</option>'; }).join('') + '</select>' +
         (o.scope === 'range' ? '<input type="text" data-rg value="' + esc(o.range) + '" placeholder="1-3,5" style="width:90px">' : '') + (o.scope === 'cur' ? '<span style="color:var(--mut)">ص ' + o.page + '</span>' : '') + '</div></div>';
     });
-    h2 += '<button class="btn" id="struct">إزالة العناصر المنفصلة داخل PDF</button><div class="note">يحذف العلامات والأختام والتواقيع المضافة كعناصر مستقلة داخل الملف، دون تحويل الصفحة إلى صورة.</div>';
+    if (S.kind === 'pdf') {
+      h2 += '<h3>علامات مكتشفة تلقائيًا داخل الملف</h3>';
+      if (!S.wm) h2 += '<div class="note">جارٍ فحص الملف…</div>';
+      else if (!S.wm.cands.length) h2 += '<div class="note">لم أجد علامات منفصلة داخل الملف (قد تكون العلامة مدمجة في صورة الصفحة). استخدم التحديد بالمستطيل على الصفحة.</div>';
+      else {
+        S.wm.cands.forEach(function (c) { h2 += '<label class="op wmc" style="display:block;cursor:pointer"><div class="r"><span><input type="checkbox" data-wk="' + esc(c.key) + '" ' + (S.wm.sel[c.key] ? 'checked' : '') + '> <b>' + esc(c.label) + '</b></span></div><div class="r" style="color:var(--mut)">في ' + (c.pages.length === S.pages ? 'كل الصفحات' : arPages(c.pages.length) + ': ' + c.pages.slice(0, 8).join('، ') + (c.pages.length > 8 ? '…' : '')) + '</div></label>'; });
+        h2 += '<button class="btn p" id="wmgo">إزالة المحدد من الملف</button><div class="note">تُحذف العناصر من بنية الملف نفسها فيبقى النص قابلًا للتحديد وتبقى الجودة كما هي. يمكن التراجع بزر «تراجع». العناصر المحددة تظهر مؤطّرة بالأحمر على الصفحة.</div>';
+      }
+    }
+    h2 += '<button class="btn" id="struct">إزالة علامات Artifact / التعليقات المنفصلة</button>';
     el.innerHTML = h2; bindRem();
   }
 }
@@ -232,8 +241,8 @@ function initPad() {
 function placeAsset(a) {
   if (!a) return; if (!S.kind) { msg('افتح ملفًا أولًا.'); return; }
   loadImg(a.url).then(function (im) {
-    var o = { id: uid(), url: a.url, orig: a.url, tint: '', ar: im.naturalHeight / im.naturalWidth, x: 0.55, y: 0.78, w: 0.28, rot: 0, op: 1, scope: 'cur', page: S.cur, range: '' };
-    if (o.ar > 1.2) o.w = 0.18; o.y = Math.min(o.y, 0.95 - o.w * o.ar * 0.7);
+    var o = { id: uid(), url: a.url, orig: a.url, tint: '', ar: im.naturalHeight / im.naturalWidth, x: 0.36, y: 0.45, w: 0.28, rot: 0, op: 1, scope: 'cur', page: S.cur, range: '' };
+    if (o.ar > 1.2) o.w = 0.18; o.x = 0.5 - o.w / 2; o.y = Math.max(0.02, 0.5 - o.w * o.ar * (S.cw / S.ch) / 2);
     S.overlays.push(o); S.sel = o.id; renderStage(); renderRight();
   });
 }
@@ -262,14 +271,21 @@ async function renderStage() {
   var base = await basePage(S.cur, PREVIEW_W); S.cw = base.width; S.ch = base.height;
   var cv = base;
   if (S.tab === 'rem') { cv = await composeRemoval(S.cur, base); }
-  var nav = '<div class="nav"><button id="pp">‹</button><span>الصفحة <input type="number" id="pn" min="1" max="' + S.pages + '" value="' + S.cur + '" style="width:56px;border:1px solid var(--bd2);border-radius:6px;padding:3px"> من ' + S.pages + '</span><button id="pnx">›</button></div>';
-  st.innerHTML = (S.pages > 1 ? nav : '') + '<div class="sheet" id="sheet" style="width:min(' + base.width + 'px,100%)"></div>';
+  var sc = st.scrollTop, sl = st.scrollLeft, availH = Math.max(300, st.clientHeight - 110), availW = Math.max(300, st.clientWidth - 56);
+  var fit = Math.min(availW, availH * base.width / base.height), wpx = Math.round(Math.max(260, Math.min(fit * S.zoom, 3000)));
+  var nav = '<div class="nav">' + (S.pages > 1 ? '<button id="pp" title="السابقة">‹</button><span>الصفحة <input type="number" id="pn" min="1" max="' + S.pages + '" value="' + S.cur + '" style="width:56px;border:1px solid var(--bd2);border-radius:6px;padding:3px;background:var(--card);color:var(--ink)"> من ' + S.pages + '</span><button id="pnx" title="التالية">›</button><span style="width:1px;height:22px;background:var(--bd2)"></span>' : '') +
+    '<button id="zo" title="تصغير">−</button><span id="zl" style="min-width:48px;text-align:center">' + Math.round(S.zoom * 100) + '٪</span><button id="zi" title="تكبير">+</button><button id="zf" title="ملاءمة الصفحة للشاشة" style="width:auto;padding:0 10px;font-size:13px">ملاءمة</button></div>';
+  st.innerHTML = nav + '<div class="sheet" id="sheet" style="width:' + wpx + 'px"></div>';
+  $('#zo').onclick = function () { S.zoom = Math.max(0.5, +(S.zoom - 0.25).toFixed(2)); renderStage(); };
+  $('#zi').onclick = function () { S.zoom = Math.min(3, +(S.zoom + 0.25).toFixed(2)); renderStage(); };
+  $('#zf').onclick = function () { S.zoom = 1; renderStage(); };
   var sh = $('#sheet'); var disp = document.createElement('canvas'); disp.width = cv.width; disp.height = cv.height; disp.getContext('2d').drawImage(cv, 0, 0); sh.appendChild(disp);
   var layer = document.createElement('div'); layer.className = 'layer'; sh.appendChild(layer);
   if (S.pages > 1) {
     $('#pp').onclick = function () { go(S.cur - 1); }; $('#pnx').onclick = function () { go(S.cur + 1); }; $('#pn').onchange = function (e) { go(+e.target.value); };
   }
   if (S.tab === 'add') drawOverlays(layer, sh); else drawSelect(layer, sh, base);
+  st.scrollTop = sc; st.scrollLeft = sl;
 }
 function go(p) { p = Math.max(1, Math.min(S.pages, p || 1)); S.cur = p; S.sel = null; renderStage(); renderRight(); }
 function drawOverlays(layer, sh) {
@@ -357,7 +373,7 @@ async function composeRemoval(page, base, width) {
 function bindRem() {
   var el = $('#left');
   $$('.k', el).forEach(function (b) { b.onclick = function () { var k = b.dataset.k, K = KINDS[k]; S.set.kind = k; S.set.mode = K.mode; S.set.color = K.rgb.slice(); S.set.scope = K.scope; renderLeft(); renderRight(); }; });
-  $$('.op', el).forEach(function (row) {
+  $$('.op:not(.wmc)', el).forEach(function (row) {
     var o = S.ops.filter(function (x) { return x.id === row.dataset.o; })[0];
     $('[data-on]', row).onchange = function (e) { o.on = e.target.checked; renderLeft(); renderStage(); };
     $('[data-rm]', row).onclick = function () { S.ops = S.ops.filter(function (x) { return x !== o; }); renderLeft(); renderStage(); };
@@ -365,6 +381,8 @@ function bindRem() {
     var rg = $('[data-rg]', row); if (rg) rg.oninput = function (e) { o.range = e.target.value; renderStage(); };
   });
   $('#struct', el).onclick = structural;
+  $$('[data-wk]', el).forEach(function (cb) { cb.onchange = function () { S.wm.sel[cb.dataset.wk] = cb.checked; renderStage(); }; });
+  var wg = $('#wmgo', el); if (wg) wg.onclick = applyWm;
 }
 function bindSet() {
   var el = $('#right');
@@ -394,8 +412,29 @@ function drawSelect(layer, sh, base) {
     var s = S.set, n = S.ops.filter(function (o) { return o.kind === s.kind; }).length + 1;
     S.ops.push({ id: uid(), kind: s.kind, rect: r, mode: s.mode, color: s.color.slice(), tol: s.tol, grow: s.grow, scope: s.scope, range: s.range, page: S.cur, on: true, n: n });
     renderLeft(); renderStage(); };
+  if (S.wm) S.wm.cands.forEach(function (c) { if (!S.wm.sel[c.key] || c.pages.indexOf(S.cur) < 0 || !c.bbox) return; var d = document.createElement('div'); d.style.cssText = 'position:absolute;pointer-events:none;border:2px solid #e5484d;background:rgba(229,72,77,.12);border-radius:3px;left:' + c.bbox.x * 100 + '%;top:' + c.bbox.y * 100 + '%;width:' + c.bbox.w * 100 + '%;height:' + c.bbox.h * 100 + '%'; layer.appendChild(d); });
   /* عرض العمليات المطبقة على الصفحة الحالية */
   S.ops.forEach(function (o) { if (!o.on || !applies(o, S.cur, S.pages)) return; var d = document.createElement('div'); d.style.cssText = 'position:absolute;pointer-events:none;border:1.5px solid ' + KINDS[o.kind].col + ';opacity:.55;left:' + o.rect.x * 100 + '%;top:' + o.rect.y * 100 + '%;width:' + o.rect.w * 100 + '%;height:' + o.rect.h * 100 + '%'; layer.appendChild(d); });
+}
+
+/* ---------- auto watermark detection (wm.js) ---------- */
+async function runWm() {
+  var token = S.bytes;
+  try { var c = await WM.analyze(S.bytes); if (S.bytes !== token) return; var sel = {}; c.forEach(function (x) { sel[x.key] = true; }); S.wm = { cands: c, sel: sel }; }
+  catch (e) { console.error(e); S.wm = { cands: [], sel: {} }; }
+  if (S.tab === 'rem') { renderLeft(); renderStage(); }
+}
+async function applyWm() {
+  var keys = Object.keys(S.wm.sel).filter(function (k) { return S.wm.sel[k]; });
+  if (!keys.length) { msg('حدّد عنصرًا واحدًا على الأقل.'); return; }
+  try {
+    var doc = await PL.PDFDocument.load(S.bytes), n = WM.removeFromDoc(doc, keys);
+    if (!n) { msg('لم يتغير شيء في الملف.'); return; }
+    var nb = new Uint8Array(await doc.save());
+    S.undo.push({ bytes: S.bytes }); S.bytes = nb; S.baseCache = {}; S.wm = null;
+    S.pdf = await pdfjs.getDocument({ data: S.bytes.slice(), cMapUrl: '../pdf/cmaps/', cMapPacked: true, standardFontDataUrl: '../pdf/standard_fonts/' }).promise;
+    msg('تمت إزالة ' + n + ' عنصر من الملف مع بقاء النص كما هو.', 5000); renderLeft(); renderStage(); runWm();
+  } catch (e) { console.error(e); msg('تعذرت الإزالة: ' + (e.message || e)); }
 }
 
 /* ---------- structural removal (pdf-lib) ---------- */
@@ -492,10 +531,19 @@ $('#save').onclick = exportFile;
 $('#undo').onclick = async function () {
   if (S.tab === 'add' && S.overlays.length) { S.overlays.pop(); S.sel = null; renderStage(); renderRight(); return; }
   if (S.tab === 'rem' && S.ops.length) { S.ops.pop(); renderLeft(); renderStage(); return; }
-  var u = S.undo.pop(); if (u) { S.bytes = u.bytes; S.baseCache = {}; S.pdf = await pdfjs.getDocument({ data: S.bytes.slice(), cMapUrl: '../pdf/cmaps/', cMapPacked: true, standardFontDataUrl: '../pdf/standard_fonts/' }).promise; renderStage(); }
+  var u = S.undo.pop(); if (u) { S.bytes = u.bytes; S.baseCache = {}; S.pdf = await pdfjs.getDocument({ data: S.bytes.slice(), cMapUrl: '../pdf/cmaps/', cMapPacked: true, standardFontDataUrl: '../pdf/standard_fonts/' }).promise; S.wm = null; runWm(); renderStage(); }
 };
 document.body.addEventListener('dragover', function (e) { e.preventDefault(); });
 document.body.addEventListener('drop', function (e) { e.preventDefault(); if (e.dataTransfer.files[0]) openFile(e.dataTransfer.files[0]); });
+document.addEventListener('keydown', function (e) {
+  if (S.tab !== 'add' || !S.sel || /INPUT|TEXTAREA|SELECT/.test((e.target.tagName || ''))) return;
+  var o = S.overlays.filter(function (x) { return x.id === S.sel; })[0]; if (!o) return;
+  var st = e.shiftKey ? 0.02 : 0.004, h = true;
+  if (e.key === 'ArrowLeft') o.x -= st; else if (e.key === 'ArrowRight') o.x += st; else if (e.key === 'ArrowUp') o.y -= st; else if (e.key === 'ArrowDown') o.y += st;
+  else if (e.key === '+' || e.key === '=') o.w = Math.min(1, o.w * 1.05); else if (e.key === '-') o.w = Math.max(0.03, o.w / 1.05);
+  else if (e.key === 'Delete' || e.key === 'Backspace') { S.overlays = S.overlays.filter(function (x) { return x !== o; }); S.sel = null; renderRight(); } else h = false;
+  if (h) { e.preventDefault(); renderStage(); }
+});
 loadAssets();
 fetch('../fonts/pro/fonts.json').then(function (r) { return r.json(); }).then(function (j) { S.fonts = j; renderLeft(); renderRight(); }).catch(function () { S.fonts = [{ k: 'noto', ar: 'نوتو سنس', d: '', f400: 'NotoSansArabic.ttf' }]; renderLeft(); });
 renderLeft(); renderRight();
