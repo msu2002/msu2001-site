@@ -8,3 +8,4 @@
  .stage{min-height:46vh}
  .btn{min-height:40px}
 }
+@media (max-width:520px){.homebtn .hl{display:none}.homebtn{width:36px;padding:0}}
