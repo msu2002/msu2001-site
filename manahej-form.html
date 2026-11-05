@@ -226,5 +226,6 @@ $('#btnSave').onclick=async()=>{ if(!validate())return; $('#btnSave').disabled=t
   }catch(e){msg(e.message,'bad')}finally{$('#btnSave').disabled=false}};
 $('#btnReset').onclick=()=>{if(confirm('مسح جميع البيانات؟')){form.reset();$('#clearSig').click();$('#dateBox').classList.add('hide');$('#lateBox').classList.add('hide');msg('')}};
 </script>
+<script src="/home-btn.js"></script>
 </body>
 </html>
