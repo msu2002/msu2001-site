@@ -1,0 +1,10 @@
+/* الجوال: اجعل منطقة المحتوى هي التي تتمرر، وأبقِ الشريط السفلي ظاهرًا */
+@media (max-width:860px){
+ html,body{overflow:hidden;overscroll-behavior:none}
+ #main{min-height:0;overflow:hidden}
+ #view{min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+ #nav{padding-bottom:calc(6px + env(safe-area-inset-bottom,0px))}
+ input[type=text],input[type=number],input[type=search],select,textarea{font-size:16px}
+ .stage{min-height:46vh}
+ .btn{min-height:40px}
+}
