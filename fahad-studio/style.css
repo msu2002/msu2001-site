@@ -41,3 +41,15 @@
 .track-add button{font-size:10px;padding:3px 4px;border:1px dashed #3b4470;border-radius:6px;background:none;color:#aeb6d6;cursor:pointer}
 .track-add button:hover{border-color:#8f7bff;color:#fff}
 .quick-row{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:8px 0}.quick-row button{font-size:10px;padding:6px 2px;border:1px solid #333b60;border-radius:7px;background:#191d30;color:#cfd5f0;cursor:pointer}.quick-row button:hover{border-color:#8f7bff}
+/* v1.7 timeline toolbar */
+.timeline-toolbar{justify-content:flex-start;gap:6px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;white-space:nowrap}.timeline-toolbar::-webkit-scrollbar{display:none}
+.tl-group{display:flex;align-items:center;gap:3px;padding-inline-end:8px;margin-inline-end:2px;border-inline-end:1px solid var(--line);flex-shrink:0}.tl-group:last-child,.tl-group.timeline-options{border:0}.tl-spacer{flex:1;min-width:6px}
+.timeline-toolbar .button.compact{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}.timeline-toolbar .button .icon{width:15px;height:15px}
+.tl-menu-btn[aria-expanded=true],.tl-menu-btn.active-toggle{background:#2a2750;border-color:var(--accent)}
+.tl-pop{position:fixed;z-index:60;min-width:215px;background:#1a1e30;border:1px solid var(--line);border-radius:10px;padding:5px;box-shadow:0 10px 34px #000a;direction:rtl}.tl-pop[hidden]{display:none}
+.tl-pop button{display:flex;width:100%;justify-content:space-between;align-items:center;gap:14px;background:none;border:0;color:var(--text);font:inherit;font-size:12px;padding:8px 10px;border-radius:7px;cursor:pointer;text-align:start}.tl-pop button:hover{background:#2a2e48}.tl-pop kbd{font:10px monospace;color:var(--muted);background:#0d101b;padding:2px 6px;border-radius:5px}
+.ruler-marker{position:absolute;top:0;width:12px;height:16px;margin-left:-6px;padding:0;border:0;background:#f5b942;clip-path:polygon(0 0,100% 0,100% 70%,50% 100%,0 70%);cursor:pointer;z-index:4}
+.timeline-clip.multi{outline:2px solid #5cd3ad;outline-offset:-2px}#timeline-content.tool-blade .timeline-clip{cursor:crosshair}
+#keys-dialog .keys-grid{display:grid;grid-template-columns:auto 1fr;gap:9px 16px;align-items:center;padding:6px 2px 2px;max-height:60vh;overflow:auto}#keys-dialog kbd{font:11px monospace;background:#0d101b;border:1px solid var(--line);padding:3px 8px;border-radius:6px;text-align:center}
+@media(max-width:650px){.timeline-toolbar{padding:0 5px}.timeline-toolbar #duplicate{display:inline-flex}.tl-hint{display:none}.timeline-options>input{display:block;width:60px}}
+.text-tabs{display:flex;gap:4px;padding:8px 14px 0;flex-shrink:0}.text-tabs[hidden]{display:none}.text-tabs button{flex:1;background:#191d2c;border:1px solid var(--line);color:var(--muted);font:inherit;font-size:11px;padding:7px 4px;border-radius:8px;cursor:pointer;white-space:nowrap}.text-tabs button.active{background:#2a2750;color:var(--text);border-color:var(--accent)}

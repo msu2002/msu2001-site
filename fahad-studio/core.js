@@ -24,14 +24,14 @@
   function split(p, id, t) {
     const c=p.clips.find(x=>x.id===id);
     if(!c || t<=c.start+.05 || t>=c.start+c.duration-.05) return null;
-    const cut=t-c.start, right={...clone(c),id:uid(),start:t,in:c.in+cut,duration:c.duration-cut};
+    const cut=t-c.start, right={...clone(c),id:uid(),start:t,in:c.in+cut*(c.speed||1),duration:c.duration-cut};
     c.duration=cut; p.clips.splice(p.clips.indexOf(c)+1,0,right); return right;
   }
   function trim(c, side, delta, sourceDuration=Infinity) {
     if(side==='left') {
-      const d=clamp(delta,-Math.min(c.start,c.in),c.duration-.1);
-      c.start+=d; c.in+=d; c.duration-=d;
-    } else c.duration=clamp(c.duration+delta,.1,Math.max(.1,sourceDuration-c.in));
+      const d=clamp(delta,-Math.min(c.start,c.in/(c.speed||1)),c.duration-.1);
+      c.start+=d; c.in+=d*(c.speed||1); c.duration-=d;
+    } else c.duration=clamp(c.duration+delta,.1,Math.max(.1,(sourceDuration-c.in)/(c.speed||1)));
     return c;
   }
   function assetUsage(p, assetId) {
@@ -71,6 +71,8 @@
       for(const key of ['start','duration','in','volume','opacity','scale','x','y','rotation','brightness','saturation','transitionDuration']) if(!Number.isFinite(c[key])) throw Error('قيمة مقطع غير صالحة.');
       if(c.start<0||c.start>3600||c.duration<.1||c.duration>3600||c.in<0||c.in>86400||c.volume<0||c.volume>2||c.opacity<0||c.opacity>1||c.scale<.1||c.scale>4) throw Error('توقيت أو خصائص خارج الحدود.');
       if(c.kind!=='text'&&!p.assets.some(a=>a.id===c.assetId&&(a.type===c.kind||(c.kind==='audio'&&a.type==='video')))) throw Error('وسائط المقطع مفقودة.');
+      if(c.speed!==undefined&&(!Number.isFinite(c.speed)||c.speed<.1||c.speed>8))throw Error('سرعة مقطع غير صالحة.');
+      for(const k of ['flipX','flipY'])if(c[k]!==undefined&&typeof c[k]!=='boolean')throw Error('قلب مقطع غير صالح.');
       if(c.fontId!==undefined&&(typeof c.fontId!=='string'||!/^[a-z][a-z0-9-]{0,90}$/i.test(c.fontId)))throw Error('معرّف خط غير صالح.');
       if(c.fontWeight!==undefined&&(!Number.isInteger(c.fontWeight)||c.fontWeight<100||c.fontWeight>1000))throw Error('وزن خط غير صالح.');
       for(const key of ['motionAmount','effectStrength','goldGlow','goldShine','smokeDensity','lightStrength','lutStrength'])if(c[key]!==undefined&&(!Number.isFinite(c[key])||c[key]<0||c[key]>1))throw Error('قوة التأثير خارج الحدود.');
