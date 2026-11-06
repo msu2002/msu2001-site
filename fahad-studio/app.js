@@ -103,7 +103,7 @@ function draw(cx,t,w,h,state=p,bank=assets){
   }else{
    const a=bank.get(c.assetId);lc.translate(-W/2,-H/2);
    if(c.kind==='scene')sceneDraw(lc,a?.scene,local+c.in,W,H,c.paletteColors||a?.colors,a?.overlay,c);
-   else{const el=c.kind==='image'?a?.image:state===p?getNode(c)?.el:null;if(el&&(c.kind==='image'||el.readyState>=2)){if(c.fit==='cover'){lc.beginPath();lc.rect(0,0,W,H);lc.clip();}drawFit(lc,el,W,H,c.fit);}}
+   else{const el=c.kind==='image'?a?.image:state===p?getNode(c)?.el:null;if(el&&(c.kind==='image'||el.readyState>=2)){if(c.fit==='cover'){lc.beginPath();lc.rect(0,0,W,H);lc.clip();}drawFit(lc,el,W,H,c.fit);if(c.kind==='video'&&(c.faces||c.bg)&&window.FahadTools&&FahadTools.vfx)FahadTools.vfx(lc,el,W,H,c,local);}}
   }
   lc.restore();X.paintEffect(lc,c.effect,c.effectStrength,local,W,H);if(window.FahadLUT&&c.kind!=='text'&&FahadLUT.needs(c))FahadLUT.apply(clipLayer,c,state.luts||p.luts);if(c.chroma&&window.FahadTools)FahadTools.chroma(clipLayer,c);
   cx.save();cx.globalAlpha=c.opacity;X.transition(cx,c.transition,local,c.duration,c.transitionDuration,W,H);cx.drawImage(clipLayer,0,0);cx.restore();
