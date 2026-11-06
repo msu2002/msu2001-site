@@ -184,5 +184,5 @@ function open(){const a=A();const c=a?.chosen();if(!c||c.kind!=='video'){a?.toas
 function addButton(){const g=document.querySelector('.mt-magic')?.parentElement;if(!g||g.querySelector('.pv-btn'))return !!g;
  const b=document.createElement('button');b.className='button compact pv-btn';b.title='إخفاء الوجوه وتعتيم الخلفية';b.textContent='🛡 خصوصية';b.addEventListener('click',open);g.appendChild(b);return true;}
 let n=0;const iv=setInterval(()=>{if(addButton()||++n>80)clearInterval(iv);},250);
-const T=window.FahadTools=window.FahadTools||{};T.vfx=vfx;T.privacyOpen=open;
+const T=window.FahadTools=window.FahadTools||{};T.vfx=vfx;T.privacyOpen=open;T.detectFaces=async el=>{await getDetector();const r=await detect(el);return (r.detections||[]).map(d=>d.boundingBox).filter(Boolean);};
 })();

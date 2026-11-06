@@ -325,6 +325,6 @@ function onKey(e){
 }
 document.addEventListener('keydown',onKey,true);
 function boot(){buildUI();}
-window.FahadTools={chroma,compact,noAutoInspector:()=>compact(),afterTimeline,pointer,run,get tool(){return tool},get multi(){return multi}};
+window.FahadTools={chroma,compact,noAutoInspector:()=>compact(),STYLES,montageSources,afterTimeline,pointer,run,get tool(){return tool},get multi(){return multi}};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();

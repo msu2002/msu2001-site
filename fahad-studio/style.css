@@ -202,3 +202,5 @@ button,.tool,.asset-card,.timeline-clip,.ruler{touch-action:manipulation}
 #export-share{width:100%;margin-top:8px}
 @media(max-width:700px){.home-btn span,#share-open span{display:none!important}.home-btn{padding:6px 10px!important}#share-open{padding:6px 10px!important}.share-presets{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.export-illustration{display:none}}
+
+.lg-prev canvas{height:140px;width:auto;max-width:100%;object-fit:contain}
