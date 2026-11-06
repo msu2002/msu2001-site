@@ -1,0 +1,1046 @@
+{
+  "version": 1,
+  "source": "google/fonts",
+  "revision": "24ddc1f324cac5d9f5aedca126d298f56e3f1640",
+  "families": [
+    {
+      "id": "cairo",
+      "name": "Cairo",
+      "label": "القاهرة",
+      "category": "kufi",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "cairo/OFL.txt",
+      "faces": [
+        {
+          "file": "cairo/Cairo[slnt,wght].ttf",
+          "weight": "200 1000",
+          "min": 200,
+          "max": 1000,
+          "bytes": 599548,
+          "sha256": "667c987182391c91f4e57a2f455b1794fb5e3ee6ca4ef3383e86bb690fa9c964",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/cairo/Cairo%5Bslnt%2Cwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "tajawal",
+      "name": "Tajawal",
+      "label": "تجوال",
+      "category": "modern",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "tajawal/OFL.txt",
+      "faces": [
+        {
+          "file": "tajawal/Tajawal-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 60364,
+          "sha256": "6882892da3e03527d5db2bbab3b48bde6ef2e878a43f522d1a4eebda90010a19",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/tajawal/Tajawal-Regular.ttf"
+        },
+        {
+          "file": "tajawal/Tajawal-Bold.ttf",
+          "weight": "700",
+          "min": 700,
+          "max": 700,
+          "bytes": 59988,
+          "sha256": "0342ab6b74b6bd1b4b5bf7beda45a9734a2b3147a31e8a3a45b6a3417a52d9d7",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/tajawal/Tajawal-Bold.ttf"
+        }
+      ]
+    },
+    {
+      "id": "amiri",
+      "name": "Amiri",
+      "label": "أميري",
+      "category": "naskh",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "amiri/OFL.txt",
+      "faces": [
+        {
+          "file": "amiri/Amiri-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 431116,
+          "sha256": "ab391c4147d054c48976e98322ad0eefe1427aa0e0502a12a4c75d80a70cfcd7",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/amiri/Amiri-Regular.ttf"
+        },
+        {
+          "file": "amiri/Amiri-Bold.ttf",
+          "weight": "700",
+          "min": 700,
+          "max": 700,
+          "bytes": 413480,
+          "sha256": "cfccb794268e7d573d857e6d6a67f89cf8a053e8ffd85dfa0c8ec1bb36fc4827",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/amiri/Amiri-Bold.ttf"
+        }
+      ]
+    },
+    {
+      "id": "notonaskharabic",
+      "name": "Noto Naskh Arabic",
+      "label": "نوتو نسخ عربي",
+      "category": "naskh",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "notonaskharabic/OFL.txt",
+      "faces": [
+        {
+          "file": "notonaskharabic/NotoNaskhArabic[wght].ttf",
+          "weight": "400 700",
+          "min": 400,
+          "max": 700,
+          "bytes": 307592,
+          "sha256": "67b5a525a661b607971fbd3f96a81b89d3a768e74534fca84f18ac97e6fab72f",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/notonaskharabic/NotoNaskhArabic%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "notokufiarabic",
+      "name": "Noto Kufi Arabic",
+      "label": "نوتو كوفي عربي",
+      "category": "kufi",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "notokufiarabic/OFL.txt",
+      "faces": [
+        {
+          "file": "notokufiarabic/NotoKufiArabic[wght].ttf",
+          "weight": "100 900",
+          "min": 100,
+          "max": 900,
+          "bytes": 434204,
+          "sha256": "494f6b61469d7a02a2d63f0fc4930bb007388d8cfe551de5eb98354e100889f3",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/notokufiarabic/NotoKufiArabic%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "notosansarabic",
+      "name": "Noto Sans Arabic",
+      "label": "نوتو عربي",
+      "category": "modern",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "notosansarabic/OFL.txt",
+      "faces": [
+        {
+          "file": "notosansarabic/NotoSansArabic[wdth,wght].ttf",
+          "weight": "100 900",
+          "min": 100,
+          "max": 900,
+          "bytes": 844676,
+          "sha256": "63111b5b2e074dd48cc67692e0a2726d86ee94c1c37fe8598257b7b4e87e869e",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/notosansarabic/NotoSansArabic%5Bwdth%2Cwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "ibmplexsansarabic",
+      "name": "IBM Plex Sans Arabic",
+      "label": "آي بي إم بلكس عربي",
+      "category": "modern",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "ibmplexsansarabic/OFL.txt",
+      "faces": [
+        {
+          "file": "ibmplexsansarabic/IBMPlexSansArabic-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 235924,
+          "sha256": "6f611412270a132bbac838da9259d4c68569b4175f3b3b8fa3fa36a30b56dab9",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/ibmplexsansarabic/IBMPlexSansArabic-Regular.ttf"
+        },
+        {
+          "file": "ibmplexsansarabic/IBMPlexSansArabic-Bold.ttf",
+          "weight": "700",
+          "min": 700,
+          "max": 700,
+          "bytes": 246992,
+          "sha256": "691e0c891a38637ae6bbdb69700f8042cb0724a137bee615068ffdb92244f61f",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/ibmplexsansarabic/IBMPlexSansArabic-Bold.ttf"
+        }
+      ]
+    },
+    {
+      "id": "almarai",
+      "name": "Almarai",
+      "label": "المراعي",
+      "category": "modern",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "almarai/OFL.txt",
+      "faces": [
+        {
+          "file": "almarai/Almarai-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 152824,
+          "sha256": "5b5cad33c8e5922083728d271cdcda91f96ba291f1307eccc4f4ef732dc19622",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/almarai/Almarai-Regular.ttf"
+        },
+        {
+          "file": "almarai/Almarai-Bold.ttf",
+          "weight": "700",
+          "min": 700,
+          "max": 700,
+          "bytes": 156672,
+          "sha256": "06401391b5b39fbcf2bc0c6a6e03faf992435e7b011183a1861737e913af8613",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/almarai/Almarai-Bold.ttf"
+        }
+      ]
+    },
+    {
+      "id": "alexandria",
+      "name": "Alexandria",
+      "label": "الإسكندرية",
+      "category": "kufi",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "alexandria/OFL.txt",
+      "faces": [
+        {
+          "file": "alexandria/Alexandria[wght].ttf",
+          "weight": "100 900",
+          "min": 100,
+          "max": 900,
+          "bytes": 332488,
+          "sha256": "db8ae03b62d55a65aa4e04307878df8c00d6e5388e4800635cbe0e22b6411b64",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/alexandria/Alexandria%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "beiruti",
+      "name": "Beiruti",
+      "label": "بيروتي",
+      "category": "modern",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "beiruti/OFL.txt",
+      "faces": [
+        {
+          "file": "beiruti/Beiruti[wght].ttf",
+          "weight": "200 900",
+          "min": 200,
+          "max": 900,
+          "bytes": 678740,
+          "sha256": "c31f26b93e90ac916757de63c060370c5382457f85d50f64f930b96e5477f222",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/beiruti/Beiruti%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "zain",
+      "name": "Zain",
+      "label": "زين",
+      "category": "modern",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "zain/OFL.txt",
+      "faces": [
+        {
+          "file": "zain/Zain-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 188468,
+          "sha256": "2a2b8af3804039c7f500c43f581a4145012728bc3109ef15d48371700f5e1f63",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/zain/Zain-Regular.ttf"
+        },
+        {
+          "file": "zain/Zain-Bold.ttf",
+          "weight": "700",
+          "min": 700,
+          "max": 700,
+          "bytes": 189816,
+          "sha256": "4dc98e7b1a9cac93bde1907271472ba9cf43ae5212e942cafe59a6d341f052e3",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/zain/Zain-Bold.ttf"
+        }
+      ]
+    },
+    {
+      "id": "changa",
+      "name": "Changa",
+      "label": "تشانغا",
+      "category": "modern",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "changa/OFL.txt",
+      "faces": [
+        {
+          "file": "changa/Changa[wght].ttf",
+          "weight": "200 800",
+          "min": 200,
+          "max": 800,
+          "bytes": 132140,
+          "sha256": "7c4f7a14d4b70ac8816ea8df3a0b127aee4c5f5af7239aca2afecc84ddc7f4d3",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/changa/Changa%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "mada",
+      "name": "Mada",
+      "label": "مدى",
+      "category": "modern",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "mada/OFL.txt",
+      "faces": [
+        {
+          "file": "mada/Mada[wght].ttf",
+          "weight": "200 900",
+          "min": 200,
+          "max": 900,
+          "bytes": 181408,
+          "sha256": "bf4d193ee78cea2fd8bdc9e64e5cb7e8a19ff76ab74f97a9a4a0e80f8f4cefde",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/mada/Mada%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "fustat",
+      "name": "Fustat",
+      "label": "الفسطاط",
+      "category": "modern",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "fustat/OFL.txt",
+      "faces": [
+        {
+          "file": "fustat/Fustat[wght].ttf",
+          "weight": "200 800",
+          "min": 200,
+          "max": 800,
+          "bytes": 172620,
+          "sha256": "ba09d90e6180e79334aadd42ea1ed0e97a405fadcd34412c1d02a6b8f679d402",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/fustat/Fustat%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "readexpro",
+      "name": "Readex Pro",
+      "label": "ريدكس برو",
+      "category": "modern",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "readexpro/OFL.txt",
+      "faces": [
+        {
+          "file": "readexpro/ReadexPro[HEXP,wght].ttf",
+          "weight": "160 700",
+          "min": 160,
+          "max": 700,
+          "bytes": 278544,
+          "sha256": "268bba7e1e8f3b14d798b3fb0e40ebaa3fc39308c9ac0020e2faf6df181cc30e",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/readexpro/ReadexPro%5BHEXP%2Cwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "elmessiri",
+      "name": "El Messiri",
+      "label": "المسيري",
+      "category": "modern",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "elmessiri/OFL.txt",
+      "faces": [
+        {
+          "file": "elmessiri/ElMessiri[wght].ttf",
+          "weight": "400 700",
+          "min": 400,
+          "max": 700,
+          "bytes": 138664,
+          "sha256": "5d58d5259d2accccba39cffe12e1226e88b6afc5150e3605eb2a9c2fe06ccab0",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/elmessiri/ElMessiri%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "markazitext",
+      "name": "Markazi Text",
+      "label": "مركزي",
+      "category": "naskh",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "markazitext/OFL.txt",
+      "faces": [
+        {
+          "file": "markazitext/MarkaziText[wght].ttf",
+          "weight": "400 700",
+          "min": 400,
+          "max": 700,
+          "bytes": 296896,
+          "sha256": "424b7331681160ff2a4b209bfc356ea9564d429a7daea43ee4dc28de8ff4f9fe",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/markazitext/MarkaziText%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "vazirmatn",
+      "name": "Vazirmatn",
+      "label": "وزير متن",
+      "category": "modern",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "vazirmatn/OFL.txt",
+      "faces": [
+        {
+          "file": "vazirmatn/Vazirmatn[wght].ttf",
+          "weight": "100 900",
+          "min": 100,
+          "max": 900,
+          "bytes": 241328,
+          "sha256": "696249a2c74b39ffdef55de4df2809c5b639d3ff80d618d8160a095d2fd49dca",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/vazirmatn/Vazirmatn%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "reemkufi",
+      "name": "Reem Kufi",
+      "label": "ريم كوفي",
+      "category": "kufi",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "reemkufi/OFL.txt",
+      "faces": [
+        {
+          "file": "reemkufi/ReemKufi[wght].ttf",
+          "weight": "400 700",
+          "min": 400,
+          "max": 700,
+          "bytes": 127152,
+          "sha256": "33ead1986cd48c138c4d906c9e5a6341877268461f97623409a2014de1cd4aa4",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/reemkufi/ReemKufi%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "reemkufifun",
+      "name": "Reem Kufi Fun",
+      "label": "ريم كوفي فن",
+      "category": "kufi",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "reemkufifun/OFL.txt",
+      "faces": [
+        {
+          "file": "reemkufifun/ReemKufiFun[wght].ttf",
+          "weight": "400 700",
+          "min": 400,
+          "max": 700,
+          "bytes": 176328,
+          "sha256": "d1342cebd08afc04a51bf9a28e5ac6a8299c5716c47df9b7ea27f94653aaa40f",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/reemkufifun/ReemKufiFun%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "reemkufiink",
+      "name": "Reem Kufi Ink",
+      "label": "ريم كوفي حبر",
+      "category": "art",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "reemkufiink/OFL.txt",
+      "faces": [
+        {
+          "file": "reemkufiink/ReemKufiInk-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 315764,
+          "sha256": "45fecf59cff786a23357b61d282e5ad383438be9507f3aa9ea00eb0534d0a87e",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/reemkufiink/ReemKufiInk-Regular.ttf"
+        }
+      ]
+    },
+    {
+      "id": "arefruqaa",
+      "name": "Aref Ruqaa",
+      "label": "عارف رقعة",
+      "category": "ruqaa",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "arefruqaa/OFL.txt",
+      "faces": [
+        {
+          "file": "arefruqaa/ArefRuqaa-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 110696,
+          "sha256": "ceb786d83ba92f35e96efcd8623c2858d288e0c543c8761ba35b1020989464f9",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/arefruqaa/ArefRuqaa-Regular.ttf"
+        },
+        {
+          "file": "arefruqaa/ArefRuqaa-Bold.ttf",
+          "weight": "700",
+          "min": 700,
+          "max": 700,
+          "bytes": 123852,
+          "sha256": "247071015b7eefd63f94d6e47949c5d10294ed31bd432f809ba9a219d93f91bb",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/arefruqaa/ArefRuqaa-Bold.ttf"
+        }
+      ]
+    },
+    {
+      "id": "arefruqaaink",
+      "name": "Aref Ruqaa Ink",
+      "label": "عارف رقعة حبر",
+      "category": "ruqaa",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "arefruqaaink/OFL.txt",
+      "faces": [
+        {
+          "file": "arefruqaaink/ArefRuqaaInk-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 568056,
+          "sha256": "0415c2410b1e453f5d0ea0db114fb95d01f65ba2e9e2dc4ae67c5fb73c33e863",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/arefruqaaink/ArefRuqaaInk-Regular.ttf"
+        },
+        {
+          "file": "arefruqaaink/ArefRuqaaInk-Bold.ttf",
+          "weight": "700",
+          "min": 700,
+          "max": 700,
+          "bytes": 631016,
+          "sha256": "601b5c607e7e20e7957673b92947d35eb87620cd406214037a140695221c31b4",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/arefruqaaink/ArefRuqaaInk-Bold.ttf"
+        }
+      ]
+    },
+    {
+      "id": "scheherazadenew",
+      "name": "Scheherazade New",
+      "label": "شهرزاد",
+      "category": "naskh",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "scheherazadenew/OFL.txt",
+      "faces": [
+        {
+          "file": "scheherazadenew/ScheherazadeNew-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 331504,
+          "sha256": "794bac8dc9e83d1d620bc471ea694f5f31d0965ce8006490a79dfc51a2d283b3",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/scheherazadenew/ScheherazadeNew-Regular.ttf"
+        },
+        {
+          "file": "scheherazadenew/ScheherazadeNew-Bold.ttf",
+          "weight": "700",
+          "min": 700,
+          "max": 700,
+          "bytes": 593472,
+          "sha256": "91363517a63dbc7448b5814226d33d845b26b32a461cd159ea0b3f23c7effd2d",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/scheherazadenew/ScheherazadeNew-Bold.ttf"
+        }
+      ]
+    },
+    {
+      "id": "lateef",
+      "name": "Lateef",
+      "label": "لطيف",
+      "category": "naskh",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "lateef/OFL.txt",
+      "faces": [
+        {
+          "file": "lateef/Lateef-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 241092,
+          "sha256": "fcbd9e0227a4d7238880defa5fd74c012d69351150709e559a8577446145c2fc",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/lateef/Lateef-Regular.ttf"
+        },
+        {
+          "file": "lateef/Lateef-Bold.ttf",
+          "weight": "700",
+          "min": 700,
+          "max": 700,
+          "bytes": 243260,
+          "sha256": "eee405eeb4e81491b0b659fb40dc016765292022d74406c616f72501e160afe2",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/lateef/Lateef-Bold.ttf"
+        }
+      ]
+    },
+    {
+      "id": "harmattan",
+      "name": "Harmattan",
+      "label": "هارمتان",
+      "category": "naskh",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "harmattan/OFL.txt",
+      "faces": [
+        {
+          "file": "harmattan/Harmattan-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 573500,
+          "sha256": "5fbaafc51ad21663729b168afaff5f28d3e3087f1fc736ada32d7cd99674c0e0",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/harmattan/Harmattan-Regular.ttf"
+        },
+        {
+          "file": "harmattan/Harmattan-Bold.ttf",
+          "weight": "700",
+          "min": 700,
+          "max": 700,
+          "bytes": 559624,
+          "sha256": "eb9de49ecb72d34e14c768bea6f9a7831f6bd2c15b062fcc2bb17b0ac967bc67",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/harmattan/Harmattan-Bold.ttf"
+        }
+      ]
+    },
+    {
+      "id": "ruwudu",
+      "name": "Ruwudu",
+      "label": "روودو",
+      "category": "naskh",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "ruwudu/OFL.txt",
+      "faces": [
+        {
+          "file": "ruwudu/Ruwudu-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 121440,
+          "sha256": "ed5b134e7f389eecfdabc6bbbf9605177fa8b5b9984c8b24edbec908623d2c3b",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/ruwudu/Ruwudu-Regular.ttf"
+        },
+        {
+          "file": "ruwudu/Ruwudu-Bold.ttf",
+          "weight": "700",
+          "min": 700,
+          "max": 700,
+          "bytes": 123240,
+          "sha256": "7f7611d534aea674b960e0b586d1f594f3975b4db3fff5f55c1b92484a34cf78",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/ruwudu/Ruwudu-Bold.ttf"
+        }
+      ]
+    },
+    {
+      "id": "mirza",
+      "name": "Mirza",
+      "label": "ميرزا",
+      "category": "naskh",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "mirza/OFL.txt",
+      "faces": [
+        {
+          "file": "mirza/Mirza-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 177820,
+          "sha256": "5b1ac6cb285ca3492e313a53d5252b9784bf7607f2835a2d44cb3cbad0168539",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/mirza/Mirza-Regular.ttf"
+        },
+        {
+          "file": "mirza/Mirza-Bold.ttf",
+          "weight": "700",
+          "min": 700,
+          "max": 700,
+          "bytes": 177052,
+          "sha256": "306b412a39d9f93ca840c13ca62300eb5c7712e2afa94bd7ef2272b51131be6d",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/mirza/Mirza-Bold.ttf"
+        }
+      ]
+    },
+    {
+      "id": "lemonada",
+      "name": "Lemonada",
+      "label": "ليمونادة",
+      "category": "art",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "lemonada/OFL.txt",
+      "faces": [
+        {
+          "file": "lemonada/Lemonada[wght].ttf",
+          "weight": "300 700",
+          "min": 300,
+          "max": 700,
+          "bytes": 189204,
+          "sha256": "84134e9e1da7d593839073157980a4d38296d2be10b61469a8f3169204959ad9",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/lemonada/Lemonada%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "lalezar",
+      "name": "Lalezar",
+      "label": "لالزار",
+      "category": "art",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "lalezar/OFL.txt",
+      "faces": [
+        {
+          "file": "lalezar/Lalezar-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 290016,
+          "sha256": "7b80807bc831f141de0f7dcf6816412bf0c548968d548c5156ca388733390ea9",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/lalezar/Lalezar-Regular.ttf"
+        }
+      ]
+    },
+    {
+      "id": "jomhuria",
+      "name": "Jomhuria",
+      "label": "جمهورية",
+      "category": "art",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "jomhuria/OFL.txt",
+      "faces": [
+        {
+          "file": "jomhuria/Jomhuria-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 172276,
+          "sha256": "17b4b0453acdaafb940a8be8acccc968713e223e5d03942347f6562ca3b1dec3",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/jomhuria/Jomhuria-Regular.ttf"
+        }
+      ]
+    },
+    {
+      "id": "rakkas",
+      "name": "Rakkas",
+      "label": "رقّاص",
+      "category": "art",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "rakkas/OFL.txt",
+      "faces": [
+        {
+          "file": "rakkas/Rakkas-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 146824,
+          "sha256": "54278882e4774c14d50c3b555f127d0fe586366d5b787316ebbcbd8108829e60",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/rakkas/Rakkas-Regular.ttf"
+        }
+      ]
+    },
+    {
+      "id": "qahiri",
+      "name": "Qahiri",
+      "label": "قاهري",
+      "category": "kufi",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "qahiri/OFL.txt",
+      "faces": [
+        {
+          "file": "qahiri/Qahiri-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 40728,
+          "sha256": "9c4d8cfba7b663dad7eeeeb52a625749f3e1f5ec472a0a6333e1684a2f43dbdf",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/qahiri/Qahiri-Regular.ttf"
+        }
+      ]
+    },
+    {
+      "id": "katibeh",
+      "name": "Katibeh",
+      "label": "كتيبة",
+      "category": "art",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "katibeh/OFL.txt",
+      "faces": [
+        {
+          "file": "katibeh/Katibeh-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 189124,
+          "sha256": "334eeadb58eb442734fe7dea87412cbbd8c3fd00294252723aadf19a850cf11f",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/katibeh/Katibeh-Regular.ttf"
+        }
+      ]
+    },
+    {
+      "id": "marhey",
+      "name": "Marhey",
+      "label": "مرحي",
+      "category": "art",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "marhey/OFL.txt",
+      "faces": [
+        {
+          "file": "marhey/Marhey[wght].ttf",
+          "weight": "300 700",
+          "min": 300,
+          "max": 700,
+          "bytes": 198704,
+          "sha256": "19c30686157ec965797fae8c8feb7bb142b082217227562d1a809c067df447e9",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/marhey/Marhey%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "kufam",
+      "name": "Kufam",
+      "label": "كوفام",
+      "category": "kufi",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "kufam/OFL.txt",
+      "faces": [
+        {
+          "file": "kufam/Kufam[wght].ttf",
+          "weight": "400 900",
+          "min": 400,
+          "max": 900,
+          "bytes": 428544,
+          "sha256": "f17a89b518c833de289598d0662bb9a07d09cc7d75b7079a15f1305f624bbcda",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/kufam/Kufam%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "vibes",
+      "name": "Vibes",
+      "label": "فايبز",
+      "category": "ruqaa",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "vibes/OFL.txt",
+      "faces": [
+        {
+          "file": "vibes/Vibes-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 78412,
+          "sha256": "297d9c8499e7383ac7675932741625ab12d9bb3abd1c31d2659b385d965a7ab7",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/vibes/Vibes-Regular.ttf"
+        }
+      ]
+    },
+    {
+      "id": "baloobhaijaan2",
+      "name": "Baloo Bhaijaan 2",
+      "label": "بالو بهيجان",
+      "category": "art",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "baloobhaijaan2/OFL.txt",
+      "faces": [
+        {
+          "file": "baloobhaijaan2/BalooBhaijaan2[wght].ttf",
+          "weight": "400 800",
+          "min": 400,
+          "max": 800,
+          "bytes": 285508,
+          "sha256": "3e9f07fbc796c0ddcb3e6e0aa26f9c86741d9f5b7f5cb72f4ed3c06e55a19336",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/baloobhaijaan2/BalooBhaijaan2%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "blaka",
+      "name": "Blaka",
+      "label": "بلاكا",
+      "category": "art",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "blaka/OFL.txt",
+      "faces": [
+        {
+          "file": "blaka/Blaka-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 58104,
+          "sha256": "5cd0ff67dcfbc371c6450afffe10f6e7027ffada0c31f436beb8865e57b781a3",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/blaka/Blaka-Regular.ttf"
+        }
+      ]
+    },
+    {
+      "id": "blakahollow",
+      "name": "Blaka Hollow",
+      "label": "بلاكا مجوف",
+      "category": "art",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "blakahollow/OFL.txt",
+      "faces": [
+        {
+          "file": "blakahollow/BlakaHollow-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 73852,
+          "sha256": "59cb30824e6023d454b4b44038cf44cdc9a4ad67f9795171c646c98ceb2bd542",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/blakahollow/BlakaHollow-Regular.ttf"
+        }
+      ]
+    },
+    {
+      "id": "blakaink",
+      "name": "Blaka Ink",
+      "label": "بلاكا حبر",
+      "category": "art",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "blakaink/OFL.txt",
+      "faces": [
+        {
+          "file": "blakaink/BlakaInk-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 391520,
+          "sha256": "d745f0be7cf43f4e8998834ef730b3cab22a82db19d6a1737008b7b4a87112ea",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/blakaink/BlakaInk-Regular.ttf"
+        }
+      ]
+    },
+    {
+      "id": "badeendisplay",
+      "name": "Badeen Display",
+      "label": "بدين للعناوين",
+      "category": "art",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "badeendisplay/OFL.txt",
+      "faces": [
+        {
+          "file": "badeendisplay/BadeenDisplay-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 78908,
+          "sha256": "274805b3ee44f9b45a99bdcecf25cd44944c0a81f6cf8086b5cf30d00e860537",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/badeendisplay/BadeenDisplay-Regular.ttf"
+        }
+      ]
+    },
+    {
+      "id": "playpensansarabic",
+      "name": "Playpen Sans Arabic",
+      "label": "بلايبن عربي",
+      "category": "art",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "playpensansarabic/OFL.txt",
+      "faces": [
+        {
+          "file": "playpensansarabic/PlaypenSansArabic[wght].ttf",
+          "weight": "100 800",
+          "min": 100,
+          "max": 800,
+          "bytes": 758132,
+          "sha256": "31122f11b6aa8a36a283f95797663a575afffbe2d52b69e496f3a2440942a226",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/playpensansarabic/PlaypenSansArabic%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "handjet",
+      "name": "Handjet",
+      "label": "هاندجت",
+      "category": "art",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "handjet/OFL.txt",
+      "faces": [
+        {
+          "file": "handjet/Handjet[ELGR,ELSH,wght].ttf",
+          "weight": "100 900",
+          "min": 100,
+          "max": 900,
+          "bytes": 283912,
+          "sha256": "9262749e8bb0b73ebcae0e20428689c3c59576eebeb6c4e1020300d2d41bdf4d",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/handjet/Handjet%5BELGR%2CELSH%2Cwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "alyamama",
+      "name": "Alyamama",
+      "label": "اليمامة",
+      "category": "modern",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "alyamama/OFL.txt",
+      "faces": [
+        {
+          "file": "alyamama/Alyamama[wght].ttf",
+          "weight": "300 900",
+          "min": 300,
+          "max": 900,
+          "bytes": 220572,
+          "sha256": "f09eb4ad2eaf1b0a7c990cb9b3b7658414405804d74775269fdddc25efdb1883",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/alyamama/Alyamama%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "estedad",
+      "name": "Estedad",
+      "label": "استعداد",
+      "category": "modern",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "estedad/OFL.txt",
+      "faces": [
+        {
+          "file": "estedad/Estedad[wght].ttf",
+          "weight": "100 900",
+          "min": 100,
+          "max": 900,
+          "bytes": 328340,
+          "sha256": "6e745beeeb0cae5eea7f38d3132597089548a622d87997b58944e5b1edfec5a1",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/estedad/Estedad%5Bwght%5D.ttf"
+        }
+      ]
+    },
+    {
+      "id": "gulzar",
+      "name": "Gulzar",
+      "label": "غُلزار",
+      "category": "art",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "gulzar/OFL.txt",
+      "faces": [
+        {
+          "file": "gulzar/Gulzar-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 963496,
+          "sha256": "246337973ac64e8b70fe611405dcf32a395a8885c4497dc45dbc4975d3ac0831",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/gulzar/Gulzar-Regular.ttf"
+        }
+      ]
+    },
+    {
+      "id": "alkalami",
+      "name": "Alkalami",
+      "label": "القلمي",
+      "category": "naskh",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "alkalami/OFL.txt",
+      "faces": [
+        {
+          "file": "alkalami/Alkalami-Regular.ttf",
+          "weight": "400",
+          "min": 400,
+          "max": 400,
+          "bytes": 145540,
+          "sha256": "4410dfc591b918dd4360b0252b079855a8a00250de363c8c0163b29ddfc56434",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/alkalami/Alkalami-Regular.ttf"
+        }
+      ]
+    },
+    {
+      "id": "notonastaliqurdu",
+      "name": "Noto Nastaliq Urdu",
+      "label": "نوتو نستعليق",
+      "category": "art",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "notonastaliqurdu/OFL.txt",
+      "faces": [
+        {
+          "file": "notonastaliqurdu/NotoNastaliqUrdu[wght].ttf",
+          "weight": "400 700",
+          "min": 400,
+          "max": 700,
+          "bytes": 690304,
+          "sha256": "98a4787f34eb6fde57fb9a1121a8f216301196ab0da98ea110cad581be8abbcd",
+          "source": "https://raw.githubusercontent.com/google/fonts/24ddc1f324cac5d9f5aedca126d298f56e3f1640/ofl/notonastaliqurdu/NotoNastaliqUrdu%5Bwght%5D.ttf"
+        }
+      ]
+    }
+  ]
+}

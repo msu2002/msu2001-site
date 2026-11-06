@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d101b">
+  <meta name="description" content="Fahad Studio — محرر فيديو عربي مجاني، يعمل محليًا على جهازك دون حساب أو علامة مائية.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob: data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; worker-src 'self'">
+  <title>Fahad Studio | فهد أستديو</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css?v=1.4.1">
+  <script src="core.js?v=1.4.1" defer></script>
+  <script src="captions.js?v=1.4.1" defer></script>
+  <script src="fonts.js?v=1.4.1" defer></script>
+  <script src="gold.js?v=1.4.1" defer></script>
+  <script src="creative.js?v=1.4.1" defer></script>
+  <script src="app.js?v=1.4.1" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#" aria-label="Fahad Studio"><span class="brand-mark"><i data-icon="logo"></i></span><span dir="ltr">Fahad<span class="brand-light"> Studio</span><small>مساحتك للإبداع</small></span></a>
+  <span class="header-divider"></span>
+  <div class="project-heading"><input id="project-name" aria-label="اسم المشروع" maxlength="100" value="حكاية من الضوء"><span id="save-state"><span class="status-dot"></span> محفوظ على جهازك</span></div>
+  <div class="header-actions"><span class="local-badge"><i data-icon="shield"></i> محلي وآمن</span><button class="button subtle" id="project-menu"><i data-icon="folder"></i><span>المشروع</span><i data-icon="chevron"></i></button><button class="button primary" id="export-open"><i data-icon="export"></i><span>تصدير الفيديو</span></button></div>
+</header>
+<div class="app-shell">
+  <main class="workspace">
+    <nav class="tool-rail" aria-label="أدوات التحرير">
+      <button class="tool active" data-panel="media"><i data-icon="media"></i><span>وسائط</span></button>
+      <button class="tool" data-panel="captions"><i data-icon="text"></i><span>ترجمة تلقائية</span></button>
+      <button class="tool" data-panel="templates"><i data-icon="grid"></i><span>قوالب</span></button>
+      <button class="tool" data-panel="motion"><i data-icon="sparkles"></i><span>موشن</span></button>
+      <button class="tool" data-panel="effects"><i data-icon="image"></i><span>تأثيرات</span></button>
+      <button class="tool" data-panel="text"><i data-icon="text"></i><span>نصوص</span></button>
+      <button class="tool" data-panel="fonts"><i data-icon="text"></i><span>خطوط</span></button>
+      <button class="tool" data-panel="audio"><i data-icon="music"></i><span>صوت</span></button>
+      <button class="tool" data-panel="transitions"><i data-icon="transition"></i><span>انتقالات</span></button>
+      <button class="tool" data-panel="smart"><i data-icon="sparkles"></i><span>أدوات ذكية</span></button>
+      <button class="tool help-tool" id="help-open"><i data-icon="help"></i><span>مساعدة</span></button>
+    </nav>
+    <aside class="library panel"><div class="panel-heading"><h1 id="library-title">مكتبة الوسائط</h1><span class="small-tag" id="asset-count">٠ ملفات</span></div><div id="library-content"></div><div class="privacy-note"><i data-icon="lock"></i><span>ملفاتك تبقى على جهازك.<br>بلا حساب، بلا حدود للإبداع.</span></div></aside>
+    <section class="preview-panel" aria-label="معاينة الفيديو">
+      <div class="preview-top"><span><span class="status-dot violet"></span> معاينة المشروع</span><div><select id="aspect" aria-label="نسبة أبعاد الفيديو"><option value="1280x720">16:9 أفقي</option><option value="720x1280">9:16 عمودي</option><option value="1080x1080">1:1 مربع</option></select><button class="icon-button" id="fullscreen" title="ملء الشاشة" aria-label="ملء الشاشة"><i data-icon="expand"></i></button></div></div>
+      <div class="stage" id="stage"><canvas id="preview" width="1280" height="720" aria-label="شاشة معاينة المشروع"></canvas><div id="stage-empty" hidden><i data-icon="media"></i><strong>كل حكاية تبدأ بلقطة</strong><p>استورد فيديو أو جرّب أحد المشاهد المجانية.</p><button class="button primary" id="empty-import">استيراد وسائط</button></div></div>
+      <div class="transport"><div class="time-readout" dir="ltr"><strong id="current-time">00:00:00</strong><span>/</span><span id="total-time">00:12:00</span></div><div class="play-buttons"><button class="icon-button" id="to-start" aria-label="العودة للبداية" title="البداية"><i data-icon="skip"></i></button><button class="play" id="play" aria-label="تشغيل" title="تشغيل / إيقاف (مسافة)"><i data-icon="play"></i></button><button class="icon-button" id="next-clip" aria-label="اللقطة التالية" title="اللقطة التالية"><i class="flip" data-icon="skip"></i></button></div><span class="preview-quality">معاينة مباشرة <b>30 fps</b></span></div>
+      <div class="project-info"><span><i data-icon="sparkles"></i> فكرتك. لقطتك. حكايتك.</span><span id="dimensions">1280 × 720</span></div>
+    </section>
+    <aside class="inspector panel" id="inspector"><div class="panel-heading"><h2>خصائص المقطع</h2><button class="icon-button inspector-close" aria-label="إغلاق الخصائص"><i data-icon="close"></i></button><span class="small-tag">تحرير</span></div><div id="properties"></div></aside>
+  </main>
+  <section class="timeline" aria-label="الخط الزمني">
+    <div class="timeline-toolbar"><div class="timeline-edit"><button class="icon-button" id="undo" title="تراجع (Ctrl/⌘ Z)" aria-label="تراجع"><i data-icon="undo"></i></button><button class="icon-button" id="redo" title="إعادة (Ctrl/⌘ Shift Z)" aria-label="إعادة"><i data-icon="redo"></i></button><span class="separator"></span><button class="button compact" id="split" title="تقسيم عند مؤشر التشغيل (S)"><i data-icon="scissors"></i> تقسيم</button><button class="icon-button" id="duplicate" title="تكرار المقطع" aria-label="تكرار المقطع"><i data-icon="copy"></i></button><button class="icon-button danger" id="delete" title="حذف المقطع" aria-label="حذف المقطع"><i data-icon="trash"></i></button><span class="separator"></span><button class="icon-button active-toggle" id="snap" aria-label="تفعيل المغناطيس" title="محاذاة المقاطع"><i data-icon="magnet"></i></button></div><div class="timeline-options"><span class="timeline-hint">اسحب للترتيب · اسحب الحواف للقص</span><button class="icon-button" id="zoom-out" aria-label="تصغير الخط الزمني"><i data-icon="minus"></i></button><input id="zoom" aria-label="تكبير الخط الزمني" type="range" min="15" max="100" value="48"><button class="icon-button" id="zoom-in" aria-label="تكبير الخط الزمني"><i data-icon="plus"></i></button><button class="button compact" id="fit-timeline">ملاءمة</button></div></div>
+    <div class="timeline-body" dir="ltr"><div class="track-labels" id="track-labels"></div><div class="timeline-scroll" id="timeline-scroll"><div class="timeline-content" id="timeline-content"><div class="ruler" id="ruler" aria-label="اختيار وقت المعاينة"></div><div id="tracks"></div><div class="playhead" id="playhead"><span></span></div></div></div></div>
+    <footer class="statusbar"><span><span class="status-dot"></span> جميع المعالجة على جهازك</span><span id="timeline-summary">٤ مسارات · مشروع تجريبي قابل للتعديل</span><span dir="ltr">FAHAD STUDIO <b>MVP 1.4.1</b></span></footer>
+  </section>
+</div>
+<input type="file" id="file-input" multiple accept="video/*,image/*,audio/*" hidden>
+<input type="file" id="project-input" accept=".fahad,.json" hidden>
+<input type="file" id="font-input" accept=".ttf,.otf,.woff,.woff2" multiple hidden>
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+<dialog id="remove-asset-dialog" aria-labelledby="remove-asset-title" aria-describedby="remove-asset-description">
+ <div class="dialog-head"><h2 id="remove-asset-title">حذف ملف مستخدم؟</h2><button class="icon-button" data-close aria-label="إلغاء حذف الملف"><i data-icon="close"></i></button></div>
+ <p id="remove-asset-name" class="remove-asset-name"></p>
+ <p id="remove-asset-description" class="muted"></p>
+ <p class="fine-print">يمكنك التراجع من شريط التحرير خلال الجلسة الحالية. الملف الأصلي على جهازك يبقى محفوظًا.</p>
+ <div class="dialog-buttons"><button class="button" data-close autofocus>إلغاء</button><button class="button danger" id="remove-asset-confirm">حذف من المشروع</button></div>
+</dialog>
+<dialog id="project-dialog"><div class="dialog-head"><h2>مشروعك، على جهازك</h2><button class="icon-button" data-close aria-label="إغلاق"><i data-icon="close"></i></button></div><p class="muted">حفظ تلقائي في هذا المتصفح، ونسخة محمولة تضم الوسائط لمتابعة العمل على جهاز آخر.</p><div class="project-actions"><button class="action-card" id="save-project"><i data-icon="download"></i><span><strong>تنزيل المشروع مع الوسائط</strong><small>ملف ‎.fahad قابل لإعادة الفتح</small></span></button><button class="action-card" id="open-project"><i data-icon="folder"></i><span><strong>فتح مشروع محفوظ</strong><small>استعادة المقاطع والنصوص والتوقيت</small></span></button><button class="action-card" id="new-project"><i data-icon="plus"></i><span><strong>مشروع فارغ جديد</strong><small>نزّل نسخة من مشروعك الحالي أولًا</small></span></button><button class="action-card" id="demo-project"><i data-icon="sparkles"></i><span><strong>فتح المشروع التجريبي</strong><small>مشاهد أصلية مرسومة محليًا</small></span></button></div><p class="fine-print">الحفظ في المتصفح مرتبط بهذا الموقع والجهاز. تنزيل نسخة احتياطية يحمي عملك عند مسح بيانات المتصفح.</p></dialog>
+<dialog id="export-dialog"><div class="dialog-head"><h2>حكايتك جاهزة للمشاركة</h2><button class="icon-button" data-close aria-label="إغلاق"><i data-icon="close"></i></button></div><div class="export-illustration"><i data-icon="export"></i><span>صُنع بإبداعك، دون علامة مائية</span></div><label class="field">الصيغة<select id="export-format" aria-label="صيغة التصدير"></select></label><div class="fields-row"><label class="field">الدقة<select id="export-size"><option value="720">HD · 720p</option><option value="1080">Full HD · 1080p</option><option value="480">خفيف · 480p</option></select></label><label class="field">الجودة<select id="export-bitrate"><option value="5000000">عالية · 5 Mbps</option><option value="2500000">متوازنة · 2.5 Mbps</option><option value="8000000">قصوى · 8 Mbps</option></select></label></div><p class="muted" id="export-support"></p><p class="fine-print">يُصدَّر الفيديو على جهازك في زمن يقارب مدته. أبقِ الصفحة ظاهرة والجهاز مستيقظًا. المشاريع الطويلة قد تتجاوز ذاكرة الجوال.</p><div id="export-progress" hidden><progress id="export-bar" max="100" value="0"></progress><p id="export-status">تجهيز الفيديو…</p></div><div id="export-result" hidden><video controls playsinline id="export-preview"></video><a class="button primary" id="export-download" download>تنزيل الفيديو</a></div><div class="dialog-buttons"><button class="button primary" id="export-start"><i data-icon="export"></i> ابدأ التصدير المحلي</button><button class="button" id="export-cancel" hidden>إلغاء التصدير</button></div></dialog>
+<dialog id="help-dialog"><div class="dialog-head"><h2>أهلًا بك في Fahad Studio</h2><button class="icon-button" data-close aria-label="إغلاق"><i data-icon="close"></i></button></div><p>مساحة عربية لإنشاء الفيديو، مجانًا ودون حساب أو علامة مائية.</p><ol class="help-steps"><li><strong>اجلب لقطاتك</strong><span>استورد فيديو أو صورة أو صوت، ثم اضغط + لإضافته إلى المسار.</span></li><li><strong>اصنع إيقاعك</strong><span>اسحب المقاطع، قص الحواف، أو ضع المؤشر واضغط «تقسيم». عدّل التوقيت بدقة من الخصائص.</span></li><li><strong>أضف لمستك</strong><span>عناوين عربية متحركة وانتقالات ومزج صوتي. اسحب النص داخل المعاينة لتحديد موضعه.</span></li><li><strong>احفظ وشارك</strong><span>نزّل مشروعك مع وسائطه، أو صدّر الفيديو بالصيغة التي يدعمها متصفحك.</span></li></ol><div class="help-note"><strong>حدود النسخة الأولى</strong><p>٤ مسارات، سرعة تشغيل عادية، تصدير مباشر بزمن الفيديو. دعم الملفات والترميز يعتمد على المتصفح. يتوفر تفريغ عربي تلقائي محلي عند إضافة فيديو. راجع الكلمات والتوقيت؛ تختلف الدقة حسب اللهجة والضوضاء. توليد الفيديو غير متاح.</p></div><p class="fine-print">الاختصارات: مسافة تشغيل · S تقسيم · Delete حذف · Ctrl/⌘ Z تراجع · الأسهم تحريك المؤشر. لا تُستخدم كاميرا أو ميكروفون ولا تُرفع ملفاتك إلى خادم.</p><button class="button primary" data-close>لنبدأ الإبداع</button></dialog>
+<dialog id="confirm-dialog"><div class="dialog-head"><h2>بدء مشروع آخر؟</h2></div><p>سيستبدل هذا المشروع المحفوظ تلقائيًا. يمكنك تنزيل نسختك الحالية أولًا.</p><div class="dialog-buttons"><button class="button primary" id="confirm-save">تنزيل نسخة ثم المتابعة</button><button class="button" id="confirm-proceed">متابعة دون تنزيل</button><button class="button subtle" data-close>إلغاء</button></div></dialog>
+<dialog id="font-dialog" class="font-dialog">
+ <div class="dialog-head"><div><h2>مكتبة الخطوط العربية</h2><p id="font-count" class="muted">خطوط مجانية لقصتك</p></div><button class="icon-button" data-close aria-label="إغلاق مكتبة الخطوط"><i data-icon="close"></i></button></div>
+ <div class="font-dialog-tools"><button class="button" id="font-import"><i data-icon="upload"></i> استيراد خطوط من الجهاز</button><button class="button subtle" id="font-cache">تجهيز كل المعاينات</button><span class="fine-print">TTF · OTF · WOFF · WOFF2</span></div>
+ <label class="font-sample-label">جرّب كلماتك<input id="font-sample" aria-label="نص معاينة الخطوط" maxlength="120" value="اصنع حكايتك بالعربية"></label>
+ <div class="font-filters"><input id="font-search" type="search" placeholder="ابحث باسم الخط العربي أو الإنجليزي" aria-label="البحث في الخطوط"><select id="font-category" aria-label="تصنيف الخطوط"><option value="all">كل الخطوط</option><option value="modern">خطوط عصرية</option><option value="naskh">نسخ وقراءة</option><option value="kufi">كوفي</option><option value="ruqaa">رقعة وخط يد</option><option value="art">عناوين وفنون</option><option value="imported">من جهازي</option></select><select id="font-weight" aria-label="وزن الخط المختار"><option value="400">عادي</option><option value="700">عريض</option></select></div>
+ <div id="font-grid" class="font-grid" aria-label="معاينات الخطوط"></div>
+ <div class="font-dialog-footer"><label class="field">تطبيق على<select id="font-scope" aria-label="تطبيق الخط على"><option value="selected">النص المحدد</option><option value="new">نص جديد</option></select></label><button class="button primary" id="font-apply">استخدم هذا الخط</button></div>
+ <p id="font-ready" class="fine-print" role="status">الخطوط مضمّنة في التطبيق. المستورد يبقى على جهازك ويُحفظ مع المشروع.</p>
+</dialog>
+<dialog id="preset-dialog" class="preset-dialog">
+ <div class="dialog-head"><div><h2 id="preset-title">معاينة</h2><p id="preset-description" class="muted"></p></div><button class="icon-button" data-close aria-label="إغلاق معاينة الحركة"><i data-icon="close"></i></button></div>
+ <div class="preset-stage"><canvas id="preset-canvas" width="960" height="540" aria-label="المعاينة المتحركة للاختيار"></canvas></div>
+ <div class="preset-controls"><button class="button" id="preset-play">إيقاف المعاينة</button><output id="preset-time">00:00</output><span class="feature-status">معالجة محلية</span></div>
+ <label class="caption-switch" id="preset-overlay-label"><input type="checkbox" id="preset-overlay"> إضافة النصوص والموشن فوق الفيديو الحالي</label>
+ <p class="fine-print" id="preset-hint"></p><div class="dialog-buttons"><button class="button primary" id="preset-apply">استخدم هذا الاختيار</button><button class="button" data-close>إغلاق</button></div>
+</dialog>
+<noscript>يرجى تفعيل JavaScript لتشغيل محرر الفيديو المحلي.</noscript>
+</body>
+</html>
