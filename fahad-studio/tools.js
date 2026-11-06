@@ -38,7 +38,8 @@ const CMDS={
  snap(){$('#snap')?.click();},
  keys(){openKeys();},
  trackVisual(){addTrack('visual');},trackText(){addTrack('text');},trackAudio(){addTrack('audio');},
- freeze(){freeze();}
+ freeze(){freeze();},
+ silence(){removeSilence();}
 };
 function vis(){const a=A(),c=a.chosen();if(!c||c.kind==='audio'){a.toast('حدّد مقطع فيديو أو صورة أو نصًا.');return null;}return c;}
 function addTrack(kind){const a=A(),letter={visual:'v',text:'t',audio:'a'}[kind];a.edit(()=>{const p=a.p;if(p.tracks.filter(t=>t.kind===kind).length>=5)throw Error('وصلت إلى الحد الأقصى لهذا النوع (٥ مسارات).');let n=1;while(p.tracks.some(t=>t.id===letter+n))n++;if(n>9)throw Error('لا توجد معرّفات مسارات متاحة.');const t={id:letter+n,name:{visual:'فيديو/صور',text:'نصوص',audio:'صوت'}[kind]+' '+n,kind,hidden:false,muted:false};if(kind==='visual')p.tracks.unshift(t);else if(kind==='text')p.tracks.splice(Math.max(0,p.tracks.findIndex(x=>x.kind==='text')),0,t);else p.tracks.push(t);a.activeTrack=t.id;});}
@@ -59,13 +60,35 @@ async function freeze(){
   a.toast('أُدرجت لقطة مجمدة مدتها ثانيتان.','success');
  }catch(e){a.toast(e.message||'تعذّر تجميد اللقطة.','error');}
 }
+
+async function removeSilence(){
+ const a=A(),c=a.chosen();
+ if(!c||!['video','audio'].includes(c.kind)||isSub(c)){a.toast('حدّد مقطع فيديو أو صوت لحذف الصمت منه.');return;}
+ const as=a.assets.get(c.assetId);if(!as||!as.blob){a.toast('تعذّر الوصول إلى ملف المقطع.');return;}
+ if(as.blob.size>300*1048576){a.toast('الملف كبير جدًا للتحليل داخل المتصفح (الحد 300 MB).');return;}
+ a.toast('جارٍ تحليل الصوت…');
+ let buf;try{buf=await new OfflineAudioContext(1,1,44100).decodeAudioData(await as.blob.arrayBuffer());}catch(e){a.toast('هذا الملف لا يحتوي صوتًا يمكن تحليله.','error');return;}
+ const sr=buf.sampleRate,ch=[...Array(buf.numberOfChannels).keys()].map(i=>buf.getChannelData(i)),win=Math.round(sr*.05),n=Math.floor(buf.length/win),thr=.012,minLen=.5,pad=.1,sp=c.speed||1;
+ const loud=new Array(n);for(let w=0;w<n;w++){let s=0;for(const d of ch)for(let i=w*win;i<(w+1)*win;i+=4)s+=d[i]*d[i];loud[w]=Math.sqrt(s/((win/4)*ch.length))>thr;}
+ const lo=c.in,hi=c.in+c.duration*sp,runs=[];let st=null;
+ for(let w=0;w<=n;w++){const q=w<n&&!loud[w];if(q&&st===null)st=w;else if(!q&&st!==null){const s0=st*.05,s1=w*.05;st=null;if(s1-s0>=minLen){const x0=Math.max(s0+pad,lo),x1=Math.min(s1-pad,hi);if(x1-x0>=.2)runs.push([c.start+(x0-c.in)/sp,c.start+(x1-c.in)/sp]);}}}
+ const ids=[c.id];if(c.audioLink)ids.push(c.audioLink);
+ const cut=[];for(const r of runs)if(r[0]>c.start+.06&&r[1]<c.start+c.duration-.06)cut.push(r);
+ if(!cut.length){a.toast('لم أجد مقاطع صامتة طويلة في هذا المقطع.');return;}
+ let saved=0;
+ a.edit(()=>{const p=a.p;for(let k=cut.length-1;k>=0;k--){const [t1,t2]=cut[k],gap=t2-t1;for(const base of ids){const first=p.clips.find(v=>v.id===base);if(!first)continue;const tr=first.track,x=p.clips.find(v=>v.track===tr&&v.assetId===c.assetId&&v.start<=t1+.001&&v.start+v.duration>=t2-.001);if(!x)continue;
+   const right=a.C.split(p,x.id,t2);if(!right)continue;const mid=a.C.split(p,x.id,t1);if(!mid)continue;p.clips=p.clips.filter(v=>v.id!==mid.id);
+   for(const v of p.clips)if(v.track===tr&&v.start>=t2-.001&&!isSub(v))v.start=Math.max(0,+(v.start-gap).toFixed(3));}
+  saved+=gap;}a.selected=null;});
+ a.toast('حُذف '+cut.length+' مقطع صامت، ووُفّرت '+saved.toFixed(1)+' ثانية.','success');
+}
 /* ---- UI ---- */
 const MENUS=[
  ['tool','أداة',[['select','تحديد','A'],['blade','شفرة: تقسيم بالنقر','E'],['selLeft','تحديد ما على اليسار','['],['selRight','تحديد ما على اليمين',']'],['selAll','تحديد الكل','Ctrl+A']]],
  ['cut','قص',[['split','تقسيم عند المؤشر','S'],['trimL','قص البداية حتى المؤشر','Q'],['trimR','قص النهاية من المؤشر','W'],['ripple','حذف وسدّ الفراغ','Shift+Del'],['copy','نسخ','Ctrl+C'],['cut','قصّ','Ctrl+X'],['paste','لصق','Ctrl+V'],['dup','تكرار','Ctrl+D']]],
  ['xform','تحويل',[['freeze','لقطة مجمدة','F'],['flipX','قلب أفقي (مرآة)','H'],['flipY','قلب رأسي','V'],['rot90','تدوير ٩٠°','R']]],
  ['speed','سرعة',[['sp:0.25','٠٫٢٥×',''],['sp:0.5','٠٫٥×',''],['sp:0.75','٠٫٧٥×',''],['sp:1','عادية ١×',''],['sp:1.25','١٫٢٥×',''],['sp:1.5','١٫٥×',''],['sp:2','٢×',''],['sp:3','٣×',''],['sp:4','٤×','']]],
- ['audio','صوت',[['detach','عزل الصوت عن الفيديو',''],['mute','كتم / إلغاء كتم المقطع','']]],
+ ['audio','صوت',[['silence','حذف المقاطع الصامتة تلقائيًا',''],['detach','عزل الصوت عن الفيديو',''],['mute','كتم / إلغاء كتم المقطع','']]],
  ['track','+ مسار',[['trackVisual','مسار فيديو / صور',''],['trackText','مسار كتابة',''],['trackAudio','مسار صوت','']]]
 ];
 const KEYS=[['Space','تشغيل / إيقاف'],['A','أداة التحديد'],['E','أداة الشفرة (انقر المقطع للتقسيم)'],['S','تقسيم عند المؤشر'],['Q / W','قص البداية / النهاية حتى المؤشر'],['[  /  ]','تحديد ما على يسار / يمين المؤشر'],['Delete','حذف'],['Shift+Delete','حذف وسدّ الفراغ'],['Ctrl+C / X / V','نسخ / قصّ / لصق'],['Ctrl+D','تكرار'],['Ctrl+A','تحديد الكل'],['Ctrl+Z / Ctrl+Shift+Z','تراجع / إعادة'],['F','لقطة مجمدة'],['H / V','قلب أفقي / رأسي'],['R','تدوير ٩٠°'],['M','علامة عند المؤشر'],[', / .','العلامة السابقة / التالية'],['← / →','إطار واحد (مع Shift: ثانية)'],['Home / End','البداية / النهاية'],['+ / −','تكبير / تصغير الخط الزمني'],['N','المغناطيس']];
