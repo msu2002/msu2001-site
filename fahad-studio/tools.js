@@ -39,7 +39,8 @@ const CMDS={
  keys(){openKeys();},
  trackVisual(){addTrack('visual');},trackText(){addTrack('text');},trackAudio(){addTrack('audio');},
  freeze(){freeze();},
- silence(){removeSilence();}
+ silence(){removeSilence();},
+ montage(){montageOpen();}
 };
 function vis(){const a=A(),c=a.chosen();if(!c||c.kind==='audio'){a.toast('حدّد مقطع فيديو أو صورة أو نصًا.');return null;}return c;}
 function addTrack(kind){const a=A(),letter={visual:'v',text:'t',audio:'a'}[kind];a.edit(()=>{const p=a.p;if(p.tracks.filter(t=>t.kind===kind).length>=5)throw Error('وصلت إلى الحد الأقصى لهذا النوع (٥ مسارات).');let n=1;while(p.tracks.some(t=>t.id===letter+n))n++;if(n>9)throw Error('لا توجد معرّفات مسارات متاحة.');const t={id:letter+n,name:{visual:'فيديو/صور',text:'نصوص',audio:'صوت'}[kind]+' '+n,kind,hidden:false,muted:false};if(kind==='visual')p.tracks.unshift(t);else if(kind==='text')p.tracks.splice(Math.max(0,p.tracks.findIndex(x=>x.kind==='text')),0,t);else p.tracks.push(t);a.activeTrack=t.id;});}
@@ -82,6 +83,73 @@ async function removeSilence(){
   saved+=gap;}a.selected=null;});
  a.toast('حُذف '+cut.length+' مقطع صامت، ووُفّرت '+saved.toFixed(1)+' ثانية.','success');
 }
+
+/* ---- Auto montage ---- */
+const STYLES={
+ cinematic:{name:'سينمائي',desc:'إيقاع هادئ، انتقالات ناعمة، ألوان سينمائية وحواف مظللة',img:4,seg:6,tr:.6,trans:['fade','zoom','fade','circle','fade','wipe'],motions:['ken-burns','zoom-in','pan-left','zoom-out','pan-right','drift'],vm:.3,lut:'teal-orange',fx:'vignette',fxs:.5,title:'rise'},
+ fast:{name:'سريع وحيوي',desc:'لقطات قصيرة، انتقالات سريعة وحركة نابضة (مناسب لـ Reels/TikTok)',img:2,seg:3,tr:.3,trans:['slide','zoom','wipe','slide-up','spin','diamond','blinds-vertical'],motions:['zoom-in','pulse','shake','zoom-out','pan-left'],vm:.25,lut:'vivid-pop',fx:'none',fxs:0,title:'pop'},
+ calm:{name:'هادئ وأنيق',desc:'لقطات أطول، تلاشٍ ناعم وحركة تنفّس خفيفة بألوان دافئة',img:5,seg:7,tr:.9,trans:['fade'],motions:['breathe','float','drift','zoom-in'],vm:.2,lut:'soft-warm',fx:'vignette',fxs:.3,title:'fade'}
+};
+function montageSources(){
+ const a=A(),p=a.p,vis=id=>(p.tracks.find(t=>t.id===id)||{}).kind==='visual';
+ let items=p.clips.filter(c=>c.track==='v1'&&!['audio','text'].includes(c.kind)&&!c.subtitleOf).sort((x,y)=>x.start-y.start).map(c=>({asset:a.assets.get(c.assetId),srcIn:c.in,srcDur:c.duration*(c.speed||1),clipId:c.id})).filter(i=>i.asset);
+ let fromTimeline=true;
+ if(!items.length){fromTimeline=false;items=[...a.assets.values()].filter(x=>['video','image','scene'].includes(x.type)&&!x.overlay).map(x=>({asset:x,srcIn:0,srcDur:x.duration||5}));}
+ let music=p.clips.filter(c=>c.kind==='audio'&&!c.videoLink&&!c.subtitleOf).sort((x,y)=>x.start-y.start).map(c=>({asset:a.assets.get(c.assetId),clipId:c.id})).filter(m=>m.asset);
+ const musicFromTimeline=music.length>0;
+ let m=music[0]||null;const ids=new Set(music.map(x=>x.clipId));
+ if(!m){const x=[...a.assets.values()].find(q=>q.type==='audio');if(x)m={asset:x};}
+ return {items,fromTimeline,music:m,musicClipIds:musicFromTimeline?ids:new Set()};
+}
+function montageOpen(){
+ const a=A(),src=montageSources();
+ if(!src.items.length){a.toast('أضف مقاطع فيديو أو صورًا إلى المشروع أولًا ثم اضغط «مونتاج تلقائي».');return;}
+ let d=$('#montage-dialog');if(d)d.remove();
+ d=document.createElement('dialog');d.id='montage-dialog';
+ d.innerHTML=`<div class="dialog-head"><h2>✨ مونتاج تلقائي بضغطة زر</h2><button class="icon-button" data-close aria-label="إغلاق">×</button></div>
+ <p class="muted">سأرتّب مقاطعك وأقصّها وأضيف الحركة والتأثيرات والانتقالات والألوان وأركّب الموسيقى. يمكنك التراجع (Ctrl+Z) وتعديل أي شيء بعدها.</p>
+ <div class="mt-info"><span>🎞 ${src.items.length} ${src.fromTimeline?'مقطع من الخط الزمني':'ملف من المكتبة'}</span><span>🎵 ${src.music?'الموسيقى: '+src.music.asset.name.slice(0,30):'بلا موسيقى (أضف ملفًا صوتيًا لتركيبه)'}</span></div>
+ <div class="mt-styles">${Object.entries(STYLES).map(([k,s],i)=>`<label class="mt-opt"><input type="radio" name="mt-style" value="${k}" ${i===0?'checked':''}><span><strong>${s.name}</strong><small>${s.desc}</small></span></label>`).join('')}</div>
+ <label class="mt-check"><input type="checkbox" id="mt-title" checked> إضافة عنوان افتتاحي باسم المشروع</label>
+ <label class="mt-check"><input type="checkbox" id="mt-fit" ${src.music?'checked':'disabled'}> اجعل طول الفيديو بطول الموسيقى</label>
+ <div class="dialog-buttons"><button class="button primary" id="mt-go">إنشاء المونتاج</button><button class="button" data-close>إلغاء</button></div>`;
+ document.body.append(d);
+ d.addEventListener('click',e=>{if(e.target===d||e.target.closest('[data-close]'))d.close();});
+ d.querySelector('#mt-go').onclick=()=>{const st=d.querySelector('input[name=mt-style]:checked').value,title=d.querySelector('#mt-title').checked,fit=d.querySelector('#mt-fit').checked;d.close();runMontage(st,title,fit);};
+ d.showModal();
+}
+function runMontage(key,title,fit){
+ const a=A(),st=STYLES[key],src=montageSources(),n=src.items.length;
+ if(!n)return;
+ const tr=n>1?st.tr:0,clamp=(v,x,y)=>Math.max(x,Math.min(y,v));
+ let ds=src.items.map(i=>i.asset.type==='video'?Math.max(.8,Math.min(i.srcDur,st.seg)):st.img);
+ if(fit&&src.music){const T=Math.min(src.music.asset.duration,600),sum=ds.reduce((x,y)=>x+y,0),k=(T+(n-1)*tr)/sum;ds=ds.map((d,i)=>{const it=src.items[i],max=it.asset.type==='video'?it.srcDur:8;return clamp(d*k,Math.min(1.2,max),max);});}
+ ds=ds.map(d=>Math.max(d,tr+.4));
+ const hasLut=window.FahadLUT&&FahadLUT.LOOKS&&FahadLUT.LOOKS.some(l=>l.id===st.lut);
+ a.edit(()=>{
+  const p=a.p;
+  const drop=new Set([...(src.fromTimeline?src.items.map(i=>i.clipId):[]),...src.musicClipIds]);
+  p.clips=p.clips.filter(c=>!drop.has(c.id));
+  let t=0,last=0;
+  src.items.forEach((it,i)=>{
+   const as=it.asset,c=a.C.clip(as,t,'v1'),d=ds[i];c.duration=d;c.fit='cover';
+   if(as.type==='video'){c.in=Math.max(0,it.srcIn+(it.srcDur-d)*.35);c.volume=src.music?.25:1;}
+   const mo=as.type==='video'?(i%2?'zoom-in':'none'):st.motions[i%st.motions.length];
+   if(mo!=='none'){c.motion=mo;c.motionAmount=as.type==='video'?st.vm:.55;}
+   c.transition=i===0?'fade':st.trans[(i-1)%st.trans.length];c.transitionDuration=i===0?.4:tr;
+   if(hasLut){c.lut=st.lut;c.lutStrength=.75;}
+   if(st.fx!=='none'){c.effect=st.fx;c.effectStrength=st.fxs;}
+   p.clips.push(c);last=t+d;t=last-tr;
+  });
+  const total=last;
+  if(src.music){const m=src.music.asset;let at=0,k=0;while(at<total-.2&&k<8){const c=a.C.clip(m,at,'a1');c.duration=Math.min(m.duration,total-at);c.volume=.85;p.clips.push(c);at+=c.duration;k++;}}
+  if(title&&!p.clips.some(c=>c.kind==='text'&&!c.subtitleOf&&c.start<3.7&&c.start+c.duration>.5)){const tc=a.C.textClip(.5,{text:p.name||'حكايتي',name:'عنوان افتتاحي',duration:Math.min(3.2,ds[0]-.2),fontSize:80,y:.5,animation:st.title});p.clips.push(tc);}
+  a.selected=null;
+ });
+ a.seek(0);
+ a.toast('تم المونتاج التلقائي: '+n+' مقطع بنمط «'+st.name+'». يمكنك الآن تعديل أي شيء.','success');
+}
+(()=>{const s=document.createElement('style');s.textContent='#montage-dialog{max-width:440px;width:92vw}.mt-info{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);margin:8px 0}.mt-styles{display:grid;gap:8px;margin:10px 0}.mt-opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;background:#191d2c}.mt-opt:has(input:checked){border-color:var(--accent);background:#2a2750}.mt-opt strong{display:block;font-size:13px}.mt-opt small{display:block;color:var(--muted);font-size:11px;margin-top:2px;line-height:1.7}.mt-check{display:flex;gap:8px;align-items:center;font-size:12px;margin:6px 0}.mt-magic{background:linear-gradient(135deg,#8d7aff,#c07bff)!important;color:#fff!important;border:0!important;font-weight:700}';document.head.append(s);})();
 /* ---- UI ---- */
 const MENUS=[
  ['tool','أداة',[['select','تحديد','A'],['blade','شفرة: تقسيم بالنقر','E'],['selLeft','تحديد ما على اليسار','['],['selRight','تحديد ما على اليمين',']'],['selAll','تحديد الكل','Ctrl+A']]],
@@ -94,6 +162,7 @@ const MENUS=[
 const KEYS=[['Space','تشغيل / إيقاف'],['A','أداة التحديد'],['E','أداة الشفرة (انقر المقطع للتقسيم)'],['S','تقسيم عند المؤشر'],['Q / W','قص البداية / النهاية حتى المؤشر'],['[  /  ]','تحديد ما على يسار / يمين المؤشر'],['Delete','حذف'],['Shift+Delete','حذف وسدّ الفراغ'],['Ctrl+C / X / V','نسخ / قصّ / لصق'],['Ctrl+D','تكرار'],['Ctrl+A','تحديد الكل'],['Ctrl+Z / Ctrl+Shift+Z','تراجع / إعادة'],['F','لقطة مجمدة'],['H / V','قلب أفقي / رأسي'],['R','تدوير ٩٠°'],['M','علامة عند المؤشر'],[', / .','العلامة السابقة / التالية'],['← / →','إطار واحد (مع Shift: ثانية)'],['Home / End','البداية / النهاية'],['+ / −','تكبير / تصغير الخط الزمني'],['N','المغناطيس']];
 function buildUI(){
  const host=$('.timeline-toolbar');if(!host||host.dataset.tools)return;host.dataset.tools='1';
+ const mg=document.createElement('div');mg.className='tl-group';mg.innerHTML='<button class="button compact mt-magic" data-tl-cmd="montage" title="مونتاج كامل بضغطة زر">✨ مونتاج تلقائي</button>';host.prepend(mg);
  const pop=document.createElement('div');pop.className='tl-pop';pop.hidden=true;document.body.append(pop);
  host.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.tlCmd){run(b.dataset.tlCmd);return;}if(b.dataset.tlMenu){e.stopPropagation();const m=MENUS.find(x=>x[0]===b.dataset.tlMenu);pop.innerHTML=m[2].map(([c,l,k])=>`<button data-c="${c}"><span>${l}</span><kbd dir="ltr">${k}</kbd></button>`).join('');const r=b.getBoundingClientRect();pop.hidden=false;pop.style.bottom=(window.innerHeight-r.top+6)+'px';pop.style.left=Math.max(6,Math.min(r.left,window.innerWidth-pop.offsetWidth-6))+'px';}});
  pop.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;pop.hidden=true;run(b.dataset.c);});

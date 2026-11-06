@@ -1,8 +1,8 @@
 /* Only same-origin app/model files are requested. User media stays in IndexedDB. */
-const CACHE='fahad-studio-shell-1.7.1';
+const CACHE='fahad-studio-shell-1.7.2';
 const FONTS='fahad-studio-fonts-v1';
 const MODELS='fahad-studio-models-whisper-base-q8-v1';
-const FILES=['./','index.html','style.css?v=1.7.1','core.js?v=1.7.1','captions.js?v=1.7.1','fonts.js?v=1.7.1','fonts/catalog.json','gold.js?v=1.7.1','creative.js?v=1.7.1','lut.js?v=1.7.1','textfx.js?v=1.7.1','tools.js?v=1.7.1','app.js?v=1.7.1','asr-worker.js','manifest.webmanifest','assets/icon.svg'];
+const FILES=['./','index.html','style.css?v=1.7.2','core.js?v=1.7.2','captions.js?v=1.7.2','fonts.js?v=1.7.2','fonts/catalog.json','gold.js?v=1.7.2','creative.js?v=1.7.2','lut.js?v=1.7.2','textfx.js?v=1.7.2','tools.js?v=1.7.2','app.js?v=1.7.2','asr-worker.js','manifest.webmanifest','assets/icon.svg'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>(k.startsWith('fahad-studio-shell-')||k.startsWith('fahad-studio-v'))&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
