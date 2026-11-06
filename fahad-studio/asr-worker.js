@@ -22,11 +22,11 @@ env.backends.onnx.wasm.numThreads=1;
 env.backends.onnx.wasm.proxy=false;
 let transcriber;
 self.onmessage=async event=>{
- const {id,audio}=event.data;const send=(type,data={})=>self.postMessage({id,type,...data});
+ const {id,audio,lang='arabic'}=event.data;const send=(type,data={})=>self.postMessage({id,type,...data});
  try{
   if(!transcriber){send('loading');transcriber=await pipeline('automatic-speech-recognition','whisper-base',{device:'wasm',dtype:'q8',local_files_only:true,progress_callback:progress=>{if(/\.onnx$/.test(progress.file||''))send('loading',{progress:progress.progress??(progress.status==='done'?100:0)});}});}
   send('transcribing');
-  const result=await transcriber(new Float32Array(audio),{language:'arabic',task:'transcribe',return_timestamps:true,chunk_length_s:30,stride_length_s:5,max_new_tokens:384,do_sample:false});
+  const result=await transcriber(new Float32Array(audio),{...(lang&&lang!=='auto'?{language:lang}:{}),task:'transcribe',return_timestamps:true,chunk_length_s:30,stride_length_s:5,max_new_tokens:384,do_sample:false});
   send('complete',{result});
  }catch(error){transcriber=null;send('error',{message:error?.message||String(error)});}
 };

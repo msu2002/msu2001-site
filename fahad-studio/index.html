@@ -10,23 +10,24 @@
   <meta name="apple-mobile-web-app-title" content="Fahad Studio">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta name="description" content="Fahad Studio — محرر فيديو عربي مجاني، يعمل محليًا على جهازك دون حساب أو علامة مائية.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob: data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; worker-src 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob: data:; connect-src 'self' https://api.mymemory.translated.net; object-src 'none'; base-uri 'self'; form-action 'none'; worker-src 'self'">
   <title>Fahad Studio | فهد أستديو</title>
   <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="style.css?v=1.10.0">
-  <script src="core.js?v=1.10.0" defer></script>
-  <script src="captions.js?v=1.10.0" defer></script>
-  <script src="fonts.js?v=1.10.0" defer></script>
-  <script src="gold.js?v=1.10.0" defer></script>
-  <script src="creative.js?v=1.10.0" defer></script>
-  <script src="lut.js?v=1.10.0" defer></script>
-  <script src="textfx.js?v=1.10.0" defer></script>
-  <script src="tools.js?v=1.10.0" defer></script>
-  <script src="privacy.js?v=1.10.0" defer></script>
-  <script src="extras.js?v=1.10.0" defer></script>
-  <script src="ai.js?v=1.10.0" defer></script>
-  <script src="app.js?v=1.10.0" defer></script>
+  <link rel="stylesheet" href="style.css?v=1.11.0">
+  <script src="core.js?v=1.11.0" defer></script>
+  <script src="captions.js?v=1.11.0" defer></script>
+  <script src="fonts.js?v=1.11.0" defer></script>
+  <script src="gold.js?v=1.11.0" defer></script>
+  <script src="creative.js?v=1.11.0" defer></script>
+  <script src="lut.js?v=1.11.0" defer></script>
+  <script src="textfx.js?v=1.11.0" defer></script>
+  <script src="tools.js?v=1.11.0" defer></script>
+  <script src="privacy.js?v=1.11.0" defer></script>
+  <script src="extras.js?v=1.11.0" defer></script>
+  <script src="ai.js?v=1.11.0" defer></script>
+  <script src="pro.js?v=1.11.0" defer></script>
+  <script src="app.js?v=1.11.0" defer></script>
 </head>
 <body>
 <header class="topbar">
@@ -62,7 +63,7 @@
   <section class="timeline" aria-label="الخط الزمني">
     <div class="timeline-toolbar" dir="ltr"><div class="tl-group" aria-label="التراجع"><button class="icon-button" id="undo" title="تراجع (Ctrl/⌘ Z)" aria-label="تراجع"><i data-icon="undo"></i></button><button class="icon-button" id="redo" title="إعادة (Ctrl/⌘ Shift Z)" aria-label="إعادة"><i data-icon="redo"></i></button></div><div class="tl-group" aria-label="التحرير"><button class="button compact tl-menu-btn" id="tl-tool" data-tl-menu="tool" title="اختيار الأداة (A تحديد · E شفرة)"><i data-icon="blade"></i><span id="tl-tool-label">تحديد</span> ▾</button><button class="button compact" id="split" title="تقسيم عند مؤشر التشغيل (S)"><i data-icon="scissors"></i> تقسيم</button><button class="button compact tl-menu-btn" data-tl-menu="cut" title="قص ونسخ ولصق"><i data-icon="copy"></i> تحرير ▾</button><button class="icon-button" id="duplicate" title="تكرار المقطع (Ctrl D)" aria-label="تكرار المقطع"><i data-icon="copy"></i></button><button class="icon-button danger" id="delete" title="حذف المقطع (Delete)" aria-label="حذف المقطع"><i data-icon="trash"></i></button></div><div class="tl-group" aria-label="تأثيرات المقطع"><button class="button compact tl-menu-btn" data-tl-menu="xform" title="لقطة مجمدة، قلب، تدوير"><i data-icon="flip"></i> تحويل ▾</button><button class="button compact tl-menu-btn" data-tl-menu="speed" title="سرعة المقطع"><i data-icon="speed"></i> سرعة ▾</button><button class="button compact tl-menu-btn" data-tl-menu="audio" title="عزل الصوت وكتمه"><i data-icon="music"></i> صوت ▾</button></div><div class="tl-group" aria-label="المسارات"><button class="button compact tl-menu-btn" data-tl-menu="track" title="إضافة مسار فيديو أو كتابة أو صوت"><i data-icon="tracks"></i> مسار جديد ▾</button><button class="button compact" data-tl-cmd="marker" title="علامة عند المؤشر (M)"><i data-icon="marker"></i> علامة</button><button class="icon-button active-toggle" id="snap" aria-label="تفعيل المغناطيس" title="محاذاة المقاطع (N)"><i data-icon="magnet"></i></button></div><div class="tl-spacer"></div><div class="tl-group timeline-options"><button class="icon-button" data-tl-cmd="keys" title="اختصارات لوحة المفاتيح" aria-label="اختصارات لوحة المفاتيح"><i data-icon="keyboard"></i></button><button class="icon-button" id="zoom-out" aria-label="تصغير الخط الزمني"><i data-icon="minus"></i></button><input id="zoom" aria-label="تكبير الخط الزمني" type="range" min="15" max="100" value="48"><button class="icon-button" id="zoom-in" aria-label="تكبير الخط الزمني"><i data-icon="plus"></i></button><button class="button compact" id="fit-timeline">ملاءمة</button></div></div>
     <div class="timeline-body" dir="ltr"><div class="track-labels" id="track-labels"></div><div class="timeline-scroll" id="timeline-scroll"><div class="timeline-content" id="timeline-content"><div class="ruler" id="ruler" aria-label="اختيار وقت المعاينة"></div><div id="tracks"></div><div class="playhead" id="playhead"><span></span></div></div></div></div>
-    <footer class="statusbar"><span><span class="status-dot"></span> جميع المعالجة على جهازك</span><span id="timeline-summary">٤ مسارات · مشروع تجريبي قابل للتعديل</span><span dir="ltr">FAHAD STUDIO <b>MVP 1.10.0</b></span></footer>
+    <footer class="statusbar"><span><span class="status-dot"></span> جميع المعالجة على جهازك</span><span id="timeline-summary">٤ مسارات · مشروع تجريبي قابل للتعديل</span><span dir="ltr">FAHAD STUDIO <b>MVP 1.11.0</b></span></footer>
   </section>
 </div>
 <input type="file" id="file-input" multiple accept="video/*,image/*,audio/*" hidden>

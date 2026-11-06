@@ -71,7 +71,7 @@ function renderPanel(){creativeObserver?.disconnect();const title={motion:'مك�
  if(['templates','motion','effects','transitions'].includes(panel)){renderCreative(root);return;}
  if(panel==='media'||panel==='audio'){const show=[...assets.values()].filter(a=>(panel!=='audio'||a.type==='audio')&&(filter==='all'||a.type===filter||(filter==='video'&&a.type==='scene'))&&a.name.toLowerCase().includes(search.toLowerCase()));root.innerHTML=importZone+(panel==='media'?`<div class="library-tabs"><button data-filter="all" class="${filter==='all'?'active':''}">الكل</button><button data-filter="video" class="${filter==='video'?'active':''}">فيديو</button><button data-filter="image" class="${filter==='image'?'active':''}">صور</button><button data-filter="audio" class="${filter==='audio'?'active':''}">صوت</button></div>`:'<div class="section-label">ملفاتك الصوتية</div>')+`<div class="asset-grid">${show.map(a=>`<article class="asset-card" draggable="true" data-asset="${esc(a.id)}"><div class="asset-thumb" data-add="${esc(a.id)}" role="button" tabindex="0" aria-label="إضافة ${esc(a.name)} إلى الخط الزمني">${a.thumb?`<img alt="" src="${a.thumb}">`:`<span style="display:grid;place-items:center;height:100%;color:#82ccb9">${icon('music')}</span>`}<span class="asset-duration">${C.time(a.duration)}</span><span class="asset-add">${icon('plus')}</span></div><button class="asset-remove" data-remove-asset="${esc(a.id)}" aria-label="حذف ${esc(a.name)} من المكتبة" title="حذف من المكتبة" draggable="false">${icon('trash')}</button><strong title="${esc(a.name)}">${esc(a.name)}</strong><small>${a.type==='scene'?'مشهد أصلي · مجاني':a.type==='audio'?'صوت محلي · '+fileSize(a.blob?.size||0):(a.width+' × '+a.height)}</small></article>`).join('')}</div><p class="mini-tip">${icon('info')}<span>${show.length?'اضغط + أو اسحب الملف إلى الخط الزمني.':'أضف ملفاتك من جهازك لتبدأ.'}</span></p>`;
  }else if(panel==='text'){root.innerHTML=`<button class="button primary" data-action="add-text">${icon('plus')} إضافة نص جديد</button>`+[['title','عنوان يحكي قصتك','عنوان رئيسي · ظهور ناعم'],['caption','تفاصيل تصنع الفرق','عنوان سفلي · صعود'],['bold','ابدأ الإبداع','عنوان بارز · تكبير']].map(([id,t,sub])=>`<button class="text-preset" data-text-preset="${id}"><strong style="color:${id==='bold'?'#b4a2ff':'#eef0ff'}">${t}</strong><small>${sub}</small></button>`).join('');
- }else{root.innerHTML=`<div class="smart-card"><span class="feature-status">متاح الآن · على جهازك</span><h3>الكتابة العربية التلقائية</h3><p>أضف الفيديو وسيُكتب كلامه بالعربية على الخط الزمني. يمكنك تعديل السطور والتوقيت.</p><button class="button" data-action="captions-panel">فتح الترجمة التلقائية</button></div><div class="smart-card"><span class="feature-status">متاح الآن · دون نموذج AI</span><h3>توازن مستوى الصوت</h3><p>تحليل محلي لقوة الصوت وضبط مستوى المقطع المحدد. ليس إزالة ضوضاء.</p><button class="button" data-action="normalize">${icon('volume')} موازنة الصوت المحدد</button></div><div class="smart-card"><span class="feature-status">متاح الآن · يدوي</span><h3>إعادة التأطير للمنصات</h3><p>اختر 9:16 أو 1:1 من المعاينة، ثم اضبط الحجم والموضع من الخصائص.</p></div><div class="smart-card"><span class="feature-status planned">مخطط له · غير متاح</span><h3>ذكاء اصطناعي على جهازك</h3><p>إزالة الخلفية واكتشاف المشاهد والتوليد غير متاحة. التفريغ العربي متاح في تبويب الترجمة.</p></div>`;}
+ }else{root.innerHTML=`<div class="smart-card"><span class="feature-status">متاح الآن · على جهازك</span><h3>الكتابة العربية التلقائية</h3><p>أضف الفيديو وسيُكتب كلامه بالعربية على الخط الزمني. يمكنك تعديل السطور والتوقيت.</p><button class="button" data-action="captions-panel">فتح الترجمة التلقائية</button></div><div class="smart-card"><span class="feature-status">متاح الآن · دون نموذج AI</span><h3>توازن مستوى الصوت</h3><p>تحليل محلي لقوة الصوت وضبط مستوى المقطع المحدد. ليس إزالة ضوضاء.</p><button class="button" data-action="normalize">${icon('volume')} موازنة الصوت المحدد</button></div><div class="smart-card"><span class="feature-status">متاح الآن · يدوي</span><h3>إعادة التأطير للمنصات</h3><p>اختر 9:16 أو 1:1 من المعاينة، ثم اضبط الحجم والموضع من الخصائص.</p></div><div class="smart-card"><span class="feature-status">متاح الآن · على جهازك</span><h3>أدوات ذكية على جهازك</h3><p>ترجمة الفيديو الناطق بلغة أخرى إلى العربية، وتمويه الخلفية وإزالتها، وكشف المشاهد، والمونتاج الذكي. كلها تعمل محليًا.</p><div class="quick-row smart-tools"><button data-action="captions-panel" data-tool="translate">🌍 ترجمة للعربية</button><button data-tool="privacy">🛡 الخلفية والخصوصية</button><button data-tool="smart">🧠 مونتاج ذكي</button><button data-tool="pro">🚀 احترافي</button></div></div>`;}
 }
 function field(label,key,value,type='number',extra=''){return `<label class="field">${label}<input data-prop="${key}" type="${type}" value="${esc(value)}" ${extra}></label>`;}
 function range(label,key,val,min,max,step=1,unit=''){return `<label class="field"><span>${label}<output>${num(val)}${unit}</output></span><input data-prop="${key}" type="range" min="${min}" max="${max}" step="${step}" value="${val}"></label>`;}
@@ -94,7 +94,7 @@ function draw(cx,t,w,h,state=p,bank=assets){
  for(const c of layers){
   if(!C.active(c,t)||tr(c.track)?.hidden||(c.subtitleOf&&tr(state.clips.find(v=>v.id===c.subtitleOf)?.track)?.hidden))continue;
   const local=t-c.start;lc.clearRect(0,0,W,H);lc.save();if(filterSupported)lc.filter=X.filter(c);
-  lc.translate(c.x*W,c.y*H);lc.rotate(c.rotation*Math.PI/180);lc.scale(c.scale,c.scale);if(c.flipX||c.flipY)lc.scale(c.flipX?-1:1,c.flipY?-1:1);X.motion(lc,c.motion,local,c.duration,W,H,c.motionAmount??.6);
+  lc.translate((c.xk&&window.FahadTools&&FahadTools.kx?FahadTools.kx(c,local):c.x)*W,c.y*H);lc.rotate(c.rotation*Math.PI/180);lc.scale(c.scale,c.scale);if(c.flipX||c.flipY)lc.scale(c.flipX?-1:1,c.flipY?-1:1);X.motion(lc,c.motion,local,c.duration,W,H,c.motionAmount??.6);
   if(c.kind==='text'){
    X.textMotion(lc,c.animation,local,c.duration,W,H,c);lc.font=`${c.fontWeight||(c.bold?700:400)} ${c.fontSize}px ${FM.request(c.fontId)}`;
    lc.textAlign='center';lc.textBaseline='middle';lc.direction=/\p{Script=Arabic}/u.test(c.text)?'rtl':'ltr';
@@ -176,7 +176,7 @@ function captionSource(){
 }
 function captionStatus(a){
  const state=a?.transcription?.status;
- return ({queued:'في قائمة الانتظار',decoding:'جارٍ تجهيز صوت الفيديو محليًا…',loading:'جارٍ تجهيز نموذج الكتابة على جهازك…',transcribing:'جارٍ كتابة الكلام بالعربية…',complete:'الكتابة العربية جاهزة',empty:'لم يُكتشف كلام قابل للتفريغ',cancelled:'أُوقفت الكتابة — يمكنك إعادة المحاولة',error:a?.transcription?.message||'تعذّر التفريغ'})[state]||'يبدأ التفريغ تلقائيًا عند إضافة فيديو جديد';
+ return ({queued:'في قائمة الانتظار',decoding:'جارٍ تجهيز صوت الفيديو محليًا…',loading:'جارٍ تجهيز نموذج الكتابة على جهازك…',transcribing:'جارٍ كتابة الكلام…',translating:'جارٍ ترجمة النص إلى العربية…',complete:'الكتابة العربية جاهزة',empty:'لم يُكتشف كلام قابل للتفريغ',cancelled:'أُوقفت الكتابة — يمكنك إعادة المحاولة',error:a?.transcription?.message||'تعذّر التفريغ'})[state]||'يبدأ التفريغ تلقائيًا عند إضافة فيديو جديد';
 }
 function renderCaptionPanel(root){
  const videos=[...assets.values()].filter(a=>a.type==='video'),a=captionSource(),busy=captionRun?.assetId===a?.id||captionQueue.some(j=>j.assetId===a?.id),state=a?.transcription?.status;
@@ -222,7 +222,7 @@ function inferCaptions(samples,job,a){
     if(data.type==='transcribing'){job.percent=undefined;captionState(a,'transcribing');}
    };
    captionWorker.onerror=event=>{console.warn('ASR worker failed',event.message);reject(Error('تعذّر بدء محرك الكتابة المحلي. أعد فتح التطبيق أو جرّب متصفحًا حديثًا.'));};
-   captionWorker.postMessage({id:job.id,audio:samples.buffer},[samples.buffer]);
+   captionWorker.postMessage({id:job.id,audio:samples.buffer,lang:(window.FahadASR&&FahadASR.lang)||'arabic'},[samples.buffer]);
   }catch{reject(Error('تعذّر بدء محرك الكتابة. شغّل التطبيق من رابط المعاينة أو موقع HTTPS.'));}
  });
 }
@@ -238,7 +238,8 @@ async function pumpCaptions(){
   let energy=0;for(let i=0;i<samples.length;i++)energy+=samples[i]*samples[i];
   const result=Math.sqrt(energy/Math.max(1,samples.length))<.0001?{text:'',chunks:[]}:await inferCaptions(samples,job,a);
   if(job.cancelled||p.id!==job.projectId||assets.get(a.id)!==a)throw Error('ASR_CANCELLED');
-  const cues=CM.normalize(result,a.duration),before=C.clone(p),oldCues=a.captions,oldState=a.transcription;
+  let cues=CM.normalize(result,a.duration);if(cues.length&&window.FahadASR&&FahadASR.lang&&FahadASR.lang!=='arabic'&&FahadASR.translate){captionState(a,'translating');cues=await FahadASR.translate(cues,FahadASR.lang,{duration:a.duration});if(job.cancelled||p.id!==job.projectId||assets.get(a.id)!==a)throw Error('ASR_CANCELLED');}
+  const before=C.clone(p),oldCues=a.captions,oldState=a.transcription;
   try{
    remember();a.captions=cues;captionState(a,cues.length?'complete':'empty');syncAssets();CM.reconcile(p);C.validate(p);changed();
   }catch(error){p=before;a.captions=oldCues;a.transcription=oldState;undo.pop();throw error;}
