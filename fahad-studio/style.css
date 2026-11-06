@@ -23,3 +23,21 @@
 .asset-card{position:relative}.asset-remove{position:absolute;top:5px;left:5px;z-index:2;display:grid;place-items:center;width:27px;height:27px;padding:5px;border:1px solid #9c647c99;border-radius:6px;color:#ffdae3;background:#291c32e8;box-shadow:0 2px 6px #0005;cursor:pointer}.asset-remove .icon{width:15px;height:15px;pointer-events:none}.asset-remove:hover{background:#77364e;color:#fff;border-color:#ed9cb6}.asset-remove:focus-visible{outline:2px solid #f4c4d3;outline-offset:2px}.button.danger{background:#95435f;border-color:#c97691;color:#fff}.button.danger:hover{background:#ac4d6e}.remove-asset-name{font-size:14px;font-weight:700;color:#eee3fc;overflow-wrap:anywhere;unicode-bidi:plaintext;line-height:1.8}#remove-asset-description{font-size:12px;line-height:2}#remove-asset-dialog .fine-print{line-height:1.9}@media(max-width:650px){.asset-remove{width:28px;height:28px;top:3px;left:3px;padding:6px}#remove-asset-dialog{padding:18px}#remove-asset-description{font-size:11px}}
 
 .creative-card.is-gold{border-color:#a08048;background:linear-gradient(140deg,#342a1e,#201e24)}.creative-card.is-gold>strong{color:#f0d69d}.creative-card.is-gold .creative-add{background:#7a6033;border-color:#b18b4d;color:#fff0cf}.gold-properties h3{color:#e8c784}.gold-properties input[type=range]{accent-color:#d4ae63}
+
+.lut-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;margin:10px 0}
+.lut-card{position:relative;display:flex;flex-direction:column;gap:4px;padding:4px;border:1px solid #2c3350;border-radius:8px;background:#191d30}
+.lut-card.is-selected{border-color:#8f7bff;box-shadow:0 0 0 1px #8f7bff}
+.lut-card>button:first-child{padding:0;border:0;background:none;cursor:pointer;display:block}
+.lut-card canvas{width:100%;aspect-ratio:16/9;border-radius:5px;display:block;background:#000}
+.lut-card strong{font-size:10.5px;color:#dfe3f6;text-align:center;font-weight:600}
+.lut-del{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;border:0;background:#000a;color:#fff;cursor:pointer;line-height:1}
+.lut-actions{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+.lut-panel .field output{margin-inline-start:6px;color:#b4a2ff}
+
+.track-label.is-active{background:#2a2450;box-shadow:inset 3px 0 0 #8f7bff}
+.track-label{cursor:pointer}
+.track-label [data-track-del]{margin-inline-start:2px;border:0;background:none;color:#ff8d9a;cursor:pointer;font-size:14px}
+.track-add{display:flex;flex-direction:column;gap:3px;padding:6px 4px}
+.track-add button{font-size:10px;padding:3px 4px;border:1px dashed #3b4470;border-radius:6px;background:none;color:#aeb6d6;cursor:pointer}
+.track-add button:hover{border-color:#8f7bff;color:#fff}
+.quick-row{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:8px 0}.quick-row button{font-size:10px;padding:6px 2px;border:1px solid #333b60;border-radius:7px;background:#191d30;color:#cfd5f0;cursor:pointer}.quick-row button:hover{border-color:#8f7bff}
