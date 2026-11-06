@@ -190,3 +190,15 @@ button,.tool,.asset-card,.timeline-clip,.ruler{touch-action:manipulation}
  .transport{justify-content:space-between}
  .time-readout span{display:none}
 }
+
+/* v1.8.1 share + home */
+.home-btn{padding-inline:12px}
+.share-presets{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:8px;margin:0 0 12px}
+.share-chip{display:flex;flex-direction:column;gap:3px;align-items:flex-start;text-align:right;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:#1c2031;min-height:52px}
+.share-chip b{font-size:12px;font-weight:700}.share-chip small{font-size:9px;color:var(--muted)}
+.share-chip:hover{border-color:#8775ce}.share-chip.active{border-color:var(--accent);background:#8d7aff1c}
+.share-hint{font-size:11px;line-height:1.9;color:#b9c0d8;margin:0 0 12px;padding:9px 11px;background:#232842;border-radius:8px}
+.share-hint .button{margin-inline-start:8px}
+#export-share{width:100%;margin-top:8px}
+@media(max-width:700px){.home-btn span,#share-open span{display:none!important}.home-btn{padding:6px 10px!important}#share-open{padding:6px 10px!important}.share-presets{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.export-illustration{display:none}}

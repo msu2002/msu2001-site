@@ -224,6 +224,44 @@ compactMQ.addEventListener?.('change',()=>{document.body.classList.remove('sheet
  document.addEventListener('touchstart',e=>{if(e.touches.length===2&&e.target.closest&&e.target.closest('#timeline-scroll')){d0=dist(e);z0=+($('#zoom')?.value||48);}},{passive:true});
  document.addEventListener('touchmove',e=>{if(e.touches.length===2&&d0&&e.target.closest&&e.target.closest('#timeline-scroll')){e.preventDefault();const z=clamp(Math.round(z0*dist(e)/d0),15,100),el=$('#zoom');if(el&&+el.value!==z){el.value=z;el.dispatchEvent(new Event('input',{bubbles:true}));}}},{passive:false});
  document.addEventListener('touchend',e=>{if(e.touches.length<2)d0=0;},{passive:true});})();
+
+/* ---- Share / social export presets ---- */
+const PRESETS=[
+ {id:'ig-reels',n:'إنستغرام ريلز / ستوري',s:1080,b:8e6,f:30,r:'720x1280',c:'mp4',note:'9:16 · 1080p · H.264'},
+ {id:'tiktok',n:'تيك توك',s:1080,b:8e6,f:30,r:'720x1280',c:'mp4',note:'9:16 · 1080p · H.264'},
+ {id:'snap',n:'سناب شات',s:1080,b:5e6,f:30,r:'720x1280',c:'mp4',note:'9:16 · 1080p · H.264'},
+ {id:'yt-shorts',n:'يوتيوب شورتس',s:1080,b:8e6,f:30,r:'720x1280',c:'mp4',note:'9:16 · 1080p'},
+ {id:'yt',n:'يوتيوب',s:1080,b:16e6,f:30,r:'1280x720',c:'mp4',note:'16:9 · 1080p · جودة عالية'},
+ {id:'yt4k',n:'يوتيوب 4K',s:2160,b:30e6,f:30,r:'1280x720',c:'mp4',note:'16:9 · 4K'},
+ {id:'ig-post',n:'إنستغرام (منشور)',s:1080,b:5e6,f:30,r:'1080x1080',c:'mp4',note:'1:1 · 1080p'},
+ {id:'x',n:'X (تويتر)',s:1080,b:5e6,f:30,r:'1280x720',c:'mp4',note:'16:9 · 1080p'},
+ {id:'fb',n:'فيسبوك',s:1080,b:5e6,f:30,r:'1280x720',c:'mp4',note:'16:9 · 1080p'},
+ {id:'wa',n:'واتساب / تيليجرام',s:720,b:2.5e6,f:30,r:null,c:'mp4',note:'حجم صغير · 720p'},
+ {id:'best',n:'أعلى جودة',s:1440,b:16e6,f:30,r:null,c:'mp4',note:'2K · 16 Mbps'}
+];
+const CODEC_PREF={mp4:['video/mp4;codecs=avc1.640028,mp4a.40.2','video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/mp4','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm']};
+function setSel(id,v){const el=$(id);if(!el)return false;const o=[...el.options].find(x=>x.value===String(v));if(o){el.value=o.value;return true;}return false;}
+function applyPreset(id){const p=PRESETS.find(x=>x.id===id);if(!p)return;
+ setSel('#export-size',p.s);setSel('#export-bitrate',p.b);setSel('#export-fps',p.f);
+ for(const m of CODEC_PREF[p.c])if(setSel('#export-format',m))break;
+ document.querySelectorAll('#share-presets button').forEach(b=>b.classList.toggle('active',b.dataset.preset===id));
+ const hint=$('#share-hint');const cur=$('#aspect')?.value;
+ if(p.r&&cur!==p.r){hint.hidden=false;hint.innerHTML='النسبة الموصى بها لهذه المنصة <b>'+p.r.replace('x',' × ')+'</b> — نسبة مشروعك الحالية '+String(cur).replace('x',' × ')+'. <button class="button compact" id="share-fit">اضبط النسبة</button>';
+  $('#share-fit').onclick=()=>{const a=$('#aspect');a.value=p.r;a.dispatchEvent(new Event('change',{bubbles:true}));applyPreset(id);};}
+ else{hint.hidden=false;hint.textContent='✓ إعدادات '+p.n+' جاهزة: '+p.note;}
+}
+function buildShare(){const box=$('#share-presets');if(!box||box.dataset.ok)return;box.dataset.ok=1;
+ box.innerHTML=PRESETS.map(p=>'<button type="button" class="share-chip" data-preset="'+p.id+'"><b>'+p.n+'</b><small>'+p.note+'</small></button>').join('');
+ box.addEventListener('click',e=>{const b=e.target.closest('[data-preset]');if(b)applyPreset(b.dataset.preset);});
+ $('#share-open')?.addEventListener('click',()=>{$('#export-open').click();setTimeout(()=>{const d=$('#export-dialog');d?.querySelector('h2')&&(d.querySelector('h2').textContent='مشاركة على منصات التواصل');box.scrollIntoView({block:'nearest'});},50);});
+ $('#export-open')?.addEventListener('click',()=>{setTimeout(()=>{const h=$('#export-dialog h2');if(h&&!$('#export-dialog').dataset.share)h.textContent='حكايتك جاهزة للمشاركة';},0);},true);
+ const sb=$('#export-share');
+ if(sb){const can=()=>{try{return !!navigator.canShare&&!!navigator.share;}catch{return false;}};
+  new MutationObserver(()=>{sb.hidden=!(can()&&!$('#export-result').hidden);}).observe($('#export-result'),{attributes:true,attributeFilter:['hidden']});
+  sb.onclick=async()=>{try{const a=$('#export-download');const blob=await fetch(a.href).then(r=>r.blob());const name=a.download||'video.mp4';const f=new File([blob],name,{type:blob.type||'video/mp4'});
+   if(navigator.canShare({files:[f]}))await navigator.share({files:[f],title:name});else A().toast('جهازك لا يدعم مشاركة الملف مباشرة. نزّله ثم شاركه من تطبيقك.','error');}catch(e){if(e&&e.name!=='AbortError')A().toast('تعذّرت المشاركة: '+e.message,'error');}};}
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',buildShare);else buildShare();
 /* ---- UI ---- */
 const MENUS=[
  ['tool','أداة',[['select','تحديد','A'],['blade','شفرة: تقسيم بالنقر','E'],['selLeft','تحديد ما على اليسار','['],['selRight','تحديد ما على اليمين',']'],['selAll','تحديد الكل','Ctrl+A']]],
