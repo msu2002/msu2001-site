@@ -40,7 +40,9 @@ const CMDS={
  trackVisual(){addTrack('visual');},trackText(){addTrack('text');},trackAudio(){addTrack('audio');},
  freeze(){freeze();},
  silence(){removeSilence();},
- montage(){montageOpen();}
+ montage(){montageOpen();},
+ enhance(){enhanceAudio();},
+ chromaG(){chromaSet('green');},chromaB(){chromaSet('blue');},chromaMore(){chromaAdj(.08);},chromaLess(){chromaAdj(-.08);},chromaOff(){chromaOff();}
 };
 function vis(){const a=A(),c=a.chosen();if(!c||c.kind==='audio'){a.toast('حدّد مقطع فيديو أو صورة أو نصًا.');return null;}return c;}
 function addTrack(kind){const a=A(),letter={visual:'v',text:'t',audio:'a'}[kind];a.edit(()=>{const p=a.p;if(p.tracks.filter(t=>t.kind===kind).length>=5)throw Error('وصلت إلى الحد الأقصى لهذا النوع (٥ مسارات).');let n=1;while(p.tracks.some(t=>t.id===letter+n))n++;if(n>9)throw Error('لا توجد معرّفات مسارات متاحة.');const t={id:letter+n,name:{visual:'فيديو/صور',text:'نصوص',audio:'صوت'}[kind]+' '+n,kind,hidden:false,muted:false};if(kind==='visual')p.tracks.unshift(t);else if(kind==='text')p.tracks.splice(Math.max(0,p.tracks.findIndex(x=>x.kind==='text')),0,t);else p.tracks.push(t);a.activeTrack=t.id;});}
@@ -150,13 +152,64 @@ function runMontage(key,title,fit){
  a.toast('تم المونتاج التلقائي: '+n+' مقطع بنمط «'+st.name+'». يمكنك الآن تعديل أي شيء.','success');
 }
 (()=>{const s=document.createElement('style');s.textContent='#montage-dialog{max-width:440px;width:92vw}.mt-info{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);margin:8px 0}.mt-styles{display:grid;gap:8px;margin:10px 0}.mt-opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;background:#191d2c}.mt-opt:has(input:checked){border-color:var(--accent);background:#2a2750}.mt-opt strong{display:block;font-size:13px}.mt-opt small{display:block;color:var(--muted);font-size:11px;margin-top:2px;line-height:1.7}.mt-check{display:flex;gap:8px;align-items:center;font-size:12px;margin:6px 0}.mt-magic{background:linear-gradient(135deg,#8d7aff,#c07bff)!important;color:#fff!important;border:0!important;font-weight:700}';document.head.append(s);})();
+
+/* ---- Audio enhance: denoise gate + high-pass + compressor + loudness ---- */
+function wavBlob(data,sr){const n=data.length,b=new ArrayBuffer(44+n*2),v=new DataView(b);const w=(o,t)=>{for(let i=0;i<t.length;i++)v.setUint8(o+i,t.charCodeAt(i));};w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);for(let i=0;i<n;i++){const x=Math.max(-1,Math.min(1,data[i]));v.setInt16(44+i*2,x<0?x*32768:x*32767,true);}return new Blob([b],{type:'audio/wav'});}
+async function enhanceAudio(){
+ const a=A(),c=a.chosen();
+ if(!c||!['video','audio'].includes(c.kind)||isSub(c)){a.toast('حدّد مقطع فيديو أو صوت لتحسين صوته.');return;}
+ const as=a.assets.get(c.assetId);if(!as||!as.blob){a.toast('تعذّر الوصول إلى ملف المقطع.');return;}
+ if(as.blob.size>250*1048576||as.duration>1200){a.toast('الملف طويل جدًا للمعالجة داخل المتصفح (الحد 20 دقيقة).');return;}
+ a.toast('جارٍ تحسين الصوت… قد يستغرق لحظات.');
+ try{
+  const dec=await new OfflineAudioContext(1,1,44100).decodeAudioData(await as.blob.arrayBuffer());
+  const sr=dec.sampleRate,len=dec.length;
+  const off=new OfflineAudioContext(1,len,sr),src=off.createBufferSource();src.buffer=dec;
+  const hp=off.createBiquadFilter();hp.type='highpass';hp.frequency.value=90;hp.Q.value=.7;
+  const lp=off.createBiquadFilter();lp.type='lowpass';lp.frequency.value=14000;
+  const comp=off.createDynamicsCompressor();comp.threshold.value=-26;comp.knee.value=18;comp.ratio.value=3;comp.attack.value=.01;comp.release.value=.2;
+  src.connect(hp);hp.connect(lp);lp.connect(comp);comp.connect(off.destination);src.start();
+  const r=await off.startRendering(),d=r.getChannelData(0);
+  const win=Math.round(sr*.03),nw=Math.floor(len/win),rms=new Float32Array(nw);
+  for(let w=0;w<nw;w++){let s2=0;for(let i=w*win;i<(w+1)*win;i++)s2+=d[i]*d[i];rms[w]=Math.sqrt(s2/win);}
+  const sorted=[...rms].sort((x,y)=>x-y),floor=Math.max(1e-4,sorted[Math.floor(nw*.1)]||1e-4),thr=floor*2.6;
+  const g=new Float32Array(nw);let cur=1;for(let w=0;w<nw;w++){const t=rms[w]>=thr?1:Math.max(.1,Math.pow(rms[w]/thr,1.6));cur=t>cur?cur+(t-cur)*.6:cur+(t-cur)*.12;g[w]=cur;}
+  const out=new Float32Array(len);for(let w=0;w<nw;w++){const g0=g[w],g1=g[Math.min(nw-1,w+1)];for(let i=0;i<win;i++)out[w*win+i]=d[w*win+i]*(g0+(g1-g0)*i/win);}
+  let ss=0,cnt=0;for(let w=0;w<nw;w++)if(rms[w]>=thr){ss+=rms[w]*rms[w];cnt++;}
+  const speech=Math.sqrt(ss/Math.max(1,cnt))||.05;let gain=Math.min(8,.14/speech),peak=0;for(let i=0;i<len;i++){const v=Math.abs(out[i]);if(v>peak)peak=v;}
+  if(peak*gain>.97)gain=.97/peak;for(let i=0;i<len;i++)out[i]*=gain;
+  const file=new File([wavBlob(out,sr)],'صوت محسّن.wav',{type:'audio/wav'});
+  const na=await a.loadAsset(file,{name:'صوت محسّن — '+as.name.slice(0,30),type:'audio'});a.assets.set(na.id,na);
+  a.edit(()=>{const p=a.p;
+   if(c.kind==='audio'){c.assetId=na.id;c.name='صوت محسّن';}
+   else{let at=p.tracks.filter(t=>t.kind==='audio').find(t=>!p.clips.some(x=>x.track===t.id&&x.start<c.start+c.duration&&x.start+x.duration>c.start))||p.tracks.find(t=>t.id==='a1');
+    const ac=a.C.clip(na,c.start,at.id);ac.in=c.in;ac.duration=c.duration;ac.volume=c.volume||1;if(c.speed)ac.speed=c.speed;ac.name='صوت محسّن: '+c.name.slice(0,30);ac.videoLink=c.id;c.audioLink=ac.id;c.volume=0;p.clips.push(ac);}});
+  a.toast('تم تحسين الصوت: إزالة ضجيج الخلفية وتخفيف الدمدمة وتوحيد المستوى.','success');
+ }catch(e){a.toast('تعذّر تحسين الصوت: '+(e.message||'ملف غير مدعوم'),'error');}
+}
+/* ---- Chroma key (green/blue screen) ---- */
+function chroma(canvas,c){
+ const k=c.chroma;if(!k)return;const w=canvas.width,h=canvas.height,ctx=canvas.getContext('2d');if(!ctx||!w||!h)return;
+ let img;try{img=ctx.getImageData(0,0,w,h);}catch{return;}
+ const px=img.data,hex=k.k==='blue'?[0,70,255]:[0,255,0],ky=(-.168736*hex[0]-.331264*hex[1]+.5*hex[2]),kr=(.5*hex[0]-.418688*hex[1]-.081312*hex[2]);
+ const t0=Math.max(2,k.s*110),t1=t0+4+k.f*110,green=k.k!=='blue';
+ for(let i=0;i<px.length;i+=4){const r=px[i],g=px[i+1],b=px[i+2];if(!px[i+3])continue;
+  const cb=-.168736*r-.331264*g+.5*b,cr=.5*r-.418688*g-.081312*b,d=Math.hypot(cb-ky,cr-kr);
+  let a=d<=t0?0:d>=t1?1:(d-t0)/(t1-t0);a=a*a*(3-2*a);
+  if(a<1)px[i+3]*=a;
+  if(green){const m=Math.max(r,b);if(g>m)px[i+1]=m+(g-m)*.15;}else{const m=Math.max(r,g);if(b>m)px[i+2]=m+(b-m)*.15;}}
+ ctx.putImageData(img,0,0);
+}
+function chromaSet(kind){const c=vis();if(!c)return;A().edit(()=>{c.chroma={k:kind,s:.4,f:.15};});A().toast('أُزيلت الخلفية '+(kind==='blue'?'الزرقاء':'الخضراء')+'. اضبط القوة من قائمة «تحويل». ضع المقطع فوق مقطع آخر ليظهر خلفه.');}
+function chromaAdj(dl){const c=vis();if(!c)return;if(!c.chroma){A().toast('فعّل إزالة الخلفية أولًا.');return;}A().edit(()=>{c.chroma.s=clamp(+(c.chroma.s+dl).toFixed(2),.05,1);c.chroma.f=clamp(+(c.chroma.f+dl/2).toFixed(2),.02,.6);});}
+function chromaOff(){const c=vis();if(!c)return;A().edit(()=>{delete c.chroma;});}
 /* ---- UI ---- */
 const MENUS=[
  ['tool','أداة',[['select','تحديد','A'],['blade','شفرة: تقسيم بالنقر','E'],['selLeft','تحديد ما على اليسار','['],['selRight','تحديد ما على اليمين',']'],['selAll','تحديد الكل','Ctrl+A']]],
  ['cut','قص',[['split','تقسيم عند المؤشر','S'],['trimL','قص البداية حتى المؤشر','Q'],['trimR','قص النهاية من المؤشر','W'],['ripple','حذف وسدّ الفراغ','Shift+Del'],['copy','نسخ','Ctrl+C'],['cut','قصّ','Ctrl+X'],['paste','لصق','Ctrl+V'],['dup','تكرار','Ctrl+D']]],
- ['xform','تحويل',[['freeze','لقطة مجمدة','F'],['flipX','قلب أفقي (مرآة)','H'],['flipY','قلب رأسي','V'],['rot90','تدوير ٩٠°','R']]],
+ ['xform','تحويل',[['freeze','لقطة مجمدة','F'],['flipX','قلب أفقي (مرآة)','H'],['flipY','قلب رأسي','V'],['rot90','تدوير ٩٠°','R'],['chromaG','إزالة الخلفية الخضراء',''],['chromaB','إزالة الخلفية الزرقاء',''],['chromaMore','زيادة قوة إزالة الخلفية',''],['chromaLess','تقليل قوة إزالة الخلفية',''],['chromaOff','إلغاء إزالة الخلفية','']]],
  ['speed','سرعة',[['sp:0.25','٠٫٢٥×',''],['sp:0.5','٠٫٥×',''],['sp:0.75','٠٫٧٥×',''],['sp:1','عادية ١×',''],['sp:1.25','١٫٢٥×',''],['sp:1.5','١٫٥×',''],['sp:2','٢×',''],['sp:3','٣×',''],['sp:4','٤×','']]],
- ['audio','صوت',[['silence','حذف المقاطع الصامتة تلقائيًا',''],['detach','عزل الصوت عن الفيديو',''],['mute','كتم / إلغاء كتم المقطع','']]],
+ ['audio','صوت',[['enhance','تحسين الصوت (ضجيج + مستوى)',''],['silence','حذف المقاطع الصامتة تلقائيًا',''],['detach','عزل الصوت عن الفيديو',''],['mute','كتم / إلغاء كتم المقطع','']]],
  ['track','+ مسار',[['trackVisual','مسار فيديو / صور',''],['trackText','مسار كتابة',''],['trackAudio','مسار صوت','']]]
 ];
 const KEYS=[['Space','تشغيل / إيقاف'],['A','أداة التحديد'],['E','أداة الشفرة (انقر المقطع للتقسيم)'],['S','تقسيم عند المؤشر'],['Q / W','قص البداية / النهاية حتى المؤشر'],['[  /  ]','تحديد ما على يسار / يمين المؤشر'],['Delete','حذف'],['Shift+Delete','حذف وسدّ الفراغ'],['Ctrl+C / X / V','نسخ / قصّ / لصق'],['Ctrl+D','تكرار'],['Ctrl+A','تحديد الكل'],['Ctrl+Z / Ctrl+Shift+Z','تراجع / إعادة'],['F','لقطة مجمدة'],['H / V','قلب أفقي / رأسي'],['R','تدوير ٩٠°'],['M','علامة عند المؤشر'],[', / .','العلامة السابقة / التالية'],['← / →','إطار واحد (مع Shift: ثانية)'],['Home / End','البداية / النهاية'],['+ / −','تكبير / تصغير الخط الزمني'],['N','المغناطيس']];
@@ -212,6 +265,6 @@ function onKey(e){
 }
 document.addEventListener('keydown',onKey,true);
 function boot(){buildUI();}
-window.FahadTools={afterTimeline,pointer,run,get tool(){return tool},get multi(){return multi}};
+window.FahadTools={chroma,afterTimeline,pointer,run,get tool(){return tool},get multi(){return multi}};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
