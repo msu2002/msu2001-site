@@ -1,0 +1,3 @@
+MediaPipe Solutions (face_detection, selfie_segmentation) — Copyright Google LLC, Apache License 2.0.
+Files in this folder are unmodified distributions from npm: @mediapipe/face_detection@0.4.1646425229 and @mediapipe/selfie_segmentation@0.1.1675465747.
+License text: https://www.apache.org/licenses/LICENSE-2.0
