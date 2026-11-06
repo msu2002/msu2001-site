@@ -9,14 +9,15 @@
   <title>Fahad Studio | فهد أستديو</title>
   <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="style.css?v=1.5.0">
-  <script src="core.js?v=1.5.0" defer></script>
-  <script src="captions.js?v=1.5.0" defer></script>
-  <script src="fonts.js?v=1.5.0" defer></script>
-  <script src="gold.js?v=1.5.0" defer></script>
-  <script src="creative.js?v=1.5.0" defer></script>
-  <script src="lut.js?v=1.5.0" defer></script>
-  <script src="app.js?v=1.5.0" defer></script>
+  <link rel="stylesheet" href="style.css?v=1.6.0">
+  <script src="core.js?v=1.6.0" defer></script>
+  <script src="captions.js?v=1.6.0" defer></script>
+  <script src="fonts.js?v=1.6.0" defer></script>
+  <script src="gold.js?v=1.6.0" defer></script>
+  <script src="creative.js?v=1.6.0" defer></script>
+  <script src="lut.js?v=1.6.0" defer></script>
+  <script src="textfx.js?v=1.6.0" defer></script>
+  <script src="app.js?v=1.6.0" defer></script>
 </head>
 <body>
 <header class="topbar">
@@ -53,7 +54,7 @@
   <section class="timeline" aria-label="الخط الزمني">
     <div class="timeline-toolbar"><div class="timeline-edit"><button class="icon-button" id="undo" title="تراجع (Ctrl/⌘ Z)" aria-label="تراجع"><i data-icon="undo"></i></button><button class="icon-button" id="redo" title="إعادة (Ctrl/⌘ Shift Z)" aria-label="إعادة"><i data-icon="redo"></i></button><span class="separator"></span><button class="button compact" id="split" title="تقسيم عند مؤشر التشغيل (S)"><i data-icon="scissors"></i> تقسيم</button><button class="icon-button" id="duplicate" title="تكرار المقطع" aria-label="تكرار المقطع"><i data-icon="copy"></i></button><button class="icon-button danger" id="delete" title="حذف المقطع" aria-label="حذف المقطع"><i data-icon="trash"></i></button><span class="separator"></span><button class="icon-button active-toggle" id="snap" aria-label="تفعيل المغناطيس" title="محاذاة المقاطع"><i data-icon="magnet"></i></button></div><div class="timeline-options"><span class="timeline-hint">اسحب للترتيب · اسحب الحواف للقص</span><button class="icon-button" id="zoom-out" aria-label="تصغير الخط الزمني"><i data-icon="minus"></i></button><input id="zoom" aria-label="تكبير الخط الزمني" type="range" min="15" max="100" value="48"><button class="icon-button" id="zoom-in" aria-label="تكبير الخط الزمني"><i data-icon="plus"></i></button><button class="button compact" id="fit-timeline">ملاءمة</button></div></div>
     <div class="timeline-body" dir="ltr"><div class="track-labels" id="track-labels"></div><div class="timeline-scroll" id="timeline-scroll"><div class="timeline-content" id="timeline-content"><div class="ruler" id="ruler" aria-label="اختيار وقت المعاينة"></div><div id="tracks"></div><div class="playhead" id="playhead"><span></span></div></div></div></div>
-    <footer class="statusbar"><span><span class="status-dot"></span> جميع المعالجة على جهازك</span><span id="timeline-summary">٤ مسارات · مشروع تجريبي قابل للتعديل</span><span dir="ltr">FAHAD STUDIO <b>MVP 1.5.0</b></span></footer>
+    <footer class="statusbar"><span><span class="status-dot"></span> جميع المعالجة على جهازك</span><span id="timeline-summary">٤ مسارات · مشروع تجريبي قابل للتعديل</span><span dir="ltr">FAHAD STUDIO <b>MVP 1.6.0</b></span></footer>
   </section>
 </div>
 <input type="file" id="file-input" multiple accept="video/*,image/*,audio/*" hidden>
