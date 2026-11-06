@@ -53,3 +53,140 @@
 #keys-dialog .keys-grid{display:grid;grid-template-columns:auto 1fr;gap:9px 16px;align-items:center;padding:6px 2px 2px;max-height:60vh;overflow:auto}#keys-dialog kbd{font:11px monospace;background:#0d101b;border:1px solid var(--line);padding:3px 8px;border-radius:6px;text-align:center}
 @media(max-width:650px){.timeline-toolbar{padding:0 5px}.timeline-toolbar #duplicate{display:inline-flex}.tl-hint{display:none}.timeline-options>input{display:block;width:60px}}
 .text-tabs{display:flex;gap:4px;padding:8px 14px 0;flex-shrink:0}.text-tabs[hidden]{display:none}.text-tabs button{flex:1;background:#191d2c;border:1px solid var(--line);color:var(--muted);font:inherit;font-size:11px;padding:7px 4px;border-radius:8px;cursor:pointer;white-space:nowrap}.text-tabs button.active{background:#2a2750;color:var(--text);border-color:var(--accent)}
+
+/* ===== v1.8 — iPhone / iPad ===== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text}
+button,.tool,.asset-card,.timeline-clip,.ruler{touch-action:manipulation}
+.timeline-clip,.trim-handle,.ruler{touch-action:none}
+.timeline-scroll{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.topbar{padding-top:env(safe-area-inset-top);padding-left:max(25px,env(safe-area-inset-left));padding-right:max(25px,env(safe-area-inset-right));height:calc(78px + env(safe-area-inset-top))}
+.app-shell{height:calc(100dvh - 78px - env(safe-area-inset-top))}
+.tl-compact-only{display:none}
+@media(pointer:coarse){
+ .icon-button{width:42px;height:42px}
+ .icon-button .icon{width:20px;height:20px}
+ .button{min-height:42px}.button.compact{min-height:40px;padding:6px 12px;font-size:12px}
+ .trim-handle{width:18px}
+ .tool{min-height:60px}
+ .track-label button{padding:8px}
+ .library-tabs button{padding:8px 4px 12px;font-size:12px}
+ .choice-row button{padding:11px 6px}
+ .tl-pop button,.tl-pop [role=menuitem]{min-height:44px}
+ input[type=range]{height:28px}
+ .asset-add{width:30px;height:30px}.asset-add .icon{width:16px;height:16px}
+}
+@media(pointer:coarse){input:not([type=range]):not([type=checkbox]):not([type=radio]):not([type=color]),select,textarea{font-size:16px!important}}
+
+/* iPad portrait & small tablets */
+@media(min-width:701px) and (max-width:1024px) and (orientation:portrait){
+ .workspace{grid-template-columns:76px 240px minmax(0,1fr)}
+ .tool{width:62px}
+ .inspector{display:none;position:fixed;top:calc(78px + env(safe-area-inset-top));bottom:320px;left:0;width:300px;z-index:15;box-shadow:10px 0 30px #0007}
+ .inspector.open{display:flex}.inspector-close{display:inline-flex;margin-inline-start:auto}
+ .timeline{height:320px}
+ .project-info{display:none}
+}
+/* iPad landscape */
+@media(min-width:1025px) and (max-width:1400px) and (pointer:coarse){
+ .workspace{grid-template-columns:76px 250px minmax(0,1fr) 270px}
+}
+
+/* ---------- Phone portrait ---------- */
+@media(max-width:700px){
+ body{display:flex;flex-direction:column}
+ .topbar{height:calc(54px + env(safe-area-inset-top))!important;padding:env(safe-area-inset-top) max(10px,env(safe-area-inset-right)) 0 max(10px,env(safe-area-inset-left))!important;gap:8px!important;flex-shrink:0}
+ .brand{font-size:16px}.brand small{display:none}.brand-mark{width:32px;height:34px}.brand-mark .icon{width:20px;height:22px}
+ .header-divider,.local-badge,.project-heading>span{display:none!important}
+ .project-heading{min-width:0;flex:1}.project-heading input{width:100%!important;font-size:16px;min-width:0}
+ .header-actions{gap:6px!important}.header-actions .button{padding:6px 10px!important;min-height:38px!important;font-size:12px}
+ .header-actions .button span:not(.icon){display:none}
+ .app-shell{height:auto!important;flex:1;min-height:0;display:flex;flex-direction:column}
+ .workspace{display:contents!important}
+ .preview-panel{order:1;flex:1 1 0;min-height:150px;padding:0 10px!important}
+ .preview-top{height:44px}.preview-top select{max-width:110px;font-size:12px}
+ .stage{min-height:90px}
+ .transport{height:50px}.play{width:42px;height:42px}
+ .project-info{display:none}
+ .timeline{order:2;height:232px!important;flex-shrink:0}
+ .timeline-toolbar{height:46px;padding:0 6px!important}
+ .track-labels{width:84px!important}.track-label{height:44px;padding:0 6px;gap:3px;font-size:10px}.track-label-spacer{height:28px}
+ .timeline-track{height:44px}.timeline-clip{height:32px;top:5px}
+ .ruler{height:28px}.ruler-tick{height:28px}
+ .timeline-hint,.statusbar{display:none!important}
+ .tl-compact-only{display:flex}
+ /* bottom tab bar */
+ .tool-rail{order:3;flex-direction:row!important;flex-shrink:0;height:calc(58px + env(safe-area-inset-bottom));padding:4px 6px env(safe-area-inset-bottom)!important;gap:2px!important;border:0!important;border-top:1px solid var(--line)!important;overflow-x:auto;overflow-y:hidden;align-items:stretch;background:#10131f;scrollbar-width:none;grid-area:auto!important}
+ .tool-rail::-webkit-scrollbar{display:none}
+ .tool{flex:0 0 64px;width:64px!important;min-height:0!important;height:100%;gap:4px!important;font-size:10px;padding:0}
+ .tool.active:after{right:auto;top:-5px;left:50%;transform:translateX(-50%);width:24px;height:2px}
+ .help-tool{margin-top:0!important}
+ /* library = bottom sheet */
+ .library{position:fixed!important;left:0;right:0;bottom:calc(58px + env(safe-area-inset-bottom));top:auto!important;height:min(52dvh,430px)!important;z-index:30;display:flex!important;flex-direction:column;border:0!important;border-top:1px solid #4b4570!important;border-radius:16px 16px 0 0;box-shadow:0 -14px 40px #000a;transform:translateY(calc(100% + 80px));visibility:hidden;transition:transform .22s ease,visibility 0s .22s;grid-area:auto!important;width:auto!important;min-width:0}
+ body.sheet-lib .library{transform:none;visibility:visible;transition:transform .22s ease}
+ .library:before{content:'';display:block;width:38px;height:4px;border-radius:3px;background:#4a5070;margin:7px auto 0;flex-shrink:0}
+ .library .panel-heading{height:44px}
+ #library-content{display:block!important;overflow-y:auto!important;overflow-x:hidden!important;padding:0 14px 14px!important;-webkit-overflow-scrolling:touch}
+ .privacy-note{display:none}
+ .asset-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(110px,1fr))!important;gap:12px 9px!important}
+ .asset-card{width:auto!important;flex:none!important}
+ .asset-thumb{height:74px}
+ .transition-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+ .creative-library,.font-library-intro{width:auto!important;display:block!important;max-width:100%}
+ .template-card{width:100%!important;flex:none}
+ .caption-controls{width:auto!important}
+ /* inspector = bottom sheet */
+ .inspector{display:flex!important;position:fixed!important;left:0;right:0;top:auto!important;bottom:calc(58px + env(safe-area-inset-bottom))!important;width:auto!important;height:min(62dvh,520px)!important;z-index:31;border:0!important;border-top:1px solid #4b4570!important;border-radius:16px 16px 0 0;box-shadow:0 -14px 40px #000a;transform:translateY(calc(100% + 80px));visibility:hidden;transition:transform .22s ease,visibility 0s .22s}
+ .inspector.open{transform:none;visibility:visible;transition:transform .22s ease}
+ .inspector-close{display:inline-flex!important;margin-inline-start:auto}
+ .inspector .panel-heading{height:48px}
+ #properties{padding-bottom:calc(20px + env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}
+ /* popups */
+ .tl-pop{left:8px!important;right:8px!important;width:auto!important;max-width:none!important;bottom:calc(62px + env(safe-area-inset-bottom))!important;top:auto!important;max-height:55dvh;overflow:auto}
+ dialog{width:calc(100vw - 20px);padding:18px;border-radius:14px}
+ .toasts{bottom:calc(72px + env(safe-area-inset-bottom))}
+}
+
+/* ---------- Phone landscape ---------- */
+@media(max-height:500px) and (orientation:landscape){
+ body{display:flex;flex-direction:column}
+ .topbar{height:calc(44px + env(safe-area-inset-top))!important;padding:env(safe-area-inset-top) max(10px,env(safe-area-inset-right)) 0 max(10px,env(safe-area-inset-left))!important;gap:8px!important;flex-shrink:0}
+ .brand small,.header-divider,.local-badge,.project-heading>span{display:none!important}
+ .brand{font-size:15px}.brand-mark{width:28px;height:30px}
+ .project-heading{flex:1;min-width:0}.project-heading input{width:100%!important;font-size:14px}
+ .header-actions{gap:6px!important}.header-actions .button{padding:4px 10px!important;min-height:34px!important;font-size:12px}
+ .header-actions .button span:not(.icon){display:none}
+ .app-shell{height:auto!important;flex:1;min-height:0;display:grid!important;grid-template-columns:62px minmax(0,1fr) minmax(0,1.25fr);grid-template-rows:minmax(0,1fr);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+ .workspace{display:contents!important}
+ .tool-rail{grid-column:1;grid-row:1;padding:4px 3px!important;gap:2px!important;overflow-y:auto;overflow-x:hidden;border-left:1px solid var(--line)!important;align-items:center;flex-direction:column!important}
+ .tool{width:56px!important;min-height:46px!important;gap:2px!important;font-size:9px;flex-shrink:0}
+ .tool .icon{width:18px;height:18px}
+ .preview-panel{grid-column:2;grid-row:1;padding:0 8px!important;min-height:0}
+ .preview-top{height:34px}.preview-top select{font-size:11px}
+ .transport{height:44px}.play{width:36px;height:36px}
+ .project-info,.statusbar,.timeline-hint{display:none!important}
+ .timeline{grid-column:3;grid-row:1;height:auto!important;min-height:0;border-top:0;border-right:1px solid var(--line)}
+ .timeline-toolbar{height:42px;padding:0 4px!important}
+ .track-labels{width:70px!important}.track-label{height:38px;padding:0 4px;font-size:9px}.track-label-spacer{height:24px}
+ .timeline-track{height:38px}.timeline-clip{height:28px;top:4px}
+ .ruler,.ruler-tick{height:24px}
+ .timeline-content{min-height:0}
+ .tl-compact-only{display:flex}
+ .library{position:fixed!important;top:calc(44px + env(safe-area-inset-top));bottom:0;right:calc(62px + env(safe-area-inset-right));left:auto!important;width:min(300px,48vw)!important;height:auto!important;z-index:30;border:0!important;border-right:1px solid #4b4570!important;box-shadow:-12px 0 36px #000a;transform:translateX(120%);visibility:hidden;transition:transform .22s ease,visibility 0s .22s;display:flex!important;flex-direction:column}
+ body.sheet-lib .library{transform:none;visibility:visible;transition:transform .22s ease}
+ .library .panel-heading{height:40px}
+ #library-content{display:block!important;overflow-y:auto!important;padding:0 12px 12px!important}
+ .privacy-note{display:none}
+ .asset-grid{display:grid!important;grid-template-columns:1fr 1fr!important}
+ .creative-library,.font-library-intro{width:auto!important;display:block!important}
+ .inspector{display:flex!important;position:fixed!important;top:calc(44px + env(safe-area-inset-top));bottom:0;left:0;width:min(320px,50vw)!important;z-index:31;border:0!important;border-right:1px solid #4b4570!important;box-shadow:12px 0 36px #000a;transform:translateX(-120%);visibility:hidden;transition:transform .22s ease,visibility 0s .22s}
+ .inspector.open{transform:none;visibility:visible;transition:transform .22s ease}
+ .inspector-close{display:inline-flex!important;margin-inline-start:auto}
+ .tl-pop{max-height:70dvh;overflow:auto}
+ dialog{max-height:94dvh}
+ .toasts{bottom:12px}
+ .play-buttons{position:static!important;transform:none!important}
+ .transport{justify-content:space-between}
+ .time-readout span{display:none}
+}
