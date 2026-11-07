@@ -223,7 +223,7 @@ async function snapshot(){
   sheet.querySelectorAll('input:not([type=file]),textarea,select').forEach(el=>{
     const d=document.createElement('div');d.textContent=el.tagName==='SELECT'?(el===selC&&el.value===OTHER&&cx.value.trim()?'':(el.value||'')):el.value;
     d.style.cssText='white-space:pre-wrap;padding:'+(el.tagName==='INPUT'?'6px 12px':'8px 10px')+';font-size:'+(el.tagName==='INPUT'?'15.5px':'14.5px')+';min-height:'+el.offsetHeight+'px';
-    el.style.display='none';el.after(d);swaps.push(()=>{d.remove();el.style.display=''});
+    const pv=el.style.display;el.style.display='none';el.after(d);swaps.push(()=>{d.remove();el.style.display=pv});
   });
   const hide=[...document.querySelectorAll('.evbtn,.evhint,.th button,.homeTop')];hide.forEach(x=>x.style.display='none');
   await document.fonts.ready;
