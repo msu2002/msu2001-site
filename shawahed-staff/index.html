@@ -123,15 +123,40 @@ table{border-collapse:collapse;width:100%}
  @page{size:A4;margin:0}
 }
 </style>
+<style id="pwcss">
+#lock .hintb{background:#eaf6f6;border-radius:12px;padding:9px 11px;font-size:14px;color:#1d6061;text-align:right;margin:2px 0 8px;line-height:1.6}
+#lock .lnk2{display:block;margin-top:12px;color:#1d7d7e;font-weight:700;font-size:15px;text-decoration:underline}
+#lock .adl{border-top:1px solid #e3eeee;margin-top:14px;padding-top:10px;font-size:14px;color:#777}#lock .adl a{color:#0f5e5f;font-weight:700;text-decoration:underline}
+.ov{position:fixed;inset:0;z-index:100000;display:none;align-items:center;justify-content:center;background:#06282ccc;padding:16px;overflow:auto;font-family:inherit}.ov.show{display:flex}
+.ov .box{width:min(440px,100%);max-height:94vh;overflow:auto;background:#fff;border-radius:22px;padding:22px 20px;text-align:right;box-shadow:0 20px 60px #0008;color:#222}
+.ov h3{margin:0 0 10px;font-size:22px;color:#0f5e5f;text-align:center}.ov label{display:block;font-weight:700;color:#1d7d7e;font-size:14px;margin:8px 2px 4px}
+.ov input{width:100%;box-sizing:border-box;border:2px solid #cfe3e3;border-radius:12px;padding:10px;font-size:18px;font-family:inherit;text-align:center}
+.ov .b1{display:block;width:100%;margin-top:12px;padding:11px;border:0;border-radius:12px;background:#1d7d7e;color:#fff;font-size:18px;font-weight:700;font-family:inherit;cursor:pointer}.ov .b1.g{background:#fff;color:#1d7d7e;border:2px solid #1d7d7e}.ov .b1:disabled{opacity:.6}
+.ov .er{color:#c0392b;font-size:14px;min-height:18px;margin-top:8px;text-align:center}.ov .sm{font-size:13px;color:#666;margin-top:4px}
+.ov table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}.ov td,.ov th{padding:7px 6px;border-bottom:1px solid #e3eeee}.ov th{background:#1d7d7e;color:#fff}
+.ov .tg{display:inline-block;padding:2px 8px;border-radius:99px;font-size:12px}.ov .t1{background:#e1f6e8;color:#1a7a3f}.ov .t2{background:#fff0d6;color:#9a6200}
+.ov .rb{border:0;border-radius:9px;padding:5px 12px;color:#fff;background:#d9534f;font-weight:700;font-family:inherit;cursor:pointer}.ov .rb:disabled{background:#bbb;cursor:default}
+.ov .cf{border:2px solid #d9534f;border-radius:14px;padding:12px;margin-top:12px;text-align:center;font-size:15px}.ov .cf button{margin:8px 4px 0;border:0;border-radius:9px;padding:7px 16px;font-family:inherit;font-weight:700;color:#fff;background:#d9534f;cursor:pointer}.ov .cf button.n{background:#999}
+</style>
 </head>
 <body>
 <script>document.documentElement.classList.add("locked")</script>
 <div id="lock" dir="rtl"><div class="box"><div class="ic"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.4" fill="#fff"/></svg></div><h2>شواهد الإداريين</h2><p>سجّل دخولك لتُعبَّأ بياناتك تلقائيًا</p>
 <label class="l" for="lkId">اسم المستخدم (السجل المدني)</label><input id="lkId" inputmode="numeric" autocomplete="username" maxlength="10" aria-label="السجل المدني">
-<label class="l" for="lkPw">كلمة المرور (رقم الجوال)</label><input id="lkPw" type="password" inputmode="numeric" autocomplete="current-password" maxlength="10" aria-label="رقم الجوال">
-<label class="eye"><input type="checkbox" id="lkEye"> إظهار كلمة المرور</label><button id="lkGo" type="button">دخول</button><div class="err" id="lkErr"></div></div></div>
+<label class="l" for="lkPw">كلمة المرور</label><input id="lkPw" type="password" autocomplete="current-password" maxlength="40" aria-label="كلمة المرور"><div class="hintb">ℹ️ أول دخول: كلمة المرور هي <b>رقم جوالك المسجّل</b> ويبدأ بصفر</div>
+<label class="eye"><input type="checkbox" id="lkEye"> إظهار كلمة المرور</label><button id="lkGo" type="button">دخول</button><div class="err" id="lkErr"></div><a href="#" class="lnk2" id="lkForgot">نسيت كلمة المرور؟</a><div class="adl">🛠️ <a href="#" id="lkAdm">دخول المسؤول</a></div></div></div>
 <div id="done" dir="rtl"><div class="box"><div class="ok"><svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h3 id="dnT">تم حفظ شاهدك</h3><div class="path" id="dnP"></div><button id="dnShare" type="button">📤 مشاركة</button><button class="g" id="dnNew" type="button">إضافة شاهد جديد</button></div></div>
 
+<div id="cp" class="ov" dir="rtl"><div class="box"><h3>🔑 تغيير كلمة المرور</h3>
+<label for="cpOld">كلمة المرور الحالية</label><input id="cpOld" type="password" autocomplete="current-password" maxlength="40">
+<label for="cpNew">كلمة المرور الجديدة</label><input id="cpNew" type="password" autocomplete="new-password" maxlength="40"><div class="sm">6 أحرف أو أرقام على الأقل</div>
+<label for="cpNew2">تأكيد كلمة المرور الجديدة</label><input id="cpNew2" type="password" autocomplete="new-password" maxlength="40">
+<div class="er" id="cpEr"></div><button class="b1" id="cpGo" type="button">حفظ</button><button class="b1 g" id="cpX" type="button">إلغاء</button></div></div>
+<div id="adm" class="ov" dir="rtl"><div class="box"><div id="admA"><h3>🛠️ دخول المسؤول</h3>
+<label for="admU">اسم المستخدم</label><input id="admU" autocomplete="off" autocapitalize="off" maxlength="40" style="direction:ltr">
+<label for="admP">كلمة المرور</label><input id="admP" type="password" autocomplete="off" maxlength="40">
+<div class="er" id="admEr"></div><button class="b1" id="admGo" type="button">دخول</button><button class="b1 g" id="admX" type="button">← رجوع لدخول الموظفين</button></div>
+<div id="admB" style="display:none"><h3>🛠️ إعادة كلمات مرور الموظفين</h3><div class="sm" id="admWho"></div><div id="admL"></div><div id="admC"></div><div class="er" id="admEr2"></div><button class="b1 g" id="admOut" type="button">خروج</button></div></div></div>
 <div id="sheet">
   <div class="band"></div>
   <a class="homeTop" href="/" data-x="1">🏠 الرئيسية</a>
@@ -183,6 +208,7 @@ table{border-collapse:collapse;width:100%}
   <button class="btn" id="btnSave">📤 مشاركة</button>
   <button class="btn" id="btnInstall">📲 إضافة إلى الشاشة الرئيسية</button>
   <button class="btn danger" id="btnReset">🔄 مسح البيانات</button>
+  <button class="btn" id="btnPw">🔑 تغيير كلمة المرور</button>
   <button class="btn" id="btnOut">🚪 تسجيل الخروج</button>
 </div>
 <div id="status"></div>
@@ -283,7 +309,7 @@ $('#btnPdf').onclick=async()=>{if(!validate())return;const b=$('#btnPdf');b.disa
     const blob=toPdf(await snapshot()).output('blob'),name=fname(),file=new File([blob],name,{type:'application/pdf'});LAST=[file,...usedDocs()];
     let saved=false,why='';
     if(ENDPOINT){msg('جاري الحفظ في مجلدك على Drive…');
-      try{const body=JSON.stringify({id:USER.id,ph:USER.ph,fn:name,pdf:await b64(blob),extra:await Promise.all(usedDocs().map(async d=>({n:d.name,b:await b64(d)})))});
+      try{const body=JSON.stringify({id:USER.id,pw:USER.pw||USER.ph,pn:pnorm(USER.pw||USER.ph),fn:name,pdf:await b64(blob),extra:await Promise.all(usedDocs().map(async d=>({n:d.name,b:await b64(d)})))});
         const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body});const j=await r.json();
         if(j&&j.ok)saved=true;else why=(j&&j.error)||'تعذّر الحفظ'}catch(e){why='تعذّر الاتصال بالخادم'}}
     dl(file);
@@ -337,14 +363,56 @@ async function tryLogin(id,ph){
 function applyUser(u){USER=u;$('#f_name').value=u.n;$('#f_job').value=u.j;$('#f_no').value=u.o;document.documentElement.classList.remove('locked')}
 function lockUI(){USER=null;document.documentElement.classList.add('locked');$('#lkPw').value='';setTimeout(()=>$('#lkId').focus(),50)}
 $('#lkEye').onchange=()=>{$('#lkPw').type=$('#lkEye').checked?'text':'password'};
-$('#lkGo').onclick=async()=>{const e=$('#lkErr'),b=$('#lkGo');e.textContent='';b.disabled=true;b.textContent='جاري التحقق…';
-  try{if(!(crypto&&crypto.subtle))throw 0;const u=await tryLogin($('#lkId').value,$('#lkPw').value);
-    if(u){try{localStorage.setItem(UK,JSON.stringify(u))}catch(_){}applyUser(u)}else e.textContent='السجل المدني أو رقم الجوال غير صحيح.'}
+const post=async o=>{const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(o)});return r.json()};
+const pnorm=t=>{let p=d2a(t);if(p.length===9)p='0'+p;return p};
+const SKEEP=u=>{try{localStorage.setItem(UK,JSON.stringify(u))}catch(_){}};
+$('#lkGo').onclick=async()=>{const e=$('#lkErr'),b=$('#lkGo');e.textContent='';
+  const id=d2a($('#lkId').value),pw=$('#lkPw').value.trim();
+  if(id.length!==10||!pw){e.textContent='أدخل السجل المدني وكلمة المرور.';return}
+  b.disabled=true;b.textContent='جاري التحقق…';
+  try{if(!(crypto&&crypto.subtle))throw 0;
+    let ph=null,bad=false;
+    try{const j=await post({a:'login',id,pw,pn:pnorm(pw)});if(j&&j.ok)ph=j.ph;else bad=true}catch(_){ph=pnorm(pw)}
+    const u=(!bad&&ph)?await tryLogin(id,ph):null;
+    if(u){u.pw=pw;SKEEP(u);applyUser(u)}else e.textContent='السجل المدني أو كلمة المرور غير صحيحة.'}
   catch(_){e.textContent='تعذّر التحقق على هذا المتصفح.'}finally{b.disabled=false;b.textContent='دخول'}};
+$('#lkForgot').onclick=ev=>{ev.preventDefault();const id=d2a($('#lkId').value);
+  const t='السلام عليكم، أنا موظف في المدرسة'+(id?'، سجلي المدني '+id:'')+'، نسيت كلمة المرور في «شواهد الإداريين». أرجو إعادتها. شكرًا.';
+  window.open('https://wa.me/966505176270?text='+encodeURIComponent(t),'_blank')};
+/* ---- تغيير كلمة المرور ---- */
+const cpc=()=>{['cpOld','cpNew','cpNew2'].forEach(i=>$('#'+i).value='');$('#cpEr').textContent='';$('#cp').classList.remove('show')};
+$('#btnPw').onclick=()=>{$('#cpEr').textContent='';$('#cp').classList.add('show');setTimeout(()=>$('#cpOld').focus(),50)};
+$('#cpX').onclick=cpc;
+$('#cpGo').onclick=async()=>{const er=$('#cpEr'),b=$('#cpGo'),o=$('#cpOld').value.trim(),n=$('#cpNew').value.trim(),n2=$('#cpNew2').value.trim();er.style.color='';er.textContent='';
+  if(!o||!n)return er.textContent='املأ جميع الحقول.';
+  if(n.length<6)return er.textContent='كلمة المرور الجديدة يجب ألا تقل عن 6 أحرف أو أرقام.';
+  if(n!==n2)return er.textContent='تأكيد كلمة المرور غير مطابق.';
+  if(n===o)return er.textContent='كلمة المرور الجديدة مطابقة للحالية.';
+  b.disabled=true;b.textContent='جاري الحفظ…';
+  try{const j=await post({a:'change',id:USER.id,old:o,oldn:pnorm(o),nw:n});
+    if(j&&j.ok){USER.pw=n;SKEEP(USER);er.style.color='#1a7a3f';er.textContent='✔ تم تغيير كلمة المرور. استخدم الجديدة في الدخول القادم.';setTimeout(cpc,1800)}
+    else er.textContent=(j&&j.error)||'تعذّر التغيير.'}
+  catch(_){er.textContent='تعذّر الاتصال بالخادم.'}finally{b.disabled=false;b.textContent='حفظ'}};
+/* ---- دخول المسؤول ---- */
+let AU='',AP='';
+const adc=()=>{AU=AP='';$('#admU').value=$('#admP').value='';$('#admEr').textContent=$('#admEr2').textContent='';$('#admC').innerHTML='';$('#admL').innerHTML='';$('#admA').style.display='';$('#admB').style.display='none';$('#adm').classList.remove('show')};
+$('#lkAdm').onclick=ev=>{ev.preventDefault();$('#adm').classList.add('show');setTimeout(()=>$('#admU').focus(),50)};
+$('#admX').onclick=adc;$('#admOut').onclick=adc;
+async function admLoad(){const j=await post({a:'alist',au:AU,ap:AP});if(!(j&&j.ok))throw new Error((j&&j.error)||'تعذّر الجلب');
+  $('#admL').innerHTML='<table><tr><th>الموظف</th><th>الحالة</th><th>إجراء</th></tr>'+j.list.map((x,i)=>'<tr><td>'+esc(x.n)+'</td><td>'+(x.c?'<span class="tg t2">غيّر كلمة المرور</span>':'<span class="tg t1">= رقم الجوال</span>')+'</td><td>'+(x.c?'<button class="rb" data-i="'+i+'">إعادة</button>':'<button class="rb" disabled>لا حاجة</button>')+'</td></tr>').join('')+'</table>';
+  $('#admL').querySelectorAll('.rb[data-i]').forEach(bt=>bt.onclick=()=>{const nm=j.list[+bt.dataset.i].n;
+    $('#admC').innerHTML='<div class="cf">إعادة كلمة مرور <b>'+esc(nm)+'</b> إلى رقم جواله؟<br><button id="cfY">نعم، أعد</button><button class="n" id="cfN">إلغاء</button></div>';
+    $('#cfN').onclick=()=>{$('#admC').innerHTML=''};
+    $('#cfY').onclick=async()=>{$('#cfY').disabled=true;try{const r=await post({a:'areset',au:AU,ap:AP,name:nm});if(!(r&&r.ok))throw new Error((r&&r.error)||'تعذّر');$('#admC').innerHTML='';$('#admEr2').style.color='#1a7a3f';$('#admEr2').textContent='✔ تمت إعادة كلمة مرور '+nm;await admLoad()}catch(x){$('#admEr2').style.color='';$('#admEr2').textContent=x.message}}})}
+$('#admGo').onclick=async()=>{const er=$('#admEr'),b=$('#admGo');er.textContent='';AU=$('#admU').value.trim();AP=$('#admP').value;if(!AU||!AP)return er.textContent='أدخل اسم المستخدم وكلمة المرور.';
+  b.disabled=true;b.textContent='جاري التحقق…';
+  try{await admLoad();$('#admWho').textContent='مرحبًا '+AU;$('#admA').style.display='none';$('#admB').style.display=''}
+  catch(x){er.textContent=x.message||'تعذّر الاتصال بالخادم.';AU=AP=''}finally{b.disabled=false;b.textContent='دخول'}};
+['admU','admP'].forEach(i=>$('#'+i).addEventListener('keydown',e=>{if(e.key==='Enter')$('#admGo').click()}));
 ['lkId','lkPw'].forEach(i=>$('#'+i).addEventListener('keydown',e=>{if(e.key==='Enter')$('#lkGo').click()}));
 $('#btnOut').onclick=()=>{try{localStorage.removeItem(UK)}catch(_){}$('#f_name').value=$('#f_job').value=$('#f_no').value='';lockUI()};
 (async()=>{let u=null;try{u=JSON.parse(localStorage.getItem(UK)||'null')}catch(_){}
-  if(u&&u.id&&u.ph){const v=await tryLogin(u.id,u.ph).catch(()=>null);if(v){applyUser(v);return}}
+  if(u&&u.id&&u.ph){const v=await tryLogin(u.id,u.ph).catch(()=>null);if(v){v.pw=u.pw||u.ph;applyUser(v);return}}
   lockUI()})();
 
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
