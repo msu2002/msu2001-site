@@ -26,6 +26,11 @@
 .ev2 .notes textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:15px;min-height:70px;resize:vertical;margin-top:4px}
 @media(max-width:720px){.ev2 .th{width:calc(50% - 5px)}.pk .dt .d{width:24%}}
 @media print{.ev2 .th{break-inside:avoid}}
+#lock input{font-size:21px;letter-spacing:1px;text-align:center}#lock label.l{display:block;text-align:right;font-weight:700;color:#1d7d7e;font-size:14px;margin:4px 4px 4px}#lock .eye{display:flex;align-items:center;gap:8px;font-size:14px;color:#555;margin:0 0 12px;justify-content:flex-start;cursor:pointer}#lock .eye input{width:auto;margin:0;font-size:inherit;letter-spacing:0}
+.clsbox{padding:12px 14px 4px}.clsbox label{display:block;font-weight:700;color:var(--t-d);font-size:15.5px;margin-bottom:4px}
+tr.fx td.v input{background:transparent}
+#done{position:fixed;inset:0;z-index:99998;display:none;align-items:center;justify-content:center;background:#06282ccc;padding:20px}#done.show{display:flex}#done .box{width:min(400px,100%);background:#fff;border-radius:24px;padding:28px 22px;text-align:center;box-shadow:0 20px 60px #0008}#done .ok{width:88px;height:88px;margin:0 auto 10px;border-radius:50%;background:#1fb66b;display:grid;place-items:center}#done h3{font-family:'Noto Kufi Arabic',Cairo,sans-serif;font-weight:800;font-size:24px;color:#1d7d7e;margin:8px 0}#done .path{background:#f4f7f7;border:1.5px solid #cfe3e1;border-radius:14px;padding:10px 14px;text-align:right;line-height:2;font-weight:600;font-size:14.5px;margin:12px 0;word-break:break-word}#done button{width:100%;font:inherit;font-size:17px;font-weight:700;border:0;border-radius:14px;padding:12px;margin-top:8px;cursor:pointer;background:#279a9b;color:#fff}#done button.g{background:#e9eeee;color:#1d7d7e}
+.userbar{display:flex;gap:10px;align-items:center;justify-content:center;font-weight:700;color:#1d7d7e;font-size:14px;margin:8px 0 0}
 </style>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -120,6 +125,12 @@ table{border-collapse:collapse;width:100%}
 </style>
 </head>
 <body>
+<script>document.documentElement.classList.add("locked")</script>
+<div id="lock" dir="rtl"><div class="box"><div class="ic"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.4" fill="#fff"/></svg></div><h2>شواهد الإداريين</h2><p>سجّل دخولك لتُعبَّأ بياناتك تلقائيًا</p>
+<label class="l" for="lkId">اسم المستخدم (السجل المدني)</label><input id="lkId" inputmode="numeric" autocomplete="username" maxlength="10" aria-label="السجل المدني">
+<label class="l" for="lkPw">كلمة المرور (رقم الجوال)</label><input id="lkPw" type="password" inputmode="numeric" autocomplete="current-password" maxlength="10" aria-label="رقم الجوال">
+<label class="eye"><input type="checkbox" id="lkEye"> إظهار كلمة المرور</label><button id="lkGo" type="button">دخول</button><div class="err" id="lkErr"></div></div></div>
+<div id="done" dir="rtl"><div class="box"><div class="ok"><svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h3 id="dnT">تم حفظ شاهدك</h3><div class="path" id="dnP"></div><button id="dnShare" type="button">📤 مشاركة</button><button class="g" id="dnNew" type="button">إضافة شاهد جديد</button></div></div>
 
 <div id="sheet">
   <div class="band"></div>
@@ -139,19 +150,16 @@ table{border-collapse:collapse;width:100%}
 
   <table class="info">
     <tr><th colspan="2">البيانات الأساسية للموظف</th></tr>
-    <tr><td class="k">الاسم</td><td class="v"><input type="text" id="f_name" aria-label="الاسم" placeholder="اكتب اسم الموظف" autocomplete="off"></td></tr>
-    <tr><td class="k">المسمى الفعلي للوظيفة</td><td class="v"><input type="text" id="f_job" aria-label="المسمى الفعلي للوظيفة" placeholder="اكتب المسمى الوظيفي" autocomplete="off"></td></tr>
+    <tr><td class="k">الاسم</td><td class="v fixed"><input type="text" id="f_name" aria-label="الاسم" readonly tabindex="-1"></td></tr>
+    <tr><td class="k">المسمى الفعلي للوظيفة</td><td class="v fixed"><input type="text" id="f_job" aria-label="المسمى الفعلي للوظيفة" readonly tabindex="-1"></td></tr>
+    <tr><td class="k">الرقم الوظيفي</td><td class="v fixed"><input type="text" id="f_no" aria-label="الرقم الوظيفي" readonly tabindex="-1"></td></tr>
     <tr><td class="k">المدير المباشر</td><td class="v fixed"><input type="text" id="f_mgr" aria-label="المدير المباشر" value="علي بن صالح الخليوي" readonly tabindex="-1"></td></tr>
     <tr><td class="k">الإدارة</td><td class="v fixed"><input type="text" id="f_dep" aria-label="الإدارة" value="المدرسة الابتدائية المحمدية" readonly tabindex="-1"></td></tr>
   </table>
 
-  <div class="pick" id="pick">
-    <div class="pk"><label for="f_cls">الفصل</label><select class="cls" id="f_cls" aria-label="الفصل"></select><input class="cx" id="f_cx" type="text" placeholder="اكتب الفصل يدوياً" aria-label="الفصل (كتابة يدوية)" style="display:none"></div>
-    <div class="pk"><label>التاريخ</label><div class="dt"><input class="d" id="f_d" type="text" inputmode="numeric" maxlength="2" placeholder="اليوم" aria-label="اليوم"><select class="m" id="f_m" aria-label="الشهر"></select><input class="y" id="f_y" type="text" inputmode="numeric" maxlength="4" aria-label="السنة"></div></div>
-  </div>
-
   <div class="ev2" id="ev">
     <div class="evh">الشواهد</div>
+    <div class="clsbox"><label for="f_cls">الفصل (اختياري)</label><select class="cls" id="f_cls" aria-label="الفصل (اختياري)" style="width:100%;font:inherit;font-size:16px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff"></select><input class="cx" id="f_cx" type="text" placeholder="اكتب الفصل يدوياً" aria-label="الفصل (كتابة يدوية)" style="display:none;width:100%;font:inherit;font-size:16px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:8px"></div>
     <div class="thumbs" id="thumbs"></div>
     <div class="evhint" id="evHint">لم تُضف أي صورة بعد — اختر من الاستديو أو التقط صورة بالكاميرا</div>
     <div class="evbtn">
@@ -175,6 +183,7 @@ table{border-collapse:collapse;width:100%}
   <button class="btn" id="btnSave">📤 مشاركة</button>
   <button class="btn" id="btnInstall">📲 إضافة إلى الشاشة الرئيسية</button>
   <button class="btn danger" id="btnReset">🔄 مسح البيانات</button>
+  <button class="btn" id="btnOut">🚪 تسجيل الخروج</button>
 </div>
 <div id="status"></div>
 <div id="iosHelp" class="hide-help">لإضافة الاختصار على الآيفون: اضغط زر المشاركة <b>⬆︎</b> في المتصفح ثم اختر <b>«إضافة إلى الشاشة الرئيسية»</b>.</div>
@@ -186,10 +195,8 @@ const DAYS=["الأحد","الاثنين","الثلاثاء","الأربعاء",
 const MONTHS=["محرم","صفر","ربيع الأول","ربيع الآخر","جمادى الأولى","جمادى الآخرة","رجب","شعبان","رمضان","شوال","ذو القعدة","ذو الحجة"];
 const DEF_YEAR="١٤٤٨";
 const OTHER="أخرى";const CLASSES=["الأول الابتدائي","الثاني الابتدائي","الثالث الابتدائي","الرابع الابتدائي","الخامس الابتدائي","السادس الابتدائي"];
-const selC=$('#f_cls'),selM=$('#f_m'),cx=$('#f_cx'),thumbs=$('#thumbs');
-selC.innerHTML='<option value="">اختر الفصل</option>'+CLASSES.map(c=>'<option>'+c+'</option>').join('')+'<option>'+OTHER+'</option>';
-selM.innerHTML='<option value="">الشهر</option>'+MONTHS.map(m=>'<option>'+m+'</option>').join('');
-$('#f_y').value=DEF_YEAR;
+const selC=$('#f_cls'),cx=$('#f_cx'),thumbs=$('#thumbs');
+selC.innerHTML='<option value="">بدون تحديد فصل</option>'+CLASSES.map(c=>'<option>'+c+'</option>').join('')+'<option>'+OTHER+'</option>';
 selC.addEventListener('change',()=>{const o=selC.value===OTHER;cx.style.display=o?'block':'none';if(o)cx.focus();else cx.value=''});
 
 /* الشواهد: صور من الجهاز (تُصغَّر تلقائياً) */
@@ -226,7 +233,7 @@ document.addEventListener('input',e=>{const t=e.target;if(t.tagName==='TEXTAREA'
 
 function msg(t,c){st.className=c||'';st.textContent=t}
 function validate(){
-  if(!$('#f_name').value.trim()){msg('يرجى كتابة اسم الموظف أولاً.','bad');$('#f_name').focus();return false}
+  if(!USER){msg('سجّل دخولك أولاً.','bad');return false}
   return true;
 }
 /* تحويل الحقول إلى نص ثابت قبل التصوير */
@@ -237,7 +244,7 @@ async function snapshot(){
     d.style.cssText='white-space:pre-wrap;padding:'+(el.tagName==='INPUT'?'6px 12px':'8px 10px')+';font-size:'+(el.tagName==='INPUT'?'15.5px':'14.5px')+';min-height:'+el.offsetHeight+'px';
     const pv=el.style.display;el.style.display='none';el.after(d);swaps.push(()=>{d.remove();el.style.display=pv});
   });
-  const hide=[...document.querySelectorAll('.evbtn,.evhint,.th button,.homeTop')];hide.forEach(x=>x.style.display='none');
+  const hide=[...document.querySelectorAll('.evbtn,.evhint,.th button,.homeTop')];if(!selC.value)hide.push($('.clsbox'));hide.forEach(x=>x.style.display='none');
   await document.fonts.ready;
   const c=await html2canvas(sheet,{scale:2.5,backgroundColor:'#fff',useCORS:true});
   swaps.forEach(f=>f());hide.forEach(x=>x.style.display='');return c;
@@ -258,24 +265,42 @@ function toPdf(canvas){
 }
 function collect(){
   const goals={الفصل:selC.value===OTHER?(cx.value.trim()||OTHER):selC.value,
-    التاريخ:[$('#f_d').value,selM.value,$('#f_y').value].filter(Boolean).join(' '),
     'عدد الشواهد (صور)':thumbs.querySelectorAll('.th').length,'ملاحظات':$('#f_notes').value};
   return {السنة:$('#f_year').value,الاسم:$('#f_name').value,المسمى_الوظيفي:$('#f_job').value,المدير_المباشر:$('#f_mgr').value,الإدارة:$('#f_dep').value,الشواهد:goals,تاريخ_الحفظ:new Date().toISOString()};
 }
 const safe=s=>(s||'بدون_اسم').trim().replace(/[\\/:*?"<>|\s]+/g,'_');
 
 $('#btnPrint').onclick=()=>{if(validate())print()};
-$('#btnPdf').onclick=async()=>{if(!validate())return;msg('جاري تجهيز PDF…');
-  try{toPdf(await snapshot()).save('سجل_متابعة_المهام_'+safe($('#f_name').value)+'.pdf');msg('تم تصدير الملف ✔','ok')}catch(e){msg(e.message,'bad')}};
+const ENDPOINT='';/* رابط تطبيق Apps Script — يُضاف بعد نشره */
+const fname=()=>'شاهد - '+USER.n+' - '+new Date().toISOString().slice(0,10)+'.pdf';
+const b64=b=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(String(r.result).split(',')[1]);r.onerror=no;r.readAsDataURL(b)});
+const usedDocs=()=>[...new Set([...thumbs.querySelectorAll('.th[data-doc]')].map(x=>+x.dataset.doc))].map(k=>DOCS[k]);
+function dl(f){const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove()}
+let LAST=null;
+function showDone(t,p){$('#dnT').textContent=t;$('#dnP').innerHTML=p.replace(/(\d{4}-\d\d-\d\d\.pdf)/g,'<bdi dir="ltr">$1</bdi>');$('#done').classList.add('show')}
+$('#btnPdf').onclick=async()=>{if(!validate())return;const b=$('#btnPdf');b.disabled=true;msg('جاري تجهيز ملف PDF بصورك…');
+  try{
+    const blob=toPdf(await snapshot()).output('blob'),name=fname(),file=new File([blob],name,{type:'application/pdf'});LAST=[file,...usedDocs()];
+    let saved=false,why='';
+    if(ENDPOINT){msg('جاري الحفظ في مجلدك على Drive…');
+      try{const body=JSON.stringify({id:USER.id,ph:USER.ph,fn:name,pdf:await b64(blob),extra:await Promise.all(usedDocs().map(async d=>({n:d.name,b:await b64(d)})))});
+        const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body});const j=await r.json();
+        if(j&&j.ok)saved=true;else why=(j&&j.error)||'تعذّر الحفظ'}catch(e){why='تعذّر الاتصال بالخادم'}}
+    dl(file);
+    if(saved)showDone('تم حفظ شاهدك','📁 شواهد الاداريين<br>↳ 📁 '+esc(USER.n)+'<br>&nbsp;&nbsp;&nbsp;↳ 📄 '+esc(name));
+    else if(ENDPOINT)showDone('نُزِّل الملف على جوالك','⚠️ لم يُحفظ في Drive: '+esc(why)+'<br>📄 '+esc(name));
+    else showDone('نُزِّل الملف على جوالك','📄 '+esc(name)+'<br>الحفظ في Drive غير مفعّل بعد.');
+    msg(saved?'تم الحفظ في Drive ✔':'تم تنزيل الملف.',saved?'ok':'');
+  }catch(e){msg(e.message,'bad')}finally{b.disabled=false}};
 $('#btnSave').onclick=async()=>{if(!validate())return;$('#btnSave').disabled=true;msg('جاري التجهيز…');
   try{
-    const blob=toPdf(await snapshot()).output('blob'), base='سجل_متابعة_المهام_'+safe($('#f_name').value)+'_'+new Date().toISOString().slice(0,16).replace(/[T:]/g,'-');
-    const used=new Set([...thumbs.querySelectorAll('.th[data-doc]')].map(x=>+x.dataset.doc));
-    const files=[new File([blob],base+'.pdf',{type:'application/pdf'}),...[...used].map(k=>DOCS[k])];
+    const blob=toPdf(await snapshot()).output('blob'),files=[new File([blob],fname(),{type:'application/pdf'}),...usedDocs()];
     if(navigator.canShare&&navigator.canShare({files})){try{await navigator.share({files,title:'شواهد الإداريين'});msg('تمت المشاركة ✔','ok');return}catch(e){if(e&&e.name==='AbortError'){msg('أُلغيت المشاركة.');return}}}
-    for(const f of files){const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove();await new Promise(r=>setTimeout(r,400))}
+    for(const f of files){dl(f);await new Promise(r=>setTimeout(r,400))}
     msg('تم تنزيل الملف — شاركه حيث تشاء ✔','ok');
   }catch(e){msg(e.message,'bad')}finally{$('#btnSave').disabled=false}};
+$('#dnShare').onclick=async()=>{if(!LAST)return;try{if(navigator.canShare&&navigator.canShare({files:LAST}))await navigator.share({files:LAST,title:'شواهد الإداريين'});else LAST.forEach(dl)}catch(e){}};
+$('#dnNew').onclick=()=>{$('#done').classList.remove('show');thumbs.innerHTML='';DOCS.length=0;$('#f_notes').value='';selC.value='';selC.dispatchEvent(new Event('change'));msg('')};
 $('#btnReset').onclick=()=>{if(confirm('مسح جميع البيانات؟')){
   document.querySelectorAll('input:not([readonly]):not([type=file]),textarea,select').forEach(x=>{x.value=x.id==='f_year'?'١٤٤٨هـ':(x.classList.contains('y')?DEF_YEAR:'');x.style.height=''});
   DOCS.length=0;selC.dispatchEvent(new Event('change'));document.querySelectorAll('.thumbs').forEach(t=>t.innerHTML='');msg('')}};
@@ -293,6 +318,35 @@ $('#btnInstall').onclick=async()=>{
     :'من قائمة المتصفح (⋮) اختر <b>«تثبيت التطبيق»</b> أو <b>«إضافة إلى الشاشة الرئيسية»</b>.';
   $('#iosHelp').classList.add('show');
 };
+document.documentElement.classList.add('locked');
+/* ---------- تسجيل الدخول ببيانات الموظفين (مشفّرة) ---------- */
+const EMP={"s":"BzfkLAeRvulROI+BVaIU7g==","n":120000,"r":[{"h":"19f2931f0a33608540d5","i":"91rWb9MxqALNPlWV","c":"RjoQsFSg7AFO9c6Ioqsd12uM6jG1y0jo7TYDATgB+CazI9RS3cahhKXVKKT3QvSI+UM7D3Z5hIzCxvmhJtLhtaqTxyuX+ez/YHNiYshvs5WeXWmx5HIISGz2XLYQWjioA3+DzinsWLT4o53bZ+Y8BpRi3Q6JfrM6gtmOSjgMg6/lcLbgluwD/zGG5KOVUA=="},{"h":"d26815c4e73efb499bd7","i":"2rV7X7ng4FwhjkyI","c":"A91MB9vYEec88vHZXKQRrsQl3oPN/ke8XbduIVXnhahHvkzAftpdejnewBo3WtCEukiH4Q3u1yIjq/DgNXhOXrntg+WbwKVxoxuwZoRd78JxYiqDS5efnjYbe8MnLyw8oDpxqF4kHt0Q5M9kYcmTKdqGXtKj0BuPhjBd9H5b"},{"h":"ead5a11a19ab60c5aaeb","i":"BEMFEx36qVpoZqJr","c":"yt+PDpyaXb1k5FtwNeFyDIKROHej6EE752Ej/Xg4G6vD5eI4W5h8LiN/PMvVByJan8zNB6yT8+6lLqudwt5ELr+eedbF41X8RjEHh4dGyH4MdyrALPTMau2TEnTznXKZq9wZymnfRWhDfa14axx/Pxer+z/uo21SdE5siQJxQ8wIfO8clAo="},{"h":"f38900256c69a3bb117e","i":"7k7BqA9D57FFy+sn","c":"gmWmVo4448orBnDsF0nC7pRaFY/Sqo2IJXTlNh3xT9GfZbXb3bkQ53foueQe/SAMX2o9uBns/Xm9eXWf94kBvbjw/ev+PZD8zdLPKwFmrkXimrfFe6HgxtWLv4rQTZ4emGKgG3JUlX84fAEQpDJiueArodw="},{"h":"8c46cddcb2e4287f1587","i":"FFIaP63uB3H6Yg0/","c":"yBY0gZo1KYxvKn7Yt4vikvhai27oZXLq5Oav03N6JU8e0dwYHngKke6hrlKBz3HsH1aEEmLaeUjJbY5sNx700rV8bGI8ZploSHDY0T0H4qp/yqevCi980nqs5utMbMcDfDoMy5KaiMU98zD88wzJU0R9KrFrroxqKxf/y6huK4vv0j5rvDKQDWFNM7BTH6m8/yz7w5J9paGnsA=="},{"h":"62bf66556769b709b7d8","i":"a5hD1e16Ko98iVWq","c":"W+hv6/sGQu5oiBH0JKlM1JqXZ8N2MfahdNqVJDxhYuXRaiYo8orK5RviGlStuxdD+wgCk6RF7a5Bt7Wj9n8XM4+iUdb/uKdxjC4FOUgHWnu33AhbLEjuuSwDIyy5Rn8i0xhTspLtcC8ZBSu9LEJLziYaMB8sE0Va8ZAWvZ6lKtAcWQsdXSzQ/SZB2qYH0g=="},{"h":"7b7cb82b8b187b478d23","i":"mRaQnyW/t9hzXzBR","c":"ZeBPKTv1GzeN6Pq1pfE/gpvTZa6/fYtIQZDcbV2aE4YokT6AeUBKDwHCbVshIFIrq6X1oXG4/1Z+qrW5vNyaBrdcEg/61F6pMP5UKq+V/njqm8OKCo/5ZRzGqbVtlB+ncI79erK2aJ20IcDpKDHRxWJ5xfQMfVN39q33lSydMK1Pvm+aRN4="},{"h":"6eb665bb2bd171acc730","i":"lHQIPYbnrfV/CXR1","c":"9y5CtSAbKgpcwzIz0KZKH1SkpqzTda3J/SBwqxrcQlmdX3mynOPuq4a5khXzdJoLeo2jk1eQcyp6psQTLaxtV5kCLf04szVp8jFqMqtNN1i4hNiP5WLgNtcqeEqR4AVwggri5NlvqXh7SXDZi4klPc/Qi/Ueb/GV9ZzQpzbsmXxfcMJHslRsXvWqc7il"},{"h":"f0838bcc7d14274a81c5","i":"EjgwsMX+vr91HdG/","c":"/JlRKqdNi9tBc4Q73yndO6Yq7MEHo9wjLFac016+TzB0RbCx3iH4T/qi0WhjDmPQFWmlB/0UddoGhItBHrLC8+gaMjUxZaXm1r664YHyufw6RGBbz3gWSsgzuLF0OFg2VP8ELHWcEtdwDy70zd4ULiB4zVlFjPXMctNSC8Jod8r5C2bZ8PyaLY4Bwrig8Rsw03DOGJ5G"},{"h":"dfb30386c477a8c7dccc","i":"3SVRqDtc6JFlHQr6","c":"6HiEmZo0pjjWCDl1CQvzNjLOd/e+L8+1zqB4WHogdsQJyJMDdnQdTi69/QmXmN04rMUsDKTAispAvYRKiKuk56p7w7/fuXz9hZyeAtTCO+hvE1H5Z5vCN94Ea8L8VwCsxTcePdBaFP+u07L66ea9PV2U36Afhoif9+qeTMi8KxFk7l2knq9CRT/mcIz3pB0I87nQckEQnsgsiNY="},{"h":"67dee467749e922d3fcc","i":"OgtTDadIgaCdye7F","c":"277XiZkW3FX8i5PcOXVGY8qV4nug1qlkQ2Obso1htUF3XjOe5Ai8uNrOIRLLuzWEsPL27Wl/WMLFj2bCh5a8V8iVcc7I6rZkQ8STYhrddH7KsgiTgBrhEAjdNNHY36Mh4GiJ2FY7tvnbP2oophUlJokhffjXA18AmEaEDoUWfTAYdY/vH0GnbIm9"},{"h":"570b95644d7769f8e072","i":"VpnTFdxmwFq+Op7u","c":"g6ZluAi+V4FNxzw1Pa5fXmcq+vl3IvafxDGhU5hW2jj1vtJkLnvjglNfnMyDQOPs+U+3H5o99xsLCS3BfxY3+3gV8MDN0RqjkwMwQifWgZeyYuvHH2vSdPWvVEhah9tdDU52YbHr2lm1myyy06vQh7DCn0J6zcF7gNRD98Y="},{"h":"0844c353bca9f5eeab11","i":"GuWdy4f7KzgSNsEl","c":"a3EVeRkA+VlXRqqEzP2EGjo++opC5A62cMdupv2fZ4Lbqv2jgCSCSfgIawmBYAYwz0tUfpA90SzdpTsJFE0uXbR6oOCRuznKhS8PtdJ6+A2QBz2/Iys4Ss4c2pZTAr+tZ/USFCGbsKshXo3MlxPMCkcJrQhFIYtRUN5uAA=="},{"h":"921503ccf1b46c45fd5e","i":"03g+PYytCJbcyV4b","c":"hnk+4lLfUrOs96xqKQVnJQPoX+TKWHRzXx6aQsFihKOMUpPbQdqHs/mT0LdrP1FI9wui+kTNWmfX30Eyc9pRxgUqXdprhLH+ruO/KX/hnKDaxOjP68CeMGdKXTZ0xDARObiO15ziQ1uaSRabRW/U6ArCtj5nhBkV4u1oaycfVmtRXjYN6M1Pcw=="},{"h":"4ebd9160a884e33cb6d7","i":"inamEn862o/yJ1ru","c":"zXT6x/kpnWs7pIPqMqPGJidCAhFHahL6RJ0//u+ifA59haxf6tdzX96hxbE3V9xka9nu1unXbZ0sb0gbodH+r3JuBuSSgCeaQbA0fuALpU6me6QQxMWVV8y1povG+1Y+vTxsbgXLJajQD3xJDa6Y5DheImpyJExFpH27u5/muyuDGclI40iKjDSAHtEnOLhTTfLmCA=="},{"h":"c21f4d117b855374e5d2","i":"geNiTSDxWWN/j2TJ","c":"mivz8Jx5eFLI4Rq23HzS6OCLIiyRqXKs7h+7VtPjeX/YpEqLDQhPGYSgNbxlbBNU5S2sPKoreKx5vXGPcTH5jOAZxo+dDm8iiahG+xy+ZoOcM++oWufIWuZ8R4adOs//lxM5E7dx1SZjZD0imtRWzz1J44ZQ"},{"h":"c07455a6e1706680feae","i":"zMNmRgbLK6uSD75P","c":"6vJRbDvPCEx8fm28RRe3wQcnOAAkrrxwWAekzRWdKgpp2rcF+rKiinADmGAKfGqjYtN3H10EthAIgVFF2UXhDsrpJ/usPeVTUzMuTyyScOMkXkGgmjWK84nSQGe9tJNYuZsDymv7zIxDXLbI8nn4Bg=="},{"h":"807efae58ec5e6c6deae","i":"qonMTuhuOHfhIqgc","c":"oHe+hjPytkLpFwf6aH80VNAPrTA2zRFoGBsiZFtl8sv+WqY+i/tCUb3rGq0Y3RYkBX15p+IBJFzJyZ823cYNTP8JpIpamt0JGL9ECSbGD7qHN8HrjilxC6zR1PB8VY6RbJOgMAspRmlShdCUNg=="},{"h":"9d976b2d8c9e3bfb5bf9","i":"2UDzzRGPfUaZJmHZ","c":"/sSsg8HPhg5ySCh4W+QCD+uD4LoYt4up4hei6ZN/66TqTGlJkEtAeVw1dhz2VRJ6uurzqO05XzrHpHECNFbv+dTsKtI2Xv50/BNL0GADNfXDIdrJRHwXkeQ5qjkeGBgHy726eYVfHqop00XmqsFLonKJJkpHpckBgOmB"},{"h":"648c31e2c02475e3b795","i":"DAetDtktmcCPP6nX","c":"5UWxMxmjYUW/OBTm7Or1Y5X7f3qj0KIZ+K4LtOGWvpIdj23ienQ54Q8sJ0r5NY6Az7cHCMLFqcE/WMhxxW4rLYAGoZy2b4cWLdT5PcCcCYk4wkbMTOIj6/L4sydOR42lAk9vl68HPsVvpvM3gjHo9Q=="},{"h":"01b7f9708000aa3da9d0","i":"XG+Kp0lknE0LEte4","c":"VyT3cjjTJCAy/XhAlLcnUBsClMJ1rskMWuyCOr5sT0urpYep9vciQ5kR+1XdnyQ7j0ibmzJPfpeC6QZuDCb7DJT/+LJUMiA7X7N1Iw6huJxYdYGc3Z2Uh/LIMCD1iPrac+qdR24DJH4tIgpU59MX"},{"h":"601c32ea81e4be4ab626","i":"9yndU6xFIEttATn9","c":"29vDYeUXWs88sD5F6iwuBzPxvVwN4DNt6O/Ug+H6OWzKIfK7KoS6Y2Mwf7W0zIgtLGxh25prF5vArz8JaR2do2V+Gp7xekRxwFVyPlThLOxSta1tfHriCDka05pgRV3j32DpDNPd"},{"h":"c88ec4c15561712472d9","i":"9vgJ9TDjIjwzStP6","c":"BsaqIsOAC2TCp8tGXStL0Cr2OS77V5vrOtlyY02hUPeHsvFbzyUuyW3gdD3kBQ6XKXPnWxGtdh2pKhRqNFtpieGR6QBQF0wszrIas1TtvSqo53VTA8xwtg7fzfGJkEG/j+1DSA=="},{"h":"7ff2d2f4681ea9f7a391","i":"mjtpHa/3OMlHT9G6","c":"TvRDE10MzJsDu5V9lm83DbWCqTUhTtKbI97mUaDlDaKVgKRA0XGNdouxOWwCjOpCC0MhtUjgGK9dkjZYNT2cx+UkD3yUahvzL/zVLXqDUpUKYyIblNIIfrPdLABKnLTbfXq9MbIA3DQY/J5jcg=="},{"h":"f395f4bbfca4cd587c43","i":"sI2Z+g/eZvPHUT7F","c":"FgNQ78sNqe8ws9GZSHQ4U8jwDcMeBTTGmzUU5J0bPNnhSkuY5VrgZ87AAtZRNDyb8WzqBU9qpE+Xhj1h1bAH45OvAQocNRXc6OFa86yeD9GmiAdIELM/u08NXhQ="}]};
+const IDS='shw2-staff-v1',UK='shw2_user';let USER=null;
+const d2a=t=>String(t||'').replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace(/[۰-۹]/g,c=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(c)).replace(/\D/g,'');
+const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+const unb=t=>Uint8Array.from(atob(t),c=>c.charCodeAt(0));
+async function tryLogin(id,ph){
+  id=d2a(id);ph=d2a(ph);if(ph.length===9)ph='0'+ph;
+  if(id.length!==10||ph.length!==10)return null;
+  const h=hex(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(IDS+id))).slice(0,20);
+  const rec=EMP.r.find(r=>r.h===h);if(!rec)return null;
+  try{const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(id+':'+ph),'PBKDF2',false,['deriveKey']);
+    const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:unb(EMP.s),iterations:EMP.n,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+    const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb(rec.i)},key,unb(rec.c));
+    return Object.assign(JSON.parse(new TextDecoder().decode(pt)),{id,ph})}catch(e){return null}}
+function applyUser(u){USER=u;$('#f_name').value=u.n;$('#f_job').value=u.j;$('#f_no').value=u.o;document.documentElement.classList.remove('locked')}
+function lockUI(){USER=null;document.documentElement.classList.add('locked');$('#lkPw').value='';setTimeout(()=>$('#lkId').focus(),50)}
+$('#lkEye').onchange=()=>{$('#lkPw').type=$('#lkEye').checked?'text':'password'};
+$('#lkGo').onclick=async()=>{const e=$('#lkErr'),b=$('#lkGo');e.textContent='';b.disabled=true;b.textContent='جاري التحقق…';
+  try{if(!(crypto&&crypto.subtle))throw 0;const u=await tryLogin($('#lkId').value,$('#lkPw').value);
+    if(u){try{localStorage.setItem(UK,JSON.stringify(u))}catch(_){}applyUser(u)}else e.textContent='السجل المدني أو رقم الجوال غير صحيح.'}
+  catch(_){e.textContent='تعذّر التحقق على هذا المتصفح.'}finally{b.disabled=false;b.textContent='دخول'}};
+['lkId','lkPw'].forEach(i=>$('#'+i).addEventListener('keydown',e=>{if(e.key==='Enter')$('#lkGo').click()}));
+$('#btnOut').onclick=()=>{try{localStorage.removeItem(UK)}catch(_){}$('#f_name').value=$('#f_job').value=$('#f_no').value='';lockUI()};
+(async()=>{let u=null;try{u=JSON.parse(localStorage.getItem(UK)||'null')}catch(_){}
+  if(u&&u.id&&u.ph){const v=await tryLogin(u.id,u.ph).catch(()=>null);if(v){applyUser(v);return}}
+  lockUI()})();
+
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
