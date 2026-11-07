@@ -40,7 +40,7 @@ function sfCheck(){if(sfTried)return;sfTried=1;fetch(SF.u,{cache:"no-store"}).th
 function sfPut(){if(!sfOk||document.getElementById(SF.id))return;var ref=document.getElementById(SH.id)||document.getElementById(PS.id);if(!ref||!ref.getAttribute("data-ink"))return;
  var n=ref.cloneNode(true);n.id=SF.id;n.href=SF.u;n.setAttribute("data-ink","shawahed-staff");
  var h=n.querySelector("h3"),p=n.querySelector("p"),v=n.querySelector(".ink-tile svg");if(!h||!p||!v)return;
- h.textContent=SF.t;p.textContent=SF.p;v.innerHTML=ICON["shawahed-staff"];ref.after(n)}
+ h.textContent=SF.t;p.textContent=SF.p;v.innerHTML=ICON["shawahed-staff"];n.querySelector(".ink-tile").style.setProperty("background","radial-gradient(circle at 30% 20%,#e5313d,#8f0d17)","important");h.style.setProperty("color","#c1121f","important");ref.after(n)}
 function apply(){
  var s=document.getElementById('tools');if(!s)return;
  if(!document.getElementById('ink-css')){var st=document.createElement('style');st.id='ink-css';st.textContent=css;document.head.appendChild(st);
