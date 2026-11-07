@@ -271,7 +271,7 @@ function collect(){
 const safe=s=>(s||'بدون_اسم').trim().replace(/[\\/:*?"<>|\s]+/g,'_');
 
 $('#btnPrint').onclick=()=>{if(validate())print()};
-const ENDPOINT='';/* رابط تطبيق Apps Script — يُضاف بعد نشره */
+const ENDPOINT='https://script.google.com/macros/s/AKfycbw_Mwc6xZCIPBTSGrtrkpsOrccMmH69z5X6TNksgCweoMTVxUg2E1biTg9ZuKdrIR4dRg/exec';/* رابط تطبيق Apps Script — يُضاف بعد نشره */
 const fname=()=>'شاهد - '+USER.n+' - '+new Date().toISOString().slice(0,10)+'.pdf';
 const b64=b=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(String(r.result).split(',')[1]);r.onerror=no;r.readAsDataURL(b)});
 const usedDocs=()=>[...new Set([...thumbs.querySelectorAll('.th[data-doc]')].map(x=>+x.dataset.doc))].map(k=>DOCS[k]);
