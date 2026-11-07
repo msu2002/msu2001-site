@@ -6,7 +6,7 @@
 <title>شواهد — سجل متابعة المهام</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#279a9b">
-<style id="lockcss">html.locked #sheet,html.locked .actions,html.locked #status,html.locked #iosHelp{display:none!important}#lock{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;background:linear-gradient(160deg,#0f5e5f,#279a9b 55%,#a9dcd9);padding:20px}html.locked #lock{display:flex}#lock .box{width:min(380px,100%);background:#fff;border-radius:24px;padding:30px 24px;text-align:center;box-shadow:0 20px 60px #0006}#lock .ic{width:84px;height:84px;margin:0 auto 10px;border-radius:24px;background:#279a9b;display:grid;place-items:center}#lock h2{margin:6px 0 4px;font-family:Cairo,sans-serif;font-weight:800;font-size:26px;color:#1d7d7e}#lock p{margin:0 0 16px;font-size:14.5px;color:#555}#lock input{width:100%;font:inherit;font-size:28px;letter-spacing:10px;text-align:center;border:2px solid #cfd6d6;border-radius:14px;padding:10px;margin-bottom:10px;direction:ltr}#lock input:focus{outline:none;border-color:#279a9b}#lock button{width:100%;font:inherit;font-size:18px;font-weight:700;background:#279a9b;color:#fff;border:0;border-radius:14px;padding:12px;cursor:pointer}#lock .err{min-height:24px;color:#c0392b;font-weight:700;font-size:14px;margin-top:8px}.pick{display:flex;gap:14px;flex-wrap:wrap;border:2px solid var(--t);border-radius:14px;background:var(--t-bg);padding:14px 16px;margin:6px 0 20px}
+<style id="lockcss">html.locked #sheet,html.locked .actions,html.locked #status,html.locked #iosHelp{display:none!important}#lock{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;background:linear-gradient(160deg,#0f5e5f,#279a9b 55%,#a9dcd9);padding:20px}html.locked #lock{display:flex}#lock .box{width:min(380px,100%);background:#fff;border-radius:24px;padding:30px 24px;text-align:center;box-shadow:0 20px 60px #0006}#lock .ic{width:84px;height:84px;margin:0 auto 10px;border-radius:24px;background:#279a9b;display:grid;place-items:center}#lock h2{margin:6px 0 4px;font-family:'Noto Kufi Arabic',Cairo,sans-serif;font-weight:800;font-size:26px;color:#1d7d7e}#lock p{margin:0 0 16px;font-size:14.5px;color:#555}#lock input{width:100%;font:inherit;font-size:28px;letter-spacing:10px;text-align:center;border:2px solid #cfd6d6;border-radius:14px;padding:10px;margin-bottom:10px;direction:ltr}#lock input:focus{outline:none;border-color:#279a9b}#lock button{width:100%;font:inherit;font-size:18px;font-weight:700;background:#279a9b;color:#fff;border:0;border-radius:14px;padding:12px;cursor:pointer}#lock .err{min-height:24px;color:#c0392b;font-weight:700;font-size:14px;margin-top:8px}.homeTop{position:absolute;top:44px;right:44px;z-index:2;font-weight:700;font-size:14px;color:var(--t-d);text-decoration:none;border:1.5px solid var(--t-l);border-radius:999px;padding:4px 12px;background:#fff}@media print{.homeTop{display:none!important}}@media(max-width:720px){.homeTop{right:14px;top:38px}}.pick{display:flex;gap:14px;flex-wrap:wrap;border:2px solid var(--t);border-radius:14px;background:var(--t-bg);padding:14px 16px;margin:6px 0 20px}
 .pk{flex:1 1 260px;min-width:0}.pk>label{display:block;font-weight:700;color:var(--t-d);font-size:15.5px;margin-bottom:4px}
 .pk select.cls,.pk .dt select,.pk .dt input,.pk input.cx{width:100%;font:inherit;font-size:16px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;color:var(--ink);min-height:44px}
 .pk input.cx{margin-top:8px}.pk .dt{padding:0;display:flex;gap:8px;flex-wrap:nowrap}.pk .dt .d{width:22%}.pk .dt .m{width:44%}.pk .dt .y{width:34%;text-align:center}
@@ -35,25 +35,25 @@
 <link rel="apple-touch-icon" href="data:image/png;base64,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">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <meta name="robots" content="noindex,nofollow">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Cairo:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@500;600;700;800&family=Cairo:wght@700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{--t:#279a9b;--t-d:#1d7d7e;--t-l:#a9dcd9;--t-bg:#eaf6f5;--gray:#f1f1f1;--ink:#222;--line:#cfd6d6}
 *{box-sizing:border-box}
-body{margin:0;background:#e9eeee;font-family:'IBM Plex Sans Arabic','Cairo',sans-serif;color:var(--ink);padding:20px 10px;line-height:1.8;-webkit-font-smoothing:antialiased}
+body{margin:0;background:#e9eeee;font-family:'IBM Plex Sans Arabic','Noto Kufi Arabic','Cairo',sans-serif;color:var(--ink);padding:20px 10px;line-height:1.8;-webkit-font-smoothing:antialiased}
 #sheet{max-width:1000px;margin:0 auto;background:#fff;box-shadow:0 6px 30px #0002;position:relative;overflow:hidden;padding:0 44px 0}
 /* الشريط العلوي والسفلي */
 .band{height:26px;margin-inline:-44px;background:linear-gradient(270deg,var(--t) 0 38%,var(--t-l) 38% 62%,var(--t) 62% 100%)}
 .band.bottom{margin-top:36px}
 .year{position:absolute;top:44px;left:44px;display:flex;align-items:center;gap:6px;z-index:2}
 .year span{font-weight:700;color:var(--t-d);font-size:14px}
-.year input{width:110px;font:inherit;font-family:'Cairo',sans-serif;font-weight:800;font-size:22px;letter-spacing:1px;text-align:center;color:var(--t);border:0;border-bottom:2px dashed var(--t-l);background:transparent;padding:0 4px}
+.year input{width:110px;font:inherit;font-family:'Noto Kufi Arabic','Cairo',sans-serif;font-weight:800;font-size:22px;letter-spacing:1px;text-align:center;color:var(--t);border:0;border-bottom:2px dashed var(--t-l);background:transparent;padding:0 4px}
 .year input:focus{outline:none;border-bottom-color:var(--t);background:var(--t-bg)}
 .hdr{text-align:center;padding:26px 0 8px}
 .hdr .a{font-size:19px;font-weight:700}
 .hdr .b{font-size:19px;font-weight:700;color:var(--t-d)}
-h1{font-family:'Cairo',sans-serif;font-weight:800;font-size:28px;text-align:center;margin:22px 0 0}
+h1{font-family:'Noto Kufi Arabic','Cairo',sans-serif;font-weight:800;font-size:28px;text-align:center;margin:22px 0 0}
 .rule{width:230px;margin:6px auto 26px;border-top:3px solid var(--t);border-bottom:3px solid var(--t-l);height:9px}
 .bul{display:flex;gap:8px;align-items:flex-start;font-weight:700;font-size:16.5px;line-height:2;margin:0 0 16px}
 .bul::before{content:"◉";font-size:17px;flex:none;margin-top:2px}
@@ -125,6 +125,7 @@ table{border-collapse:collapse;width:100%}
 
 <div id="sheet">
   <div class="band"></div>
+  <a class="homeTop" href="/" data-x="1">🏠 الرئيسية</a>
 
   <div class="year"><span>السنة</span><input type="text" id="f_year" value="١٤٤٨هـ" aria-label="السنة" maxlength="14"></div>
 
@@ -174,7 +175,6 @@ table{border-collapse:collapse;width:100%}
   <button class="btn" id="btnPdf">📄 تصدير PDF</button>
   <button class="btn primary" id="btnSave">✅ حفظ ومشاركة</button>
   <button class="btn" id="btnInstall">📲 إضافة إلى الشاشة الرئيسية</button>
-  <button class="btn" id="btnFolder">📁 مجلد الدرايف</button>
   <button class="btn" id="btnLock">🔒 قفل الصفحة</button>
   <button class="btn danger" id="btnReset">🔄 مسح البيانات</button>
 </div>
@@ -225,7 +225,7 @@ async function snapshot(){
     d.style.cssText='white-space:pre-wrap;padding:'+(el.tagName==='INPUT'?'6px 12px':'8px 10px')+';font-size:'+(el.tagName==='INPUT'?'15.5px':'14.5px')+';min-height:'+el.offsetHeight+'px';
     el.style.display='none';el.after(d);swaps.push(()=>{d.remove();el.style.display=''});
   });
-  const hide=[...document.querySelectorAll('.evbtn,.evhint,.th button')];hide.forEach(x=>x.style.display='none');
+  const hide=[...document.querySelectorAll('.evbtn,.evhint,.th button,.homeTop')];hide.forEach(x=>x.style.display='none');
   await document.fonts.ready;
   const c=await html2canvas(sheet,{scale:2.5,backgroundColor:'#fff',useCORS:true});
   swaps.forEach(f=>f());hide.forEach(x=>x.style.display='');return c;
@@ -265,11 +265,10 @@ $('#btnSave').onclick=async()=>{if(!validate())return;$('#btnSave').disabled=tru
       const j=await r.json();if(!j.ok)throw new Error('تعذّر الحفظ في Drive.');msg('تم الحفظ في مجلدك على Drive ✔','ok');return;
     }
     const files=[new File([blob],base+'.pdf',{type:'application/pdf'}),new File([jb],base+'.json',{type:'application/json'})];
-    if(navigator.canShare&&navigator.canShare({files})){try{await navigator.share({files,title:'شواهد'});msg('تمت المشاركة — اختر «Drive» لحفظها في مجلدك ✔','ok');return}catch(e){if(e&&e.name==='AbortError'){msg('أُلغيت المشاركة.');return}}}
+    if(navigator.canShare&&navigator.canShare({files})){try{await navigator.share({files,title:'شواهد'});msg('تمت المشاركة — اختر مكان الحفظ ✔','ok');return}catch(e){if(e&&e.name==='AbortError'){msg('أُلغيت المشاركة.');return}}}
     for(const f of files){const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove();await new Promise(r=>setTimeout(r,400))}
-    msg('تم تنزيل الملفين — ارفعهما إلى مجلد Drive الخاص بك ✔','ok');
+    msg('تم تنزيل الملفين — احفظهما حيث تشاء ✔','ok');
   }catch(e){msg(e.message,'bad')}finally{$('#btnSave').disabled=false}};
-$('#btnFolder').onclick=()=>window.open(DRIVE.FOLDER_URL,'_blank','noopener');
 $('#btnReset').onclick=()=>{if(confirm('مسح جميع البيانات؟')){
   document.querySelectorAll('input:not([readonly]):not([type=file]),textarea,select').forEach(x=>{x.value=x.id==='f_year'?'١٤٤٨هـ':(x.classList.contains('y')?DEF_YEAR:'');x.style.height=''});
   selC.dispatchEvent(new Event('change'));document.querySelectorAll('.thumbs').forEach(t=>t.innerHTML='');msg('')}};
