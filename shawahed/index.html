@@ -51,7 +51,7 @@ table{border-collapse:collapse;width:100%}
 .goals td.g{background:var(--gray);text-align:center;vertical-align:middle;font-size:14.5px;font-weight:500;width:11%}
 .goals td.c{background:#fff}
 .goals td.c:focus-within{outline:2px solid var(--t);outline-offset:-2px}
-.goals select.cls{width:100%;height:100%;min-height:60px;border:0;background:transparent;font:inherit;font-size:14.5px;padding:8px 6px;display:block;color:var(--ink);cursor:pointer}.goals select.cls:focus{outline:none}.goals textarea,.info input{width:100%;height:100%;min-height:60px;border:0;background:transparent;font:inherit;font-size:14.5px;padding:8px 10px;resize:none;display:block;color:var(--ink)}
+.goals select.cls{width:100%;height:100%;min-height:60px;border:0;background:transparent;font:inherit;font-size:14.5px;padding:8px 6px;display:block;color:var(--ink);cursor:pointer}.goals select.cls:focus{outline:none}.goals input.cx{width:calc(100% - 12px);margin:0 6px 8px;border:1px solid var(--line);border-radius:6px;padding:7px 8px;font:inherit;font-size:14.5px}#lkShow{display:flex;align-items:center;gap:8px;justify-content:center;font-size:14px;margin:2px 0 10px;cursor:pointer;color:#334}#lkShow input{width:auto;margin:0;padding:0}.goals textarea,.info input{width:100%;height:100%;min-height:60px;border:0;background:transparent;font:inherit;font-size:14.5px;padding:8px 10px;resize:none;display:block;color:var(--ink)}
 .info input{min-height:36px;padding:6px 12px;font-size:15.5px}
 .info input:focus,.goals textarea:focus{outline:none}
 .info td.fixed input{cursor:default;font-weight:600;color:#333}
@@ -101,7 +101,7 @@ table{border-collapse:collapse;width:100%}
 </style>
 </head>
 <body>
-<div id="lock" dir="rtl"><div class="box"><div class="ic"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.4" fill="#fff"/></svg></div><h2 id="lkT">شواهد</h2><p id="lkP">أدخل الرقم السري</p><input id="lkIn" type="password" inputmode="numeric" autocomplete="off" maxlength="8" aria-label="الرقم السري"><input id="lkIn2" type="password" inputmode="numeric" autocomplete="off" maxlength="8" aria-label="تأكيد الرقم السري" style="display:none" placeholder="تأكيد الرقم"><button id="lkGo" type="button">دخول</button><div class="err" id="lkErr"></div></div></div>
+<div id="lock" dir="rtl"><div class="box"><div class="ic"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.4" fill="#fff"/></svg></div><h2 id="lkT">شواهد</h2><p id="lkP">أدخل الرقم السري</p><input id="lkIn" type="password" inputmode="numeric" autocomplete="off" maxlength="8" aria-label="الرقم السري"><input id="lkIn2" type="password" inputmode="numeric" autocomplete="off" maxlength="8" aria-label="تأكيد الرقم السري" style="display:none" placeholder="تأكيد الرقم"><label id="lkShow"><input type="checkbox" id="lkEye"> إظهار الرقم السري</label><button id="lkGo" type="button">دخول</button><div class="err" id="lkErr"></div></div></div>
 
 <div id="sheet">
   <div class="band"></div>
@@ -166,7 +166,7 @@ const $=s=>document.querySelector(s), st=$('#status'), sheet=$('#sheet');
 const DAYS=["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس"];
 const MONTHS=["محرم","صفر","ربيع الأول","ربيع الآخر","جمادى الأولى","جمادى الآخرة","رجب","شعبان","رمضان","شوال","ذو القعدة","ذو الحجة"];
 const DEF_YEAR="١٤٤٨";
-const CLASSES=["الأول الابتدائي","الثاني الابتدائي","الثالث الابتدائي","الرابع الابتدائي","الخامس الابتدائي","السادس الابتدائي"];
+const OTHER="أخرى";const CLASSES=["الأول الابتدائي","الثاني الابتدائي","الثالث الابتدائي","الرابع الابتدائي","الخامس الابتدائي","السادس الابتدائي"];
 const tb=$('#goals tbody');
 function addRow(){
   const n=tb.rows.length, tr=tb.insertRow();
@@ -175,11 +175,12 @@ function addRow(){
     '<input class="y" type="text" inputmode="numeric" maxlength="4" value="'+DEF_YEAR+'" aria-label="السنة">'+
     '<select class="m" aria-label="الشهر"><option value="">الشهر</option>'+MONTHS.map(m=>'<option>'+m+'</option>').join('')+'</select></div></td>'+
     '<td class="c"><textarea aria-label="ما تم إنجازه" rows="2"></textarea></td>'+
-    '<td class="c"><select class="cls" aria-label="الفصل"><option value="">اختر الفصل</option>'+CLASSES.map(c=>'<option>'+c+'</option>').join('')+'</select></td>'+
+    '<td class="c"><select class="cls" aria-label="الفصل"><option value="">اختر الفصل</option>'+CLASSES.map(c=>'<option>'+c+'</option>').join('')+'<option>'+OTHER+'</option></select><input class="cx" type="text" placeholder="اكتب الفصل يدوياً" aria-label="الفصل (كتابة يدوية)" style="display:none"></td>'+
     '<td class="c"><div class="ev"><div class="thumbs"></div><label class="up">📷 إضافة صورة من جهازك<input type="file" accept="image/*" multiple></label></div></td>'+
     '<td class="c"><textarea aria-label="ملاحظات" rows="2"></textarea></td>';
 }
 DAYS.forEach(()=>addRow());
+tb.addEventListener('change',e=>{const t=e.target;if(t.classList&&t.classList.contains('cls')){const x=t.parentNode.querySelector('.cx');const o=t.value===OTHER;x.style.display=o?'block':'none';if(o)x.focus();else x.value=''}});
 
 /* الشواهد: صور من الجهاز (تُصغَّر تلقائياً) */
 function shrink(file){return new Promise((ok,no)=>{const r=new FileReader();r.onerror=no;r.onload=()=>{const im=new Image();im.onerror=no;im.onload=()=>{
@@ -205,7 +206,7 @@ function validate(){
 async function snapshot(){
   const swaps=[];
   sheet.querySelectorAll('input:not([type=file]),textarea,select').forEach(el=>{
-    const d=document.createElement('div');d.textContent=el.tagName==='SELECT'?(el.value||''):el.value;
+    const d=document.createElement('div');d.textContent=el.tagName==='SELECT'?(el.value===OTHER&&el.parentNode.querySelector('.cx').value.trim()?'':(el.value||'')):el.value;
     d.style.cssText='white-space:pre-wrap;padding:'+(el.tagName==='INPUT'?'6px 12px':'8px 10px')+';font-size:'+(el.tagName==='INPUT'?'15.5px':'14.5px')+';min-height:'+el.offsetHeight+'px';
     el.style.display='none';el.after(d);swaps.push(()=>{d.remove();el.style.display=''});
   });
@@ -231,7 +232,7 @@ function toPdf(canvas){
 function collect(){
   const goals=[...tb.rows].map(r=>({اليوم:r.cells[0].textContent,
     التاريخ:[r.querySelector('.dt .d').value,r.querySelector('.dt .m').value,r.querySelector('.dt .y').value].filter(Boolean).join(' '),
-    'ما تم إنجازه':r.cells[2].querySelector('textarea').value,'الفصل':r.cells[3].querySelector('select').value,
+    'ما تم إنجازه':r.cells[2].querySelector('textarea').value,'الفصل':(()=>{const v=r.cells[3].querySelector('select').value;return v===OTHER?(r.cells[3].querySelector('.cx').value.trim()||OTHER):v})(),
     'عدد الشواهد (صور)':r.cells[4].querySelectorAll('.th').length,'ملاحظات':r.cells[5].querySelector('textarea').value}));
   return {السنة:$('#f_year').value,الاسم:$('#f_name').value,المسمى_الوظيفي:$('#f_job').value,المدير_المباشر:$('#f_mgr').value,الإدارة:$('#f_dep').value,الأيام:goals,تاريخ_الحفظ:new Date().toISOString()};
 }
@@ -257,7 +258,7 @@ $('#btnSave').onclick=async()=>{if(!validate())return;$('#btnSave').disabled=tru
 $('#btnFolder').onclick=()=>window.open(DRIVE.FOLDER_URL,'_blank','noopener');
 $('#btnReset').onclick=()=>{if(confirm('مسح جميع البيانات؟')){
   document.querySelectorAll('input:not([readonly]):not([type=file]),textarea,select').forEach(x=>{x.value=x.id==='f_year'?'١٤٤٨هـ':(x.classList.contains('y')?DEF_YEAR:'');x.style.height=''});
-  document.querySelectorAll('.thumbs').forEach(t=>t.innerHTML='');msg('')}};
+  document.querySelectorAll('select.cls').forEach(x=>x.dispatchEvent(new Event('change',{bubbles:true})));document.querySelectorAll('.thumbs').forEach(t=>t.innerHTML='');msg('')}};
 
 
 /* ---------- قفل الصفحة بالرقم السري ---------- */
@@ -268,7 +269,7 @@ $('#btnReset').onclick=()=>{if(confirm('مسح جميع البيانات؟')){
   let fails=0,until=0,idle,hid=0;
   const get=k=>{try{return localStorage.getItem(k)}catch(_){return null}};
   const set=(k,v)=>{try{localStorage.setItem(k,v)}catch(_){}};
-  function show(){root.classList.add('locked');const first=!get(K);T.textContent=first?'اختر رقمك السري':'شواهد';P.textContent=first?'٤ إلى ٨ أرقام — لن يُطلب منك أي شيء سواه':'أدخل الرقم السري';inp2.style.display=first?'':'none';go.textContent=first?'حفظ الرقم والدخول':'دخول';inp.value=inp2.value='';err.textContent='';setTimeout(()=>inp.focus(),50)}
+  function show(){root.classList.add('locked');const first=!get(K);T.textContent=first?'اختر رقمك السري':'شواهد';P.textContent=first?'٤ إلى ٨ أرقام — لن يُطلب منك أي شيء سواه':'أدخل الرقم السري';inp2.style.display=first?'':'none';go.textContent=first?'حفظ الرقم والدخول':'دخول';inp.value=inp2.value='';eye.checked=false;eye.onchange();err.textContent='';setTimeout(()=>inp.focus(),50)}
   function unlock(){root.classList.remove('locked');inp.value=inp2.value='';rearm()}
   function rearm(){clearTimeout(idle);idle=setTimeout(show,5*60*1000)}
   async function submit(){
@@ -282,6 +283,7 @@ $('#btnReset').onclick=()=>{if(confirm('مسح جميع البيانات؟')){
     if(await hash(p,get(KS)||'')===get(K)){fails=0;unlock()}
     else{fails++;inp.value='';err.textContent='الرقم غير صحيح.';if(fails>=5){until=Date.now()+30000;fails=0;err.textContent='٥ محاولات خاطئة — انتظر ٣٠ ثانية.'}}
   }
+  const eye=document.getElementById('lkEye');eye.onchange=()=>{[inp,inp2].forEach(i=>i.type=eye.checked?'text':'password')};
   go.onclick=submit;[inp,inp2].forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')submit()}));
   document.getElementById('btnLock').onclick=show;
   ['pointerdown','keydown','input'].forEach(ev=>document.addEventListener(ev,()=>{if(!root.classList.contains('locked'))rearm()},true));
