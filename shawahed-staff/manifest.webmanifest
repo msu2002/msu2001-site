@@ -1,0 +1,21 @@
+{
+  "name": "شواهد الإداريين — سجل متابعة المهام",
+  "short_name": "شواهد الإداريين",
+  "description": "سجل متابعة المهام والشواهد للإداريين — المدرسة الابتدائية المحمدية بالرس",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#279a9b",
+  "theme_color": "#279a9b",
+  "icons": [
+    {
+      "src": "/shawahed/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
