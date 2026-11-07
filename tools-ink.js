@@ -8,6 +8,7 @@ var ICON={
 "waraq":'<path d="M3 8.5h18V19a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 8.5V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2.5"/><path d="M3 13.5h18"/><path d="M10.8 12v3h2.4v-3"/>',
 "quran":'<path d="M12 6.2c-2.2-1.6-5.2-2.1-8.2-1.5v13c3-.6 6 0 8.2 1.6 2.2-1.6 5.2-2.2 8.2-1.6v-13c-3-.6-6 0-8.2 1.5z"/><path d="M12 6.2v13"/><path d="M7.4 9.8c1.4-.2 2.6 0 3.6.5M7.4 13c1.4-.2 2.6 0 3.6.5M13 10.3c1-.5 2.2-.7 3.6-.5M13 13.5c1-.5 2.2-.7 3.6-.5"/>',
 "photo-studio":'<rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.7"/><path d="M3.8 17l5-4.6 3.4 3.1 3-2.6 5 4.4"/><path d="M18 2.4v2.8M16.6 3.8h2.8"/>',
+"shawahed":'<rect x="5" y="4.5" width="14" height="17" rx="2.5"/><path d="M9 4.5h6v-1.2a.8.8 0 0 0-.8-.8H9.8a.8.8 0 0 0-.8.8z"/><path d="M8.5 11l1.3 1.3 2.2-2.4M8.5 16l1.3 1.3 2.2-2.4M14 11.2h2.5M14 16.2h2.5"/>',
 "fahad-studio":'<path d="M4 10.5h16V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M3.6 7.2l15.3-3.5.7 3.1-15.3 3.5z"/><path d="M7.7 6.7l2.1 3M12.2 5.7l2.1 3M16.7 4.7l2.1 3"/><path d="M10.5 13.4v4.2l3.8-2.1z"/>'
 };
 var css='#tools.ink-grid{display:grid;grid-template-columns:1fr;gap:14px}'+
@@ -27,6 +28,12 @@ function psPut(s){if(!psOk||document.getElementById(PS.id))return;var ref=docume
  var n=ref.cloneNode(true);n.id=PS.id;n.href=PS.u;n.setAttribute("data-ink","photo-studio");
  var h=n.querySelector("h3"),p=n.querySelector("p"),v=n.querySelector(".ink-tile svg");if(!h||!p||!v)return;
  h.textContent=PS.t;p.textContent=PS.p;v.innerHTML=ICON["photo-studio"];ref.after(n)}
+var SH={id:"frm-card8",u:"/shawahed/",k:"شواهد",t:"شواهدي الإدارية",p:"سجل متابعة المهام الخاص بي: توثيق الشواهد اليومية بالصور، مقفل برقم سري، مع تصدير PDF وحفظ في مجلد Drive الخاص."},shOk=0,shTried=0;
+function shCheck(){if(shTried)return;shTried=1;fetch(SH.u,{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(x){if(x.indexOf(SH.k)>-1){shOk=1;apply()}}).catch(function(){})}
+function shPut(){if(!shOk||document.getElementById(SH.id))return;var ref=document.getElementById(PS.id)||document.getElementById("frm-card6")||document.getElementById("frm-card5");if(!ref||!ref.getAttribute("data-ink"))return;
+ var n=ref.cloneNode(true);n.id=SH.id;n.href=SH.u;n.setAttribute("data-ink","shawahed");
+ var h=n.querySelector("h3"),p=n.querySelector("p"),v=n.querySelector(".ink-tile svg");if(!h||!p||!v)return;
+ h.textContent=SH.t;p.textContent=SH.p;v.innerHTML=ICON["shawahed"];ref.after(n)}
 function apply(){
  var s=document.getElementById('tools');if(!s)return;
  if(!document.getElementById('ink-css')){var st=document.createElement('style');st.id='ink-css';st.textContent=css;document.head.appendChild(st);
@@ -38,7 +45,7 @@ function apply(){
   var old=a.firstElementChild;if(old&&old.tagName==='DIV'&&!old.classList.contains('flex-1'))old.classList.add('ink-old');
   var t=document.createElement('div');t.className='ink-tile';t.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+ICON[k]+'</svg>';
   a.insertBefore(t,a.firstChild)});
- if(any)s.classList.add('ink-grid');psCheck();psPut(s)}
+ if(any)s.classList.add('ink-grid');psCheck();psPut(s);shCheck();shPut()}
 apply();
 new MutationObserver(apply).observe(document.documentElement,{childList:true,subtree:true});
 })();
@@ -53,7 +60,7 @@ function add(){
  st.textContent="#shw-pin{position:absolute;top:calc(68px + env(safe-area-inset-top,0px));right:12px;z-index:2147482000;display:flex;gap:8px;direction:rtl;font-family:Tajawal,Cairo,system-ui,sans-serif}#shw-pin a{display:flex;align-items:center;gap:8px;height:46px;padding:0 16px 0 12px;border-radius:999px;background:linear-gradient(135deg,#34b3b4,#176b6c);color:#fff;font-weight:800;font-size:15px;text-decoration:none;border:1.5px solid rgba(255,255,255,.55);box-shadow:0 6px 20px rgba(0,0,0,.35);-webkit-tap-highlight-color:transparent}#shw-pin a.m{width:46px;padding:0;justify-content:center;background:linear-gradient(135deg,#d9b04d,#a87c1f)}#shw-pin svg{width:24px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}#shw-pin a:active{transform:scale(.96)}@media(max-width:420px){#shw-pin a.s span{display:none}#shw-pin a.s{width:46px;padding:0;justify-content:center}}@media print{#shw-pin{display:none!important}}";
  document.head.appendChild(st);
  var d=document.createElement("div");d.id="shw-pin";
- d.innerHTML='<a class="s" href="/shawahed/" title="شواهد — سجل متابعة المهام (مقفل برقم سري)" aria-label="شواهد"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4.5" width="14" height="17" rx="2.5"/><path d="M9 4.5h6v-1.2a.8.8 0 0 0-.8-.8H9.8a.8.8 0 0 0-.8.8z"/><path d="M8.5 11l1.6 1.6L13 9.8"/><path d="M8.5 17l1.6 1.6L13 15.8"/><path d="M15 11.5h1.5M15 17.5h1.5"/></svg><span>شواهد</span></a><a class="m" href="'+MAP+'" target="_blank" rel="noopener" title="الموقع على الخريطة" aria-label="الموقع على الخريطة"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg></a>';
+ d.innerHTML='<a class="m" href="'+MAP+'" target="_blank" rel="noopener" title="الموقع على الخريطة" aria-label="الموقع على الخريطة"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg></a>';
  document.body.appendChild(d);
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",add);else add();
