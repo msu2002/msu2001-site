@@ -27,7 +27,6 @@
 @media(max-width:720px){.ev2 .th{width:calc(50% - 5px)}.pk .dt .d{width:24%}}
 @media print{.ev2 .th{break-inside:avoid}}
 </style>
-<script>document.documentElement.classList.add("locked")</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="شواهد الإداريين">
@@ -39,7 +38,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-:root{--t:#279a9b;--t-d:#1d7d7e;--t-l:#a9dcd9;--t-bg:#eaf6f5;--gray:#f1f1f1;--ink:#222;--line:#cfd6d6}
+:root{--t:#279a9b;--t-d:#1d7d7e;--t-l:#a9dcd9;--t-bg:#eaf6f5;--gray:#f1f1f1;--ink:#c1121f;--line:#cfd6d6}
 *{box-sizing:border-box}
 body{margin:0;background:#e9eeee;font-family:'IBM Plex Sans Arabic','Noto Kufi Arabic','Cairo',sans-serif;color:var(--ink);padding:20px 10px;line-height:1.8;-webkit-font-smoothing:antialiased}
 #sheet{max-width:1000px;margin:0 auto;background:#fff;box-shadow:0 6px 30px #0002;position:relative;overflow:hidden;padding:0 44px 0}
@@ -52,7 +51,7 @@ body{margin:0;background:#e9eeee;font-family:'IBM Plex Sans Arabic','Noto Kufi A
 .year input:focus{outline:none;border-bottom-color:var(--t);background:var(--t-bg)}
 .hdr{text-align:center;padding:26px 0 8px}
 .hdr .a{font-size:19px;font-weight:700}
-.hdr .b{font-size:19px;font-weight:700;color:var(--t-d)}
+.hdr .b{font-size:19px;font-weight:700;color:var(--ink)}
 h1{font-family:'Noto Kufi Arabic','Cairo',sans-serif;font-weight:800;font-size:28px;text-align:center;margin:22px 0 0}
 .rule{width:230px;margin:6px auto 26px;border-top:3px solid var(--t);border-bottom:3px solid var(--t-l);height:9px}
 .bul{display:flex;gap:8px;align-items:flex-start;font-weight:700;font-size:16.5px;line-height:2;margin:0 0 16px}
@@ -74,7 +73,7 @@ table{border-collapse:collapse;width:100%}
 .goals select.cls{width:100%;height:100%;min-height:60px;border:0;background:transparent;font:inherit;font-size:14.5px;padding:8px 6px;display:block;color:var(--ink);cursor:pointer}.goals select.cls:focus{outline:none}.goals input.cx{width:calc(100% - 12px);margin:0 6px 8px;border:1px solid var(--line);border-radius:6px;padding:7px 8px;font:inherit;font-size:14.5px}#lkShow{display:flex;align-items:center;gap:8px;justify-content:center;font-size:14px;margin:2px 0 10px;cursor:pointer;color:#334}#lkShow input{width:auto;margin:0;padding:0}.goals textarea,.info input{width:100%;height:100%;min-height:60px;border:0;background:transparent;font:inherit;font-size:14.5px;padding:8px 10px;resize:none;display:block;color:var(--ink)}
 .info input{min-height:36px;padding:6px 12px;font-size:15.5px}
 .info input:focus,.goals textarea:focus{outline:none}
-.info td.fixed input{cursor:default;font-weight:600;color:#333}
+.info td.fixed input{cursor:default;font-weight:600;color:var(--ink)}
 .info td.fixed:focus-within{background:var(--gray);outline:none}
 .info td.v:focus-within{background:#fff;outline:2px solid var(--t);outline-offset:-2px}
 .row-add{display:flex;justify-content:center;margin:10px 0 0}
@@ -121,7 +120,6 @@ table{border-collapse:collapse;width:100%}
 </style>
 </head>
 <body>
-<div id="lock" dir="rtl"><div class="box"><div class="ic"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.4" fill="#fff"/></svg></div><h2 id="lkT">شواهد الإداريين</h2><p id="lkP">أدخل الرقم السري</p><input id="lkIn" type="password" inputmode="numeric" autocomplete="off" maxlength="8" aria-label="الرقم السري"><input id="lkIn2" type="password" inputmode="numeric" autocomplete="off" maxlength="8" aria-label="تأكيد الرقم السري" style="display:none" placeholder="تأكيد الرقم"><label id="lkShow"><input type="checkbox" id="lkEye"> إظهار الرقم السري</label><button id="lkGo" type="button">دخول</button><div class="err" id="lkErr"></div></div></div>
 
 <div id="sheet">
   <div class="band"></div>
@@ -176,7 +174,6 @@ table{border-collapse:collapse;width:100%}
   <button class="btn" id="btnPdf">📄 تصدير PDF</button>
   <button class="btn primary" id="btnSave">📤 مشاركة</button>
   <button class="btn" id="btnInstall">📲 إضافة إلى الشاشة الرئيسية</button>
-  <button class="btn" id="btnLock">🔒 قفل الصفحة</button>
   <button class="btn danger" id="btnReset">🔄 مسح البيانات</button>
 </div>
 <div id="status"></div>
@@ -283,36 +280,6 @@ $('#btnReset').onclick=()=>{if(confirm('مسح جميع البيانات؟')){
   document.querySelectorAll('input:not([readonly]):not([type=file]),textarea,select').forEach(x=>{x.value=x.id==='f_year'?'١٤٤٨هـ':(x.classList.contains('y')?DEF_YEAR:'');x.style.height=''});
   DOCS.length=0;selC.dispatchEvent(new Event('change'));document.querySelectorAll('.thumbs').forEach(t=>t.innerHTML='');msg('')}};
 
-
-/* ---------- قفل الصفحة بالرقم السري ---------- */
-(function(){
-  const K='shw2_pin_h',KS='shw2_pin_s',root=document.documentElement,inp=document.getElementById('lkIn'),inp2=document.getElementById('lkIn2'),go=document.getElementById('lkGo'),err=document.getElementById('lkErr'),T=document.getElementById('lkT'),P=document.getElementById('lkP');
-  const norm=v=>v.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[^0-9]/g,'');
-  const hash=async(p,s)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s+'|'+p)))].map(x=>x.toString(16).padStart(2,'0')).join('');
-  let fails=0,until=0,idle,hid=0;
-  const get=k=>{try{return localStorage.getItem(k)}catch(_){return null}};
-  const set=(k,v)=>{try{localStorage.setItem(k,v)}catch(_){}};
-  function show(){root.classList.add('locked');const first=!get(K);T.textContent=first?'اختر رقمك السري':'شواهد الإداريين';P.textContent=first?'٤ إلى ٨ أرقام — لن يُطلب منك أي شيء سواه':'أدخل الرقم السري';inp2.style.display=first?'':'none';go.textContent=first?'حفظ الرقم والدخول':'دخول';inp.value=inp2.value='';eye.checked=false;eye.onchange();err.textContent='';setTimeout(()=>inp.focus(),50)}
-  function unlock(){root.classList.remove('locked');inp.value=inp2.value='';rearm()}
-  function rearm(){clearTimeout(idle);idle=setTimeout(show,5*60*1000)}
-  async function submit(){
-    const p=norm(inp.value);err.textContent='';
-    if(Date.now()<until){err.textContent='محاولات كثيرة — انتظر قليلاً.';return}
-    if(!get(K)){
-      if(p.length<4){err.textContent='الرقم يجب ألا يقل عن ٤ أرقام.';return}
-      if(p!==norm(inp2.value)){err.textContent='الرقمان غير متطابقين.';return}
-      const s=crypto.getRandomValues(new Uint32Array(4)).join('-');set(KS,s);set(K,await hash(p,s));unlock();return
-    }
-    if(await hash(p,get(KS)||'')===get(K)){fails=0;unlock()}
-    else{fails++;inp.value='';err.textContent='الرقم غير صحيح.';if(fails>=5){until=Date.now()+30000;fails=0;err.textContent='٥ محاولات خاطئة — انتظر ٣٠ ثانية.'}}
-  }
-  const eye=document.getElementById('lkEye');eye.onchange=()=>{[inp,inp2].forEach(i=>i.type=eye.checked?'text':'password')};
-  go.onclick=submit;[inp,inp2].forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')submit()}));
-  document.getElementById('btnLock').onclick=show;
-  ['pointerdown','keydown','input'].forEach(ev=>document.addEventListener(ev,()=>{if(!root.classList.contains('locked'))rearm()},true));
-  document.addEventListener('visibilitychange',()=>{if(document.hidden)hid=Date.now();else if(hid&&Date.now()-hid>60000&&!root.classList.contains('locked'))show()});
-  show();
-})();
 
 /* ---------- الاختصار على الشاشة الرئيسية ---------- */
 let deferred=null;
