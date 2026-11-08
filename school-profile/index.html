@@ -1,0 +1,579 @@
+<!doctype html><html><head><meta charset="utf-8"><title>مدرسة المحمدية</title><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap">
+<style>
+  /* Layout: one phone-width column copied from the supplied mockup: wings + plaque, photo, 3-column tile grid that doubles as tab bar, then green-banded content cards. */
+  :root {
+    --bg: #F6F0E4;
+    --paper: #FAF6EE;
+    --ink: #1F2A25;
+    --muted: #5F6B63;
+    --green: #1F5538;
+    --green-d: #1A4A30;
+    --on-green: #FAF4E8;
+    --gold: #B8924A;
+    --gold-l: #D1B371;
+    --line: #E2D6BC;
+    --tile: #FAF6EE;
+    --tile-line: #CFBD99;
+    --icon: #205C3B;
+    --leaf: #F1EADB;
+    --todo: #A8741E;
+    --pat: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%23B8893A' stroke-opacity='.16'%3E%3Crect x='15' y='15' width='30' height='30'/%3E%3Crect x='15' y='15' width='30' height='30' transform='rotate(45 30 30)'/%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/svg%3E");
+    --f-body: "Tajawal", "Segoe UI", Tahoma, sans-serif;
+    --f-title: "Tajawal", "Segoe UI", Tahoma, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0D1A15; --paper: #14251E; --ink: #EDE6D0; --muted: #A9B8AE;
+      --green: #1D7552; --green-d: #165C40; --on-green: #FBF6E6; --gold: #DDB35E; --gold-l: #E8C984;
+      --line: #2B4136; --tile: #172A22; --tile-line: #46604F; --icon: #6CD0A5; --leaf: #1B3329; --todo: #E3B24F;
+      --pat: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%23DDB35E' stroke-opacity='.10'%3E%3Crect x='15' y='15' width='30' height='30'/%3E%3Crect x='15' y='15' width='30' height='30' transform='rotate(45 30 30)'/%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/svg%3E");
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0D1A15; --paper: #14251E; --ink: #EDE6D0; --muted: #A9B8AE;
+    --green: #1D7552; --green-d: #165C40; --on-green: #FBF6E6; --gold: #DDB35E; --gold-l: #E8C984;
+    --line: #2B4136; --tile: #172A22; --tile-line: #46604F; --icon: #6CD0A5; --leaf: #1B3329; --todo: #E3B24F;
+    --pat: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%23DDB35E' stroke-opacity='.10'%3E%3Crect x='15' y='15' width='30' height='30'/%3E%3Crect x='15' y='15' width='30' height='30' transform='rotate(45 30 30)'/%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/svg%3E");
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background-color: var(--bg); background-image: var(--pat);
+    color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.8;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 0;
+  }
+  .app { max-width: 480px; margin-inline: auto; padding-block: 8px 28px; }
+  a { color: inherit; }
+  svg { display: block; }
+  .ic { width: 1em; height: 1em; fill: currentColor; stroke: currentColor; flex: none; }
+
+  /* top strip */
+  .strip { display: flex; justify-content: space-between; align-items: center; padding: 6px 4px 0; color: var(--gold); }
+  .strip .tag { font-size: 13px; color: var(--green); font-weight: 500; letter-spacing: .02em; border: 1px solid var(--gold-l); border-radius: 999px; padding: 0 12px; background: var(--tile); }
+  :root[data-theme="dark"] .strip .tag { color: var(--gold-l); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .strip .tag { color: var(--gold-l); } }
+
+  /* banner + hero */
+  .banner { position: relative; z-index: 2; margin-bottom: -30px; }
+  .banner svg { width: 100%; height: auto; }
+  .wing { fill: var(--green); }
+  .wing-g { fill: var(--gold-l); }
+  .plaque { fill: var(--green); stroke: var(--gold-l); stroke-width: 3.5; stroke-linejoin: round; }
+  .plaque-in { fill: none; stroke: var(--gold-l); stroke-width: 1; }
+  .t-main { font-family: var(--f-title); font-size: 31px; fill: var(--on-green); font-weight: 800; }
+  .t-sub { font-family: var(--f-title); font-size: 16.5px; fill: var(--on-green); font-weight: 500; }
+  .hero { position: relative; z-index: 1; border-radius: 0 0 18px 18px; overflow: hidden; }
+  .hero img { display: block; width: 100%; height: auto; }
+  .hero .cap { position: absolute; left: 8px; bottom: 8px; font-size: 12px; line-height: 1.8; color: #fff; background: rgba(0,0,0,.5); border-radius: 999px; padding: 0 10px; }
+
+  /* tiles */
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+  .tile {
+    --tile-bg: var(--tile);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center;
+    padding: 14px 4px 12px; min-width: 0; min-height: 106px;
+    background: var(--tile); color: var(--ink); text-decoration: none; font-weight: 500; font-size: 15px; line-height: 1.45;
+    border: 1.5px solid var(--tile-line); border-radius: 16px;
+  }
+  .tile .ic { width: 38px; height: 38px; color: var(--icon); }
+  .tile[aria-current="true"] { --tile-bg: var(--green); background: var(--green); color: var(--on-green); border-color: var(--green); }
+  .tile[aria-current="true"] .ic { color: var(--gold-l); }
+  .tile:focus-visible, .btn:focus-visible, .chip:focus-visible, .back:focus-visible, input:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  .tile.wide { grid-column: span 2; flex-direction: row; gap: 12px; min-height: 76px; }
+  .tile.wide .ic { width: 34px; height: 34px; }
+
+  /* views + cards */
+  .view { margin-top: 14px; scroll-margin-top: 8px; }
+  .back { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 10px; font: inherit; font-size: 14px; font-weight: 500; color: var(--green); background: var(--tile); border: 1px solid var(--gold-l); border-radius: 999px; padding: 0 14px; text-decoration: none; }
+  :root[data-theme="dark"] .back { color: var(--gold-l); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .back { color: var(--gold-l); } }
+  .back .ic { width: 14px; height: 14px; stroke-width: 2.4; fill: none; }
+  .card { position: relative; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; margin-bottom: 14px; box-shadow: 0 1px 0 var(--line); }
+  .card-h { position: relative; display: flex; align-items: center; gap: 10px; background: var(--green); color: var(--on-green); padding: 9px 16px; font-weight: 700; font-size: 20px; line-height: 1.5; }
+  .card-h::before { content: ""; position: absolute; left: 0; top: 0; width: 64px; height: 100%; background: linear-gradient(135deg, var(--gold-l), var(--gold)); clip-path: polygon(0 0, 100% 0, 0 100%); }
+  .card-h .ic { width: 26px; height: 26px; color: var(--gold-l); }
+  .card-b { position: relative; padding: 16px; }
+  .card-b > * { position: relative; z-index: 1; }
+  .wm { position: absolute !important; z-index: 0 !important; left: 0; bottom: 0; width: 46%; max-width: 190px; height: auto; color: var(--gold); opacity: .22; pointer-events: none; }
+  p { margin: 0 0 10px; }
+  .lead { max-width: 65ch; font-size: 16px; }
+  .motto { color: var(--green); font-weight: 700; margin: 4px 0 0; }
+  :root[data-theme="dark"] .motto { color: var(--gold-l); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .motto { color: var(--gold-l); } }
+
+  .kv { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--paper); }
+  .kv > div { display: grid; grid-template-columns: 44% 1fr; border-bottom: 1px solid var(--line); }
+  .kv > div:last-child { border-bottom: 0; }
+  .kv dt, .kv dd { margin: 0; padding: 10px 12px; min-width: 0; }
+  .kv dt { display: flex; align-items: center; gap: 8px; background: var(--leaf); color: var(--green); font-weight: 700; font-size: 15px; }
+  :root[data-theme="dark"] .kv dt { color: var(--gold-l); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .kv dt { color: var(--gold-l); } }
+  .kv dt .ic { width: 22px; height: 22px; color: var(--gold); }
+  .kv dd { font-weight: 500; }
+  .todo { color: var(--todo); }
+  .note { font-size: 13.5px; color: var(--muted); margin: 8px 0 0; }
+
+  /* timeline */
+  .tl { list-style: none; margin: 0; padding: 0 24px 0 0; border-right: 2px solid var(--gold-l); display: grid; gap: 20px; }
+  .tl li { position: relative; }
+  .tl li::before { content: ""; position: absolute; right: -32px; top: 8px; width: 14px; height: 14px; border-radius: 50%; background: var(--gold); border: 3px solid var(--paper); box-shadow: 0 0 0 1px var(--gold); }
+  .yr { display: inline-block; font-weight: 700; font-size: 14px; color: var(--on-green); background: var(--green); border-radius: 999px; padding: 0 12px; line-height: 1.7; }
+  .tl h3 { margin: 4px 0 2px; font-size: 17px; line-height: 1.5; }
+  .tl p { margin: 0; color: var(--ink); }
+  .src { font-size: 13px; color: var(--muted); }
+  .src a { color: var(--green); }
+  :root[data-theme="dark"] .src a { color: var(--gold-l); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .src a { color: var(--gold-l); } }
+  .callout { margin-top: 16px; padding: 12px 14px; background: var(--leaf); border: 1px dashed var(--gold); border-radius: 12px; font-size: 15px; }
+  .callout b { color: var(--green); }
+  :root[data-theme="dark"] .callout b { color: var(--gold-l); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .callout b { color: var(--gold-l); } }
+  .srcs { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: 14px; }
+  .srcs a { color: var(--green); }
+  :root[data-theme="dark"] .srcs a { color: var(--gold-l); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .srcs a { color: var(--gold-l); } }
+
+  /* directories */
+  .tools { display: grid; gap: 10px; margin-bottom: 10px; }
+  .tools label { font-size: 14px; color: var(--muted); }
+  input[type="search"] { width: 100%; font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--gold-l); padding: 9px 14px; border-radius: 10px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .chip { font: inherit; font-size: 14px; color: var(--ink); background: var(--tile); border: 1px solid var(--line); border-radius: 999px; padding: 0 12px; cursor: pointer; line-height: 1.9; }
+  .chip[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: var(--on-green); }
+  .chip small { opacity: .75; margin-inline-start: 4px; }
+  .count { font-size: 14px; color: var(--muted); margin: 6px 0; }
+  .people { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--paper); }
+  .people li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  .people li:last-child { border-bottom: 0; }
+  .av { width: 34px; height: 34px; border-radius: 50%; background: var(--leaf); color: var(--green); display: grid; place-items: center; flex: none; }
+  :root[data-theme="dark"] .av { color: var(--gold-l); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .av { color: var(--gold-l); } }
+  .av .ic { width: 20px; height: 20px; }
+  .who { min-width: 0; flex: 1; }
+  .who b { display: block; font-weight: 700; line-height: 1.5; overflow-wrap: anywhere; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+  .tag-s { font-size: 13px; color: var(--green); background: var(--leaf); border-radius: 999px; padding: 0 10px; line-height: 1.7; }
+  :root[data-theme="dark"] .tag-s { color: var(--gold-l); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tag-s { color: var(--gold-l); } }
+  .tag-s.none { color: var(--muted); background: transparent; border: 1px dashed var(--line); }
+  .badge { font-size: 13px; font-weight: 700; color: var(--on-green); background: var(--green); border-radius: 8px; padding: 0 10px; white-space: nowrap; line-height: 1.8; }
+  .badge.lead-b { background: linear-gradient(135deg, var(--gold), var(--gold-l)); color: #2A1E07; }
+  .badge.assist { background: var(--leaf); color: var(--green); border: 1px solid var(--gold-l); }
+  :root[data-theme="dark"] .badge.assist { color: var(--gold-l); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .badge.assist { color: var(--gold-l); } }
+  .gh { font-weight: 700; color: var(--green); margin: 14px 0 6px; font-size: 16px; }
+  :root[data-theme="dark"] .gh { color: var(--gold-l); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .gh { color: var(--gold-l); } }
+  .empty { padding: 16px; color: var(--muted); }
+
+  /* achievements, archive, model, contact */
+  .win { display: flex; gap: 12px; align-items: flex-start; }
+  .win .ic { width: 40px; height: 40px; color: var(--gold); margin-top: 4px; }
+  .win h3 { margin: 0 0 2px; font-size: 17px; line-height: 1.5; }
+  .win p { margin: 0; }
+  .frames { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
+  .frame { aspect-ratio: 4 / 3; display: grid; place-items: center; align-content: center; gap: 4px; text-align: center; border: 1.5px dashed var(--gold); border-radius: 12px; color: var(--muted); font-size: 14px; background: var(--leaf); max-width: 100%; }
+  .frame .ic { width: 30px; height: 30px; color: var(--gold); }
+  .docs { display: flex; gap: 12px; align-items: center; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--tile); text-decoration: none; }
+  .docs .ic { width: 30px; height: 30px; color: var(--icon); }
+  .docs b { display: block; line-height: 1.5; }
+  .docs span { font-size: 13.5px; color: var(--muted); }
+  .btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; font: inherit; font-weight: 700; font-size: 17px; color: var(--on-green); background: var(--green); border: 2px solid var(--gold); border-radius: 12px; padding: 10px 16px; text-decoration: none; cursor: pointer; }
+  .btn .ic { width: 22px; height: 22px; color: var(--gold-l); }
+  .btn.ghost { background: var(--tile); color: var(--ink); border-color: var(--gold-l); font-size: 15px; font-weight: 500; }
+  .btn.ghost .ic { color: var(--icon); }
+  .model-art { background: linear-gradient(180deg, #CFE5F3, #EFE9D8); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 14px; }
+  .model-art svg { width: 100%; height: auto; max-height: 220px; }
+  .feat { list-style: none; padding: 0; margin: 14px 0; display: grid; gap: 8px; }
+  .feat li { display: flex; gap: 10px; align-items: flex-start; }
+  .feat .ic { width: 20px; height: 20px; color: var(--gold); margin-top: 6px; fill: none; stroke-width: 2.2; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+  .stats div { text-align: center; background: var(--leaf); border-radius: 10px; padding: 6px 4px; min-width: 0; }
+  .stats b { display: block; font-size: 20px; color: var(--green); line-height: 1.4; }
+  :root[data-theme="dark"] .stats b { color: var(--gold-l); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .stats b { color: var(--gold-l); } }
+  .stats span { font-size: 13px; color: var(--muted); }
+  .foot { text-align: center; color: var(--muted); font-size: 13.5px; margin-top: 8px; display: grid; gap: 8px; justify-items: center; }
+  .foot .btn { width: auto; font-size: 14px; padding: 2px 16px; }
+  @media (prefers-reduced-motion: no-preference) { .tile, .chip { transition: background .15s, color .15s; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-school" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M3 21V10l9-5 9 5v11H3zm4-8v2h3v-2H7zm7 0v2h3v-2h-3zm-4 4v4h4v-4h-4z" stroke="none"/><path d="M12 1.5V5" stroke-width="1.6" fill="none"/><path d="M12 1.5h4.2l-1.1 1.2 1.1 1.2H12z" stroke="none"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><g stroke="none"><rect x="2.500" y="4" width="19" height="17.500" rx="3"/><rect x="7" y="2" width="2.200" height="4.500" rx="1"/><rect x="14.800" y="2" width="2.200" height="4.500" rx="1"/><rect x="4.500" y="9.500" width="15" height="10" rx="1.200" fill="var(--tile-bg, var(--paper))"/><g><rect x="6.200" y="11" width="2.600" height="2.200"/><rect x="10.700" y="11" width="2.600" height="2.200"/><rect x="15.200" y="11" width="2.600" height="2.200"/><rect x="6.200" y="15" width="2.600" height="2.200"/><rect x="10.700" y="15" width="2.600" height="2.200"/><rect x="15.200" y="15" width="2.600" height="2.200"/></g></g></symbol>
+    <symbol id="i-people" viewBox="0 0 24 24"><g stroke="none"><circle cx="12" cy="8" r="3.2"/><circle cx="5.5" cy="9.5" r="2.4"/><circle cx="18.5" cy="9.5" r="2.4"/><path d="M6.5 20c0-3.300 2.500-5.700 5.500-5.700s5.500 2.400 5.500 5.700z"/><path d="M1.500 19c0-2.400 1.600-4.200 4-4.200.6 0 1.200.1 1.700.3-1 1-1.600 2.400-1.700 3.900z"/><path d="M22.500 19c0-2.400-1.600-4.200-4-4.200-.6 0-1.200.1-1.700.3 1 1 1.600 2.400 1.700 3.900z"/></g></symbol>
+    <symbol id="i-admin" viewBox="0 0 24 24"><g stroke="none"><circle cx="12" cy="6.500" r="3.500"/><path d="M6 17c0-3.200 2.600-5.500 6-5.500s6 2.300 6 5.500z"/><path d="M3 19h18v2.500H3z"/></g></symbol>
+    <symbol id="i-trophy" viewBox="0 0 24 24"><g stroke="none"><path d="M7 3h10v6a5 5 0 0 1-10 0z"/><path d="M11 14h2v4h-2zM7.500 19h9v2h-9z"/></g><path d="M7 5H3.500v1.500A3.500 3.500 0 0 0 7 10M17 5h3.500v1.500A3.500 3.500 0 0 1 17 10" fill="none" stroke-width="1.8"/></symbol>
+    <symbol id="i-img" viewBox="0 0 24 24"><rect x="2.500" y="4" width="19" height="16" rx="2.500" stroke="none"/><circle cx="8" cy="9.500" r="1.800" fill="var(--tile-bg, var(--paper))" stroke="none"/><path d="M4 18l5.500-5.500 3.500 3.500 2.500-2.500L20 18z" fill="var(--tile-bg, var(--paper))" stroke="none"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 2.500a6.500 6.500 0 0 0-6.500 6.500c0 4.700 6.500 11 6.500 11s6.500-6.300 6.500-11A6.500 6.500 0 0 0 12 2.500z" stroke="none"/><circle cx="12" cy="9" r="2.400" fill="var(--tile-bg, var(--paper))" stroke="none"/><path d="M3 21.500h18" fill="none" stroke-width="1.800" stroke-linecap="round"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M3 5.500c3-.8 6-.6 9 1.200 3-1.800 6-2 9-1.200V19c-3-.8-6-.6-9 1.200-3-1.800-6-2-9-1.200z" fill="none" stroke-width="2" stroke-linejoin="round"/><path d="M12 6.700v13.500" fill="none" stroke-width="2"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="none"/><path d="M12 11v6M12 7.500h.01" fill="none" stroke="#2A1E07" stroke-width="2.400" stroke-linecap="round"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z" fill="none" stroke-width="2" stroke-linejoin="round"/><path d="M3 12.500l9 5 9-5M3 16.500l9 5 9-5" fill="none" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-cube" viewBox="0 0 24 24"><path d="M12 2.500l8.500 4.500v10L12 21.500 3.500 17V7z" fill="none" stroke-width="2" stroke-linejoin="round"/><path d="M12 12l8.500-5M12 12v9.500M12 12L3.500 7" fill="none" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke-width="2.400" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.500l4.500 4.500L19 7.500" fill="none" stroke-width="2.400" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.500 1.500a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" fill="none" stroke-width="2" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div dir="rtl" lang="ar" class="app">
+
+  <div class="strip">
+    <svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round"><path d="M20 36V18"/><path d="M20 18C14 17 9 20 7 25"/><path d="M20 18c6-1 11 2 13 7"/><path d="M20 18C16 12 11 11 7 13"/><path d="M20 18c4-6 9-7 13-5"/><path d="M20 18V8"/></g></svg>
+    <span class="tag">الملف التعريفي للمدرسة</span>
+  </div>
+
+  <header>
+    <div class="banner">
+      <svg viewBox="0 0 400 140" role="img" aria-label="مدرسة المحمدية الابتدائية بمحافظة الرس">
+        <g>
+          <path class="wing-g" d="M0 38C50 56 80 80 102 104V110C78 90 46 72 0 54Z"/>
+          <path class="wing" d="M0 58C44 72 72 90 100 114V132C72 108 36 94 0 88Z"/>
+        </g>
+        <g transform="translate(400 0) scale(-1 1)">
+          <path class="wing-g" d="M0 38C50 56 80 80 102 104V110C78 90 46 72 0 54Z"/>
+          <path class="wing" d="M0 58C44 72 72 90 100 114V132C72 108 36 94 0 88Z"/>
+        </g>
+        <g transform="translate(200 0) scale(1.16 1) translate(-200 0)"><path class="plaque" d="M126 46H166Q176 46 182 38H218Q224 46 234 46H274Q294 46 300 60Q312 66 326 68Q318 84 326 100Q312 102 300 112Q294 128 274 128H126Q106 128 100 112Q88 102 74 100Q82 84 74 68Q88 66 100 60Q106 46 126 46Z"/>
+        <path class="plaque-in" d="M126 46H166Q176 46 182 38H218Q224 46 234 46H274Q294 46 300 60Q312 66 326 68Q318 84 326 100Q312 102 300 112Q294 128 274 128H126Q106 128 100 112Q88 102 74 100Q82 84 74 68Q88 66 100 60Q106 46 126 46Z" transform="translate(200 87) scale(.95) translate(-200 -87)"/></g>
+        <g transform="translate(200 27)"><path d="M0-19L13 0 0 19-13 0Z" fill="var(--gold)" stroke="var(--gold-l)" stroke-width="1.5"/><path d="M0-11L7.5 0 0 11-7.5 0Z" fill="var(--on-green)"/><circle r="3" fill="var(--green)"/></g>
+        <text class="t-main" x="200" y="91" text-anchor="middle">مدرسة المحمدية</text>
+        <text class="t-sub" x="200" y="116" text-anchor="middle">الابتدائية بمحافظة الرس</text>
+      </svg>
+    </div>
+    <div class="hero">
+      <img src="data:image/webp;base64,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" width="751" height="296" alt="صورة توضيحية لمبنى المدرسة">
+      <span class="cap">صورة توضيحية</span>
+    </div>
+  </header>
+
+  <nav class="tiles" aria-label="أقسام الملف التعريفي">
+    <a class="tile" href="#about" data-v="about"><svg class="ic"><use href="#i-school"/></svg>نبذة عن المدرسة</a>
+    <a class="tile" href="#history" data-v="history"><svg class="ic"><use href="#i-cal"/></svg>التاريخ والنشأة</a>
+    <a class="tile" href="#teachers" data-v="teachers"><svg class="ic"><use href="#i-people"/></svg>الكوادر التعليمية</a>
+    <a class="tile" href="#admins" data-v="admins"><svg class="ic"><use href="#i-admin"/></svg>الإداريون</a>
+    <a class="tile" href="#achievements" data-v="achievements"><svg class="ic"><use href="#i-trophy"/></svg>إنجازات المدرسة</a>
+    <a class="tile" href="#archive" data-v="archive"><svg class="ic"><use href="#i-img"/></svg>صور من أرشيف المدرسة</a>
+    <a class="tile wide" href="#contact" data-v="contact"><svg class="ic"><use href="#i-pin"/></svg>التواصل والموقع</a>
+    <a class="tile" href="#model" data-v="model"><svg class="ic"><use href="#i-cube"/></svg>مجسم المبنى</a>
+  </nav>
+
+  <main id="views">
+
+    <!-- ABOUT / HOME -->
+    <section class="view" id="v-about">
+      <div class="card">
+        <div class="card-h"><svg class="ic"><use href="#i-book"/></svg>نبذة عن المدرسة</div>
+        <div class="card-b">
+          <svg class="wm" viewBox="0 0 200 110" aria-hidden="true"><g fill="currentColor"><path d="M10 110V78h8v-6h6v6h8v-6h6v6h8v32z"/><path d="M60 110V62h10v-8h8v8h10v-8h8v8h10v48z"/><path d="M140 110V84h8v-5h6v5h8v-5h6v5h8v26z"/><path d="M118 110c2-25-1-47 2-68" stroke="currentColor" stroke-width="5" fill="none"/><path d="M120 42c-14-12-30-8-40 6M120 42c14-12 30-8 40 6M120 42c-5-16-18-22-32-20M120 42c5-16 18-22 32-20" stroke="currentColor" stroke-width="4" fill="none"/></g></svg>
+          <p class="lead">تُعد مدرسة المحمدية الابتدائية بمحافظة الرس، بمنطقة القصيم، إحدى المدارس ذات الجذور التاريخية في مسيرة التعليم بالمحافظة، إذ تذكر المصادر المحلية أنها افتُتحت عام 1383هـ وأنها ثالث مدرسة افتُتحت في الرس.</p>
+          <p class="lead">ومنذ بداياتها أسهمت المدرسة في تعليم أبناء المحافظة، وتعاقب على العمل فيها معلمون ومربون أدّوا رسالتها، وارتبط اسمها بذكريات أجيال من طلابها.</p>
+          <p class="lead">ولا تقتصر رسالة المدرسة على التعليم داخل الفصول، فهي تمتد إلى الأنشطة الثقافية والرياضية والاجتماعية والعلمية التي تنمّي شخصية الطالب وتعزّز انتماءه.</p>
+          <p class="motto">المحمدية الابتدائية: أصالة الماضي، وعطاء الحاضر، وطموح المستقبل.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-h"><svg class="ic"><use href="#i-info"/></svg>أبرز المعلومات</div>
+        <div class="card-b">
+          <dl class="kv">
+            <div><dt><svg class="ic"><use href="#i-cal"/></svg>سنة التأسيس</dt><dd>1383 هـ</dd></div>
+            <div><dt><svg class="ic"><use href="#i-pin"/></svg>الموقع</dt><dd>محافظة الرس – منطقة القصيم</dd></div>
+            <div><dt><svg class="ic"><use href="#i-layers"/></svg>المرحلة الدراسية</dt><dd>الابتدائية</dd></div>
+            <div><dt><svg class="ic"><use href="#i-admin"/></svg>مدير المدرسة</dt><dd>صالح بن علي الخليوي</dd></div>
+            <div><dt><svg class="ic"><use href="#i-admin"/></svg>وكيل المدرسة</dt><dd>خالد بن خليفة الحصان</dd></div>
+            <div><dt><svg class="ic"><use href="#i-people"/></svg>الكادر التعليمي</dt><dd id="k-teachers">—</dd></div>
+          </dl>
+          <p class="note">سنة التأسيس بحسب المؤرخ عبدالله العقيل، والتفاصيل في قسم التاريخ والنشأة.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section class="view" id="v-history" hidden>
+      <a class="back" href="#about"><svg class="ic" style="transform:scaleX(-1)"><use href="#i-chev"/></svg>الرئيسية</a>
+      <div class="card">
+        <div class="card-h"><svg class="ic"><use href="#i-cal"/></svg>التاريخ والنشأة</div>
+        <div class="card-b">
+          <ol class="tl">
+            <li>
+              <span class="yr">1383 هـ</span>
+              <h3>افتتاح المدرسة</h3>
+              <p>تذكر المصادر المحلية أن المدرسة المحمدية افتُتحت بالرس عام 1383هـ، وهي ثالث مدرسة تُفتتح في المحافظة.</p>
+              <span class="src">المصادر: <a href="https://abdullah-alageel.blogspot.com/2014/03/2.html" target="_blank" rel="noopener">العقيل</a> · <a href="https://www.al-jazirah.com/2023/20230301/wa1.htm" target="_blank" rel="noopener">الجزيرة 2023</a></span>
+            </li>
+            <li>
+              <span class="yr">بعد الافتتاح</span>
+              <h3>من أوائل من خدموا المدرسة</h3>
+              <p>انتقل الشيخ عبدالله بن إبراهيم الطاسان للتدريس في المحمدية بعد افتتاحها، واستمر فيها حتى وفاته عام 1385هـ. وعمل الأستاذ عبدالعزيز بن إبراهيم الفجحان مدرسًا ومراقبًا في بداياتها، ثم عُيّن وكيلًا لها.</p>
+              <span class="src">المصادر: <a href="https://abdullah-alageel.blogspot.com/2014/03/2.html" target="_blank" rel="noopener">العقيل</a> · <a href="https://www.al-jazirah.com/2023/20230301/wa1.htm" target="_blank" rel="noopener">الجزيرة 2023</a></span>
+            </li>
+            <li>
+              <span class="yr">1389 – 1390 هـ</span>
+              <h3>وثيقة المقصف المدرسي</h3>
+              <p>نشر أرشيف الرس قائمة بأسماء المساهمين في المقصف المدرسي بمدرسة المحمدية للعام الدراسي 1389–1390هـ، وهي وثيقة تؤكد نشاط المدرسة في تلك الفترة.</p>
+              <span class="src">المصدر: <a href="https://t.me/arshefalrass/66" target="_blank" rel="noopener">أرشيف الرس</a></span>
+            </li>
+            <li>
+              <span class="yr">2016 م</span>
+              <h3>البرنامج الترفيهي العلمي الخامس</h3>
+              <p>استضافت المدرسة برنامج الترفيه العلمي الخامس لمدارس المحافظة بقيادة الأستاذ سليمان المسيطير، وحققت المركز الأول في أحد مساراته.</p>
+              <span class="src">المصدر: <a href="https://www.al-jazirah.com/2016/20160401/tf7.htm" target="_blank" rel="noopener">صحيفة الجزيرة، 1 أبريل 2016</a></span>
+            </li>
+            <li>
+              <span class="yr">اليوم</span>
+              <h3>رسالة متجددة</h3>
+              <p>تواصل المدرسة رسالتها التعليمية بكادر من المعلمين والإداريين تجدون أسماءهم في هذا الملف.</p>
+            </li>
+          </ol>
+          <div class="callout"><b>ذاكرة المحمدية.</b> تُضاف هنا لاحقًا صور المباني القديمة وأسماء المديرين والمعلمين السابقين ووثائق دفعات الخريجين، كلما توفرت من أرشيف المدرسة.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEACHERS -->
+    <section class="view" id="v-teachers" hidden>
+      <a class="back" href="#about"><svg class="ic" style="transform:scaleX(-1)"><use href="#i-chev"/></svg>الرئيسية</a>
+      <div class="card">
+        <div class="card-h"><svg class="ic"><use href="#i-people"/></svg>الكوادر التعليمية</div>
+        <div class="card-b">
+          <div class="tools">
+            <div>
+              <label for="q">ابحث باسم المعلم</label>
+              <input id="q" type="search" placeholder="اكتب جزءًا من الاسم" autocomplete="off">
+            </div>
+            <div>
+              <label id="chips-l">المادة</label>
+              <div class="chips" id="chips" role="group" aria-labelledby="chips-l"></div>
+            </div>
+          </div>
+          <div class="count" id="count" aria-live="polite"></div>
+          <ul class="people" id="tlist"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMINS -->
+    <section class="view" id="v-admins" hidden>
+      <a class="back" href="#about"><svg class="ic" style="transform:scaleX(-1)"><use href="#i-chev"/></svg>الرئيسية</a>
+      <div class="card">
+        <div class="card-h"><svg class="ic"><use href="#i-admin"/></svg>الإداريون</div>
+        <div class="card-b">
+          <div class="tools"><div><label for="qa">ابحث باسم الإداري</label><input id="qa" type="search" placeholder="اكتب جزءًا من الاسم" autocomplete="off"></div></div>
+          <div id="alist"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACHIEVEMENTS -->
+    <section class="view" id="v-achievements" hidden>
+      <a class="back" href="#about"><svg class="ic" style="transform:scaleX(-1)"><use href="#i-chev"/></svg>الرئيسية</a>
+      <div class="card">
+        <div class="card-h"><svg class="ic"><use href="#i-trophy"/></svg>إنجازات المدرسة</div>
+        <div class="card-b">
+          <div class="win">
+            <svg class="ic"><use href="#i-trophy"/></svg>
+            <div>
+              <h3>المركز الأول في أحد مسارات البرنامج الترفيهي العلمي الخامس</h3>
+              <p>2016 م · أقيم البرنامج في المدرسة بمشاركة مدارس المحافظة.</p>
+              <span class="src"><a href="https://www.al-jazirah.com/2016/20160401/tf7.htm" target="_blank" rel="noopener">صحيفة الجزيرة، 1 أبريل 2016</a></span>
+            </div>
+          </div>
+          <p class="note">تُضاف إنجازات المدرسة وجوائزها ومشاركاتها هنا أولًا بأول.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARCHIVE -->
+    <section class="view" id="v-archive" hidden>
+      <a class="back" href="#about"><svg class="ic" style="transform:scaleX(-1)"><use href="#i-chev"/></svg>الرئيسية</a>
+      <div class="card">
+        <div class="card-h"><svg class="ic"><use href="#i-img"/></svg>صور من أرشيف المدرسة</div>
+        <div class="card-b">
+          <a class="docs" href="https://t.me/arshefalrass/66" target="_blank" rel="noopener">
+            <svg class="ic"><use href="#i-ext"/></svg>
+            <div><b>وثيقة المقصف المدرسي 1389–1390هـ</b><span>قائمة بأسماء المساهمين، منشورة في أرشيف الرس</span></div>
+          </a>
+          <div class="frames" aria-label="أماكن محجوزة للصور القديمة">
+            <div class="frame"><svg class="ic"><use href="#i-img"/></svg>مكان صورة قديمة</div>
+            <div class="frame"><svg class="ic"><use href="#i-img"/></svg>مكان صورة قديمة</div>
+            <div class="frame"><svg class="ic"><use href="#i-img"/></svg>مكان صورة قديمة</div>
+            <div class="frame"><svg class="ic"><use href="#i-img"/></svg>مكان صورة قديمة</div>
+          </div>
+          <p class="note">تُعرض هنا الصور التاريخية للمبنى والأنشطة حين تتوفر من أرشيف المدرسة.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3D MODEL -->
+    <section class="view" id="v-model" hidden>
+      <a class="back" href="#about"><svg class="ic" style="transform:scaleX(-1)"><use href="#i-chev"/></svg>الرئيسية</a>
+      <div class="card">
+        <div class="card-h"><svg class="ic"><use href="#i-cube"/></svg>مجسم المبنى ثلاثي الأبعاد</div>
+        <div class="card-b">
+          <div class="model-art" aria-hidden="true">
+            <svg viewBox="0 0 240 190">
+              <g stroke="#C9A24B" stroke-width="1.500" stroke-linejoin="round">
+                <path d="M50 110L120 150V178L50 138Z" fill="#0E4430"/>
+                <path d="M190 110L120 150V178L190 138Z" fill="#14573D"/>
+                <path d="M50 82L120 122V150L50 110Z" fill="#165C40"/>
+                <path d="M190 82L120 122V150L190 110Z" fill="#1D7552"/>
+                <path d="M120 42L190 82L120 122L50 82Z" fill="#F2E5C2"/>
+              </g>
+              <g stroke="#C9A24B" stroke-width="1.200" fill="none" opacity=".8"><path d="M120 122V178M85 102V158M155 102V158"/><path d="M85 66L155 106M120 52L190 92M50 82L120 122" stroke-dasharray="3 4"/></g>
+              <circle cx="120" cy="82" r="5" fill="#14573D"/>
+            </svg>
+          </div>
+          <div class="stats">
+            <div><b>٧</b><span>فصول</span></div>
+            <div><b>٢</b><span>الدور الأرضي والأول</span></div>
+            <div><b>٣</b><span>أوضاع عرض</span></div>
+          </div>
+          <p class="lead">جولة تفاعلية في مبنى المدرسة تُمكّنك من تدوير المجسم وتكبيره، والانتقال بين الأدوار، والبحث عن أي غرفة والوصول إليها.</p>
+          <ul class="feat">
+            <li><svg class="ic"><use href="#i-check"/></svg><span>عرض المبنى كاملًا أو الدور الأرضي أو الدور الأول.</span></li>
+            <li><svg class="ic"><use href="#i-check"/></svg><span>دليل الغرف للبحث عن غرفة والتركيز عليها.</span></li>
+            <li><svg class="ic"><use href="#i-check"/></svg><span>وضع «ولي أمر / زائر» يوضح مسار الزيارة من المدخل الرئيسي إلى غرفة المدير أو الوكيل.</span></li>
+            <li><svg class="ic"><use href="#i-check"/></svg><span>إضاءة نهارية أو ليلية، ويدعم اللمس والماوس.</span></li>
+          </ul>
+          <a class="btn" href="https://msu2001.com/school-aero-v2.html?floor=full" target="_blank" rel="noopener"><svg class="ic"><use href="#i-cube"/></svg>افتح المجسم<svg class="ic"><use href="#i-ext"/></svg></a>
+          <p class="note">يُفتح المجسم في صفحة مستقلة. إعداد المجسم: فهد عبدالله الجروان. الأبعاد الفعلية بالمتر غير موثقة، ومسارات الطوارئ وحركة الطلاب فيه توضيحية وليست خطة معتمدة.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="view" id="v-contact" hidden>
+      <a class="back" href="#about"><svg class="ic" style="transform:scaleX(-1)"><use href="#i-chev"/></svg>الرئيسية</a>
+      <div class="card">
+        <div class="card-h"><svg class="ic"><use href="#i-pin"/></svg>التواصل والموقع</div>
+        <div class="card-b">
+          <dl class="kv">
+            <div><dt><svg class="ic"><use href="#i-pin"/></svg>العنوان</dt><dd>محافظة الرس – منطقة القصيم</dd></div>
+            <div><dt><svg class="ic"><use href="#i-phone"/></svg>رقم التواصل</dt><dd class="todo">يُضاف لاحقًا</dd></div>
+          </dl>
+          <p></p>
+          <a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=%D8%A7%D8%A8%D8%AA%D8%AF%D8%A7%D8%A6%D9%8A%D8%A9%20%D8%A7%D9%84%D9%85%D8%AD%D9%85%D8%AF%D9%8A%D8%A9%20%D8%A7%D9%84%D8%B1%D8%B3" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>ابحث عن المدرسة في خرائط جوجل<svg class="ic"><use href="#i-ext"/></svg></a>
+          <p class="note">يُستبدل رابط البحث بموقع المدرسة المحدد عند اعتماده.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="foot">
+    <span>آخر تحديث لقوائم الكادر: 8 نوفمبر 2026 م</span>
+    <button class="btn ghost" id="copy" type="button">نسخ رابط هذه الصفحة</button>
+    <span id="copied" aria-live="polite"></span>
+  </div>
+</div>
+
+<script>
+  var TEACHERS = [{"n": "بدر بن عبدالله الطريفي", "s": []}, {"n": "خالد بن صالح النفجان", "s": ["العلوم"]}, {"n": "حمد منيع الله المطيري", "s": ["اللغة الإنجليزية"]}, {"n": "أحمد بن محمد الجدعى", "s": ["اللغة العربية"]}, {"n": "حسين عوض الميموني", "s": ["الدراسات الاجتماعية", "المهارات الحياتية والأسرية"]}, {"n": "عبدالحميد بن خالد الحربي", "s": ["القرآن الكريم والدراسات الإسلامية"]}, {"n": "سلطان صالح المطيري", "s": ["الرياضيات"]}, {"n": "خالد فهد المزيد", "s": ["التربية الفنية"]}, {"n": "خالد علي حميد", "s": ["العلوم"]}, {"n": "بندر عبدالله الخليف", "s": ["الرياضيات"]}, {"n": "عبدالسلام بن صالح الدعيجي", "s": ["العلوم"]}, {"n": "عبدالله مازن الحربي", "s": ["اللغة العربية"]}, {"n": "عبدالمجيد ملفي المطيري", "s": ["الرياضيات"]}, {"n": "علي محمد الحبس", "s": ["التربية البدنية والدفاع عن النفس"]}, {"n": "عبدالعزيز علي الصقعبي", "s": ["القرآن الكريم والدراسات الإسلامية"]}, {"n": "علي بن عبدالله الخلف", "s": ["اللغة العربية"]}, {"n": "عبدالله محمد الحربي", "s": []}, {"n": "عبدالله علي البطاح", "s": ["القرآن الكريم والدراسات الإسلامية"]}, {"n": "عبدالله سليمان المزيد", "s": ["اللغة العربية"]}, {"n": "عبدالعزيز عبدالرحمن المسعود", "s": ["اللغة الإنجليزية"]}, {"n": "عماد بن محمد الرميحي", "s": ["التربية البدنية والدفاع عن النفس"]}, {"n": "فهد عبدالحميد الحربي", "s": ["العلوم"]}, {"n": "محمد علي الخليفه", "s": ["التربية البدنية والدفاع عن النفس"]}, {"n": "فهد بن محمد النويصر", "s": ["المهارات الحياتية والأسرية", "الدراسات الاجتماعية"]}, {"n": "فهد بدر الحربي", "s": ["اللغة العربية"]}, {"n": "مشعل عبدالله الحربي", "s": ["المهارات الرقمية"]}, {"n": "فهد منيف المطيري", "s": ["القرآن الكريم والدراسات الإسلامية"]}, {"n": "فهد محمد الضلعان", "s": ["اللغة العربية"]}, {"n": "ماجد محمد العواجي", "s": ["اللغة العربية"]}, {"n": "فهد متعب المزيد", "s": ["القرآن الكريم والدراسات الإسلامية"]}, {"n": "ناصر بن عبدالله السبيل", "s": ["اللغة العربية"]}, {"n": "منصور بن راشد الحربي", "s": ["الرياضيات"]}, {"n": "يوسف صالح الطاسان", "s": ["الرياضيات"]}, {"n": "وليد سليمان الخزي", "s": ["العلوم"]}, {"n": "نواف ضيف الله الحربي", "s": ["الدراسات الاجتماعية", "المهارات الحياتية والأسرية"]}, {"n": "هاني بن عبدالعزيز الخليوي", "s": ["التربية الفنية"]}, {"n": "نايف سالم المطيري", "s": ["اللغة العربية"]}, {"n": "نافع بن عليان الحربي", "s": ["القرآن الكريم والدراسات الإسلامية"]}, {"n": "أسامة مرزوق الحربي", "s": ["التربية الفكرية"]}, {"n": "محمد صالح الرثيع", "s": ["التربية الفكرية"]}, {"n": "محمد علي البشري", "s": ["التربية الفكرية"]}, {"n": "خالد محمد الخليفه", "s": ["التربية الفكرية"]}, {"n": "رامي عبدالله الخليفه", "s": ["التربية الفكرية"]}, {"n": "علي بن حسين الحربي", "s": ["التربية الفكرية"]}, {"n": "مهنا بن معلا الحربى", "s": ["التربية الفكرية"]}];
+  var ADMINS = [{"n": "صالح بن علي الخليوي", "t": "مدير المدرسة"}, {"n": "خالد بن خليفة الحصان", "t": "وكيل المدرسة"}, {"n": "صالح محمد العطني", "t": "إداري"}, {"n": "عبدالله سليمان الشارخ", "t": "إداري"}, {"n": "عبدالله إبراهيم الدغيم", "t": "إداري"}, {"n": "فهد عبدالله الجروان", "t": "إداري"}, {"n": "عبدالرحمن بن عبدالله الصويان", "t": "إداري"}, {"n": "فهد بن عبدالرحمن العقيل", "t": "إداري"}, {"n": "معتز عبدالله العواجي", "t": "إداري"}, {"n": "هيثم مرزوق الفريدى", "t": "إداري"}, {"n": "محمد بن صالح الشعلان", "t": "إداري"}, {"n": "عمر محمد الخليفه", "t": "إداري"}, {"n": "بندر بن غنيمان الحربي", "t": "إداري"}, {"n": "بدر بن مناور الوسيدي", "t": "إداري"}, {"n": "زهير صالح الضويان", "t": "إداري"}, {"n": "عبدالعزيز بن حمد الريس", "t": "إداري"}, {"n": "محمد عبدالله الحربي", "t": "إداري"}, {"n": "ماجد بن عبدالله الحربي", "t": "إداري"}, {"n": "سامي محمد الحواس", "t": "إداري"}, {"n": "نايف بن محماس المطيري", "t": "إداري"}, {"n": "فيصل بن عويض المطيري", "t": "إداري"}, {"n": "فايز مازن الحربي", "t": "إداري"}, {"n": "راشد سالم الراشد", "t": "إداري"}, {"n": "سليمان علي الثواب", "t": "إداري"}, {"n": "دخيل فهد الجاسر", "t": "إداري"}, {"n": "فهد جريد الحربي", "t": "إداري"}];
+  var VIEWS = ["about", "history", "teachers", "admins", "achievements", "archive", "model", "contact"];
+  var SUBJECT_ORDER = ["القرآن الكريم والدراسات الإسلامية", "اللغة العربية", "الرياضيات", "العلوم", "اللغة الإنجليزية", "الدراسات الاجتماعية", "المهارات الحياتية والأسرية", "المهارات الرقمية", "التربية الفنية", "التربية البدنية والدفاع عن النفس", "التربية الفكرية"];
+
+  function $(id) { return document.getElementById(id); }
+  function norm(t) { return String(t).replace(/[ً-ٟـ]/g, "").replace(/[أإآ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").replace(/\s+/g, " ").trim(); }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function icon(id) { var s = document.createElementNS("http://www.w3.org/2000/svg", "svg"); s.setAttribute("class", "ic"); var u = document.createElementNS("http://www.w3.org/2000/svg", "use"); u.setAttribute("href", "#" + id); s.appendChild(u); return s; }
+  function avatar(id) { var d = el("div", "av"); d.appendChild(icon(id)); return d; }
+  function digits(n) { return String(n).replace(/\d/g, function (d) { return "٠١٢٣٤٥٦٧٨٩".charAt(d); }); }
+
+  /* views */
+  var tiles = document.querySelectorAll(".tile");
+  function show(name, scroll) {
+    if (VIEWS.indexOf(name) < 0) name = "about";
+    VIEWS.forEach(function (v) { $("v-" + v).hidden = (v !== name); });
+    for (var i = 0; i < tiles.length; i++) tiles[i].setAttribute("aria-current", tiles[i].getAttribute("data-v") === name ? "true" : "false");
+    if (scroll) {
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      $("v-" + name).scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    }
+  }
+  window.addEventListener("hashchange", function () { show(location.hash.replace("#", ""), true); });
+  show(location.hash.replace("#", ""), false);
+
+  /* teachers */
+  var activeSubject = "";
+  function primaryIndex(t) { var i = t.s.length ? SUBJECT_ORDER.indexOf(t.s[0]) : 99; return i < 0 ? 98 : i; }
+  var sorted = TEACHERS.map(function (t, i) { return { t: t, i: i }; }).sort(function (a, b) { return primaryIndex(a.t) - primaryIndex(b.t) || a.i - b.i; }).map(function (x) { return x.t; });
+  $("k-teachers").textContent = digits(TEACHERS.length) + " معلمًا";
+
+  function countFor(s) { return TEACHERS.filter(function (t) { return t.s.indexOf(s) >= 0; }).length; }
+  function chip(label, value, n) {
+    var b = el("button", "chip", label); b.type = "button";
+    b.setAttribute("aria-pressed", value === activeSubject ? "true" : "false");
+    if (n != null) b.appendChild(el("small", null, digits(n)));
+    b.addEventListener("click", function () { activeSubject = value; drawChips(); drawTeachers(); });
+    return b;
+  }
+  function drawChips() {
+    var c = $("chips"); c.innerHTML = "";
+    c.appendChild(chip("الكل", "", TEACHERS.length));
+    SUBJECT_ORDER.forEach(function (s) { var n = countFor(s); if (n) c.appendChild(chip(s, s, n)); });
+  }
+  function drawTeachers() {
+    var term = norm($("q").value), list = $("tlist"), shown = 0;
+    list.innerHTML = "";
+    sorted.forEach(function (t) {
+      if (activeSubject && t.s.indexOf(activeSubject) < 0) return;
+      if (term && norm(t.n).indexOf(term) < 0) return;
+      var li = el("li"); li.appendChild(avatar("i-people"));
+      var w = el("div", "who"); w.appendChild(el("b", null, t.n));
+      var tg = el("div", "tags");
+      if (t.s.length) t.s.forEach(function (s) { tg.appendChild(el("span", "tag-s", s)); });
+      else tg.appendChild(el("span", "tag-s none", "المادة غير مسجلة"));
+      w.appendChild(tg); li.appendChild(w); list.appendChild(li); shown++;
+    });
+    if (!shown) list.appendChild(el("li", "empty", "لا توجد نتائج مطابقة."));
+    $("count").textContent = digits(shown) + " من " + digits(TEACHERS.length) + " معلمًا";
+  }
+  $("q").addEventListener("input", drawTeachers);
+  drawChips(); drawTeachers();
+
+  /* admins */
+  function drawAdmins() {
+    var term = norm($("qa").value), root = $("alist"); root.innerHTML = "";
+    var groups = [
+      { title: "الإدارة", test: function (a) { return a.t === "مدير المدرسة" || a.t === "وكيل المدرسة"; } },
+      { title: "الإداريون", test: function (a) { return a.t === "إداري"; } }
+    ];
+    var total = 0;
+    groups.forEach(function (g) {
+      var items = ADMINS.filter(function (a) { return g.test(a) && (!term || norm(a.n).indexOf(term) >= 0); });
+      if (!items.length) return;
+      if (g.title) root.appendChild(el("div", "gh", g.title + " (" + digits(items.length) + ")"));
+      var ul = el("ul", "people");
+      items.forEach(function (a) {
+        var li = el("li"); li.appendChild(avatar("i-admin"));
+        var w = el("div", "who"); w.appendChild(el("b", null, a.n)); li.appendChild(w);
+        var cls = (a.t === "مدير المدرسة" || a.t === "وكيل المدرسة") ? "badge lead-b" : "badge";
+        li.appendChild(el("span", cls, a.t)); ul.appendChild(li); total++;
+      });
+      root.appendChild(ul);
+    });
+    if (!total) root.appendChild(el("p", "empty", "لا توجد نتائج مطابقة."));
+  }
+  $("qa").addEventListener("input", drawAdmins);
+  drawAdmins();
+
+  /* copy link */
+  $("copy").addEventListener("click", function () {
+    var done = function (ok) { $("copied").textContent = ok ? "تم نسخ الرابط" : "انسخ الرابط من شريط العنوان"; };
+    try { navigator.clipboard.writeText(location.href.split("#")[0]).then(function () { done(true); }, function () { done(false); }); }
+    catch (e) { done(false); }
+  });
+</script>
+
+</body></html>
