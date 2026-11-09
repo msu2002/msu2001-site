@@ -424,6 +424,6 @@ async function init(){try{autoCaptions=localStorage.getItem('fahad-auto-captions
 window.FahadApp={C,CM,assets,
  get p(){return p},get current(){return current},get selected(){return selected},set selected(v){selected=v},get zoom(){return zoom},
  get activeTrack(){return activeTrack},set activeTrack(v){activeTrack=v},get exportJob(){return exportJob},get loading(){return loading},
- chosen,edit,toast,seek,renderTimeline,renderProperties,splitSelected,deleteSelected,detachAudio,getNode,loadAsset};
+ queueCaptions,chosen,edit,toast,seek,renderTimeline,renderProperties,splitSelected,deleteSelected,detachAudio,getNode,loadAsset};
 init();
 })();
