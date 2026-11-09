@@ -1,5 +1,5 @@
 /* Only same-origin app/model files are requested. User media stays in IndexedDB. */
-const CACHE='fahad-studio-shell-1.11.0';
+const CACHE='fahad-studio-shell-1.12.0';
 const FONTS='fahad-studio-fonts-v1';
 const MODELS='fahad-studio-models-whisper-base-q8-v1';
 const FILES=['./','index.html','style.css?v=1.11.0','core.js?v=1.11.0','captions.js?v=1.11.0','fonts.js?v=1.11.0','fonts/catalog.json','apple-touch-icon.png','gold.js?v=1.11.0','creative.js?v=1.11.0','lut.js?v=1.11.0','textfx.js?v=1.11.0','tools.js?v=1.11.0','privacy.js?v=1.11.0','extras.js?v=1.11.0','ai.js?v=1.11.0','pro.js?v=1.11.0','montage2.js?v=1.12.0','app.js?v=1.11.0','asr-worker.js','manifest.webmanifest','assets/icon.svg'];
