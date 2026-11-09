@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>استمارة متابعة إنهاء المناهج الدراسية</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Cairo:wght@700;800&family=Aref+Ruqaa&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--c:#0f6b5c;--c-d:#0a4d42;--c2:#eaf4f2;--gold:#b8923a;--ink:#1b2927;--mut:#5b6e6a;--line:#d5e2df;--bg:#eef3f2}
+*{box-sizing:border-box}
+body{margin:0;font-family:'IBM Plex Sans Arabic','Cairo',sans-serif;background:var(--bg);color:var(--ink);padding:24px 14px;font-size:17px;line-height:1.9;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+button,input,select,textarea{font-family:inherit}
+#sheet{max-width:880px;margin:0 auto;background:#fff;border-radius:18px;padding:0 0 36px;box-shadow:0 10px 40px #0a4d4226;overflow:hidden;border-top:8px solid var(--c)}
+#sheet>*:not(.hdr){margin-inline:44px}
+.hdr{background:linear-gradient(180deg,var(--c2),#fff);text-align:center;padding:34px 24px 22px;margin-bottom:10px;border-bottom:3px double var(--gold)}
+.hdr-1{font-size:21px;font-weight:700;color:var(--ink)}
+.hdr-2{font-size:21px;font-weight:700;color:var(--c);margin-top:4px}
+h1{font-family:'Cairo',sans-serif;font-weight:800;color:var(--c-d);text-align:center;font-size:30px;line-height:1.5;margin-top:26px;margin-bottom:2px}
+.sub{text-align:center;font-weight:600;color:var(--gold);font-size:19px;margin-bottom:24px}
+.intro{background:var(--c2);border-right:6px solid var(--c);padding:20px 24px;border-radius:12px;line-height:2.1;font-size:16.5px}
+h2{font-family:'Cairo',sans-serif;background:linear-gradient(270deg,var(--c),var(--c-d));color:#fff;font-size:19px;font-weight:700;padding:11px 20px;border-radius:12px;margin-top:38px;margin-bottom:20px;box-shadow:0 3px 10px #0f6b5c33}
+.f{margin-bottom:22px;background:#fafcfc;border:1px solid var(--line);border-radius:12px;padding:16px 20px}
+label.t{display:block;font-weight:700;margin-bottom:10px;font-size:16.5px;color:var(--c-d)}
+.req::before{content:"* ";color:#c0392b}
+input[type=text],input[type=date],input[type=url],select,textarea{width:100%;font:inherit;font-size:16.5px;padding:13px 16px;border:1.5px solid var(--line);border-radius:10px;background:#fff;transition:.15s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 4px #0f6b5c1f}
+textarea{min-height:110px;resize:vertical}
+.opts{display:flex;flex-wrap:wrap;gap:10px}
+.opts label{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 18px;cursor:pointer;font-size:16px;transition:.15s}
+.opts label:hover{border-color:var(--c)}
+.opts input{accent-color:var(--c);width:18px;height:18px}
+.opts label:has(input:checked){background:var(--c2);border-color:var(--c);font-weight:700;color:var(--c-d)}
+.hide{display:none}
+.pledge{line-height:2.1;font-size:16.5px;background:#fffaf0;border:1.5px dashed var(--gold);padding:18px 22px;border-radius:12px}
+.sig-tabs{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+.sig-tabs button,.btn{font:inherit;font-size:16px;cursor:pointer;border:1.5px solid var(--c);background:#fff;color:var(--c);padding:11px 22px;border-radius:10px;font-weight:700;transition:.15s}
+.sig-tabs button.on{background:var(--c);color:#fff}
+#pad{width:100%;height:190px;border:2px dashed var(--c);border-radius:12px;touch-action:none;background:#fff;display:block}
+#typed{font-family:'Aref Ruqaa',serif;font-size:34px;text-align:center}
+.credit{display:none}
+.actions{max-width:880px;margin:22px auto 10px;display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px #0002}
+.btn.primary{background:var(--c);color:#fff;font-size:18px;padding:13px 40px}
+.btn.danger{border-color:#c0392b;color:#c0392b}
+#status{max-width:880px;margin:0 auto 24px;text-align:center;font-weight:700;min-height:26px}
+.ok{color:#0f7a3d}.bad{color:#c0392b}
+@media(max-width:600px){#sheet>*:not(.hdr){margin-inline:16px}.f{padding:14px}h1{font-size:24px}}
+@media print{
+ body{background:#fff;padding:0}#sheet{box-shadow:none;border-radius:0;max-width:none;padding:0}#sheet>*:not(.hdr){margin-inline:0}.f{break-inside:avoid;background:#fff}h2{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .actions,#status,.sig-tabs,#clearSig{display:none!important}
+ input,select,textarea{border:none!important;border-bottom:1px solid #999!important;border-radius:0!important}
+ @page{size:A4;margin:12mm}
+}
+
+/* ===== تسجيل الدخول ===== */
+.gate{max-width:440px;margin:6vh auto 0;background:#fff;border-radius:22px;box-shadow:0 14px 44px #0a4d4230;overflow:hidden;border-top:8px solid var(--c)}
+.gate .hdr{padding:26px 18px 16px;margin:0}.gate .hdr-1,.gate .hdr-2{font-size:16px}
+.logo{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--c),var(--c-d));margin:0 auto 12px;display:grid;place-items:center;color:#fff;font-size:30px;box-shadow:0 6px 16px #0f6b5c55}
+.gb{padding:22px 26px 28px}.gb h3{font-family:'Cairo',sans-serif;font-size:24px;color:var(--c-d);text-align:center;margin:0 0 2px}
+.gb .gs{text-align:center;color:var(--gold);font-weight:600;font-size:14.5px;margin-bottom:18px}
+.gb .f{padding:0;border:none;background:none;margin-bottom:14px}
+.gb input{width:100%;font:inherit;font-size:17px;padding:12px 15px;border:1.5px solid var(--line);border-radius:10px;background:#fff;direction:ltr;text-align:right}
+.gb input:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 4px #0f6b5c1f}
+.gb textarea{min-height:76px}
+.pw{position:relative}.pw button{position:absolute;left:8px;top:50%;transform:translateY(-50%);border:none;background:none;font-size:19px;cursor:pointer;padding:6px}
+.pw input{padding-left:44px}
+.gbtn{width:100%;font:inherit;font-size:18px;font-weight:700;background:var(--c);color:#fff;border:none;border-radius:10px;padding:13px;cursor:pointer;box-shadow:0 4px 12px #0f6b5c40}
+.gbtn:disabled{opacity:.6;cursor:wait}
+.lk{display:block;text-align:center;color:var(--c);font-weight:600;font-size:15px;margin-top:14px;cursor:pointer;background:none;border:none;width:100%;font-family:inherit}
+.gnote{background:#fffaf0;border:1.5px dashed var(--gold);border-radius:10px;padding:10px 13px;font-size:13.5px;line-height:1.9;margin-top:16px}
+.gmsg{min-height:22px;text-align:center;font-weight:700;font-size:14.5px;margin-top:10px}
+.gmsg.ok{color:#0f7a3d}.gmsg.bad{color:#c0392b}
+.meter{height:6px;background:#e6efed;border-radius:4px;margin-top:8px;overflow:hidden}.meter i{display:block;height:100%;width:0;background:#c0392b;transition:.2s}
+.topbar{max-width:880px;margin:0 auto 14px;display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:14px;padding:10px 18px;box-shadow:0 4px 16px #0a4d4218;font-size:15.5px;gap:10px;flex-wrap:wrap}
+.topbar b{color:var(--c-d)}.topbar .tb{display:flex;gap:8px;flex-wrap:wrap}
+.topbar button{font:inherit;font-size:14px;font-weight:700;border:1.5px solid var(--c);background:#fff;color:var(--c);border-radius:20px;padding:5px 14px;cursor:pointer}
+.ro{background:#f1f6f5!important;color:#333}
+.done{max-width:880px;margin:0 auto;background:#fff;border-radius:18px;padding:34px 26px;text-align:center;box-shadow:0 10px 40px #0a4d4226;border-top:8px solid var(--c)}
+.done h2{background:none;color:var(--c-d);box-shadow:none;margin:6px 0}
+.adm{max-width:880px;margin:0 auto;background:#fff;border-radius:18px;padding:22px 24px;box-shadow:0 10px 40px #0a4d4226;border-top:8px solid var(--gold)}
+.adm h2{margin-top:18px}.adm table{width:100%;border-collapse:collapse;font-size:15px}
+.adm td,.adm th{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right}.adm th{color:var(--c-d);font-weight:700;background:var(--c2)}
+.adm .mini{font:inherit;font-size:13.5px;font-weight:700;border-radius:8px;padding:4px 12px;cursor:pointer;border:1.5px solid var(--c);background:#fff;color:var(--c);margin-inline-start:6px}
+.adm .mini.no{border-color:#c0392b;color:#c0392b}.adm .mini.go{background:var(--c);color:#fff}
+.pill{display:inline-block;border-radius:20px;padding:2px 12px;font-size:13px;font-weight:700}.pill.y{background:#e3f4ea;color:#0f7a3d}.pill.n{background:#fdecea;color:#c0392b}
+.kpi{display:flex;gap:12px;flex-wrap:wrap}.kpi div{flex:1;min-width:120px;background:var(--c2);border-radius:12px;padding:12px;text-align:center}.kpi b{display:block;font-size:26px;color:var(--c-d);font-family:Cairo}
+.hide{display:none!important}
+@media print{.topbar{display:none}}
+</style>
+</head>
+<body>
+
+
+<div id="gLogin" class="gate"><div class="hdr"><div class="logo">🔒</div><div class="hdr-1">إدارة التربية والتعليم بمنطقة القصيم</div><div class="hdr-2">المدرسة الابتدائية المحمدية بمحافظة الرس</div></div>
+ <form class="gb" onsubmit="return false" autocomplete="on"><h3>تسجيل الدخول</h3><div class="gs">استمارة متابعة إنهاء المناهج — ١٤٤٨هـ</div>
+  <div class="f"><label class="t">رقم السجل المدني</label><input id="lgId" inputmode="numeric" maxlength="10" autocomplete="username" placeholder="١٠ أرقام"></div>
+  <div class="f"><label class="t">الرقم السري</label><div class="pw"><input id="lgPw" type="password" autocomplete="current-password"><button type="button" data-eye="lgPw" aria-label="إظهار">👁</button></div></div>
+  <button class="gbtn" id="lgGo">دخول</button><div class="gmsg" id="lgMsg"></div>
+  <button type="button" class="lk" id="toForgot">نسيت الرقم السري؟ اطلب إعادة تعيينه</button>
+  <div class="gnote">عند أول دخول: الرقم السري هو <b>رقم جوالك المسجّل</b> في نظام الوزارة، وسيُطلب منك تغييره فورًا.</div></form></div>
+
+<div id="gForgot" class="gate hide"><div class="hdr"><div class="logo">🔑</div><div class="hdr-1">إدارة التربية والتعليم بمنطقة القصيم</div><div class="hdr-2">المدرسة الابتدائية المحمدية بمحافظة الرس</div></div>
+ <form class="gb" onsubmit="return false"><h3>إعادة الرقم السري</h3><div class="gs">يُرسل الطلب إلى إدارة المدرسة للاعتماد</div>
+  <div class="f"><label class="t">رقم السجل المدني</label><input id="fgId" inputmode="numeric" maxlength="10"></div>
+  <div class="f"><label class="t">ملاحظة (اختياري)</label><textarea id="fgNote" style="width:100%;font:inherit;padding:10px 13px;border:1.5px solid var(--line);border-radius:10px" placeholder="مثال: غيّرت رقم جوالي…"></textarea></div>
+  <button class="gbtn" id="fgGo">إرسال الطلب</button><div class="gmsg" id="fgMsg"></div>
+  <button type="button" class="lk" id="backLogin1">← العودة لتسجيل الدخول</button>
+  <div class="gnote">بعد اعتماد المدير يعود رقمك السري إلى <b>رقم جوالك المسجّل</b> ويُطلب منك تغييره عند الدخول.</div></form></div>
+
+<div id="gChange" class="gate hide"><div class="hdr"><div class="logo">🛡️</div><div class="hdr-1">إدارة التربية والتعليم بمنطقة القصيم</div><div class="hdr-2">المدرسة الابتدائية المحمدية بمحافظة الرس</div></div>
+ <form class="gb" onsubmit="return false"><h3 id="chTitle">أمّن حسابك</h3><div class="gs" id="chSub">اختر رقمًا سريًا جديدًا للمتابعة</div>
+  <div class="f"><label class="t">الرقم السري الحالي</label><div class="pw"><input id="chOld" type="password" autocomplete="current-password"><button type="button" data-eye="chOld">👁</button></div></div>
+  <div class="f"><label class="t">الرقم السري الجديد</label><div class="pw"><input id="chNew" type="password" autocomplete="new-password"><button type="button" data-eye="chNew">👁</button></div><div class="meter"><i id="chBar"></i></div><div id="chHint" style="font-size:13px;color:var(--mut);margin-top:6px">٨ خانات على الأقل، ولا يكون رقم الجوال</div></div>
+  <div class="f"><label class="t">تأكيد الرقم السري</label><div class="pw"><input id="chNew2" type="password" autocomplete="new-password"><button type="button" data-eye="chNew2">👁</button></div></div>
+  <button class="gbtn" id="chGo">حفظ ومتابعة</button><div class="gmsg" id="chMsg"></div>
+  <button type="button" class="lk hide" id="chCancel">إلغاء</button></form></div>
+
+<div id="appWrap" class="hide">
+<div class="topbar"><span>مرحبًا <b id="whoName"></b></span><span class="tb"><button id="btnAdm" class="hide">لوحة الإدارة</button><button id="btnForm" class="hide">الاستمارة</button><button id="btnChg">تغيير الرقم السري</button><button id="btnOut">خروج</button></span></div>
+<div id="doneBox" class="done hide"><div style="font-size:54px">✅</div><h2>تم استلام استمارتك</h2><p id="doneTxt"></p><p style="color:var(--mut)">شكرًا لك على جهودك. لتعديل الاستمارة تواصل مع إدارة المدرسة لإعادة فتحها.</p></div>
+<div id="admBox" class="adm hide"></div>
+<div id="formBox">
+<form id="sheet" autocomplete="off" onsubmit="return false">
+  <div class="hdr">
+    <div class="hdr-1">إدارة التربية والتعليم بمنطقة القصيم</div>
+    <div class="hdr-2">المدرسة الابتدائية المحمدية بمحافظة الرس</div>
+  </div>
+  <h1>استمارة متابعة إنهاء المناهج الدراسية</h1>
+  <div class="sub">الفصل الدراسي الثاني لعام ١٤٤٨هـ</div>
+
+  <div class="intro">
+    <b>عزيزي المعلم.. السلام عليكم ورحمة الله وبركاته،،</b><br>
+    انطلاقًا من الحرص على متابعة سير العملية التعليمية وضمان إنهاء المقررات الدراسية وفق الخطة الزمنية المعتمدة، يرجى التكرم بتعبئة هذه الاستمارة بدقة لتوثيق إنجازاتك والاستعداد لفترة الاختبارات النهائية.
+    <b>شاكرين لك جهودك العظيمة في بناء جيل المستقبل.</b>
+  </div>
+
+  <h2>أولاً: البيانات الشخصية</h2>
+  <div class="f"><label class="t req">اسم المعلم الثلاثي</label><input type="text" name="الاسم" id="name" required readonly class="ro"></div>
+  <div class="f"><label class="t req">التخصص</label><input type="text" name="التخصص" required></div>
+
+  <h2>ثانياً: بيانات الصفوف والمادة</h2>
+  <div class="f"><label class="t req">الصفوف التي تدرسها</label>
+    <div class="opts" id="grades">
+      <label><input type="checkbox" name="الصفوف" value="الأول الابتدائي">الأول الابتدائي</label>
+      <label><input type="checkbox" name="الصفوف" value="الثاني الابتدائي">الثاني الابتدائي</label>
+      <label><input type="checkbox" name="الصفوف" value="الثالث الابتدائي">الثالث الابتدائي</label>
+      <label><input type="checkbox" name="الصفوف" value="الرابع الابتدائي">الرابع الابتدائي</label>
+      <label><input type="checkbox" name="الصفوف" value="الخامس الابتدائي">الخامس الابتدائي</label>
+      <label><input type="checkbox" name="الصفوف" value="السادس الابتدائي">السادس الابتدائي</label>
+    </div></div>
+  <div class="f"><label class="t req">المادة التي تدرسها</label><input type="text" name="المادة" required></div>
+
+  <h2>ثالثاً: حالة إنهاء المنهج والإنجاز</h2>
+  <div class="f"><label class="t req">حالة الإنتهاء من المنهج</label>
+    <div class="opts" id="status3">
+      <label><input type="radio" name="الحالة" value="تم الانتهاء كاملاً" required>تم الانتهاء كاملاً</label>
+      <label><input type="radio" name="الحالة" value="جاري إنهاء المتبقي">جاري إنهاء المتبقي</label>
+      <label><input type="radio" name="الحالة" value="متأخر عن الخطة">متأخر عن الخطة</label>
+    </div></div>
+  <div class="f hide" id="dateBox"><label class="t">تاريخ الإنتهاء من المنهج</label><input type="date" name="تاريخ الانتهاء"></div>
+  <div class="f hide" id="lateBox"><label class="t">أسباب التأخر عن الخطة الزمنية</label><textarea name="أسباب التأخر"></textarea></div>
+  <div class="f"><label class="t req">نسبة الإنجاز الفعلية للمنهج</label>
+    <div class="opts">
+      <label><input type="radio" name="نسبة الإنجاز" value="١٠٠٪ - مكتمل" required>١٠٠٪ - مكتمل</label>
+      <label><input type="radio" name="نسبة الإنجاز" value="٩٠٪ - متقدم جداً">٩٠٪ - متقدم جداً</label>
+      <label><input type="radio" name="نسبة الإنجاز" value="٨٠٪ - متقدم">٨٠٪ - متقدم</label>
+      <label><input type="radio" name="نسبة الإنجاز" value="أقل من ٨٠٪ - يحتاج متابعة">أقل من ٨٠٪ - يحتاج متابعة</label>
+    </div></div>
+
+  <h2>رابعاً: المتابعة والتقييم</h2>
+  <div class="f"><label class="t req">رصد درجات الاختبارات الفترية؟</label><div class="opts"><label><input type="radio" name="رصد الدرجات" value="نعم" required>نعم</label><label><input type="radio" name="رصد الدرجات" value="لا">لا</label></div></div>
+  <div class="f"><label class="t req">تقييم المهام الأدائية والمشاريع؟</label><div class="opts"><label><input type="radio" name="تقييم المهام" value="نعم" required>نعم</label><label><input type="radio" name="تقييم المهام" value="لا">لا</label></div></div>
+  <div class="f"><label class="t req">تسليم سجلات المتابعة للإدارة؟</label><div class="opts"><label><input type="radio" name="تسليم السجلات" value="نعم" required>نعم</label><label><input type="radio" name="تسليم السجلات" value="لا">لا</label></div></div>
+  <div class="f"><label class="t req">تنفيذ خطة المراجعة النهائية؟</label><div class="opts"><label><input type="radio" name="خطة المراجعة" value="نعم" required>نعم</label><label><input type="radio" name="خطة المراجعة" value="لا">لا</label></div></div>
+
+  <h2>خامساً: ملاحظات</h2>
+  <div class="f"><label class="t">رابط إثبات الإنجاز (اختياري)</label><input type="url" name="رابط الإثبات" placeholder="https://"></div>
+  <div class="f"><label class="t">ملاحظات إضافية / صعوبات:</label><textarea name="ملاحظات"></textarea></div>
+
+  <h2>سادساً: الإقرار والتوقيع الإلكتروني</h2>
+  <div class="pledge">أقر أنا المعلم المذكور أعلاه بصحة كافة البيانات المسجلة بخصوص إنهاء المناهج الدراسية المسندة إليّ، مع مراجعة المهارات الأساسية للطلاب ورصد الدرجات، وهذا إقرار مني بذلك.</div>
+  <div class="f" style="margin-top:12px"><b>التاريخ: </b><span id="today"></span></div>
+  <label class="t req">توقيع المعلم</label>
+  <div class="sig-tabs">
+    <button type="button" id="tabDraw" class="on">✍️ رسم التوقيع</button>
+    <button type="button" id="tabType">⌨️ كتابة الاسم</button>
+    <button type="button" id="clearSig" class="danger btn">🗑️ مسح</button>
+  </div>
+  <canvas id="pad"></canvas>
+  <input type="text" id="typed" class="hide" placeholder="اكتب اسمك للتوقيع">
+
+</form>
+
+<div class="actions">
+  <button class="btn" id="btnPrint">🖨️ طباعة A4</button>
+  <button class="btn" id="btnPdf">📄 تصدير PDF</button>
+  <button class="btn primary" id="btnSave">✅ حفظ البيانات</button>
+  <button class="btn danger" id="btnReset">🔄 مسح البيانات</button>
+</div>
+<div id="status"></div>
+</div></div>
+
+<script>
+/* ================== إعدادات الحفظ في Google Drive ==================
+   ضع هنا رابط تطبيق الويب (Apps Script) الذي يحفظ الملفات في مجلد «مساحة المحمدية». */
+const SAVE_URL = "https://script.google.com/macros/s/AKfycbwMs56WWZ0YzApz3D4ttYtq8OQi176VnpQrBOG8bi9VbmE_FpUk0L4R06xokEwDzGu7bg/exec";   // رابط تطبيق الويب (Apps Script) بعد النشر
+
+const $=s=>document.querySelector(s), form=$('#sheet'), st=$('#status');
+document.querySelectorAll('#status3 input').forEach(r=>r.onchange=()=>{
+  $('#dateBox').classList.toggle('hide', r.value!=="تم الانتهاء كاملاً");
+  $('#lateBox').classList.toggle('hide', r.value!=="متأخر عن الخطة");
+});
+const hij=new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura',{dateStyle:'long'}).format(new Date());
+const greg=new Date().toLocaleDateString('ar-SA-u-ca-gregory',{dateStyle:'long'});
+$('#today').textContent=hij+" هـ  —  "+greg;
+
+/* ---------- التوقيع ---------- */
+const pad=$('#pad'), ctx=pad.getContext('2d'); let mode='draw', drawing=false, signed=false;
+function fit(){const r=pad.getBoundingClientRect(),d=window.devicePixelRatio||1;const keep=signed?pad.toDataURL():null;
+  pad.width=r.width*d;pad.height=r.height*d;ctx.scale(d,d);ctx.lineWidth=2.4;ctx.lineCap='round';ctx.strokeStyle='#111';
+  if(keep){const i=new Image();i.onload=()=>ctx.drawImage(i,0,0,r.width,r.height);i.src=keep;}}
+fit(); addEventListener('resize',()=>{if(mode==='draw')fit()});
+const pos=e=>{const r=pad.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]};
+pad.onpointerdown=e=>{drawing=true;signed=true;pad.setPointerCapture(e.pointerId);ctx.beginPath();ctx.moveTo(...pos(e))};
+pad.onpointermove=e=>{if(drawing){ctx.lineTo(...pos(e));ctx.stroke()}};
+pad.onpointerup=()=>drawing=false;
+function setMode(m){mode=m;$('#tabDraw').classList.toggle('on',m==='draw');$('#tabType').classList.toggle('on',m==='type');
+  pad.classList.toggle('hide',m!=='draw');$('#typed').classList.toggle('hide',m!=='type');if(m==='draw')fit();}
+$('#tabDraw').onclick=()=>setMode('draw');$('#tabType').onclick=()=>setMode('type');
+$('#clearSig').onclick=()=>{signed=false;ctx.clearRect(0,0,pad.width,pad.height);$('#typed').value=''};
+const hasSig=()=>mode==='draw'?signed:$('#typed').value.trim().length>0;
+
+/* ---------- تجهيز الصفحة للتصدير ---------- */
+function msg(t,c){st.className=c||'';st.textContent=t}
+function validate(){
+  if(!form.reportValidity())return false;
+  if(!document.querySelector('#grades input:checked')){msg('يرجى اختيار الصفوف التي تدرسها.','bad');$('#grades').scrollIntoView({block:'center'});return false}
+  if(!hasSig()){msg('يرجى التوقيع أولاً (رسماً أو كتابةً).','bad');return false}
+  return true;
+}
+async function snapshot(){
+  // حوّل لوحة التوقيع إلى صورة، وحقل الاسم المكتوب إلى نص ثابت، لتظهر في PDF
+  const restore=[];
+  if(mode==='draw'){const img=new Image();img.src=pad.toDataURL();img.style.cssText='width:100%;height:190px;border:2px dashed #0f6b5c;border-radius:12px';
+    pad.after(img);pad.classList.add('hide');restore.push(()=>{img.remove();pad.classList.remove('hide')});}
+  document.querySelector('.sig-tabs').classList.add('hide');restore.push(()=>document.querySelector('.sig-tabs').classList.remove('hide'));
+  await document.fonts.ready;
+  const canvas=await html2canvas(form,{scale:3,backgroundColor:'#fff',useCORS:true});
+  restore.forEach(f=>f());return canvas;
+}
+function toPdf(canvas){
+  const {jsPDF}=window.jspdf, pdf=new jsPDF('p','mm','a4');
+  const W=210,H=297,m=8,iw=W-2*m, ih=canvas.height*iw/canvas.width, ph=H-2*m;
+  let y=0,first=true;
+  while(y<ih){
+    const sliceH=Math.min(ph,ih-y), c=document.createElement('canvas');
+    c.width=canvas.width; c.height=Math.round(sliceH*canvas.width/iw);
+    c.getContext('2d').drawImage(canvas,0,Math.round(y*canvas.width/iw),canvas.width,c.height,0,0,c.width,c.height);
+    if(!first)pdf.addPage(); pdf.addImage(c.toDataURL('image/jpeg',0.92),'JPEG',m,m,iw,sliceH);
+    y+=ph; first=false;
+  }
+  return pdf;
+}
+function collect(){
+  const d={}, fd=new FormData(form); for(const k of new Set(fd.keys())){const v=fd.getAll(k);d[k]=v.length>1?v.join('، '):v[0]}
+  d["التوقيع"]=mode==='draw'?"رسم":$('#typed').value; d["تاريخ التعبئة"]=$('#today').textContent; return d;
+}
+const safe=s=>(s||'بدون_اسم').trim().replace(/[\\/:*?"<>|\s]+/g,'_');
+
+/* ---------- الحفظ في Google Drive ---------- */
+function b64(blob){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(',')[1]);r.onerror=()=>rej(new Error('تعذّر تجهيز الملف.'));r.readAsDataURL(blob)})}
+async function sendToDrive(name,pdfBlob,data){
+  const j=await api({action:'submit',pdf:await b64(pdfBlob)});
+  if(!j.ok){ if(j.error==='session'){logout(true);throw new Error('انتهت الجلسة، سجّل الدخول من جديد.')}
+    throw new Error(j.msg||'تعذّر حفظ البيانات، حاول مرة أخرى لاحقاً.') }
+}
+
+/* ---------- الأزرار ---------- */
+$('#btnPrint').onclick=()=>{if(validate())print()};
+$('#btnPdf').onclick=async()=>{ if(!validate())return; msg('جاري تجهيز PDF…');
+  try{const pdf=toPdf(await snapshot());pdf.save('استمارة_'+safe($('#name').value)+'.pdf');msg('تم تصدير الملف ✔','ok')}catch(e){msg(e.message,'bad')}};
+$('#btnSave').onclick=async()=>{ if(!validate())return; $('#btnSave').disabled=true; msg('جاري الحفظ والإرسال…');
+  try{
+    const pdf=toPdf(await snapshot()), blob=pdf.output('blob'), base=safe($('#name').value)+'_'+new Date().toISOString().slice(0,10);
+    await sendToDrive(base,blob,collect());
+    localStorage.removeItem(DKEY());msg('تم حفظ الاستمارة بنجاح ✔','ok');ME.submitted=true;show('done');
+  }catch(e){msg(e.message,'bad')}finally{$('#btnSave').disabled=false}};
+$('#btnReset').onclick=()=>{if(confirm('مسح جميع البيانات؟')){form.reset();$('#name').value=ME?ME.name:'';$('#clearSig').click();$('#dateBox').classList.add('hide');$('#lateBox').classList.add('hide');msg('')}};
+
+/* ================= الدخول والجلسة ================= */
+const G=id=>document.getElementById(id);
+let TOKEN=null, ME=null;
+try{TOKEN=sessionStorage.getItem('tk');ME=JSON.parse(sessionStorage.getItem('me')||'null')}catch(e){}
+const DKEY=()=>'draft_'+(ME?ME.name:'');
+async function api(body){
+  if(!SAVE_URL)return {ok:false,error:'noapi',msg:'لم يتم ربط الخدمة بعد.'};
+  if(TOKEN)body.token=TOKEN;
+  let r;try{r=await fetch(SAVE_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)})}catch(e){throw new Error('تعذّر الاتصال، تأكد من الإنترنت وحاول مرة أخرى.')}
+  try{return await r.json()}catch(e){throw new Error('لم تصل استجابة صحيحة من الخادم، حاول مرة أخرى.')}
+}
+const gm=(id,t,c)=>{const e=G(id);e.textContent=t;e.className='gmsg '+(c||'')};
+function show(v){
+  ['gLogin','gForgot','gChange','appWrap'].forEach(x=>G(x).classList.add('hide'));
+  if(v==='login'||v==='forgot'||v==='change'){G({login:'gLogin',forgot:'gForgot',change:'gChange'}[v]).classList.remove('hide');scrollTo(0,0);return}
+  G('appWrap').classList.remove('hide');
+  G('whoName').textContent=ME.name;
+  G('btnAdm').classList.toggle('hide',!(ME.role==='admin'&&v!=='admin'));
+  G('btnForm').classList.toggle('hide',!(ME.role==='admin'&&v==='admin'));
+  G('formBox').classList.toggle('hide',v!=='form');
+  G('doneBox').classList.toggle('hide',v!=='done');
+  G('admBox').classList.toggle('hide',v!=='admin');
+  if(v==='done'){G('doneTxt').textContent='تم إرسال الاستمارة وحفظها باسمك ('+ME.name+').'}
+  if(v==='form'){G('name').value=ME.name;restoreDraft()}
+  if(v==='admin')loadAdmin();
+  scrollTo(0,0);
+}
+function enter(){ if(ME.mustChange){chMode(true);show('change')} else if(ME.role==='admin')show('admin'); else show(ME.submitted?'done':'form') }
+function logout(silent){ if(TOKEN&&!silent)api({action:'logout'}).catch(()=>{}); TOKEN=null;ME=null;sessionStorage.clear(); G('lgPw').value='';gm('lgMsg',''); show('login') }
+document.querySelectorAll('[data-eye]').forEach(b=>b.onclick=()=>{const i=G(b.dataset.eye);i.type=i.type==='password'?'text':'password'});
+const digits=s=>String(s).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace(/[۰-۹]/g,c=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(c)).replace(/\s/g,'');
+['lgId','fgId'].forEach(i=>G(i).addEventListener('input',e=>{e.target.value=digits(e.target.value).replace(/\D/g,'').slice(0,10)}));
+
+G('lgGo').onclick=async()=>{
+  const id=digits(G('lgId').value), pass=digits(G('lgPw').value);
+  if(!/^\d{10}$/.test(id)){gm('lgMsg','رقم السجل المدني يتكوّن من ١٠ أرقام.','bad');return}
+  if(!pass){gm('lgMsg','أدخل الرقم السري.','bad');return}
+  G('lgGo').disabled=true;gm('lgMsg','جاري التحقق…');
+  try{const j=await api({action:'login',id,pass});
+    if(j.ok){TOKEN=j.token;ME=j.user;sessionStorage.setItem('tk',TOKEN);sessionStorage.setItem('me',JSON.stringify(ME));G('chOld').dataset.first=pass;gm('lgMsg','');enter()}
+    else gm('lgMsg',j.error==='locked'?'تم إيقاف المحاولات مؤقتاً (١٥ دقيقة) لكثرة الأخطاء.':j.error==='noapi'?j.msg:'رقم السجل المدني أو الرقم السري غير صحيح.','bad');
+  }catch(e){gm('lgMsg',e.message,'bad')}finally{G('lgGo').disabled=false}
+};
+['lgId','lgPw'].forEach(i=>G(i).addEventListener('keydown',e=>{if(e.key==='Enter')G('lgGo').click()}));
+G('toForgot').onclick=()=>{G('fgId').value=G('lgId').value;gm('fgMsg','');show('forgot')};
+G('backLogin1').onclick=()=>show('login');
+G('fgGo').onclick=async()=>{
+  const id=digits(G('fgId').value);
+  if(!/^\d{10}$/.test(id)){gm('fgMsg','رقم السجل المدني يتكوّن من ١٠ أرقام.','bad');return}
+  G('fgGo').disabled=true;gm('fgMsg','جاري الإرسال…');
+  try{const j=await api({action:'requestReset',id,note:G('fgNote').value});
+    gm('fgMsg',j.ok?'✔ تم إرسال طلبك. سيصلك الرد بعد اعتماد المدير؛ ثم ادخل برقم جوالك المسجّل.':(j.msg||'تعذّر إرسال الطلب.'),j.ok?'ok':'bad')}
+  catch(e){gm('fgMsg',e.message,'bad')}finally{G('fgGo').disabled=false}
+};
+/* تغيير الرقم السري */
+let FORCED=false;
+function chMode(forced){FORCED=!!forced;const first=G('chOld').dataset.first;G('chOld').closest('.f').classList.toggle('hide',!!(forced&&first));G('chTitle').textContent=forced?'أمّن حسابك':'تغيير الرقم السري';G('chSub').textContent=forced?'يجب تغيير الرقم السري قبل المتابعة':'اختر رقمًا سريًا جديدًا';G('chCancel').classList.toggle('hide',!!forced);['chOld','chNew','chNew2'].forEach(i=>G(i).value='');gm('chMsg','');strength('')}
+function strength(p){let sc=0;if(p.length>=8)sc++;if(p.length>=10)sc++;if(/\d/.test(p)&&/\D/.test(p))sc++;if(new Set(p).size>=5)sc++;
+  const b=G('chBar');b.style.width=(p?Math.max(sc,1)*25:0)+'%';b.style.background=sc<=1?'#c0392b':sc<=2?'#d98e04':'#0f7a3d'}
+G('chNew').addEventListener('input',e=>strength(e.target.value));
+G('chGo').onclick=async()=>{
+  const o=(FORCED&&G('chOld').dataset.first)||digits(G('chOld').value),n=digits(G('chNew').value),n2=digits(G('chNew2').value);
+  if(!o){gm('chMsg','أدخل الرقم السري الحالي.','bad');return}
+  if(n.length<8){gm('chMsg','يجب ألا يقل الرقم السري الجديد عن ٨ خانات.','bad');return}
+  if(n!==n2){gm('chMsg','تأكيد الرقم السري غير مطابق.','bad');return}
+  if(n===o){gm('chMsg','اختر رقمًا مختلفًا عن الحالي.','bad');return}
+  if(/^(.)\1+$/.test(n)||/^(0123456789|1234567890|12345678|123456789)$/.test(n)){gm('chMsg','الرقم السري سهل التخمين، اختر رقمًا أقوى.','bad');return}
+  G('chGo').disabled=true;gm('chMsg','جاري الحفظ…');
+  try{const j=await api({action:'changePassword',oldPass:o,newPass:n});
+    if(j.ok){ME.mustChange=false;delete G('chOld').dataset.first;sessionStorage.setItem('me',JSON.stringify(ME));gm('chMsg','تم تغيير الرقم السري ✔','ok');setTimeout(enter,700)}
+    else if(j.error==='session'){logout(true)} else gm('chMsg',j.msg||'تعذّر تغيير الرقم السري.','bad')}
+  catch(e){gm('chMsg',e.message,'bad')}finally{G('chGo').disabled=false}
+};
+G('btnChg').onclick=()=>{chMode(false);show('change')};
+G('chCancel').onclick=()=>enter();
+G('btnOut').onclick=()=>logout();
+G('btnAdm').onclick=()=>show('admin');
+G('btnForm').onclick=()=>show('form');
+
+/* مسودة تلقائية (بدون التوقيع) */
+function saveDraft(){ if(!ME||ME.role==='admin')return; try{const d={};new FormData(form).forEach((v,k)=>{d[k]=(d[k]?d[k]+'\u0001':'')+v});localStorage.setItem(DKEY(),JSON.stringify(d))}catch(e){} }
+function restoreDraft(){ try{const d=JSON.parse(localStorage.getItem(DKEY())||'null');if(!d)return;
+  Object.keys(d).forEach(k=>{if(k==='الاسم')return;const vals=String(d[k]).split('\u0001');form.querySelectorAll('[name="'+k+'"]').forEach(el=>{
+    if(el.type==='checkbox'||el.type==='radio')el.checked=vals.includes(el.value);else el.value=vals[0]})});
+  const r=form.querySelector('#status3 input:checked');if(r)r.dispatchEvent(new Event('change'))}catch(e){} }
+form.addEventListener('input',saveDraft);form.addEventListener('change',saveDraft);
+
+/* لوحة الإدارة */
+async function loadAdmin(){
+  const box=G('admBox');box.innerHTML='<p>جاري التحميل…</p>';
+  try{const j=await api({action:'adminOverview'});
+    if(!j.ok){if(j.error==='session'){logout(true);return}box.innerHTML='<p>تعذّر التحميل.</p>';return}
+    const T=j.teachers,done=T.filter(t=>t.sub&&!t.sub.open).length;
+    const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const fd=v=>{try{return new Date(v).toLocaleDateString('ar-SA-u-ca-gregory',{day:'numeric',month:'short'})}catch(e){return''}};
+    box.innerHTML=`<h2 style="margin-top:0">لوحة الإدارة</h2>
+     <div class="kpi"><div><b>${T.length}</b>معلمًا</div><div><b>${done}</b>أرسلوا الاستمارة</div><div><b>${T.length-done}</b>لم يُرسلوا</div><div><b>${j.requests.length}</b>طلبات معلّقة</div></div>
+     <h2>طلبات إعادة الرقم السري</h2>`+
+     (j.requests.length?`<table><tr><th>المعلم</th><th>التاريخ</th><th>ملاحظة</th><th></th></tr>`+j.requests.map(r=>`<tr><td>${esc(r.name)}</td><td>${fd(r.time)}</td><td>${esc(r.note||'—')}</td><td style="white-space:nowrap"><button class="mini go" data-ap="${r.row}">اعتماد</button><button class="mini no" data-rj="${r.row}">رفض</button></td></tr>`).join('')+'</table>':'<p style="color:var(--mut)">لا توجد طلبات معلّقة.</p>')+
+     `<h2>متابعة الاستمارات</h2><table><tr><th>المعلم</th><th>الحالة</th><th></th></tr>`+T.map(t=>{const s=t.sub,ok=s&&!s.open;
+      return `<tr><td>${esc(t.name)}</td><td>${ok?'<span class="pill y">أُرسلت · '+fd(s.time)+'</span>':s?'<span class="pill n">أُعيد فتحها</span>':'<span class="pill n">لم تُرسل</span>'}</td><td style="white-space:nowrap">${s&&s.url?`<a class="mini" href="${esc(s.url)}" target="_blank" rel="noopener">PDF</a>`:''}${ok?`<button class="mini no" data-ro="${t.id}">إعادة فتح</button>`:''}</td></tr>`}).join('')+'</table>';
+    box.querySelectorAll('[data-ap],[data-rj]').forEach(b=>b.onclick=async()=>{const ap=b.dataset.ap!==undefined;if(!confirm(ap?'اعتماد إعادة الرقم السري إلى رقم الجوال المسجّل؟':'رفض الطلب؟'))return;b.disabled=true;
+      const r=await api({action:'adminDecide',row:+(b.dataset.ap||b.dataset.rj),approve:ap});if(r.ok)loadAdmin();else alert('تعذّر تنفيذ الإجراء.')});
+    box.querySelectorAll('[data-ro]').forEach(b=>b.onclick=async()=>{if(!confirm('إعادة فتح الاستمارة لهذا المعلم ليعدّلها؟'))return;const r=await api({action:'adminReopen',id:b.dataset.ro});if(r.ok)loadAdmin()});
+  }catch(e){box.innerHTML='<p>'+e.message+'</p>'}
+}
+/* البدء */
+(async()=>{ if(TOKEN&&ME){try{const j=await api({action:'me'});if(j.ok){ME=j.user;enter();return}}catch(e){} } TOKEN=null;ME=null;sessionStorage.clear();show('login') })();
+</script>
+</body>
+</html>
