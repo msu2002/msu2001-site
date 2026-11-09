@@ -337,7 +337,7 @@ load();setInterval(load,15*60*1000);
 var STY={none:['✅','لا يوجد قرار رسمي بتعليق الدراسة حالياً'],remote:['🏠','تعليق الدراسة الحضورية — التحول إلى التعليم عن بُعد'],full:['⛔','تعليق الدراسة بالكامل (حضوري وعن بُعد)'],partial:['⚠️','تعليق جزئي للدراسة']};
 function loadStudy(){
  fetch('/weather/study.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){
-  var st=STY[d.status]?d.status:'none',x=STY[st],e=$('study');e.setAttribute('data-s',st);$('sti').textContent=x[0];
+  if(d.expires&&Date.now()>Date.parse(d.expires))d={status:'none',sourceUrl:d.sourceUrl,updated:d.updated};var st=STY[d.status]?d.status:'none',x=STY[st],e=$('study');e.setAttribute('data-s',st);$('sti').textContent=x[0];
   $('stt').textContent=d.title||x[1];$('stp').textContent=st==='none'?'تابع القرارات الصادرة من وزارة التعليم وإدارة التعليم، ولا تعتمد على التوقعات وحدها.':(d.note||'');
   var c=$('stc');c.innerHTML='';if(st!=='none'){[d.type,d.date].concat(d.audience||[]).forEach(function(t){if(!t)return;var sp=document.createElement('span');sp.textContent=t;c.appendChild(sp)});if(d.issuedBy){var sp2=document.createElement('span');sp2.textContent='الجهة: '+d.issuedBy;c.appendChild(sp2)}}
   if(d.sourceUrl&&/^https:\/\//.test(d.sourceUrl))$('stl').href=d.sourceUrl;
