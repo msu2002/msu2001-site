@@ -105,6 +105,56 @@ export function classify(post, now) {
   };
 }
 
+function summarize(rawPosts, now) {
+  const seen = new Set();
+  const notices = [];
+  for (const post of rawPosts) {
+    if (!post || !/^\d{1,19}$/.test(post.id) || !Number.isFinite(Date.parse(post.created_at)) || typeof post.text !== 'string') {
+      throw new Error('Incomplete source post');
+    }
+    if (seen.has(post.id)) continue;
+    seen.add(post.id);
+    const notice = classify(post, now);
+    if (notice) notices.push(notice);
+  }
+  return notices.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+}
+
+export async function pollIfttt(endpoint, token, now = new Date(), request = fetch) {
+  const bridge = new URL(endpoint);
+  if (bridge.origin !== 'https://script.google.com' || !/^\/macros\/s\/[\w-]+\/exec$/.test(bridge.pathname)
+      || bridge.search || bridge.hash || bridge.username || bridge.password) {
+    throw new Error('Invalid bridge URL');
+  }
+  const signal = AbortSignal.timeout(16000);
+  let response = await request(bridge, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token }),
+    redirect: 'manual',
+    signal,
+  });
+  if (response.status === 302 || response.status === 303) {
+    const redirected = new URL(response.headers.get('location'));
+    if (redirected.origin !== 'https://script.googleusercontent.com' || redirected.pathname !== '/macros/echo') {
+      throw new Error('Unexpected bridge redirect');
+    }
+    response = await request(redirected, { redirect: 'error', signal });
+  }
+  if (!response.ok) throw new Error('Bridge unavailable');
+  const payload = await response.json();
+  if (payload.ok !== true || !Array.isArray(payload.posts)) throw new Error('Invalid bridge response');
+  const posts = payload.posts.map(post => {
+    if (!post || !/^\d{16,19}$/.test(post.id)) throw new Error('Invalid bridge post');
+    const timestamp = Number((BigInt(post.id) >> 22n) + 1288834974657n);
+    return { ...post, created_at: new Date(timestamp).toISOString() };
+  });
+  return summarize(posts.filter(post => {
+    const posted = Date.parse(post.created_at);
+    return posted <= +now && posted >= +now - 2 * DAY;
+  }), now);
+}
+
 export async function poll(token, now = new Date(), fetchPosts = fetch) {
   const url = new URL('https://api.x.com/2/tweets/search/recent');
   url.search = new URLSearchParams({
@@ -113,7 +163,6 @@ export async function poll(token, now = new Date(), fetchPosts = fetch) {
     start_time: new Date(+now - 2 * DAY).toISOString().replace(/\.\d+Z$/, 'Z'),
     max_results: '100',
   });
-  const seen = new Set();
   const posts = [];
   for (let page = 0; page < 3; page++) {
     const request = () => fetchPosts(url, {
@@ -134,16 +183,8 @@ export async function poll(token, now = new Date(), fetchPosts = fetch) {
     if (payload.errors?.length || !Array.isArray(data) || payload.meta?.result_count !== data.length) {
       throw new Error('Invalid X response');
     }
-    for (const post of data) {
-      if (!/^\d{1,19}$/.test(post.id) || !Number.isFinite(Date.parse(post.created_at)) || typeof post.text !== 'string') {
-        throw new Error('Incomplete X post');
-      }
-      if (seen.has(post.id)) continue;
-      seen.add(post.id);
-      const notice = classify(post, now);
-      if (notice) posts.push(notice);
-    }
-    if (!payload.meta.next_token) return posts.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+    posts.push(...data);
+    if (!payload.meta.next_token) return summarize(posts, now);
     url.searchParams.set('next_token', payload.meta.next_token);
   }
   throw new Error('X pagination limit reached');
@@ -152,24 +193,27 @@ export async function poll(token, now = new Date(), fetchPosts = fetch) {
 async function main(file) {
   const now = new Date();
   const token = process.env.X_BEARER_TOKEN?.trim();
-  const snapshot = { status: 'disabled', checkedAt: null, posts: [] };
-  if (token) {
+  const bridgeUrl = process.env.IFTTT_RELAY_URL?.trim();
+  const bridgeToken = process.env.IFTTT_RELAY_TOKEN?.trim();
+  const provider = token ? 'x' : bridgeUrl || bridgeToken ? 'ifttt' : null;
+  const snapshot = { status: 'disabled', checkedAt: null, posts: [], provider };
+  if (provider) {
     try {
-      snapshot.posts = await poll(token, now);
+      snapshot.posts = token ? await poll(token, now) : await pollIfttt(bridgeUrl, bridgeToken, now);
       snapshot.status = 'ok';
       snapshot.checkedAt = now.toISOString();
     } catch (error) {
       snapshot.status = 'unavailable';
-      console.warn('::warning::X check failed (' + (/^X HTTP \d+$/.test(error.message) ? error.message : 'response or connection error') + ')');
+      console.warn('::warning::School notice check failed (' + (/^X HTTP \d+$/.test(error.message) ? error.message : 'response or connection error') + ')');
     }
   }
 
   const previous = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : {};
-  const changed = previous.status !== snapshot.status || JSON.stringify(previous.posts) !== JSON.stringify(snapshot.posts);
+  const changed = previous.status !== snapshot.status || previous.provider !== snapshot.provider || JSON.stringify(previous.posts) !== JSON.stringify(snapshot.posts);
   if (changed || (snapshot.status === 'ok' && +now - Date.parse(previous.checkedAt) >= 25 * 60000)) {
     fs.writeFileSync(file, JSON.stringify(snapshot, null, 2) + '\n');
   }
-  console.log('X monitoring: ' + snapshot.status + ' (' + snapshot.posts.length + ' relevant posts)');
+  console.log('School notice monitoring: ' + snapshot.status + ' (' + snapshot.posts.length + ' relevant posts)');
   if (snapshot.status === 'unavailable') process.exitCode = 1;
 }
 
