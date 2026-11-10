@@ -135,6 +135,7 @@ h1,h3,.hh,.stage h4{font-family:"Noto Naskh Arabic",Amiri,serif}
 <div class="sech"><h3>توقعات ٧ أيام</h3><span>العظمى / الصغرى · كمية الأمطار واحتمالها</span></div>
 <div class="days" id="days"></div>
 
+<section class="card" id="mm" style="margin:16px 0"><div class="sech"><h3>مقارنة أقوى النماذج العالمية</h3><span>الأمطار والرياح والرعد · ٧٢ ساعة</span></div><div id="mmbody" class="sub">جارٍ التحميل…</div><div class="sub" style="margin-top:10px">المصدر: Open-Meteo (مخرجات النماذج كما هي). النماذج: ECMWF IFS · GFS · ICON · GEM · Météo-France · UKMO. الرعد مقدَّر من طاقة الحمل الجوي (CAPE) وليس رصدًا للبرق، ورصد البرق المباشر في الخريطة أدناه. التوقع العددي ليس تحذيرًا رسميًا والمرجع المركز الوطني للأرصاد.</div></section>
 <div class="hubhead"><div><h2 class="hh">مركز <em>الطقس والنماذج</em> — <span id="cname3">الرس</span></h2><div class="sub">خريطة بملء العرض · بدّل النموذج من الأعلى · كل شيء داخل الصفحة وعلى المدينة مباشرة</div></div>
 <a class="offc" href="https://ncm.gov.sa" target="_blank" rel="noopener"><span>⚠️</span> التحذيرات الرسمية · المركز الوطني للأرصاد ↗</a>
 <div class="seg" id="seg"><button class="on" data-m="1">عرض واحد</button><button data-m="2">مقارنة نموذجين</button></div></div>
@@ -349,5 +350,44 @@ setInterval(loadStudy,5*60*1000);
 if(window.parent!==window){var _h=0,_s=function(){var h=document.documentElement.scrollHeight;if(h!==_h){_h=h;try{parent.postMessage({wxh:h},location.origin)}catch(e){}}};if(window.ResizeObserver)new ResizeObserver(_s).observe(document.body);window.addEventListener('load',_s);setInterval(_s,1500)}
 })();
 </script>
-<script src="/home-btn.js"></script>
+<script>
+(function(){
+"use strict";
+var C={'الرس':[25.8688,43.4988],'بريدة':[26.326,43.975],'عنيزة':[26.084,43.994],'الرياض':[24.7136,46.6753],'جدة':[21.4858,39.1925]};
+var M=[['ecmwf_ifs025','ECMWF IFS (أوروبي)'],['gfs_seamless','GFS (أمريكي)'],['icon_seamless','ICON (ألماني)'],['gem_seamless','GEM (كندي)'],['meteofrance_seamless','Météo-France'],['ukmo_seamless','UKMO (بريطاني)']];
+var nf=new Intl.NumberFormat('ar-SA',{maximumFractionDigits:1});
+function F(x){return x==null||isNaN(x)?'—':nf.format(x)}
+var last='',body=document.getElementById('mmbody');
+function sum(a,i,n){var s=0,k=0;for(var x=i;x<Math.min(a.length,i+n);x++){if(a[x]!=null){s+=a[x];k++}}return k?s:null}
+function mx(a,i,n){var m=null;for(var x=i;x<Math.min(a.length,i+n);x++){if(a[x]!=null&&(m==null||a[x]>m))m=a[x]}return m}
+function cape(v){return v==null?'—':v<300?'ضعيف':v<1000?'متوسط':v<2000?'مرتفع':'مرتفع جدًا'}
+function run(){
+ var el=document.getElementById('cname3');if(!el||!body)return;var n=el.textContent.trim();
+ var c=C[n];
+ if(!c){body.textContent='اختر مدينة من القائمة لعرض مقارنة النماذج.';last='';return}
+ if(n===last)return;last=n;body.textContent='جارٍ التحميل…';
+ fetch('https://api.open-meteo.com/v1/forecast?latitude='+c[0]+'&longitude='+c[1]+'&timezone=Asia%2FRiyadh&forecast_days=3&models='+M.map(function(m){return m[0]}).join(',')+'&hourly=precipitation,cape,wind_gusts_10m')
+ .then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
+  var t=j.hourly.time,now=new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Riyadh',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date()).replace(' ','T');
+  var i=0;while(i<t.length-1&&t[i+1]<=now)i++;
+  var rows=[],wet=0,tot=0,maxr=0.1;
+  M.forEach(function(m){var p=j.hourly['precipitation_'+m[0]],cp=j.hourly['cape_'+m[0]],g=j.hourly['wind_gusts_10m_'+m[0]];
+   if(!p||p.every(function(v){return v==null})){rows.push({n:m[1],na:1});return}
+   var r24=sum(p,i,24),r72=sum(p,i,72),cm=mx(cp||[],i,24),gm=mx(g||[],i,72);tot++;if(r24!=null&&r24>=1)wet++;if(r72>maxr)maxr=r72;
+   rows.push({n:m[1],r24:r24,r72:r72,cm:cm,gm:gm})});
+  var h='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px;min-width:520px"><tr style="color:var(--mu);text-align:right"><th style="padding:6px">النموذج</th><th>أمطار ٢٤ ساعة (ملم)</th><th>أمطار ٧٢ ساعة (ملم)</th><th>أقصى هبّات (كم/س)</th><th>احتمال الرعد (CAPE)</th></tr>';
+  rows.forEach(function(r){
+   if(r.na){h+='<tr style="border-top:1px solid var(--line)"><td style="padding:8px 6px">'+r.n+'</td><td colspan="4" style="color:var(--mu)">غير متاح لهذا الموقع</td></tr>';return}
+   var w=Math.max(2,Math.round(r.r72/maxr*100));
+   h+='<tr style="border-top:1px solid var(--line)"><td style="padding:8px 6px;font-weight:700">'+r.n+'</td><td>'+F(r.r24)+'</td><td><div style="display:flex;align-items:center;gap:6px"><span style="min-width:34px">'+F(r.r72)+'</span><span style="display:inline-block;height:8px;width:'+w+'px;max-width:90px;border-radius:4px;background:var(--blue)"></span></div></td><td>'+F(r.gm)+'</td><td>'+cape(r.cm)+(r.cm!=null?' <span style="color:var(--mu)">('+F(r.cm)+')</span>':'')+'</td></tr>'});
+  h+='</table></div>';
+  if(tot)h='<div style="margin-bottom:10px;font-weight:700">'+(wet?'🌧️ ':'☀️ ')+F(wet)+' من '+F(tot)+' نماذج تتوقع أمطارًا ≥ ١ ملم خلال ٢٤ ساعة'+(wet&&wet<tot?' — النماذج غير متفقة، فالثقة أقل':'')+'</div>'+h;
+  body.innerHTML=h;
+ }).catch(function(){last='';body.textContent='تعذر تحميل مقارنة النماذج الآن. أعد المحاولة لاحقًا.'});
+}
+run();
+var tgt=document.getElementById('cname3');if(tgt&&window.MutationObserver)new MutationObserver(run).observe(tgt,{childList:true,characterData:true,subtree:true});
+setInterval(function(){last='';run()},1800000);
+})();
+</script>
 </body></html>
