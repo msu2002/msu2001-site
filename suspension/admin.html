@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>تأكيد تعليق الدراسة</title>
+<style>body{font-family:system-ui,'IBM Plex Sans Arabic',sans-serif;background:#f3f6f5;margin:0;padding:16px;line-height:1.8}main{max-width:520px;margin:0 auto;background:#fff;border-radius:16px;padding:20px}
+button,input,select{font:inherit;padding:12px;border-radius:10px;border:1px solid #cbd8d4;width:100%;margin:6px 0}button{background:#0f6b5c;color:#fff;border:0;font-weight:700}button.red{background:#c8372d}button.gray{background:#667}
+#msg{margin-top:10px;font-weight:700}</style></head><body><main>
+<h2>تأكيد قرار تعليق الدراسة</h2>
+<input id="k" type="password" placeholder="رمز التأكيد" autocomplete="off">
+<select id="status"><option value="remote">عن بُعد عبر منصة مدرستي</option><option value="full">تعليق الدراسة الحضورية</option><option value="partial">تعليق جزئي</option></select>
+<select id="scope"><option value="region">جميع مدارس منطقة القصيم</option><option value="rass">محافظة الرس فقط</option><option value="city">محافظة أخرى (اكتبها بالأسفل)</option></select>
+<input id="places" placeholder="المحافظات إن كان القرار لمحافظة محددة">
+<input id="date" type="date">
+<input id="src" placeholder="رابط المنشور الرسمي (اختياري)" inputmode="url">
+<button id="go" class="red">نشر القرار على الموقع</button>
+<button id="clr" class="gray">إلغاء/إزالة القرار الحالي</button>
+<div id="msg"></div></main>
+<script>
+const API='https://script.google.com/macros/s/AKfycbwEZjP_a_uZq2N4yK6j72_7hewbmG_1_7EeamZmpJwFEk-w5rK3GBCjWrpMm-caN3Smfg/exec',$=i=>document.getElementById(i);
+try{$('k').value=localStorage.getItem('susp_k')||''}catch(e){}
+$('date').value=new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Riyadh'}).format(new Date());
+async function send(p){const u=new URL(API);u.searchParams.set('a','set');for(const k in p)u.searchParams.set(k,p[k]);
+ try{localStorage.setItem('susp_k',$('k').value)}catch(e){}
+ try{const r=await (await fetch(u)).json();$('msg').textContent=r.ok?'تم. افتح /suspension/ للتأكد.':'فشل: '+r.error}catch(e){$('msg').textContent='تعذر الاتصال'}}
+$('go').onclick=()=>send({k:$('k').value,status:$('status').value,scope:$('scope').value,places:$('places').value,date:$('date').value,src:$('src').value});
+$('clr').onclick=()=>send({k:$('k').value,status:'clear'});
+</script></body></html>
