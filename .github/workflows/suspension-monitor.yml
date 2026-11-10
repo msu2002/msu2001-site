@@ -1,20 +1,46 @@
 name: suspension-monitor
 on:
-  schedule: [{ cron: '*/5 * * * *' }]
+  schedule: [{ cron: '2-57/5 * * * *' }]
   workflow_dispatch:
 permissions: { contents: write }
-concurrency: { group: suspension-monitor, cancel-in-progress: true }
+concurrency: { group: suspension-monitor, cancel-in-progress: false }
 jobs:
   check:
+    if: github.ref_name == github.event.repository.default_branch
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 4
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: '20' }
-      - run: node monitor/check.mjs
-      - name: commit
+        with: { node-version: '22' }
+      - name: Check sources and publish public status
+        env:
+          X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
         run: |
-          git config user.name "msu2001-monitor"; git config user.email "monitor@users.noreply.github.com"
-          git add suspension/status.json
-          git diff --cached --quiet || (git commit -m "monitor: update status" && git pull --rebase -q && git push)
+          data=$(mktemp -d)
+          ref=refs/heads/suspension-data
+          parent=()
+          if git ls-remote --exit-code origin "$ref" >/dev/null; then
+            git fetch --depth=1 origin "$ref"
+            parent=(-p FETCH_HEAD)
+            git show FETCH_HEAD:status.json > "$data/status.json"
+            git show FETCH_HEAD:x.json > "$data/x.json"
+          else
+            test "$?" -eq 2
+            cp suspension/status.json "$data/status.json"
+          fi
+
+          x_result=0
+          node monitor/x-check.mjs "$data/x.json" || x_result=$?
+          node monitor/check.mjs "$data/status.json"
+
+          tree=$(for file in status.json x.json; do
+            printf '100644 blob %s\t%s\n' "$(git hash-object -w "$data/$file")" "$file"
+          done | git mktree)
+          if [[ ${#parent[@]} -eq 0 ]] || [[ "$tree" != "$(git rev-parse 'FETCH_HEAD^{tree}')" ]]; then
+            git config user.name "msu2001-monitor"
+            git config user.email "monitor@users.noreply.github.com"
+            commit=$(git commit-tree "$tree" "${parent[@]}" -m "monitor: update school status")
+            git push origin "$commit:$ref"
+          fi
+          exit "$x_result"
