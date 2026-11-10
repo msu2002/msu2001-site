@@ -16,6 +16,8 @@ jobs:
       - name: Check sources and publish public status
         env:
           X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+          IFTTT_RELAY_URL: ${{ secrets.IFTTT_RELAY_URL }}
+          IFTTT_RELAY_TOKEN: ${{ secrets.IFTTT_RELAY_TOKEN }}
         run: |
           data=$(mktemp -d)
           ref=refs/heads/suspension-data
