@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
+<script src="/suspension/feed.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>الطقس وتوقعات الأمطار والبروق في الرس</title>
@@ -114,7 +115,7 @@ h1,h3,.hh,.stage h4{font-family:"Noto Naskh Arabic",Amiri,serif}
 <div class="city" id="cities" role="tablist" aria-label="المدينة"></div></div>
 
 <div class="alert" id="alert" role="status" aria-live="polite"><div class="ic" id="aic">🌧️</div><div><b id="atitle"></b><p id="atext"></p></div><span class="chip" id="achip"></span></div>
-<div class="study" id="study" data-s="none" role="status" aria-live="polite"><div class="si" id="sti">🏫</div><div class="sb"><div class="lbl">تعليق الدراسة · محافظة الرس</div><b id="stt">جارٍ التحقق…</b><p id="stp"></p><div class="schips" id="stc"></div></div><div class="sact"><a id="stl" class="btn" href="https://moe.gov.sa" target="_blank" rel="noopener">القرار الرسمي ↗</a><span class="lbl" id="stu"></span></div></div>
+<div class="study" id="study" data-s="none" role="status" aria-live="polite"><div class="si" id="sti">🏫</div><div class="sb"><div class="lbl">تعليق الدراسة · محافظة الرس</div><b id="stt">جارٍ التحقق…</b><p id="stp"></p><div class="schips" id="stc"></div></div><div class="sact"><a id="stl" class="btn" href="https://x.com/moe_qsm" target="_blank" rel="noopener">حساب تعليم القصيم ↗</a> <a class="btn" href="/suspension/" target="_top">تفاصيل تعليق الدراسة</a><span class="lbl" id="stu"></span></div></div>
 <div class="err" id="err">تعذّر تحميل بيانات الطقس الآن. تأكد من الاتصال بالإنترنت وحدّث الصفحة.</div>
 
 <div class="row">
@@ -335,18 +336,33 @@ function hubUpdate(){if(!STAGES.length)buildHub(1);else STAGES.forEach(function(
 function initRadar(){hubUpdate()}
 document.querySelectorAll('#seg button').forEach(function(b){b.onclick=function(){document.querySelectorAll('#seg button').forEach(function(x){x.className=''});b.className='on';buildHub(+b.dataset.m)}});
 load();setInterval(load,15*60*1000);
-var STY={none:['✅','لا يوجد قرار رسمي بتعليق الدراسة حالياً'],remote:['🏠','تعليق الدراسة الحضورية — التحول إلى التعليم عن بُعد'],full:['⛔','تعليق الدراسة بالكامل (حضوري وعن بُعد)'],partial:['⚠️','تعليق جزئي للدراسة']};
-function loadStudy(){
- fetch('/weather/study.json?cb='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){
-  if(d.expires&&Date.now()>Date.parse(d.expires))d={status:'none',sourceUrl:d.sourceUrl,updated:d.updated};var st=STY[d.status]?d.status:'none',x=STY[st],e=$('study');e.setAttribute('data-s',st);$('sti').textContent=x[0];
-  $('stt').textContent=d.title||x[1];$('stp').textContent=st==='none'?'تابع القرارات الصادرة من وزارة التعليم وإدارة التعليم، ولا تعتمد على التوقعات وحدها.':(d.note||'');
-  var c=$('stc');c.innerHTML='';if(st!=='none'){[d.type,d.date].concat(d.audience||[]).forEach(function(t){if(!t)return;var sp=document.createElement('span');sp.textContent=t;c.appendChild(sp)});if(d.issuedBy){var sp2=document.createElement('span');sp2.textContent='الجهة: '+d.issuedBy;c.appendChild(sp2)}}
-  if(d.sourceUrl&&/^https:\/\//.test(d.sourceUrl))$('stl').href=d.sourceUrl;
-  $('stu').textContent=d.updated?('آخر تحديث للحالة: '+new Date(d.updated).toLocaleString('ar-SA',{dateStyle:'medium',timeStyle:'short'})):'';
- }).catch(function(){$('stt').textContent='تعذّر تحميل حالة التعليق';$('stp').textContent='راجع قرارات وزارة التعليم مباشرة.'});
+var STY={none:['ℹ️','لم يُرصد قرار ساري للرس في آخر فحص'],unavailable:['ℹ️','متابعة حساب تعليم القصيم غير متاحة حاليًا'],review:['⚠️','منشور رسمي قيد التحقق'],remote:['🏠','تعليق الدراسة الحضورية — التحول إلى التعليم عن بُعد'],full:['⛔','تعليق الدراسة الحضورية'],partial:['⚠️','تعليق جزئي للدراسة']};
+async function loadStudy(){
+ var results=await Promise.all([SchoolNotice.readX(),SchoolNotice.read('/weather/study.json').catch(function(){return null})]);
+ var feed=results[0],manual=results[1];
+ var post=SchoolNotice.select(feed,'الرس');
+ var fallback=manual&&manual.expires&&Date.now()<Date.parse(manual.expires)&&['remote','full','partial'].includes(manual.status)?manual:null;
+ var automatic=SchoolNotice.preferX(post,fallback?.updated);
+ var st=automatic?post.status:fallback?fallback.status:SchoolNotice.fresh(feed)?'none':'unavailable';
+ var x=STY[st],e=$('study');
+ e.setAttribute('data-s',st);$('sti').textContent=x[0];$('stt').textContent=!automatic&&fallback?.title||x[1];
+ var where=post?.scope==='region'?'جميع مدارس منطقة القصيم':'محافظة الرس';
+ $('stp').textContent=st==='review'?'راجع المنشور لتأكيد تاريخ القرار وشموله للرس.':
+  automatic?where:fallback?fallback.note||'':'راجع حساب إدارة تعليم القصيم للاطلاع على آخر الإعلانات.';
+ var c=$('stc');c.replaceChildren();
+ var details=automatic?[SchoolNotice.formatDay(post.date),'إدارة تعليم القصيم']:
+  fallback?[fallback.type,fallback.date].concat(fallback.audience||[],fallback.issuedBy||[]):[];
+ details.filter(Boolean).forEach(function(t){var chip=document.createElement('span');chip.textContent=t;c.appendChild(chip)});
+ if(st==='remote'){
+  var link=document.createElement('a');link.href=SchoolNotice.madrasati;link.target='_blank';link.rel='noopener';link.textContent='منصة مدرستي';c.appendChild(link);
+ }
+ var original=automatic?SchoolNotice.sourceUrl(post.id):fallback?.sourceUrl;
+ $('stl').href=/^https:\/\//.test(original||'')?original:SchoolNotice.account;
+ $('stl').textContent=original?'المنشور الأصلي ↗':'حساب تعليم القصيم ↗';
+ $('stu').textContent=SchoolNotice.fresh(feed)?'آخر فحص للحساب: '+new Date(feed.checkedAt).toLocaleString('ar-SA',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Riyadh'}):'';
 }
 loadStudy();
-setInterval(loadStudy,5*60*1000);
+setInterval(loadStudy,60000);
 if(window.parent!==window){var _h=0,_s=function(){var h=document.documentElement.scrollHeight;if(h!==_h){_h=h;try{parent.postMessage({wxh:h},location.origin)}catch(e){}}};if(window.ResizeObserver)new ResizeObserver(_s).observe(document.body);window.addEventListener('load',_s);setInterval(_s,1500)}
 })();
 </script>

@@ -46,7 +46,7 @@ for (const s of SOURCES) {
 }
 const seen = new Set(); res.candidates = res.candidates.filter(c => !seen.has(c.title) && seen.add(c.title)).slice(0, 10);
 res.anyOk = res.sources.some(s => s.ok); res.allFailed = !res.anyOk;
-const f = 'suspension/status.json'; let prev = {}; try { prev = JSON.parse(fs.readFileSync(f, 'utf8')); } catch {}
+const f = process.argv[2] || 'suspension/status.json'; let prev = {}; try { prev = JSON.parse(fs.readFileSync(f, 'utf8')); } catch {}
 const sig = o => JSON.stringify([o.candidates, (o.sources || []).map(s => [s.id, s.ok, s.error])]);
 const age = prev.checkedAt ? (Date.now() - Date.parse(prev.checkedAt)) / 6e4 : 1e9;
 if (sig(prev) !== sig(res) || age > 55) { fs.writeFileSync(f, JSON.stringify(res, null, 1) + '\n'); console.log('status.json updated'); } else console.log('no change');

@@ -1,8 +1,6 @@
 name: suspension-probe
 on:
   workflow_dispatch:
-  push:
-    paths: ['.github/workflows/suspension-probe.yml']
 permissions:
   contents: read
 jobs:
@@ -16,9 +14,7 @@ jobs:
             "https://sites.moe.gov.sa/Qassim/news/" \
             "https://sites.moe.gov.sa/Rass/" \
             "https://www.spa.gov.sa/" \
-            "https://www.moe.gov.sa/" \
-            "https://x.com/moe_qsm" \
-            "https://syndication.twitter.com/srv/timeline-profile/screen-name/moe_qsm" ; do
+            "https://www.moe.gov.sa/" ; do
             echo "=== $u"
             curl -sS -L -m 25 -A "$UA" -o /tmp/o.html -w "status=%{http_code} size=%{size_download} time=%{time_total}\n" "$u" || echo "FAILED"
             head -c 300 /tmp/o.html | tr '\n' ' '; echo
