@@ -1,0 +1,20 @@
+name: suspension-monitor
+on:
+  schedule: [{ cron: '*/5 * * * *' }]
+  workflow_dispatch:
+permissions: { contents: write }
+concurrency: { group: suspension-monitor, cancel-in-progress: true }
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: node monitor/check.mjs
+      - name: commit
+        run: |
+          git config user.name "msu2001-monitor"; git config user.email "monitor@users.noreply.github.com"
+          git add suspension/status.json
+          git diff --cached --quiet || (git commit -m "monitor: update status" && git pull --rebase -q && git push)
