@@ -136,19 +136,26 @@ h1,h3,.hh,.stage h4{font-family:"Noto Naskh Arabic",Amiri,serif}
 <div class="sech"><h3>توقعات ٧ أيام</h3><span>العظمى / الصغرى · كمية الأمطار واحتمالها</span></div>
 <div class="days" id="days"></div>
 
-<section class="card" id="mm" style="margin:16px 0"><div class="sech"><h3>مقارنة أقوى النماذج العالمية</h3><span>الأمطار والرياح والرعد · ٧٢ ساعة</span></div><div id="mmbody" class="sub">جارٍ التحميل…</div><div class="sub" style="margin-top:10px">المصدر: Open-Meteo (مخرجات النماذج كما هي). النماذج: ECMWF IFS · GFS · ICON · GEM · Météo-France · UKMO. الرعد مقدَّر من طاقة الحمل الجوي (CAPE) وليس رصدًا للبرق، ورصد البرق المباشر في الخريطة أدناه. التوقع العددي ليس تحذيرًا رسميًا والمرجع المركز الوطني للأرصاد.</div></section>
+<section class="card" id="mm" style="margin:16px 0">
+ <div class="sech"><h3>مقارنة نماذج الطقس</h3><span>الأمطار والرياح والرعد · ٧٢ ساعة</span></div>
+ <div id="mmwindow" class="sub" style="margin-bottom:8px"></div>
+ <div id="mmbody" class="sub">جارٍ التحميل…</div>
+ <div id="mmspread" class="sub" style="margin-top:12px"></div>
+ <div class="sub" style="margin-top:10px">المصدر <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> · طاقة الحمل الجوي (CAPE) تساعد في تقدير قابلية تشكّل العواصف. خريطة البروق أدناه تعرض الصواعق المرصودة.</div>
+</section>
 <div class="hubhead"><div><h2 class="hh">مركز <em>الطقس والنماذج</em> — <span id="cname3">الرس</span></h2><div class="sub">خريطة بملء العرض · بدّل النموذج من الأعلى · كل شيء داخل الصفحة وعلى المدينة مباشرة</div></div>
 <a class="offc" href="https://ncm.gov.sa" target="_blank" rel="noopener"><span>⚠️</span> التحذيرات الرسمية · المركز الوطني للأرصاد ↗</a>
 <div class="seg" id="seg"><button class="on" data-m="1">عرض واحد</button><button data-m="2">مقارنة نموذجين</button></div></div>
 <div id="stages" class="stages"></div>
 <div class="quick">
- <div class="box"><div class="lbl">هل ستمطر خلال ساعتين؟</div><div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><b class="v" id="soon">—</b><span class="lbl" id="soon2"></span></div></div>
+ <div class="box"><div class="lbl">توقع المطر خلال ساعتين · Open-Meteo</div><div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><b class="v" id="soon">—</b><span class="lbl" id="soon2"></span></div></div>
  <div class="box th"><div class="lbl">⚡ نشاط الرعد المتوقع (٢٤ ساعة)</div><div class="v" id="thr">—</div><div class="lbl" id="thr2" style="margin-top:4px"></div>
-  <a class="btn" id="liveL" href="#" target="_blank" rel="noopener">افتح رادار البروق المباشر ↗</a></div>
+  <a class="btn" id="liveL" href="#" target="_blank" rel="noopener">رصد البروق من Blitzortung ↗</a>
+  <a class="btn" href="https://view.eumetsat.int/" target="_blank" rel="noopener">خرائط الأقمار الصناعية EUMETView ↗</a></div>
  <div class="box"><div class="lbl">قاعدة الأمان للمدرسة ⚡</div><div style="font-size:12.5px;line-height:1.8;margin-top:2px">عند وقوع صاعقة داخل <b style="color:var(--yel)">١٠ كم</b> يُوقف النشاط الخارجي، ويُستأنف بعد <b style="color:var(--yel)">٣٠ دقيقة</b> من آخر صاعقة أو رعد مسموع.</div></div>
- <div class="box"><div class="lbl">جودة الهواء والغبار</div><div class="v" style="font-size:20px;color:var(--gold)" id="aq">—</div><div class="meter"><i id="aqm" style="inset-inline-start:0"></i></div><div class="lbl" id="aq2"></div></div>
+ <div class="box"><div class="lbl">تقدير جودة الهواء والغبار · CAMS</div><div class="v" style="font-size:20px;color:var(--gold)" id="aq">—</div><div class="meter"><i id="aqm" style="inset-inline-start:0"></i></div><div class="lbl" id="aq2"></div><a class="btn" href="https://www.ncec.gov.sa/ar/eServices/AQI-Info/Pages/default.aspx" target="_blank" rel="noopener">مؤشر جودة الهواء الرسمي ↗</a></div>
 </div>
-<div class="src">🔎 الأمطار: رادار المركز الوطني للأرصاد عبر <a href="https://www.rainviewer.com" target="_blank" rel="noopener">RainViewer</a> · التوقعات وجودة الهواء: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> · الخرائط والنماذج العددية والأقمار: <a href="https://www.windy.com" target="_blank" rel="noopener">Windy</a> · البرق المباشر: <a href="https://www.blitzortung.org" target="_blank" rel="noopener">Blitzortung</a>. هذه نماذج مساعدة وليست إنذاراً رسمياً، والإنذار المعتمد يصدر من <a href="https://www.ncm.gov.sa" target="_blank" rel="noopener">المركز الوطني للأرصاد</a>.</div>
+<div class="src">🔎 رادار المطر <a href="https://www.rainviewer.com" target="_blank" rel="noopener">RainViewer</a> · التوقعات وتقدير جودة الهواء <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> · خرائط الطقس والأقمار <a href="https://www.windy.com" target="_blank" rel="noopener">Windy</a> · رصد البرق <a href="https://www.blitzortung.org" target="_blank" rel="noopener">Blitzortung</a> · خرائط المطر والبرق الرسمية في <a href="https://www.ncm.gov.sa/ar/e-services/anwaa-application" target="_blank" rel="noopener">تطبيق أنواء</a> · التحذيرات الرسمية <a href="https://www.ncm.gov.sa" target="_blank" rel="noopener">المركز الوطني للأرصاد</a>.</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 (function(){
@@ -180,9 +187,19 @@ function api(){
  var a=fetch('https://air-quality-api.open-meteo.com/v1/air-quality?latitude='+cur.lat+'&longitude='+cur.lon+'&timezone=Asia%2FRiyadh&current=pm10,pm2_5,dust').then(function(r){return r.ok?r.json():null}).catch(function(){return null});
  return Promise.all([f,a]);
 }
+var weatherRequest=0;
 function load(){
- names();buildCities();$('upd').textContent='جارٍ التحميل…';$('err').style.display='none';
- api().then(function(r){window.__wxr=0;DATA=r[0];DATA.aq=r[1];render();initRadar()}).catch(function(){$('err').style.display='block';$('upd').textContent='تعذّر التحميل · إعادة المحاولة…';if((window.__wxr=(window.__wxr||0)+1)<=3)setTimeout(load,6000)});
+ var request=++weatherRequest;
+ names();buildCities();updateModels();$('upd').textContent='جارٍ التحميل…';$('err').style.display='none';
+ if(!STAGES.length)initRadar();
+ api().then(function(r){
+  if(request!==weatherRequest)return;
+  window.__wxr=0;DATA=r[0];DATA.aq=r[1];render();initRadar();
+ }).catch(function(){
+  if(request!==weatherRequest)return;
+  $('err').style.display='block';$('upd').textContent='تعذّر التحميل · إعادة المحاولة…';
+  if((window.__wxr=(window.__wxr||0)+1)<=3)setTimeout(function(){if(request===weatherRequest)load()},6000);
+ });
 }
 function render(){
  var C=DATA.current,H=DATA.hourly,D=DATA.daily;
@@ -251,7 +268,7 @@ function liveLink(){$('liveL').href='https://map.blitzortung.org/#8/'+cur.lat.to
 
 /* ---------- hub ---------- */
 var TABS=[
- {k:'rain',i:'🌧️',n:'رادار المطر',d:'رادار المركز الوطني للأرصاد (محطة القصيم) عبر RainViewer. يُظهر شدة الهطول وحركته.',b:'● مباشر · كل ١٠ دقائق'},
+ {k:'rain',i:'🌧️',n:'رادار المطر',d:'صور الهطول المرصود من RainViewer. تختلف التغطية حسب الموقع.',b:'RainViewer · رصد سابق'},
  {k:'light',i:'⚡',n:'البروق',d:'الصواعق المباشرة حول المدينة من شبكة Blitzortung.',b:'● مباشر'},
  {k:'maps',i:'🗺️',n:'خرائط الطقس',d:'حرارة ورياح وسحب وضغط وأمطار على خريطة واحدة (Windy).',b:'نموذج ECMWF',subs:[['temp','حرارة'],['wind','رياح'],['clouds','سحب'],['pressure','ضغط'],['rain','أمطار']]},
  {k:'model',i:'🧮',n:'النموذج العددي',d:'مقارنة نماذج التنبؤ العددي للأمطار حتى ٧ أيام. حرّك الشريط الزمني أسفل الخريطة.',b:'توقعات ٧ أيام',subs:[['ecmwf','ECMWF'],['icon','ICON'],['gfs','GFS']]},
@@ -259,8 +276,22 @@ var TABS=[
  {k:'detail',i:'📍',n:'تفصيلي',d:'توقع نقطي ساعة بساعة للمدينة. المس الخريطة لتغيير النقطة.',b:'ساعة بساعة'},
  {k:'now',i:'🌡️',n:'الآن',d:'درجات الحرارة الحالية على الخريطة حول المدينة.',b:'● حي'}
 ];
-var FR=null;
-function getFrames(){if(!FR)FR=fetch('https://api.rainviewer.com/public/weather-maps.json').then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){var f=(j.radar.past||[]).concat(j.radar.nowcast||[]);if(!f.length)throw 0;return{host:j.host,frames:f,past:(j.radar.past||[]).length}});return FR}
+var radarInterval=5*60*1000,radarCacheLifetime=4*60*1000,radarCache,radarRequest;
+function getFrames(){
+ if(radarCache&&Date.now()-radarCache.checkedAt<radarCacheLifetime)return Promise.resolve(radarCache);
+ if(radarRequest)return radarRequest;
+ var controller=new AbortController();
+ var timeout=setTimeout(function(){controller.abort()},12000);
+ radarRequest=fetch('https://api.rainviewer.com/public/weather-maps.json',{cache:'no-cache',signal:controller.signal})
+  .then(function(response){if(!response.ok)throw new Error('Radar unavailable');return response.json()})
+  .then(function(data){
+   var frames=data.radar&&data.radar.past;
+   if(!data.host||!Array.isArray(frames)||!frames.length)throw new Error('No radar frames');
+   radarCache={host:data.host,frames:frames,checkedAt:Date.now()};
+   return radarCache;
+  }).finally(function(){clearTimeout(timeout);radarRequest=null});
+ return radarRequest;
+}
 function windy(o,p,d){var l=cur.lat.toFixed(3),n=cur.lon.toFixed(3);return 'https://embed.windy.com/embed2.html?lat='+l+'&lon='+n+'&detailLat='+l+'&detailLon='+n+'&zoom=8&level=surface&overlay='+o+'&product='+p+'&menu=&message=true&marker=true&calendar=now&type=map&location=coordinates&detail='+(d?'true':'')+'&metricWind=km%2Fh&metricTemp=%C2%B0C'}
 var STAGES=[];
 function Stage(parent,tab){
@@ -279,18 +310,63 @@ function Stage(parent,tab){
  var q=function(s){return el.querySelector(s)};me.q=q;
  var tb=q('.tabsx');TABS.forEach(function(t){var b=document.createElement('button');b.dataset.k=t.k;b.innerHTML='<span>'+t.i+'</span>'+t.n;b.onclick=function(){me.setTab(t.k)};tb.appendChild(b)});
  q('.sl').oninput=function(){me.stop();me.show(+this.value)};
- q('.pl').onclick=function(){if(me.timer){me.stop();return}q('.pl').textContent='❚❚';me.timer=setInterval(function(){me.show((me.fidx+1)%me.frames.length)},650)};
+ q('.pl').onclick=function(){if(me.timer){me.stop();return}if(me.frames.length<2)return;q('.pl').textContent='❚❚';me.timer=setInterval(function(){me.show((me.fidx+1)%me.frames.length)},650)};
  q('.tools').onclick=function(e){var a=e.target.getAttribute('data-a');if(!a)return;if(a==='fs'){var f=el.requestFullscreen||el.webkitRequestFullscreen;if(f)f.call(el);return}if(!me.map)return;if(a==='in')me.map.zoomIn();else if(a==='out')me.map.zoomOut();else me.map.setView([cur.lat,cur.lon],7)};
  me.setTab(tab);
 }
 Stage.prototype.stop=function(){clearInterval(this.timer);this.timer=null;this.q('.pl').textContent='▶'};
-Stage.prototype.show=function(i){var me=this;if(!me.frames.length)return;me.fidx=i;me.layers.forEach(function(l,k){l.setOpacity(k===i?.75:0)});me.q('.sl').value=i;var m=Math.round((me.frames[i].time*1000-Date.now())/60000);me.q('.ft').textContent=(m>1?'بعد '+N(m)+' د':m>=-1?'الآن':'قبل '+N(-m)+' د')};
+Stage.prototype.show=function(i){
+ var frame=this.frames[i];
+ if(!frame)return;
+ if(!this.layers[i]){
+  this.layers[i]=L.tileLayer(this.radarHost+frame.path+'/256/{z}/{x}/{y}/2/1_1.png',{
+   attribution:'<a href="https://www.rainviewer.com/">RainViewer</a>',opacity:0,maxNativeZoom:7,maxZoom:10,zIndex:5
+  }).addTo(this.map);
+ }
+ this.fidx=i;
+ this.layers.forEach(function(layer,k){if(layer)layer.setOpacity(k===i?.75:0)});
+ this.q('.sl').value=i;
+ var age=Math.max(0,Math.round((Date.now()-frame.time*1000)/60000));
+ this.q('.ft').textContent=age<1?'رصد الآن':'رصد قبل '+N(age)+' د';
+};
 Stage.prototype.initMap=function(){
  var me=this;if(me.map||!window.L)return;
  me.map=L.map(me.q('.lmap'),{zoomControl:false,attributionControl:true,minZoom:4,maxZoom:10}).setView([cur.lat,cur.lon],7);
  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© مساهمو OpenStreetMap',maxZoom:19,className:'dark-base'}).addTo(me.map);
  me.center();
- getFrames().then(function(r){me.frames=r.frames;r.frames.forEach(function(f){me.layers.push(L.tileLayer(r.host+f.path+'/256/{z}/{x}/{y}/2/1_1.png',{opacity:0,maxNativeZoom:7,maxZoom:10,zIndex:5}).addTo(me.map))});me.q('.sl').max=r.frames.length-1;me.show(r.past-1)}).catch(function(){me.q('.ft').textContent='الرادار غير متاح حالياً'});
+};
+Stage.prototype.refreshRadar=function(){
+ var me=this;
+ if(!me.map||me.tab!=='rain'||me.refreshingRadar)return;
+ me.refreshingRadar=true;
+ getFrames().then(function(data){
+  if(!me.el.isConnected||me.tab!=='rain')return;
+  var keepFrame=me.timer||me.fidx<me.frames.length-1;
+  var selected=keepFrame&&me.frames[me.fidx];
+  var oldLayers=new Map();
+  me.frames.forEach(function(frame,i){
+   if(me.layers[i])oldLayers.set(me.radarHost+frame.path,me.layers[i]);
+  });
+  me.layers=data.frames.map(function(frame){
+   var key=data.host+frame.path,layer=oldLayers.get(key);
+   oldLayers.delete(key);
+   return layer;
+  });
+  oldLayers.forEach(function(layer){layer.remove()});
+  me.frames=data.frames;
+  me.radarHost=data.host;
+  var latest=me.frames.length-1;
+  var i=selected?me.frames.findIndex(function(frame){return frame.time===selected.time}):-1;
+  me.q('.sl').max=latest;
+  me.show(i>=0?i:latest);
+  me.q('.mod .b').textContent=Date.now()-me.frames[latest].time*1000>30*60*1000
+   ?'RainViewer · أحدث صورة قديمة':TABS[0].b;
+ }).catch(function(){
+  if(!me.el.isConnected||me.tab!=='rain')return;
+  me.q('.mod .b').textContent='RainViewer · تعذّر التحديث';
+  if(me.frames.length)me.show(me.fidx);
+  else me.q('.ft').textContent='الرادار غير متاح حالياً';
+ }).finally(function(){me.refreshingRadar=false});
 };
 Stage.prototype.center=function(){
  var me=this;if(!me.map)return;me.map.setView([cur.lat,cur.lon],7);
@@ -306,7 +382,7 @@ Stage.prototype.setTab=function(k){
  q('.tl').style.display=rain?'flex':'none';q('.legx').style.display=rain?'block':'none';q('.tools').style.display=rain?'flex':'none';
  var sb=q('.subs');sb.innerHTML='';sb.style.display=T.subs?'flex':'none';
  if(T.subs)T.subs.forEach(function(s){var b=document.createElement('button');b.textContent=s[1];b.className=me.sub[k]===s[0]?'on':'';b.onclick=function(){me.sub[k]=s[0];[].forEach.call(sb.children,function(x){x.className=''});b.className='on';me.load()};sb.appendChild(b)});
- if(rain){me.initMap();if(me.map)setTimeout(function(){me.map.invalidateSize()},60)}else me.load();
+ if(rain){me.initMap();me.refreshRadar();if(me.map)setTimeout(function(){if(me.el.isConnected)me.map.invalidateSize()},60)}else me.load();
  me.panels();
 };
 Stage.prototype.load=function(){
@@ -329,12 +405,107 @@ Stage.prototype.panels=function(){
 };
 Stage.prototype.recenter=function(){var me=this;me.center();me.q('.sfr').removeAttribute('data-u');if(me.tab!=='rain')me.load();me.panels()};
 function buildHub(m){
- var box=$('stages');STAGES.forEach(function(s){s.stop()});box.innerHTML='';STAGES=[];box.className='stages'+(m===2?' two':'');
+ var box=$('stages');STAGES.forEach(function(s){s.stop();if(s.map)s.map.remove()});box.innerHTML='';STAGES=[];box.className='stages'+(m===2?' two':'');
  STAGES.push(new Stage(box,'rain'));if(m===2)STAGES.push(new Stage(box,'maps'));
 }
-function hubUpdate(){if(!STAGES.length)buildHub(1);else STAGES.forEach(function(s){s.recenter()})}
+var radarCity;
+function hubUpdate(){
+ if(!STAGES.length)buildHub(1);
+ else STAGES.forEach(function(s){if(radarCity!==cur)s.recenter();else s.panels()});
+ radarCity=cur;
+}
 function initRadar(){hubUpdate()}
+function refreshRadar(){if(!document.hidden)STAGES.forEach(function(s){s.refreshRadar()})}
+setInterval(refreshRadar,radarInterval);
+document.addEventListener('visibilitychange',refreshRadar);
 document.querySelectorAll('#seg button').forEach(function(b){b.onclick=function(){document.querySelectorAll('#seg button').forEach(function(x){x.className=''});b.className='on';buildHub(+b.dataset.m)}});
+var models=[
+ ['ecmwf_ifs','ECMWF IFS (٩ كم)'],['gfs_seamless','GFS (أمريكي)'],['icon_seamless','ICON (ألماني)'],
+ ['gem_seamless','GEM (كندي)'],['meteofrance_seamless','Météo-France'],['ukmo_seamless','UKMO (بريطاني)'],
+ ['ecmwf_aifs025_single','ECMWF AIFS (مطر)']
+];
+var modelRequest;
+var modelDate=new Intl.DateTimeFormat('ar-SA-u-ca-gregory',{
+ timeZone:'Asia/Riyadh',weekday:'short',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'
+});
+function modelHours(hourly,start){
+ // Precipitation at each timestamp is the total for the hour ending at that time.
+ var first=hourly.time.indexOf(start+3600);
+ var times=hourly.time.slice(first,first+72);
+ if(first<0||times.length!==72||times.some(function(t,i){return t!==start+(i+1)*3600})){
+  throw new Error('Incomplete hourly forecast');
+ }
+ return first;
+}
+function modelTotal(values,first,count){
+ if(!values)return null;
+ var period=values.slice(first,first+count);
+ if(period.length!==count||!period.every(Number.isFinite))return null;
+ return period.reduce(function(sum,value){return sum+value},0);
+}
+function modelMax(values,first,count){
+ var period=values&&values.slice(first,first+count).filter(Number.isFinite);
+ return period&&period.length?Math.max.apply(null,period):null;
+}
+function renderModels(hourly,start){
+ var i=modelHours(hourly,start),wet=0,total=0;
+ var rows=models.map(function(model){
+  var id=model[0],p=hourly['precipitation_'+id];
+  var rain24=modelTotal(p,i,24),rain72=modelTotal(p,i,72);
+  if(rain24!=null){total++;if(rain24>=1)wet++}
+  return {
+   name:model[1],rain24:rain24,rain72:rain72,
+   gust:modelMax(hourly['wind_gusts_10m_'+id],i,72),
+   cape:modelMax(hourly['cape_'+id],i-1,24)
+  };
+ });
+ var maxRain=Math.max(0.1,...rows.map(function(row){return row.rain72||0}));
+ var h=total?'<div style="margin-bottom:10px;font-weight:700">'+N(wet)+' من '+N(total)+' توقعات تشير إلى هطول ١ ملم فأكثر خلال ٢٤ ساعة</div>':'';
+ h+='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px;min-width:520px"><tr style="color:var(--mu);text-align:right"><th style="padding:6px">النموذج</th><th>أمطار ٢٤ ساعة (ملم)</th><th>أمطار ٧٢ ساعة (ملم)</th><th>أقصى هبّات (كم/س)</th><th>قابلية العواصف (CAPE)</th></tr>';
+ rows.forEach(function(row){
+  var width=Math.round(row.rain72/maxRain*100);
+  var bar=width>0?'<span style="display:inline-block;height:8px;width:'+width+'%;max-width:90px;border-radius:4px;background:var(--blue)"></span>':'';
+  var level=row.cape==null?'':row.cape<300?'ضعيف':row.cape<1000?'متوسط':row.cape<2000?'مرتفع':'مرتفع جدًا';
+  var cape=level?level+' ('+N(row.cape)+')':'—';
+  h+='<tr style="border-top:1px solid var(--line)"><th scope="row" style="padding:8px 6px;text-align:start">'+row.name+'</th><td>'+N1(row.rain24)+'</td><td><div style="display:flex;align-items:center;gap:6px"><span style="min-width:34px">'+N1(row.rain72)+'</span>'+bar+'</div></td><td>'+N1(row.gust)+'</td><td>'+cape+'</td></tr>';
+ });
+ $('mmbody').innerHTML=h+'</table></div>';
+}
+function renderSpread(hourly,start){
+ var i=modelHours(hourly,start);
+ var members=Object.keys(hourly).filter(function(key){return /^precipitation_member\d+$/.test(key)});
+ var totals=members.map(function(key){return modelTotal(hourly[key],i,72)}).filter(Number.isFinite);
+ if(totals.length<10)throw new Error('Insufficient ensemble members');
+ totals.sort(function(a,b){return a-b});
+ var low=totals[Math.floor((totals.length-1)*0.1)];
+ var high=totals[Math.ceil((totals.length-1)*0.9)];
+ $('mmspread').textContent='نطاق المطر خلال ٧٢ ساعة من ECMWF · '+N1(low)+' إلى '+N1(high)+' ملم · نطاق تقريبي لأوسط ٨٠٪ من '+N(totals.length)+' مسارًا.';
+}
+function updateModels(){
+ var now=Date.now();
+ if(modelRequest&&modelRequest.city===cur&&now-modelRequest.started<30*60*1000)return;
+ if(modelRequest)modelRequest.controller.abort();
+ var request={city:cur,started:now,controller:new AbortController()};
+ modelRequest=request;
+ var start=Math.ceil(now/3600000)*3600;
+ var query='?latitude='+cur.lat+'&longitude='+cur.lon+'&timezone=Asia%2FRiyadh&timeformat=unixtime&forecast_hours=75';
+ $('mmwindow').textContent='بداية الفترة '+modelDate.format(start*1000)+' بتوقيت السعودية';
+ $('mmbody').textContent='جارٍ تحميل النماذج…';
+ $('mmspread').textContent='جارٍ تحميل نطاق المطر…';
+ function get(url,render,id,message){
+  fetch(url,{signal:request.controller.signal}).then(function(response){
+   if(!response.ok)throw new Error('Forecast unavailable');
+   return response.json();
+  }).then(function(data){
+   if(modelRequest===request)render(data.hourly,start);
+  }).catch(function(){if(modelRequest===request)$(id).textContent=message});
+ }
+ get('https://api.open-meteo.com/v1/forecast'+query+'&models='+models.map(function(model){return model[0]}).join(',')+'&hourly=precipitation,cape,wind_gusts_10m',
+  renderModels,'mmbody','تعذّر تحميل مقارنة النماذج حالياً.');
+ get('https://ensemble-api.open-meteo.com/v1/ensemble'+query+'&models=ecmwf_ifs025&hourly=precipitation',
+  renderSpread,'mmspread','نطاق المطر من مجموعة توقعات ECMWF غير متاح حالياً.');
+}
+
 load();setInterval(load,15*60*1000);
 var STY={none:['ℹ️','لم يُرصد قرار ساري للرس في آخر فحص'],unavailable:['ℹ️','متابعة حساب تعليم القصيم غير متاحة حاليًا'],review:['⚠️','منشور رسمي قيد التحقق'],remote:['🏠','تعليق الدراسة الحضورية — التحول إلى التعليم عن بُعد'],full:['⛔','تعليق الدراسة الحضورية'],partial:['⚠️','تعليق جزئي للدراسة']};
 async function loadStudy(){
@@ -364,46 +535,6 @@ async function loadStudy(){
 loadStudy();
 setInterval(loadStudy,60000);
 if(window.parent!==window){var _h=0,_s=function(){var h=document.documentElement.scrollHeight;if(h!==_h){_h=h;try{parent.postMessage({wxh:h},location.origin)}catch(e){}}};if(window.ResizeObserver)new ResizeObserver(_s).observe(document.body);window.addEventListener('load',_s);setInterval(_s,1500)}
-})();
-</script>
-<script>
-(function(){
-"use strict";
-var C={'الرس':[25.8688,43.4988],'بريدة':[26.326,43.975],'عنيزة':[26.084,43.994],'الرياض':[24.7136,46.6753],'جدة':[21.4858,39.1925]};
-var M=[['ecmwf_ifs025','ECMWF IFS (أوروبي)'],['gfs_seamless','GFS (أمريكي)'],['icon_seamless','ICON (ألماني)'],['gem_seamless','GEM (كندي)'],['meteofrance_seamless','Météo-France'],['ukmo_seamless','UKMO (بريطاني)']];
-var nf=new Intl.NumberFormat('ar-SA',{maximumFractionDigits:1});
-function F(x){return x==null||isNaN(x)?'—':nf.format(x)}
-var last='',body=document.getElementById('mmbody');
-function sum(a,i,n){var s=0,k=0;for(var x=i;x<Math.min(a.length,i+n);x++){if(a[x]!=null){s+=a[x];k++}}return k?s:null}
-function mx(a,i,n){var m=null;for(var x=i;x<Math.min(a.length,i+n);x++){if(a[x]!=null&&(m==null||a[x]>m))m=a[x]}return m}
-function cape(v){return v==null?'—':v<300?'ضعيف':v<1000?'متوسط':v<2000?'مرتفع':'مرتفع جدًا'}
-function run(){
- var el=document.getElementById('cname3');if(!el||!body)return;var n=el.textContent.trim();
- var c=C[n];
- if(!c){body.textContent='اختر مدينة من القائمة لعرض مقارنة النماذج.';last='';return}
- if(n===last)return;last=n;body.textContent='جارٍ التحميل…';
- fetch('https://api.open-meteo.com/v1/forecast?latitude='+c[0]+'&longitude='+c[1]+'&timezone=Asia%2FRiyadh&forecast_days=3&models='+M.map(function(m){return m[0]}).join(',')+'&hourly=precipitation,cape,wind_gusts_10m')
- .then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
-  var t=j.hourly.time,now=new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Riyadh',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date()).replace(' ','T');
-  var i=0;while(i<t.length-1&&t[i+1]<=now)i++;
-  var rows=[],wet=0,tot=0,maxr=0.1;
-  M.forEach(function(m){var p=j.hourly['precipitation_'+m[0]],cp=j.hourly['cape_'+m[0]],g=j.hourly['wind_gusts_10m_'+m[0]];
-   if(!p||p.every(function(v){return v==null})){rows.push({n:m[1],na:1});return}
-   var r24=sum(p,i,24),r72=sum(p,i,72),cm=mx(cp||[],i,24),gm=mx(g||[],i,72);tot++;if(r24!=null&&r24>=1)wet++;if(r72>maxr)maxr=r72;
-   rows.push({n:m[1],r24:r24,r72:r72,cm:cm,gm:gm})});
-  var h='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px;min-width:520px"><tr style="color:var(--mu);text-align:right"><th style="padding:6px">النموذج</th><th>أمطار ٢٤ ساعة (ملم)</th><th>أمطار ٧٢ ساعة (ملم)</th><th>أقصى هبّات (كم/س)</th><th>احتمال الرعد (CAPE)</th></tr>';
-  rows.forEach(function(r){
-   if(r.na){h+='<tr style="border-top:1px solid var(--line)"><td style="padding:8px 6px">'+r.n+'</td><td colspan="4" style="color:var(--mu)">غير متاح لهذا الموقع</td></tr>';return}
-   var w=Math.max(2,Math.round(r.r72/maxr*100));
-   h+='<tr style="border-top:1px solid var(--line)"><td style="padding:8px 6px;font-weight:700">'+r.n+'</td><td>'+F(r.r24)+'</td><td><div style="display:flex;align-items:center;gap:6px"><span style="min-width:34px">'+F(r.r72)+'</span><span style="display:inline-block;height:8px;width:'+w+'px;max-width:90px;border-radius:4px;background:var(--blue)"></span></div></td><td>'+F(r.gm)+'</td><td>'+cape(r.cm)+(r.cm!=null?' <span style="color:var(--mu)">('+F(r.cm)+')</span>':'')+'</td></tr>'});
-  h+='</table></div>';
-  if(tot)h='<div style="margin-bottom:10px;font-weight:700">'+(wet?'🌧️ ':'☀️ ')+F(wet)+' من '+F(tot)+' نماذج تتوقع أمطارًا ≥ ١ ملم خلال ٢٤ ساعة'+(wet&&wet<tot?' — النماذج غير متفقة، فالثقة أقل':'')+'</div>'+h;
-  body.innerHTML=h;
- }).catch(function(){last='';body.textContent='تعذر تحميل مقارنة النماذج الآن. أعد المحاولة لاحقًا.'});
-}
-run();
-var tgt=document.getElementById('cname3');if(tgt&&window.MutationObserver)new MutationObserver(run).observe(tgt,{childList:true,characterData:true,subtree:true});
-setInterval(function(){last='';run()},1800000);
 })();
 </script>
 </body></html>
