@@ -345,7 +345,7 @@ async function loadStudy(){
  var automatic=SchoolNotice.preferX(post,fallback?.updated);
  var st=automatic?post.status:fallback?fallback.status:SchoolNotice.fresh(feed)?'none':'unavailable';
  var x=STY[st],e=$('study');
- e.setAttribute('data-s',st);$('sti').textContent=x[0];$('stt').textContent=!automatic&&fallback?.title||x[1];
+ e.setAttribute('data-s',st);$('sti').textContent=x[0];$('stt').textContent=!automatic&&fallback?.title||(st==='none'&&feed?.provider==='ifttt'?'لم يصل قرار ساري للرس عبر IFTTT':x[1]);
  var where=post?.scope==='region'?'جميع مدارس منطقة القصيم':'محافظة الرس';
  $('stp').textContent=st==='review'?'راجع المنشور لتأكيد تاريخ القرار وشموله للرس.':
   automatic?where:fallback?fallback.note||'':'راجع حساب إدارة تعليم القصيم للاطلاع على آخر الإعلانات.';
@@ -359,7 +359,7 @@ async function loadStudy(){
  var original=automatic?SchoolNotice.sourceUrl(post.id):fallback?.sourceUrl;
  $('stl').href=/^https:\/\//.test(original||'')?original:SchoolNotice.account;
  $('stl').textContent=original?'المنشور الأصلي ↗':'حساب تعليم القصيم ↗';
- $('stu').textContent=SchoolNotice.fresh(feed)?'آخر فحص للحساب: '+new Date(feed.checkedAt).toLocaleString('ar-SA',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Riyadh'}):'';
+ $('stu').textContent=SchoolNotice.fresh(feed)?(feed.provider==='ifttt'?'آخر فحص لبيانات IFTTT: ':'آخر فحص للحساب: ')+new Date(feed.checkedAt).toLocaleString('ar-SA',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Riyadh'}):'';
 }
 loadStudy();
 setInterval(loadStudy,60000);
