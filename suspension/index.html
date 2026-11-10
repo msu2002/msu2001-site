@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تعليق الدراسة في منطقة القصيم | MSU2001</title>
+<meta name="description" content="حالة تعليق الدراسة الحضورية في منطقة القصيم ومحافظة الرس من مصادر رسمية، مع وقت آخر فحص.">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f6f5;--card:#fff;--ink:#16211f;--mut:#5b6b68;--line:#dbe5e2;--g:#16875f;--r:#c8372d;--y:#b7791f;--w:#6b7b78}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1514;--card:#16201e;--ink:#e8f0ee;--mut:#9db0ab;--line:#26342f}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans Arabic',sans-serif;line-height:1.8}
+header{padding:16px;text-align:center;font:800 20px 'Noto Kufi Arabic',sans-serif}header a{color:inherit;text-decoration:none}
+main{max-width:760px;margin:0 auto;padding:0 16px 40px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:14px}
+#state{border-width:2px;border-color:var(--w)}#state.red{border-color:var(--r)}#state.green{border-color:var(--g)}#state.yellow{border-color:var(--y)}
+#state h1{margin:0 0 6px;font:800 21px 'Noto Kufi Arabic',sans-serif}
+dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:12px 0 0}dt{color:var(--mut)}dd{margin:0}
+.mut{color:var(--mut);font-size:14px}.btn{display:inline-block;border:1px solid var(--line);border-radius:10px;padding:6px 14px;margin:6px 0 0 6px;color:inherit;text-decoration:none;background:none;font:inherit;cursor:pointer}
+select{font:inherit;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+li{margin:8px 0}h2{font:700 17px 'Noto Kufi Arabic',sans-serif;margin:0 0 8px}
+#banner{display:none;background:var(--r);color:#fff;text-align:center;padding:10px;font-weight:700}
+</style></head><body>
+<div id="banner"></div>
+<header><a href="/">MSU2001</a> · تعليق الدراسة في منطقة القصيم</header>
+<main>
+<section class="card" id="state"><h1>جارٍ التحقق…</h1><div class="mut">يتم الآن قراءة آخر الفحوصات.</div></section>
+<section class="card"><label>المحافظة: <select id="city"></select></label> <span class="mut" id="cityNote"></span></section>
+<section class="card" id="cands" style="display:none"><h2>أخبار قيد التحقق</h2><ul id="candList"></ul><div class="mut">وُجدت هذه العناوين في المواقع الرسمية وفيها عبارات تخص تعليق الدراسة. قد يكون بعضها خبرًا سابقًا، فتحقق من تاريخه قبل الاعتماد عليه.</div></section>
+<section class="card"><h2>سجل المراقبة</h2><div id="src" class="mut"></div></section>
+<section class="card"><h2>أرشيف القرارات المؤكدة</h2><ul id="hist"><li class="mut">لا توجد قرارات مؤكدة مسجلة بعد.</li></ul></section>
+<section class="card mut" style="font-size:14px">تنبيه: الصفحة لا تقرأ منصة X تلقائيًا لأن المنصة تمنع القراءة الآلية المجانية. لذلك يُسجَّل القرار المؤكد يدويًا فور صدوره، وتُراقب المواقع الرسمية آليًا كل 5 دقائق. تحذيرات المركز الوطني للأرصاد ليست قرار تعليق. المرجع النهائي هو إعلان إدارة تعليم القصيم.</section>
+</main>
+<script>
+const API='https://script.google.com/macros/s/AKfycbwEZjP_a_uZq2N4yK6j72_7hewbmG_1_7EeamZmpJwFEk-w5rK3GBCjWrpMm-caN3Smfg/exec', CITIES=['الرس','بريدة','عنيزة','البكيرية','البدائع','المذنب','رياض الخبراء','الأسياح','عيون الجواء','النبهانية','الشماسية','عقلة الصقور','ضرية'];
+const $=id=>document.getElementById(id), esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const safe=u=>/^https:\/\//.test(u||'')?u:'';
+const TYPE={remote:'الدراسة عن بُعد عبر منصة مدرستي',full:'تعليق الدراسة الحضورية',partial:'تعليق جزئي للدراسة الحضورية'};
+const fmt=d=>{try{return new Intl.DateTimeFormat('ar-SA',{dateStyle:'full',timeStyle:'short',timeZone:'Asia/Riyadh'}).format(new Date(d))}catch(e){return d}};
+const fmtDay=d=>{try{return new Intl.DateTimeFormat('ar-SA',{dateStyle:'full',timeZone:'Asia/Riyadh'}).format(new Date(d+'T12:00:00+03:00'))+' — '+new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura',{dateStyle:'long',timeZone:'Asia/Riyadh'}).format(new Date(d+'T12:00:00+03:00'))}catch(e){return d}};
+CITIES.forEach(c=>{const o=document.createElement('option');o.textContent=c;$('city').appendChild(o)});
+try{const s=localStorage.getItem('susp_city');if(s)$('city').value=s}catch(e){}
+let M=null,S=null,mErr=false,sErr=false;
+const get=async(u)=>{const c=new AbortController();setTimeout(()=>c.abort(),12000);const r=await fetch(u,{signal:c.signal,cache:'no-store'});if(!r.ok)throw 0;return r.json()};
+async function load(){
+  try{M=await get(API)}catch(e){mErr=true;M=null}
+  try{S=await get('/suspension/status.json?'+Date.now())}catch(e){sErr=true;S=null}
+  render();
+}
+function covers(st,city){return st.scope==='region'||(st.places||'').includes(city)||(st.scope==='rass'&&city==='الرس')}
+function render(){
+  const city=$('city').value,box=$('state');let cls='',h='',b='';
+  const st=M&&M.active?M.state:null;
+  const age=S&&S.checkedAt?(Date.now()-Date.parse(S.checkedAt))/6e4:1e9;
+  const fresh=S&&S.anyOk&&age<180;
+  if(st){
+    const hit=covers(st,city);
+    cls=hit?'red':'yellow';
+    h=hit?'🔴 '+TYPE[st.status]+' — مؤكد رسميًا':'🟡 قرار يخص محافظات أخرى ولا يشمل '+esc(city);
+    const where=st.scope==='region'?'جميع مدارس منطقة القصيم':st.scope==='rass'?'محافظة الرس فقط':(st.places||'محافظات محددة');
+    b='<dl><dt>تاريخ التعليق</dt><dd>'+esc(fmtDay(st.date))+'</dd><dt>النطاق</dt><dd>'+esc(where)+'</dd><dt>جهة الإصدار</dt><dd>'+esc(st.issuedBy)+'</dd><dt>نوع الدراسة</dt><dd>'+esc(TYPE[st.status])+'</dd><dt>تسجيل القرار في الموقع</dt><dd>'+esc(fmt(st.confirmedAt))+'</dd>'+(st.note?'<dt>ملاحظة</dt><dd>'+esc(st.note)+'</dd>':'')+'</dl>'+(safe(st.sourceUrl)?'<a class="btn" href="'+esc(st.sourceUrl)+'" target="_blank" rel="noopener">الإعلان الرسمي الأصلي</a>':'')+'<a class="btn" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent('تعليق الدراسة في القصيم: '+TYPE[st.status]+' — '+location.href)+'">مشاركة واتساب</a><button class="btn" onclick="navigator.clipboard&&navigator.clipboard.writeText(location.href)">نسخ الرابط</button>';
+    $('banner').style.display=hit?'block':'none';$('banner').textContent='🔴 '+TYPE[st.status]+' — '+(st.scope==='region'?'جميع مدارس القصيم':st.scope==='rass'?'الرس':(st.places||''));
+  }else if(S&&fresh&&S.candidates&&S.candidates.length){cls='yellow';h='🟡 خبر قيد التحقق';b='<div class="mut">وُجد في المواقع الرسمية خبر يخص تعليق الدراسة، ولم يُسجَّل بعد قرار مؤكد. راجع القائمة أدناه.</div>'}
+  else if(!S||!fresh||mErr){cls='';h='⚪ تعذر التحقق من المصادر حاليًا';b='<div class="mut">'+(mErr?'تعذر قراءة حالة القرارات المؤكدة. ':'')+(!S||!S.checkedAt?'لم يكتمل أول فحص بعد. ':(!S.anyOk?'تعذر الوصول إلى المصادر الرسمية في آخر فحص. ':'آخر فحص ناجح قديم. '))+'لا يعني ذلك عدم وجود تعليق، فراجع حساب إدارة تعليم القصيم.</div><a class="btn" target="_blank" rel="noopener" href="https://x.com/moe_qsm">حساب إدارة تعليم القصيم</a>'}
+  else{cls='green';h='🟢 لم يُرصد إعلان رسمي بالتعليق حتى آخر فحص ناجح';b='<div class="mut">آخر فحص ناجح: '+esc(fmt(S.checkedAt))+'</div>'}
+  if(!st)$('banner').style.display='none';
+  box.className='card '+cls;box.id='state';box.innerHTML='<h1>'+h+'</h1>'+b;
+  $('cityNote').textContent='';
+  const c=(S&&fresh&&S.candidates)||[];$('cands').style.display=c.length?'block':'none';
+  $('candList').innerHTML=c.map(x=>'<li>'+esc(x.title)+' <span class="mut">('+esc(x.sourceName)+(x.places&&x.places.length?' — '+esc(x.places.join('، ')):'')+')</span> '+(safe(x.url)?'<a href="'+esc(x.url)+'" target="_blank" rel="noopener">المصدر</a>':'')+'</li>').join('');
+  $('src').innerHTML=S&&S.sources&&S.sources.length?S.sources.map(s=>(s.ok?'🟢':'🔴')+' '+esc(s.name)+(s.ok?'':' — '+esc(s.error||'تعذر'))).join('<br>')+'<br>آخر فحص: '+esc(S.checkedAt?fmt(S.checkedAt):'—')+'<br>X (حساب إدارة تعليم القصيم): غير مُراقَب آليًا':'لم يبدأ الفحص بعد.<br>X: غير مُراقَب آليًا';
+  const H=(M&&M.history)||[];if(H.length)$('hist').innerHTML=H.map(h=>'<li>'+esc(fmtDay(h.date))+' — '+esc(TYPE[h.status]||h.status)+' — '+esc(h.scope==='region'?'القصيم':h.scope==='rass'?'الرس':(h.places||''))+(safe(h.sourceUrl)?' <a href="'+esc(h.sourceUrl)+'" target="_blank" rel="noopener">المصدر</a>':'')+'</li>').join('');
+}
+$('city').onchange=()=>{try{localStorage.setItem('susp_city',$('city').value)}catch(e){}render()};
+load();setInterval(load,60000);
+</script></body></html>
