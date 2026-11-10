@@ -1,0 +1,26 @@
+name: suspension-probe
+on:
+  workflow_dispatch:
+  push:
+    paths: ['.github/workflows/suspension-probe.yml']
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe sources
+        run: |
+          UA="Mozilla/5.0 (compatible; MSU2001-SchoolStatusBot/1.0; +https://msu2001.com)"
+          for u in \
+            "https://sites.moe.gov.sa/Qassim/news/" \
+            "https://sites.moe.gov.sa/Rass/" \
+            "https://www.spa.gov.sa/" \
+            "https://www.moe.gov.sa/" \
+            "https://x.com/moe_qsm" \
+            "https://syndication.twitter.com/srv/timeline-profile/screen-name/moe_qsm" ; do
+            echo "=== $u"
+            curl -sS -L -m 25 -A "$UA" -o /tmp/o.html -w "status=%{http_code} size=%{size_download} time=%{time_total}\n" "$u" || echo "FAILED"
+            head -c 300 /tmp/o.html | tr '\n' ' '; echo
+            grep -o 'news-[0-9]*' /tmp/o.html | sort -u | tail -3 || true
+          done
