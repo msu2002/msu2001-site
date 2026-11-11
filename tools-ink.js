@@ -10,6 +10,7 @@ var ICON={
 "photo-studio":'<rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.7"/><path d="M3.8 17l5-4.6 3.4 3.1 3-2.6 5 4.4"/><path d="M18 2.4v2.8M16.6 3.8h2.8"/>',
 "shawahed":'<rect x="5" y="4.5" width="14" height="17" rx="2.5"/><path d="M9 4.5h6v-1.2a.8.8 0 0 0-.8-.8H9.8a.8.8 0 0 0-.8.8z"/><path d="M8.5 11l1.3 1.3 2.2-2.4M8.5 16l1.3 1.3 2.2-2.4M14 11.2h2.5M14 16.2h2.5"/>',
 "shawahed-staff":'<rect x="5" y="4.5" width="14" height="17" rx="2.5"/><path d="M9 4.5h6v-1.2a.8.8 0 0 0-.8-.8H9.8a.8.8 0 0 0-.8.8z"/><circle cx="12" cy="10.2" r="1.9"/><path d="M8.6 17c.5-2 1.9-3 3.4-3s2.9 1 3.4 3"/>',
+"rumooz":'<g fill="#fff" stroke="none"><path d="M12.19 5.09A5.44 5.44 0 1 0 13.68 15.53 5.44 5.44 0 0 1 12.19 5.09z"/><path d="M17.62 6.75l.79 1.61 1.78.26-1.29 1.26.3 1.78-1.58-.84-1.59.84.3-1.78-1.29-1.26 1.78-.26z"/></g><g fill="#fff" fill-opacity=".72" stroke="none"><rect x="4.9" y="17.25" width="3" height="3" rx=".75"/><rect x="9" y="17.25" width="3" height="3" rx=".75"/><rect x="13.1" y="17.25" width="3" height="3" rx=".75"/><rect x="17.25" y="17.25" width="3" height="3" rx=".75"/></g>',
 "fahad-studio":'<path d="M4 10.5h16V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M3.6 7.2l15.3-3.5.7 3.1-15.3 3.5z"/><path d="M7.7 6.7l2.1 3M12.2 5.7l2.1 3M16.7 4.7l2.1 3"/><path d="M10.5 13.4v4.2l3.8-2.1z"/>'
 };
 var css='#tools.ink-grid{display:grid;grid-template-columns:1fr;gap:14px}'+
@@ -41,6 +42,12 @@ function sfPut(){if(!sfOk||document.getElementById(SF.id))return;var ref=documen
  var n=ref.cloneNode(true);n.id=SF.id;n.href=SF.u;n.setAttribute("data-ink","shawahed-staff");
  var h=n.querySelector("h3"),p=n.querySelector("p"),v=n.querySelector(".ink-tile svg");if(!h||!p||!v)return;
  h.textContent=SF.t;p.textContent=SF.p;v.innerHTML=ICON["shawahed-staff"];n.querySelector(".ink-tile").style.setProperty("background","radial-gradient(circle at 30% 20%,#e5313d,#8f0d17)","important");h.style.setProperty("color","#c1121f","important");ref.after(n)}
+var RZ={id:"frm-card10",u:"/rumooz/",k:"فهد رموز",t:"فهد رموز: الحروف والرموز العربية",p:"ابحث عن الحروف والرموز العربية وانسخها بنقرة: التشكيل، الرموز الإسلامية، العملات، وأكواد Word وصفحات الويب، مع مربع لتجميع النص وتنظيفه."},rzOk=0,rzTried=0;
+function rzCheck(){if(rzTried)return;rzTried=1;fetch(RZ.u,{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(x){if(x.indexOf(RZ.k)>-1){rzOk=1;apply()}}).catch(function(){})}
+function rzPut(){if(!rzOk||document.getElementById(RZ.id))return;var ref=document.getElementById(SF.id)||document.getElementById(SH.id)||document.getElementById(PS.id);if(!ref||!ref.getAttribute("data-ink"))return;
+ var n=ref.cloneNode(true);n.id=RZ.id;n.href=RZ.u;n.setAttribute("data-ink","rumooz");
+ var h=n.querySelector("h3"),p=n.querySelector("p"),v=n.querySelector(".ink-tile svg");if(!h||!p||!v)return;
+ h.textContent=RZ.t;p.textContent=RZ.p;v.innerHTML=ICON["rumooz"];n.querySelector(".ink-tile").style.removeProperty("background");h.style.removeProperty("color");ref.after(n)}
 function apply(){
  var s=document.getElementById('tools');if(!s)return;
  if(!document.getElementById('ink-css')){var st=document.createElement('style');st.id='ink-css';st.textContent=css;document.head.appendChild(st);
@@ -52,7 +59,7 @@ function apply(){
   var old=a.firstElementChild;if(old&&old.tagName==='DIV'&&!old.classList.contains('flex-1'))old.classList.add('ink-old');
   var t=document.createElement('div');t.className='ink-tile';t.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+ICON[k]+'</svg>';
   a.insertBefore(t,a.firstChild)});
- if(any)s.classList.add('ink-grid');psCheck();psPut(s);shCheck();shPut();sfCheck();sfPut()}
+ if(any)s.classList.add('ink-grid');psCheck();psPut(s);shCheck();shPut();sfCheck();sfPut();rzCheck();rzPut()}
 apply();
 new MutationObserver(apply).observe(document.documentElement,{childList:true,subtree:true});
 })();
