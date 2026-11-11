@@ -156,7 +156,7 @@ h1,h3,.hh,.stage h4{font-family:"Noto Naskh Arabic",Amiri,serif}
  <div class="box"><div class="lbl">قاعدة الأمان للمدرسة ⚡</div><div style="font-size:12.5px;line-height:1.8;margin-top:2px">عند وقوع صاعقة داخل <b style="color:var(--yel)">١٠ كم</b> يُوقف النشاط الخارجي، ويُستأنف بعد <b style="color:var(--yel)">٣٠ دقيقة</b> من آخر صاعقة أو رعد مسموع.</div></div>
  <div class="box"><div class="lbl">تقدير جودة الهواء والغبار · CAMS</div><div class="v" style="font-size:20px;color:var(--gold)" id="aq">—</div><div class="meter"><i id="aqm" style="inset-inline-start:0"></i></div><div class="lbl" id="aq2"></div><a class="btn" href="https://www.ncec.gov.sa/ar/eServices/AQI-Info/Pages/default.aspx" target="_blank" rel="noopener">مؤشر جودة الهواء الرسمي ↗</a></div>
 </div>
-<div class="src">🔎 رادار المطر <a href="https://www.rainviewer.com" target="_blank" rel="noopener">RainViewer</a> · التوقعات وتقدير جودة الهواء <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> · خرائط الطقس والأقمار <a href="https://www.windy.com" target="_blank" rel="noopener">Windy</a> · رصد البرق <a href="https://www.blitzortung.org" target="_blank" rel="noopener">Blitzortung</a> · خرائط المطر والبرق الرسمية في <a href="https://www.ncm.gov.sa/ar/e-services/anwaa-application" target="_blank" rel="noopener">تطبيق أنواء</a> · التحذيرات الرسمية <a href="https://www.ncm.gov.sa" target="_blank" rel="noopener">المركز الوطني للأرصاد</a>.</div>
+<div class="src">🔎 رادار المطر <a href="https://www.rainviewer.com" target="_blank" rel="noopener">RainViewer</a> · التوقعات وتقدير جودة الهواء <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> · خرائط الطقس والأقمار <a href="https://www.windy.com" target="_blank" rel="noopener">Windy</a> · رصد البرق <a href="https://www.blitzortung.org" target="_blank" rel="noopener">Blitzortung</a> وراصد البرق على القمر MTG من <a href="https://view.eumetsat.int" target="_blank" rel="noopener">EUMETSAT</a> · خرائط المطر والبرق الرسمية في <a href="https://www.ncm.gov.sa/ar/e-services/anwaa-application" target="_blank" rel="noopener">تطبيق أنواء</a> · التحذيرات الرسمية <a href="https://www.ncm.gov.sa" target="_blank" rel="noopener">المركز الوطني للأرصاد</a>.</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 (function(){
@@ -270,7 +270,7 @@ function liveLink(){$('liveL').href='https://map.blitzortung.org/#8/'+cur.lat.to
 /* ---------- hub ---------- */
 var TABS=[
  {k:'rain',i:'🌧️',n:'رادار المطر',d:'صور الهطول المرصود من RainViewer. تختلف التغطية حسب الموقع.',b:'RainViewer · رصد سابق'},
- {k:'light',i:'⚡',n:'البروق',d:'الصواعق المباشرة حول المدينة من شبكة Blitzortung.',b:'● مباشر'},
+ {k:'light',i:'⚡',n:'البروق',d:'الصواعق حول المدينة: شبكة Blitzortung الأرضية، أو راصد البرق على القمر الأوروبي MTG.',b:'● مباشر',subs:[['blitz','Blitzortung أرضي'],['mtg','القمر الصناعي MTG']]},
  {k:'maps',i:'🗺️',n:'خرائط الطقس',d:'حرارة ورياح وسحب وضغط وأمطار على خريطة واحدة (Windy).',b:'نموذج ECMWF',subs:[['temp','حرارة'],['wind','رياح'],['clouds','سحب'],['pressure','ضغط'],['rain','أمطار']]},
  {k:'model',i:'🧮',n:'النموذج العددي',d:'مقارنة نماذج التنبؤ العددي للأمطار حتى ٧ أيام. حرّك الشريط الزمني أسفل الخريطة.',b:'توقعات ٧ أيام',subs:[['ecmwf','ECMWF'],['icon','ICON'],['gfs','GFS']]},
  {k:'sat',i:'🛰️',n:'الأقمار الصناعية',d:'صور الأقمار الصناعية للسحب فوق المنطقة.',b:'● شبه مباشر'},
@@ -296,7 +296,7 @@ function getFrames(){
 function windy(o,p,d){var l=cur.lat.toFixed(3),n=cur.lon.toFixed(3);return 'https://embed.windy.com/embed2.html?lat='+l+'&lon='+n+'&detailLat='+l+'&detailLon='+n+'&zoom=8&level=surface&overlay='+o+'&product='+p+'&menu=&message=true&marker=true&calendar=now&type=map&location=coordinates&detail='+(d?'true':'')+'&metricWind=km%2Fh&metricTemp=%C2%B0C'}
 var STAGES=[];
 function Stage(parent,tab){
- var me=this;me.tab=tab;me.sub={maps:'temp',model:'ecmwf'};me.map=null;me.ring=null;me.layers=[];me.frames=[];me.fidx=0;me.timer=null;
+ var me=this;me.tab=tab;me.sub={maps:'temp',model:'ecmwf',light:'blitz'};me.map=null;me.ring=null;me.layers=[];me.frames=[];me.fidx=0;me.timer=null;
  var el=document.createElement('div');el.className='stage';
  el.innerHTML='<div class="lmap"></div><iframe class="sfr" title="خريطة" loading="lazy" allow="fullscreen"></iframe>'+
   '<a class="glass offi" href="https://ncm.gov.sa" target="_blank" rel="noopener" title="التحذيرات الرسمية من المركز الوطني للأرصاد" aria-label="التحذيرات الرسمية">⚠️<em>تحذيرات رسمية</em></a>'+
@@ -388,7 +388,7 @@ Stage.prototype.setTab=function(k){
 };
 Stage.prototype.load=function(){
  var me=this,k=me.tab,f=me.q('.sfr'),u='';
- if(k==='light')u='https://map.blitzortung.org/#8/'+cur.lat.toFixed(2)+'/'+cur.lon.toFixed(2);
+ if(k==='light')u=me.sub.light==='mtg'?'/weather/mtg.html#'+cur.lat.toFixed(4)+','+cur.lon.toFixed(4):'https://map.blitzortung.org/#8/'+cur.lat.toFixed(2)+'/'+cur.lon.toFixed(2);
  else if(k==='maps')u=windy(me.sub.maps,'ecmwf');
  else if(k==='model')u=windy('rain',me.sub.model);
  else if(k==='sat')u=windy('satellite','ecmwf');
