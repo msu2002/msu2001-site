@@ -235,7 +235,7 @@ html.dk #lock button,html.dk .btn,html.dk .ov .b1,html.dk #done button{font-fami
     <tr><td class="k">الاسم</td><td class="v fixed"><input type="text" id="f_name" aria-label="الاسم" readonly tabindex="-1"></td></tr>
     <tr><td class="k">المسمى الفعلي للوظيفة</td><td class="v fixed"><input type="text" id="f_job" aria-label="المسمى الفعلي للوظيفة" readonly tabindex="-1"></td></tr>
     <tr><td class="k">الرقم الوظيفي</td><td class="v fixed"><input type="text" id="f_no" aria-label="الرقم الوظيفي" readonly tabindex="-1"></td></tr>
-    <tr><td class="k">المدير المباشر</td><td class="v fixed"><input type="text" id="f_mgr" aria-label="المدير المباشر" value="علي بن صالح الخليوي" readonly tabindex="-1"></td></tr>
+    <tr><td class="k">المدير المباشر</td><td class="v fixed"><input type="text" id="f_mgr" aria-label="المدير المباشر" value="صالح بن علي الخليوي" readonly tabindex="-1"></td></tr>
     <tr><td class="k">الإدارة</td><td class="v fixed"><input type="text" id="f_dep" aria-label="الإدارة" value="المدرسة الابتدائية المحمدية" readonly tabindex="-1"></td></tr>
   </table>
 
@@ -247,7 +247,7 @@ html.dk #lock button,html.dk .btn,html.dk .ov .b1,html.dk #done button{font-fami
     <div class="evbtn">
       <label class="up">🖼️ من الاستديو أو الجهاز<input type="file" id="f_gal" accept="image/*,.heic,.heif" multiple></label>
       <label class="up">📷 من الكاميرا مباشرة<input type="file" id="f_cam" accept="image/*" capture="environment"></label>
-      <label class="up">📄 ملف Word أو Excel<input type="file" id="f_doc" accept=".docx,.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" multiple></label>
+      <label class="up">📄 ملف Word أو Excel أو PDF<input type="file" id="f_doc" accept=".pdf,application/pdf,.docx,.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" multiple></label>
     </div>
     <div class="notes"><label for="f_notes">ملاحظات</label><textarea id="f_notes" rows="2" aria-label="ملاحظات"></textarea></div>
   </div>
@@ -291,6 +291,16 @@ const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const loadLib=src=>new Promise((ok,no)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>no(new Error('تعذّر تحميل مكتبة التحويل — تحقق من الإنترنت.'));document.head.appendChild(s)});
 async function docToImages(file){
   const ext=file.name.split('.').pop().toLowerCase(),buf=await file.arrayBuffer();let html='';
+  if(ext==='pdf'){
+    if(!window.pdfjsLib)await loadLib('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+    pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const pdf=await pdfjsLib.getDocument({data:new Uint8Array(buf)}).promise,pages=[];
+    for(let i=1;i<=Math.min(pdf.numPages,8);i++){const pg=await pdf.getPage(i),vp=pg.getViewport({scale:1.6});
+     const p=document.createElement('canvas');p.width=vp.width;p.height=vp.height;const x=p.getContext('2d');
+     x.fillStyle='#fff';x.fillRect(0,0,p.width,p.height);await pg.render({canvasContext:x,viewport:vp}).promise;
+     pages.push(p.toDataURL('image/jpeg',0.85))}
+    if(!pages.length)throw new Error('ملف PDF فارغ أو تعذّرت قراءته.');
+    return pages}
   if(ext==='docx'){if(!window.mammoth)await loadLib('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');html=(await mammoth.convertToHtml({arrayBuffer:buf})).value}
   else if(ext==='xlsx'||ext==='xls'||ext==='csv'){if(!window.XLSX)await loadLib('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js');const wb=XLSX.read(buf,{type:'array'});html=wb.SheetNames.map(n=>'<h4>'+esc(n)+'</h4>'+XLSX.utils.sheet_to_html(wb.Sheets[n],{header:'',footer:''})).join('')}
   else throw new Error('صيغة Word القديمة (doc) غير مدعومة — احفظ الملف بصيغة docx ثم أعد المحاولة.');
