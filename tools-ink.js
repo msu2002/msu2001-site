@@ -59,7 +59,7 @@ new MutationObserver(apply).observe(document.documentElement,{childList:true,sub
 
 /* أيقونة «شواهد» المثبّتة أعلى الصفحة الرئيسية + دبوس الموقع — Fahad Al-Jarwan */
 (function(){
-if(window.__shwPin)return;window.__shwPin=1;
+return; /* أزيل دبوس الموقع بطلب المالك */
 var MAP="https://maps.app.goo.gl/WXjmEN62Z4q2gBeR6?g_st=ic";
 function add(){
  if(document.getElementById("shw-pin")||!document.body)return;
