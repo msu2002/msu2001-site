@@ -1,0 +1,979 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>فهد رموز</title>
+<meta name="description" content="فهد رموز: أداة مجانية للبحث عن الحروف والرموز العربية ونسخها، مع التشكيل والرموز الإسلامية وأكواد Word وصفحات الويب.">
+<meta name="theme-color" content="#0E1614">
+<link rel="canonical" href="https://msu2001.com/rumooz/">
+<meta property="og:title" content="فهد رموز">
+<meta property="og:description" content="أداة مجانية للبحث عن الحروف والرموز العربية ونسخها، مع التشكيل والرموز الإسلامية وأكواد Word والويب.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://msu2001.com/rumooz/">
+<meta property="og:locale" content="ar_SA">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<script>
+/* الوضع الداكن هو الافتراضي، ويحفظ المتصفح اختيار الزائر إن بدّله */
+try{var s=JSON.parse(localStorage.getItem('fahd-rumooz-v1')||'null');
+document.documentElement.setAttribute('data-theme',(s&&s.theme==='light')?'light':'dark');}
+catch(e){document.documentElement.setAttribute('data-theme','dark');}
+</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@400;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Noto+Naskh+Arabic:wght@400;600&family=Reem+Kufi:wght@400;600&family=Scheherazade+New:wght@400;700&display=swap">
+<style>
+/* Layout concept: شريط أدوات علوي (بحث، تصنيفات، خط وحجم)، ثم مربع نص بأدوات، ثم شبكة رموز يمين ولوحة تفاصيل ثابتة يسار.
+   على الجوال تصير لوحة التفاصيل شريطاً سفلياً يتوسع بزر "تفاصيل". */
+:root{
+  color-scheme:light;
+  --bg:#EFF3F1;
+  --surface:#FFFFFF;
+  --surface-2:#E3EBE8;
+  --ink:#12201D;
+  --muted:#5A6B67;
+  --line:#C9D6D1;
+  --accent:#0B6B5F;
+  --accent-ink:#FFFFFF;
+  --accent-soft:#D3EAE4;
+  --gold:#A86B00;
+  --warn-bg:#F6E7C8;
+  --ui:"IBM Plex Sans Arabic","Segoe UI",Tahoma,"Noto Sans Arabic",sans-serif;
+  --glyph:"Amiri","Noto Naskh Arabic","Traditional Arabic","Segoe UI Symbol","Apple Symbols","Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji",serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1614;--surface:#16221F;--surface-2:#1E2D29;--ink:#E6F0ED;--muted:#93A8A2;
+    --line:#2B3D38;--accent:#4CCDB8;--accent-ink:#072521;--accent-soft:#1B3A35;--gold:#E5A93C;--warn-bg:#3B3216;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1614;--surface:#16221F;--surface-2:#1E2D29;--ink:#E6F0ED;--muted:#93A8A2;
+  --line:#2B3D38;--accent:#4CCDB8;--accent-ink:#072521;--accent-soft:#1B3A35;--gold:#E5A93C;--warn-bg:#3B3216;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;line-height:1.6;
+  padding-block:20px 28px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* header */
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.top h1{margin:0;font-size:28px;font-weight:600;line-height:1.3}
+.badge{font-size:12.5px;color:var(--muted);border:1px dashed var(--line);border-radius:999px;padding:2px 12px}
+.sub{margin:0;color:var(--muted);flex-basis:100%}
+
+/* top bar */
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.home{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);text-decoration:none;font-weight:500;font-size:14px}
+.home:hover{background:var(--surface-2)}
+
+/* search + chips */
+.search{position:relative}
+.search svg{position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.search input{
+  width:100%;height:50px;border:1px solid var(--line);border-radius:12px;background:var(--surface);
+  padding-inline:44px 14px;font-size:17px;
+}
+.search input::placeholder{color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:4px 14px;border-radius:999px;
+  border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:14px;
+}
+.chip small{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+.chip:hover{background:var(--surface-2)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chip[aria-pressed="true"] small{color:inherit;opacity:.8}
+.chip.add{border-style:dashed;color:var(--muted)}
+.newlist{display:flex;flex-wrap:wrap;gap:8px}
+.newlist input{flex:1 1 200px;min-width:0;height:40px;border:1px solid var(--line);border-radius:8px;background:var(--surface);padding-inline:12px}
+
+/* controls */
+.ctrls{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;color:var(--muted);font-size:13.5px}
+.ctrls .grp{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{min-height:34px;padding:0 12px;border:0;border-inline-start:1px solid var(--line);background:transparent;cursor:pointer;font-size:14px}
+.seg button:first-child{border-inline-start:0}
+.seg button:hover{background:var(--surface-2)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+
+/* buttons */
+.btn{
+  min-height:40px;padding:0 16px;border-radius:8px;border:1px solid var(--line);background:var(--surface);
+  font-weight:500;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.sm{min-height:34px;padding:0 12px;font-size:14px}
+.btn svg{flex:none}
+
+/* compose */
+.compose{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.compose>label{font-size:13.5px;color:var(--muted)}
+.compose textarea{
+  width:100%;min-height:92px;resize:vertical;border:1px solid var(--line);border-radius:8px;background:var(--bg);
+  padding:10px 12px;font-family:var(--glyph);font-size:24px;line-height:1.9;
+}
+.crow,.trow{display:flex;flex-wrap:wrap;gap:8px}
+details.tools{border-top:1px solid var(--line);padding-top:8px}
+details.tools>summary{cursor:pointer;font-weight:500;padding:4px 0;list-style-position:inside}
+details.tools[open]>summary{margin-bottom:8px}
+.hint{margin:0 0 8px;color:var(--muted);font-size:13px}
+.qrow{display:flex;flex-wrap:wrap;gap:8px}
+.qbtn{
+  min-width:64px;padding:2px 8px 4px;border:1px solid var(--line);border-radius:8px;background:var(--bg);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;line-height:1.2
+}
+.qbtn:hover{background:var(--surface-2)}
+.qbtn b{font-family:var(--glyph);font-size:26px;font-weight:400;line-height:1.5}
+.qbtn span{font-size:12px;color:var(--muted)}
+.insp{margin-top:8px;padding:10px 12px;border-radius:8px;background:var(--accent-soft);font-size:14px;display:flex;flex-direction:column;gap:8px}
+.insp .prev{direction:rtl;font-family:var(--glyph);font-size:20px;line-height:2;overflow-wrap:anywhere;background:var(--surface);border-radius:6px;padding:6px 10px}
+mark.iv{background:var(--warn-bg);color:var(--ink);font-family:var(--mono);font-size:11px;padding:1px 5px;border-radius:4px;margin-inline:2px}
+.sv{display:inline-flex;align-items:center}
+.sv .x{border:0;background:transparent;cursor:pointer;color:var(--muted);padding:0 6px;min-height:36px;font-size:18px}
+
+/* layout */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:20px;align-items:start}
+.listhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;color:var(--muted);font-size:13.5px;margin-bottom:10px;min-height:34px}
+.listhead .acts{display:flex;gap:8px;flex-wrap:wrap}
+.grid{--cell:76px;--ch:86px;--gs:32px;display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--cell),1fr));gap:8px}
+.grid[data-size="s"]{--cell:62px;--ch:72px;--gs:26px}
+.grid[data-size="l"]{--cell:100px;--ch:112px;--gs:44px}
+.cell{
+  position:relative;min-width:0;height:var(--ch);border:1px solid var(--line);border-radius:10px;background:var(--surface);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:0;
+}
+.cell:hover{background:var(--surface-2)}
+.cell.sel{border:2px solid var(--accent);background:var(--accent-soft)}
+.gl{font-family:var(--glyph);font-size:var(--gs);line-height:1.6}
+.tag{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--accent)}
+.cd{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.fv{position:absolute;top:6px;inset-inline-end:6px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.empty{grid-column:1/-1;padding:28px 12px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:12px}
+
+/* detail */
+.detail{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;position:sticky;top:16px;display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 32px);overflow:auto}
+.dhead{display:flex;flex-direction:column;gap:12px}
+.glyphbox{height:170px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;overflow:hidden}
+.g{font-family:var(--glyph);font-size:96px;line-height:1.7;color:var(--ink)}
+.names h2{margin:0;font-size:22px;font-weight:600;line-height:1.35}
+.names p{margin:0;color:var(--muted);font-size:14px}
+.xtra{display:flex;flex-direction:column;gap:12px}
+.codes{display:flex;flex-direction:column}
+.row{display:flex;align-items:center;gap:10px;padding:6px 0;border-top:1px solid var(--line)}
+.row .k{width:78px;flex:none;font-size:13px;color:var(--muted)}
+.row code{flex:1;min-width:0;direction:ltr;text-align:left;font-family:var(--mono);font-size:13.5px;overflow-wrap:anywhere}
+.mini{min-height:30px;padding:0 10px;border-radius:6px;border:1px solid var(--line);background:var(--bg);cursor:pointer;font-size:13px}
+.mini:hover{background:var(--surface-2)}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.actions .btn{flex:1 1 auto}
+.note{margin:0;font-size:13px;color:var(--muted)}
+.favon svg{fill:var(--gold);stroke:var(--gold)}
+.sect h3{margin:0 0 6px;font-size:13.5px;font-weight:600;color:var(--muted)}
+.shapes{display:flex;gap:8px;flex-wrap:wrap}
+.shp{flex:1 1 60px;text-align:center;border:1px solid var(--line);border-radius:8px;padding:2px 4px;background:var(--bg)}
+.shp b{display:block;font-family:var(--glyph);font-weight:400;font-size:34px;line-height:1.7}
+.shp span{font-size:12px;color:var(--muted)}
+.simrow{display:flex;gap:6px;flex-wrap:wrap}
+.simrow button{min-width:48px;height:48px;border:1px solid var(--line);border-radius:8px;background:var(--bg);cursor:pointer;font-family:var(--glyph);font-size:26px;line-height:1}
+.simrow button:hover{background:var(--surface-2)}
+.lrow{display:flex;gap:6px;flex-wrap:wrap}
+details.tip{border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--bg);font-size:13.5px}
+details.tip summary{cursor:pointer;font-weight:500}
+details.tip ul{margin:8px 0 0;padding-inline-start:18px}
+details.tip li{margin-bottom:4px}
+details.tip code{direction:ltr;unicode-bidi:isolate;font-family:var(--mono);font-size:12.5px;background:var(--surface-2);padding:0 4px;border-radius:4px}
+.mobonly{display:none}
+.foot{margin:0;font-size:13px;color:var(--muted)}
+
+/* toast */
+.toast{
+  position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:20;
+  background:var(--ink);color:var(--bg);padding:8px 18px;border-radius:999px;font-size:14px;max-width:calc(100vw - 32px);
+  text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+
+@media (max-width:820px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .detail{
+    position:sticky;top:auto;bottom:0;border-radius:14px 14px 0 0;gap:10px;max-height:72vh;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 20px rgba(0,0,0,.12);
+  }
+  .dhead{flex-direction:row;align-items:center;gap:12px}
+  .glyphbox{height:64px;width:64px;flex:none}
+  .g{font-size:38px;line-height:1.6}
+  .names h2{font-size:18px}
+  .xtra{display:none}
+  .detail.open .xtra{display:flex}
+  .mobonly{display:inline-flex}
+  .btn{min-height:44px}
+  .top h1{font-size:24px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap" dir="rtl" lang="ar">
+  <div class="bar">
+    <a class="home" href="/" aria-label="العودة إلى الصفحة الرئيسية" title="العودة إلى الصفحة الرئيسية"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>الرئيسية</span></a>
+    <button class="btn sm theme" id="themeBtn" type="button"></button>
+  </div>
+  <header class="top">
+    <h1>فهد رموز</h1>
+    <span class="badge">نسخة تجريبية</span>
+    <p class="sub">رموز وحروف عربية للكتابة في Word وصفحات الويب. ابحث، انقر لتنسخ، أو جمّع نصك في المربع وانسخه كاملاً.</p>
+  </header>
+
+  <div class="search">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="جرّب: شدة، ريال، ﷺ، RLM، U+FDFD، مسجد   (اضغط / للوصول للبحث)" aria-label="ابحث عن رمز">
+  </div>
+
+  <nav class="chips" id="chips" aria-label="التصنيفات"></nav>
+  <form class="newlist" id="newList" hidden>
+    <input id="newListName" type="text" maxlength="24" placeholder="اسم القائمة الجديدة" aria-label="اسم القائمة الجديدة" autocomplete="off">
+    <button class="btn primary sm" type="submit">إنشاء القائمة</button>
+  </form>
+
+  <div class="ctrls">
+    <div class="grp"><span>الخط</span><div class="seg" id="fontSeg" role="group" aria-label="الخط"></div></div>
+    <div class="grp"><span>الحجم</span><div class="seg" id="sizeSeg" role="group" aria-label="حجم الشبكة">
+      <button type="button" data-size="s" aria-pressed="false">صغير</button>
+      <button type="button" data-size="m" aria-pressed="true">متوسط</button>
+      <button type="button" data-size="l" aria-pressed="false">كبير</button>
+    </div></div>
+  </div>
+
+  <section class="compose">
+    <label for="compose">مربع النص. النص الحالي مثال، امسحه وابدأ نصك.</label>
+    <textarea id="compose" rows="3" spellcheck="false" autocomplete="off"></textarea>
+    <div class="crow">
+      <button class="btn primary" id="cCopy" type="button">نسخ النص</button>
+      <button class="btn" id="cSave" type="button">حفظ النص</button>
+      <button class="btn" id="cUndo" type="button">تراجع</button>
+      <button class="btn" id="cClear" type="button">مسح</button>
+    </div>
+
+    <details class="tools" open>
+      <summary>المُشكِّل السريع</summary>
+      <p class="hint">ضع المؤشر بعد الحرف ثم اضغط الحركة. تحل الحركة محل السابقة، والضغط عليها مرة ثانية يزيلها.</p>
+      <div class="qrow" id="quick"></div>
+    </details>
+
+    <details class="tools">
+      <summary>أدوات النص</summary>
+      <div class="trow">
+        <button class="btn sm" type="button" data-tool="strip">حذف التشكيل</button>
+        <button class="btn sm" type="button" data-tool="tatweel">حذف التطويل</button>
+        <button class="btn sm" type="button" data-tool="hindi">أرقام هندية ١٢٣</button>
+        <button class="btn sm" type="button" data-tool="west">أرقام غربية 123</button>
+        <button class="btn sm" type="button" data-tool="persian">أرقام فارسية ۱۲۳</button>
+      </div>
+      <p class="hint" style="margin-top:12px">لماذا تنقلب علامات الترقيم أو تتباعد الكلمات؟ غالباً بسبب أحرف غير مرئية في النص.</p>
+      <div class="trow">
+        <button class="btn sm" type="button" data-tool="inspect">اكشف الأحرف غير المرئية</button>
+        <button class="btn sm" type="button" data-tool="clean">نظّف الأحرف غير المرئية</button>
+      </div>
+      <div class="insp" id="insp" hidden></div>
+      <p class="hint" style="margin-top:12px">لمبرمجي الويب: انسخ النص بصيغة تصلح للصفحات والأكواد.</p>
+      <div class="trow">
+        <button class="btn sm" type="button" data-tool="exphtml">نسخ كـ HTML (&amp;#x…;)</button>
+        <button class="btn sm" type="button" data-tool="expjs">نسخ كـ JavaScript (\u…)</button>
+      </div>
+    </details>
+
+    <details class="tools">
+      <summary>عبارات جاهزة</summary>
+      <div class="trow" id="phrases"></div>
+    </details>
+
+    <details class="tools" id="savedBox" hidden>
+      <summary>نصوصي المحفوظة</summary>
+      <div class="trow" id="saved"></div>
+    </details>
+  </section>
+
+  <div class="layout">
+    <section>
+      <div class="listhead"><span><span id="listTitle"></span> · <span id="listCount"></span></span><span class="acts" id="listActs"></span></div>
+      <div class="grid" id="grid" data-size="m" role="list"></div>
+    </section>
+    <aside class="detail" id="detail" aria-live="polite"></aside>
+  </div>
+
+  <p class="foot">ظهور بعض الرموز يعتمد على الخطوط المثبتة في جهازك. الصفحة تعمل داخل المتصفح ولا ترسل شيئاً إلى أي خادم. المفضلة والقوائم والنصوص المحفوظة تُحفظ في هذا المتصفح فقط.</p>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+
+const CATS=[
+  {id:'letters',name:'الحروف'},
+  {id:'extra',name:'حروف إضافية'},
+  {id:'marks',name:'التشكيل'},
+  {id:'quran',name:'علامات قرآنية'},
+  {id:'relig',name:'رموز إسلامية'},
+  {id:'punct',name:'الترقيم'},
+  {id:'nums',name:'الأرقام'},
+  {id:'cur',name:'العملات'},
+  {id:'sym',name:'رموز عامة'},
+  {id:'math',name:'رياضيات وعلوم'},
+  {id:'typo',name:'كتابة وويب'},
+  {id:'orn',name:'زخارف وفواصل'},
+  {id:'ctrl',name:'اتجاه النص'}
+];
+const CATNAME={all:'الكل',fav:'المفضلة',recent:'الأخيرة'};
+CATS.forEach(c=>{CATNAME[c.id]=c.name;});
+
+const D={
+letters:[
+['0621','همزة','Hamza'],['0622','ألف مدّ','Alef with madda above'],['0623','ألف بهمزة فوق','Alef with hamza above'],
+['0624','واو بهمزة','Waw with hamza above'],['0625','ألف بهمزة تحت','Alef with hamza below'],['0626','ياء بهمزة','Yeh with hamza above'],
+['0627','ألف','Alef'],['0628','باء','Beh'],['0629','تاء مربوطة','Teh marbuta'],['062A','تاء','Teh'],['062B','ثاء','Theh'],
+['062C','جيم','Jeem'],['062D','حاء','Hah'],['062E','خاء','Khah'],['062F','دال','Dal'],['0630','ذال','Thal'],['0631','راء','Reh'],
+['0632','زاي','Zain'],['0633','سين','Seen'],['0634','شين','Sheen'],['0635','صاد','Sad'],['0636','ضاد','Dad'],['0637','طاء','Tah'],
+['0638','ظاء','Zah'],['0639','عين','Ain'],['063A','غين','Ghain'],['0641','فاء','Feh'],['0642','قاف','Qaf'],['0643','كاف','Kaf'],
+['0644','لام','Lam'],['0645','ميم','Meem'],['0646','نون','Noon'],['0647','هاء','Heh'],['0648','واو','Waw'],
+['0649','ألف مقصورة','Alef maksura'],['064A','ياء','Yeh'],['0671','ألف وصل','Alef wasla'],['FEFB','لام ألف (حرف مركّب)','Lam Alef ligature']
+],
+extra:[
+['067E','باء بثلاث نقاط','Peh'],['0686','جيم بثلاث نقاط','Tcheh'],['0698','زاي بثلاث نقاط','Jeh'],['06AF','كاف فارسية (گ)','Gaf'],
+['06A9','كاف (شكل فارسي)','Keheh'],['06A4','فاء بثلاث نقاط','Veh'],['06CC','ياء فارسية','Farsi Yeh'],['0679','تاء مرتفعة (أردو)','Tteh'],
+['0688','دال مرتفعة (أردو)','Ddal'],['0691','راء مرتفعة (أردو)','Rreh'],['06BE','هاء مزدوجة العينين','Heh doachashmee'],
+['06C1','هاء (أردو)','Heh goal'],['06BA','نون غنّة','Noon ghunna'],['06D2','ياء بارّي (أردو)','Yeh barree']
+],
+marks:[
+['064E','فتحة','Fatha'],['064F','ضمة','Damma'],['0650','كسرة','Kasra'],['0651','شدّة','Shadda'],['0652','سكون','Sukun'],
+['064B','فتحتان (تنوين فتح)','Fathatan'],['064C','ضمتان (تنوين ضم)','Dammatan'],['064D','كسرتان (تنوين كسر)','Kasratan'],
+['0653','مدّة','Maddah above'],['0654','همزة فوق الحرف','Hamza above'],['0655','همزة تحت الحرف','Hamza below'],
+['0670','ألف خنجرية','Superscript alef'],['0656','ألف صغيرة تحت الحرف','Subscript alef'],['0657','ضمة مقلوبة','Inverted damma'],
+['0658','علامة غنّة','Mark noon ghunna'],['0640','تطويل (كشيدة)','Tatweel']
+],
+quran:[
+['06D6','صلى: الوصل أولى','Small high ligature sad with lam with alef maksura'],
+['06D7','قلى: الوقف أولى','Small high ligature qaf with lam with alef maksura'],
+['06D8','م: وقف لازم','Small high meem initial form'],
+['06D9','لا: النهي عن الوقف','Small high lam alef'],
+['06DA','ج: وقف جائز','Small high jeem'],
+['06DB','ثلاث نقاط: وقف المعانقة','Small high three dots'],
+['06DC','س: سكتة','Small high seen'],
+['0618','فتحة صغيرة','Small fatha'],['0619','ضمة صغيرة','Small damma'],['061A','كسرة صغيرة','Small kasra'],
+['06DF','صفر مستدير صغير','Small high rounded zero'],['06E1','جزم قرآني (رأس خاء صغير)','Small high dotless head of khah'],
+['06E2','ميم صغيرة عليا (إقلاب)','Small high meem isolated form'],['06E3','سين صغيرة سفلى','Small low seen'],
+['06E4','مدّة قرآنية','Small high madda'],['06E5','واو صغيرة','Small waw'],['06E6','ياء صغيرة','Small yeh'],
+['06E7','ياء صغيرة عليا','Small high yeh'],['06E8','نون صغيرة عليا','Small high noon'],['06ED','ميم صغيرة سفلى','Small low meem'],
+['06DD','علامة نهاية الآية','End of ayah'],
+['06DE','بداية الربع (رُبع الحزب)','Start of rub el hizb'],
+['06E9','موضع سجدة التلاوة','Place of sajdah'],
+['FD3F','قوس مزخرف للفتح ﴿','Ornate right parenthesis'],
+['FD3E','قوس مزخرف للإغلاق ﴾','Ornate left parenthesis']
+],
+relig:[
+['FDFD','البسملة','Bismillah ar-Rahman ar-Rahim ligature'],['FDF2','لفظ الجلالة','Allah ligature'],
+['FDFA','صلى الله عليه وسلم','Sallallahou alayhe wasallam ligature'],['FDFB','جلّ جلاله','Jallajallalouhou ligature'],
+['FDF3','أكبر','Akbar ligature'],['FDF4','محمد','Mohammad ligature'],['FDF5','سلام','Salam ligature'],
+['FDF6','رسول','Rasoul ligature'],['FDF7','عليه','Alayhe ligature'],['FDF8','وسلم','Wasallam ligature'],['FDF9','صلى','Salla ligature'],
+['0610','علامة: صلى الله عليه وسلم','Sign sallallahou alayhe wassallam'],['0611','علامة: عليه السلام','Sign alayhe assallam'],
+['0612','علامة: رحمه الله','Sign rahmatullah alayhe'],['0613','علامة: رضي الله عنه','Sign radi allahou anhu'],
+['0614','علامة التخلّص','Sign takhallus'],['262A','هلال ونجمة','Star and crescent'],
+['1F54C','مسجد','Mosque'],['1F54B','الكعبة','Kaaba'],['1F319','هلال','Crescent moon'],['1F4FF','مسبحة','Prayer beads'],
+['1F932','أكفّ مرفوعة للدعاء','Palms up together']
+],
+punct:[
+['060C','فاصلة عربية','Arabic comma'],['061B','فاصلة منقوطة','Arabic semicolon'],['061F','علامة استفهام','Arabic question mark'],
+['061E','ثلاث نقاط (نهاية فقرة)','Arabic triple dot punctuation mark'],['060D','فاصلة التاريخ','Arabic date separator'],
+['066A','نسبة مئوية','Arabic percent sign'],['066B','فاصل عشري','Arabic decimal separator'],['066C','فاصل الآلاف','Arabic thousands separator'],
+['066D','نجمة عربية','Arabic five pointed star'],['06D4','نقطة (أردو)','Arabic full stop'],
+['00AB','علامة اقتباس «','Left guillemet'],['00BB','علامة اقتباس »','Right guillemet'],
+['201C','تنصيص مزدوج “','Left double quotation mark'],['201D','تنصيص مزدوج ”','Right double quotation mark'],
+['2018','تنصيص مفرد ‘','Left single quotation mark'],['2019','تنصيص مفرد ’','Right single quotation mark'],
+['2026','ثلاث نقاط (حذف)','Ellipsis'],['2013','شرطة قصيرة','En dash'],['2014','شرطة طويلة','Em dash'],
+['00B7','نقطة وسطية','Middle dot'],['2022','نقطة تعداد','Bullet']
+],
+nums:[],
+cur:[
+['FDFC','ريال (رمز قديم)','Rial sign'],['20C1','ريال سعودي (الرمز الجديد)','Saudi riyal sign'],['060B','أفغاني','Afghani sign'],
+['20AC','يورو','Euro sign'],['0024','دولار','Dollar sign'],['00A3','جنيه إسترليني','Pound sign'],['00A5','ين / يوان','Yen sign'],
+['20B9','روبية هندية','Indian rupee sign'],['20BA','ليرة تركية','Turkish lira sign'],['00A2','سنت','Cent sign'],['20BF','بتكوين','Bitcoin sign']
+],
+sym:[
+['00D7','ضرب','Multiplication sign'],['00F7','قسمة','Division sign'],['00B1','زائد أو ناقص','Plus-minus sign'],['2260','لا يساوي','Not equal to'],
+['2248','يساوي تقريباً','Almost equal to'],['2264','أصغر من أو يساوي','Less-than or equal to'],['2265','أكبر من أو يساوي','Greater-than or equal to'],
+['221E','ما لا نهاية','Infinity'],['221A','جذر تربيعي','Square root'],['03C0','باي','Pi'],['2211','مجموع','Summation'],
+['00BD','نصف','One half'],['00BC','ربع','One quarter'],['00BE','ثلاثة أرباع','Three quarters'],['00B0','درجة','Degree sign'],
+['00A9','حقوق النشر','Copyright sign'],['00AE','علامة مسجّلة','Registered sign'],['2122','علامة تجارية','Trade mark sign'],
+['2192','سهم لليمين','Rightwards arrow'],['2190','سهم لليسار','Leftwards arrow'],['2191','سهم للأعلى','Upwards arrow'],
+['2193','سهم للأسفل','Downwards arrow'],['21D2','سهم مزدوج لليمين','Rightwards double arrow'],
+['2713','علامة صح','Check mark'],['2717','علامة خطأ','Ballot X'],['2605','نجمة ممتلئة','Black star'],['2606','نجمة فارغة','White star'],
+['2665','قلب','Black heart suit'],['2726','نجمة رباعية','Black four pointed star'],
+['2610','مربع فارغ','Ballot box'],['2611','مربع مع صح','Ballot box with check'],['2612','مربع مع إكس','Ballot box with x'],
+['260E','هاتف','Black telephone'],['2709','ظرف رسالة','Envelope'],['25CF','دائرة ممتلئة','Black circle'],
+['25A0','مربع ممتلئ','Black square'],['25C6','معيّن ممتلئ','Black diamond'],['25B6','مثلث لليمين','Black right-pointing triangle']
+],
+math:[
+['00B2','أُسّ 2','Superscript two'],['00B3','أُسّ 3','Superscript three'],['00B9','أُسّ 1','Superscript one'],['2074','أُسّ 4','Superscript four'],
+['2080','دليل سفلي 0','Subscript zero'],['2081','دليل سفلي 1','Subscript one'],['2082','دليل سفلي 2','Subscript two'],['2083','دليل سفلي 3','Subscript three'],
+['2202','تفاضل جزئي','Partial differential'],['2206','دلتا (تغيّر)','Increment'],['222B','تكامل','Integral'],
+['2208','ينتمي إلى','Element of'],['2209','لا ينتمي إلى','Not an element of'],['2229','تقاطع','Intersection'],['222A','اتحاد','Union'],
+['2282','مجموعة جزئية','Subset of'],['2205','مجموعة خالية','Empty set'],['2200','لكل','For all'],['2203','يوجد','There exists'],
+['2234','إذن','Therefore'],['2235','لأن','Because'],['2261','مطابق لـ','Identical to'],['221D','يتناسب مع','Proportional to'],
+['03A9','أوميغا','Omega'],['03B1','ألفا','Alpha'],['03B2','بيتا','Beta'],['03B3','غاما','Gamma'],['03B8','ثيتا','Theta'],
+['03BB','لامبدا','Lambda'],['03C3','سيغما','Sigma'],['2126','أوم','Ohm sign'],['2103','درجة مئوية','Degree Celsius'],['2109','درجة فهرنهايت','Degree Fahrenheit'],
+['2160','رقم روماني 1','Roman numeral one'],['2161','رقم روماني 2','Roman numeral two'],['2162','رقم روماني 3','Roman numeral three'],['2163','رقم روماني 4','Roman numeral four']
+],
+typo:[
+['00A0','مسافة غير منقسمة','No-break space'],['202F','مسافة ضيقة غير منقسمة','Narrow no-break space'],
+['2009','مسافة رفيعة','Thin space'],['2002','مسافة بعرض N','En space'],['2003','مسافة بعرض M','Em space'],
+['00AD','واصلة اختيارية','Soft hyphen'],['2011','شرطة غير منقسمة','Non-breaking hyphen'],
+['00A7','علامة القسم','Section sign'],['00B6','علامة الفقرة','Pilcrow sign'],['2020','خنجر','Dagger'],['2021','خنجر مزدوج','Double dagger'],
+['2030','لكل ألف','Per mille sign'],['2032','دقيقة (برايم)','Prime'],['2033','ثانية (برايم مزدوج)','Double prime'],
+['2039','علامة اقتباس مفردة ‹','Single left-pointing angle quotation mark'],['203A','علامة اقتباس مفردة ›','Single right-pointing angle quotation mark'],
+['00A1','علامة تعجب مقلوبة','Inverted exclamation mark'],['00BF','علامة استفهام مقلوبة','Inverted question mark'],
+['2116','علامة الرقم','Numero sign'],['00B5','ميكرو','Micro sign']
+],
+orn:[
+['2741','زهرة ثمانية الأوراق','Eight petalled outlined black florette'],['2756','معيّن مزخرف','Black diamond minus white X'],
+['273F','زهرة سوداء','Black florette'],['2740','زهرة بيضاء','White florette'],['2767','قلب زهري مدوّر','Rotated floral heart bullet'],
+['2619','قلب زهري معكوس','Reversed rotated floral heart bullet'],['2766','قلب زهري','Floral heart'],['2042','علامة ثلاث نجوم','Asterism'],
+['2725','تقاطع مزخرف','Four club-spoked asterisk'],['25C8','معيّن مزدوج','White diamond containing black small diamond'],
+['2550','خط مزدوج','Box drawings double horizontal'],['2500','خط مفرد','Box drawings light horizontal'],['2501','خط عريض','Box drawings heavy horizontal']
+],
+ctrl:[
+['200F','علامة اتجاه من اليمين لليسار (RLM)','Right-to-left mark'],
+['200E','علامة اتجاه من اليسار لليمين (LRM)','Left-to-right mark'],
+['061C','علامة الحرف العربي (ALM)','Arabic letter mark'],
+['200C','فاصل عديم العرض (ZWNJ)','Zero width non-joiner'],
+['200D','رابط عديم العرض (ZWJ)','Zero width joiner'],
+['200B','مسافة عديمة العرض (ZWSP)','Zero width space'],
+['2067','عزل اتجاه من اليمين لليسار (RLI)','Right-to-left isolate'],
+['2066','عزل اتجاه من اليسار لليمين (LRI)','Left-to-right isolate'],
+['2068','عزل الاتجاه حسب أول حرف (FSI)','First strong isolate'],
+['2069','نهاية العزل (PDI)','Pop directional isolate'],
+['202B','تضمين من اليمين لليسار (RLE)','Right-to-left embedding'],
+['202A','تضمين من اليسار لليمين (LRE)','Left-to-right embedding'],
+['202C','نهاية التضمين (PDF)','Pop directional formatting'],
+['202E','فرض اتجاه من اليمين لليسار (RLO)','Right-to-left override'],
+['202D','فرض اتجاه من اليسار لليمين (LRO)','Left-to-right override'],
+['FEFF','علامة ترتيب البايت (BOM)','Zero width no-break space']
+]
+};
+const DA=['صفر','واحد','اثنان','ثلاثة','أربعة','خمسة','ستة','سبعة','ثمانية','تسعة'];
+const DE=['zero','one','two','three','four','five','six','seven','eight','nine'];
+for(let i=0;i<10;i++)D.nums.push([(0x660+i).toString(16).toUpperCase().padStart(4,'0'),'الرقم '+DA[i]+' (هندي)','Arabic-Indic digit '+DE[i]]);
+for(let i=0;i<10;i++)D.nums.push([(0x6F0+i).toString(16).toUpperCase().padStart(4,'0'),'الرقم '+DA[i]+' (فارسي)','Extended Arabic-Indic digit '+DE[i]]);
+
+const KW={
+'0651':'تضعيف تشديد shadda','064B':'تنوين','064C':'تنوين','064D':'تنوين','064E':'حركة','064F':'حركة','0650':'حركة','0652':'جزم',
+'FDFA':'صلعم النبي محمد عليه الصلاة والسلام','FDF2':'الله','FDFD':'بسم الله الرحمن الرحيم','FDFB':'جل جلاله','20C1':'ريال سعودي SAR',
+'FDFC':'ريال rial','00AB':'اقتباس guillemet','00BB':'اقتباس guillemet','060C':'comma','061F':'question','0640':'كشيدة مد تطويل kashida',
+'0629':'تاء مربوطة','0649':'ألف لينة','200F':'RLM rtl','200E':'LRM ltr','200C':'ZWNJ','200D':'ZWJ','262A':'رمضان إسلام العيد',
+'1F54C':'جامع مصلى islam mosque','1F54B':'مكة حج عمرة kaaba','1F319':'رمضان هلال crescent','1F4FF':'تسبيح سبحة','1F932':'دعاء يدين',
+'0610':'صلعم','0611':'عليه السلام','0612':'رحمه الله','0613':'رضي الله عنه','06DE':'حزب ربع','06E9':'سجدة','06DD':'آية نهاية رقم',
+'00A0':'nbsp','00AD':'shy','2013':'en dash','2014':'em dash','061C':'ALM','FEFF':'BOM','200B':'ZWSP','0671':'همزة وصل'
+};
+const NOTE={
+'20C1':'أُضيف هذا الرمز في Unicode 17، وقد لا يظهر في بعض الخطوط والأنظمة.',
+'0640':'يمدّ الحرف شكلاً دون تغيير معناه، وتوضع عليه علامات التشكيل أحياناً.',
+'200F':'حرف غير مرئي. يُصلح تبعثر علامات الترقيم في الجمل المختلطة عربي وإنجليزي.',
+'200E':'حرف غير مرئي. يثبّت الاتجاه من اليسار لليمين عند كتابة نص إنجليزي داخل جملة عربية.',
+'061C':'حرف غير مرئي يؤثر على ترتيب الأرقام وعلامات الترقيم بجوار النص العربي.',
+'200C':'حرف غير مرئي. يفصل بين حرفين كان يجب أن يتصلا (مفيد في الفارسية والأردو).',
+'200D':'حرف غير مرئي. يجبر الحرفين على الاتصال.',
+'200B':'حرف غير مرئي. يسمح بكسر السطر دون ظهور مسافة.',
+'202E':'تنبيه أمني: يُستخدم أحياناً لإخفاء أسماء الملفات والأكواد. لا تلصقه في نص لا تعرف مصدره.',
+'202D':'يفرض الاتجاه على ما بعده، ويُستخدم أحياناً في الخداع. استعمله بحذر.',
+'00A0':'في Word: Ctrl+Shift+Space. يمنع انقسام الكلمتين على سطرين.',
+'00AD':'يظهر فقط حين تنكسر الكلمة عند نهاية السطر.',
+'06DD':'تحيط بالرقم الذي يليها (مثل ۝١٢) في خطوط مثل Amiri. يختلف ظهورها بين البرامج.',
+'FDFD':'قد تحتاج خطاً يدعمها مثل Amiri. في Word جرّب الخط Traditional Arabic أو Amiri.',
+'FDFA':'قد تحتاج خطاً يدعمه مثل Amiri أو Traditional Arabic.',
+'FEFF':'يظهر أحياناً أول الملفات النصية ويسبب مسافة غريبة. نظّفه بأداة التنظيف.'
+};
+const INV={'200F':'RLM','200E':'LRM','061C':'ALM','200C':'ZWNJ','200D':'ZWJ','200B':'ZWSP','2067':'RLI','2066':'LRI','2068':'FSI','2069':'PDI',
+'202B':'RLE','202A':'LRE','202C':'PDF','202E':'RLO','202D':'LRO','FEFF':'BOM','00A0':'NBSP','202F':'NNBSP','2009':'THIN','2002':'ENSP','2003':'EMSP','00AD':'SHY'};
+const NAMED={'00A9':'copy','00AE':'reg','2122':'trade','20AC':'euro','00A3':'pound','00A5':'yen','00A2':'cent','0024':'dollar','00AB':'laquo','00BB':'raquo',
+'201C':'ldquo','201D':'rdquo','2018':'lsquo','2019':'rsquo','2026':'hellip','2013':'ndash','2014':'mdash','00B7':'middot','2022':'bull',
+'00D7':'times','00F7':'divide','00B1':'plusmn','2260':'ne','2248':'asymp','2264':'le','2265':'ge','221E':'infin','221A':'radic','03C0':'pi',
+'2211':'sum','00BD':'frac12','00BC':'frac14','00BE':'frac34','00B0':'deg','2192':'rarr','2190':'larr','2191':'uarr','2193':'darr','21D2':'rArr',
+'2665':'hearts','2713':'check','2717':'cross','2605':'starf','2606':'star','200F':'rlm','200E':'lrm','200C':'zwnj','200D':'zwj','00A0':'nbsp',
+'00AD':'shy','00A7':'sect','00B6':'para','2020':'dagger','2021':'Dagger','2030':'permil','2032':'prime','2033':'Prime','2039':'lsaquo',
+'203A':'rsaquo','00A1':'iexcl','00BF':'iquest','2116':'numero','00B5':'micro','2002':'ensp','2003':'emsp','2009':'thinsp','00B2':'sup2',
+'00B3':'sup3','00B9':'sup1','2202':'part','222B':'int','2208':'isin','2209':'notin','2229':'cap','222A':'cup','2282':'sub','2205':'empty',
+'2200':'forall','2203':'exist','2234':'there4','2235':'because','2261':'equiv','221D':'prop','03A9':'Omega','03B1':'alpha','03B2':'beta',
+'03B3':'gamma','03B8':'theta','03BB':'lambda','03C3':'sigma'};
+
+const SIM=[
+['0627','0623','0625','0622','0671'],['0647','0629','06BE','06C1'],['0649','064A','06CC','0626','06D2'],['0643','06A9','06AF'],
+['0648','0624'],['0628','067E','062A','062B'],['062C','0686','062D','062E'],['0633','0634','0635','0636'],['0637','0638'],
+['0639','063A'],['0641','0642','06A4'],['0646','06BA'],['0631','0632','0698','0691'],['062F','0630','0688'],
+['064E','064B'],['064F','064C'],['0650','064D'],['060C','061B','061F'],['00AB','00BB','201C','201D'],['2013','2014','0640'],
+['FDFA','0610','FDF9'],['FDFD','FDF2','FDFB'],['200F','200E','061C'],['2066','2067','2068','2069'],['00A0','202F','2009','2002','2003']
+];
+for(let i=0;i<10;i++)SIM.push([(0x660+i).toString(16).toUpperCase().padStart(4,'0'),(0x6F0+i).toString(16).toUpperCase().padStart(4,'0')]);
+
+const DUAL=['0628','062A','062B','062C','062D','062E','0633','0634','0635','0636','0637','0638','0639','063A','0641','0642','0643','0644','0645','0646','0647','064A','0626','067E','0686','06AF','06A9','06A4','06CC'];
+const RIGHTJ=['0622','0623','0624','0625','0627','062F','0630','0631','0632','0648','0629','0649','0698','0688','0691','06D2','0671'];
+
+const BLOCKS=[[0x0000,0x007F,'Basic Latin'],[0x0080,0x00FF,'Latin-1 Supplement'],[0x0370,0x03FF,'Greek and Coptic'],[0x0600,0x06FF,'Arabic'],
+[0x2000,0x206F,'General Punctuation'],[0x2070,0x209F,'Superscripts and Subscripts'],[0x20A0,0x20CF,'Currency Symbols'],[0x2100,0x214F,'Letterlike Symbols'],
+[0x2150,0x218F,'Number Forms'],[0x2190,0x21FF,'Arrows'],[0x2200,0x22FF,'Mathematical Operators'],[0x2500,0x257F,'Box Drawing'],
+[0x25A0,0x25FF,'Geometric Shapes'],[0x2600,0x26FF,'Miscellaneous Symbols'],[0x2700,0x27BF,'Dingbats'],[0xFB50,0xFDFF,'Arabic Presentation Forms-A'],
+[0xFE70,0xFEFF,'Arabic Presentation Forms-B'],[0x1F300,0x1F5FF,'Misc Symbols and Pictographs'],[0x1F900,0x1F9FF,'Supplemental Symbols and Pictographs']];
+function blockOf(cp){for(const b of BLOCKS)if(cp>=b[0]&&cp<=b[1])return b[2];return 'Unicode';}
+
+const PHRASES=[
+'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ','السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ','صلى الله عليه وسلم','ﷺ','ﷻ','رضي الله عنه','رحمه الله',
+'جلّ جلاله','تبارك وتعالى','الحمد لله','سبحان الله','لا إله إلا الله','الله أكبر','لا حول ولا قوة إلا بالله','إن شاء الله','ما شاء الله',
+'جزاك الله خيراً','بارك الله فيك','كل عام وأنتم بخير','تقبّل الله طاعاتكم'
+];
+const FONTS=[
+{id:'amiri',n:'أميري',f:'"Amiri"'},{id:'naskh',n:'نسخ',f:'"Noto Naskh Arabic"'},{id:'kufi',n:'كوفي',f:'"Reem Kufi"'},
+{id:'ruqaa',n:'رقعة',f:'"Aref Ruqaa"'},{id:'sch',n:'شهرزاد',f:'"Scheherazade New"'},{id:'cairo',n:'كايرو',f:'"Cairo"'}
+];
+const FALLBACK=',"Amiri","Noto Naskh Arabic","Traditional Arabic","Segoe UI Symbol","Apple Symbols","Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji",serif';
+
+function isMark(c){return (c>=0x64B&&c<=0x65F)||c===0x670||(c>=0x6D6&&c<=0x6DC)||(c>=0x610&&c<=0x61A)||(c>=0x6DF&&c<=0x6E8)||c===0x6ED;}
+function norm(s){
+  return String(s).toLowerCase().replace(/[\u064B-\u065F\u0670\u0640]/g,'')
+    .replace(/[أإآٱ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/\s+/g,' ').trim();
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+const hex4=cp=>cp.toString(16).toUpperCase().padStart(4,'0');
+
+const ITEMS=[],BYID={};
+CATS.forEach(c=>{
+  (D[c.id]||[]).forEach(r=>{
+    const cp=parseInt(r[0],16);
+    const it={id:r[0],cp:cp,ch:String.fromCodePoint(cp),ar:r[1],en:r[2],cat:c.id,mark:isMark(cp)&&r[0]!=='06DD',inv:INV[r[0]]||'',note:NOTE[r[0]]||''};
+    it.hay=norm([it.ar,it.en,c.name,KW[r[0]]||'',r[0]].join(' '));
+    ITEMS.push(it);BYID[it.id]=it;
+  });
+});
+
+/* state */
+const KEY='fahd-rumooz-v1';
+const state={cat:'all',q:'',sel:'FDFD',favs:[],recent:[],lists:[],saved:[],font:'amiri',size:'m',theme:''};
+try{
+  const sv=JSON.parse(localStorage.getItem(KEY)||'null');
+  if(sv){
+    state.favs=(sv.favs||[]).filter(x=>BYID[x]);
+    state.recent=(sv.recent||[]).filter(x=>BYID[x]);
+    state.lists=(sv.lists||[]).map(l=>({n:String(l.n||'قائمة'),ids:(l.ids||[]).filter(x=>BYID[x])}));
+    state.saved=(sv.saved||[]).filter(x=>typeof x==='string').slice(0,10);
+    if(FONTS.some(f=>f.id===sv.font))state.font=sv.font;
+    if(['s','m','l'].indexOf(sv.size)>-1)state.size=sv.size;
+    if(sv.theme==='dark'||sv.theme==='light')state.theme=sv.theme;
+  }
+}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({favs:state.favs,recent:state.recent,lists:state.lists,saved:state.saved,font:state.font,size:state.size,theme:state.theme}));}catch(e){}}
+
+const el={q:$('q'),chips:$('chips'),grid:$('grid'),detail:$('detail'),title:$('listTitle'),count:$('listCount'),acts:$('listActs'),compose:$('compose'),toast:$('toast'),wrap:$('wrap')};
+
+function plainDisp(it){return it.inv?it.inv:(it.mark?'\u0640'+it.ch:it.ch);}
+function disp(it){return it.inv?'<span class="tag">'+it.inv+'</span>':esc(plainDisp(it));}
+
+function catIds(){
+  if(state.cat==='fav')return state.favs;
+  if(state.cat==='recent')return state.recent;
+  if(/^L\d+$/.test(state.cat)){const l=state.lists[+state.cat.slice(1)];return l?l.ids:[];}
+  return null;
+}
+function visible(){
+  const q=state.q.trim();
+  if(q){
+    const nq=norm(q),single=Array.from(q).length===1;
+    const m=q.match(/^(u\+|0x|\\u)?([0-9a-f]{2,6})$/i),pref=/^(u\+|0x|\\u)/i.test(q);
+    const hx=m?m[2].toLowerCase().replace(/^0+/,''):'';
+    return ITEMS.filter(it=>{
+      if(single&&it.ch===q)return true;
+      if(m&&hx&&(pref||m[2].length>=3)&&it.id.toLowerCase().indexOf(hx)>-1)return true;
+      return nq?it.hay.indexOf(nq)>-1:false;
+    });
+  }
+  const ids=catIds();
+  if(ids)return ids.map(x=>BYID[x]).filter(Boolean);
+  if(state.cat==='all')return ITEMS;
+  return ITEMS.filter(it=>it.cat===state.cat);
+}
+
+/* chips */
+function renderChips(){
+  const q=state.q.trim();
+  const list=[{id:'all',n:'الكل',c:ITEMS.length},{id:'fav',n:'المفضلة',c:state.favs.length},{id:'recent',n:'الأخيرة',c:state.recent.length}];
+  state.lists.forEach((l,i)=>list.push({id:'L'+i,n:l.n,c:l.ids.length}));
+  CATS.forEach(c=>list.push({id:c.id,n:c.name,c:(D[c.id]||[]).length}));
+  el.chips.innerHTML=list.map(c=>'<button type="button" class="chip" data-cat="'+c.id+'" aria-pressed="'+(!q&&state.cat===c.id)+'">'+esc(c.n)+' <small>'+c.c+'</small></button>').join('')+
+    '<button type="button" class="chip add" id="addListBtn">＋ قائمة</button>';
+}
+
+/* grid */
+function cellHTML(it){
+  const fav=state.favs.indexOf(it.id)>-1;
+  return '<button type="button" role="listitem" class="cell'+(it.id===state.sel?' sel':'')+'" data-id="'+it.id+'" title="'+esc(it.ar)+' · U+'+it.id+'" aria-label="'+esc(it.ar)+'">'+
+    '<span class="gl">'+disp(it)+'</span><span class="cd" dir="ltr">'+it.id+'</span>'+(fav?'<i class="fv"></i>':'')+'</button>';
+}
+let delArm=0;
+function renderGrid(){
+  const items=visible(),q=state.q.trim();
+  let title;
+  if(q)title='نتائج البحث عن «'+q+'»';
+  else if(/^L\d+$/.test(state.cat)){const l=state.lists[+state.cat.slice(1)];title=l?l.n:'القائمة';}
+  else title=CATNAME[state.cat];
+  el.title.textContent=title;
+  el.count.textContent=items.length+' رمز';
+  let acts='';
+  const ids=catIds();
+  if(!q&&ids&&(state.cat==='fav'||/^L\d+$/.test(state.cat))){
+    if(items.length)acts+='<button type="button" class="btn sm" data-lact="copyall">نسخ رموز القائمة</button>';
+    if(/^L\d+$/.test(state.cat))acts+='<button type="button" class="btn sm" data-lact="del">'+(delArm?'اضغط للتأكيد':'حذف القائمة')+'</button>';
+  }
+  el.acts.innerHTML=acts;
+  if(!items.length){
+    let msg;
+    if(q)msg='لا نتائج لـ «'+q+'». جرّب اسماً آخر مثل «شدة» أو الكود U+0651.';
+    else if(state.cat==='fav')msg='لا توجد مفضلة بعد. افتح أي رمز واضغط «أضف للمفضلة».';
+    else if(/^L\d+$/.test(state.cat))msg='القائمة فارغة. افتح أي رمز وأضفه إليها من قسم «القوائم».';
+    else msg='ستظهر هنا الرموز التي تنسخها.';
+    el.grid.innerHTML='<div class="empty">'+esc(msg)+'</div>';
+    return;
+  }
+  el.grid.innerHTML=items.map(cellHTML).join('');
+}
+
+/* detail */
+function starSVG(){return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>';}
+function codeRows(it){
+  const cp=it.cp,h=it.id.toLowerCase(),trim=h.replace(/^0+/,'');
+  const rows=[['Unicode','U+'+it.id],['HTML','&#x'+trim+';']];
+  if(NAMED[it.id])rows.push(['HTML (اسم)','&'+NAMED[it.id]+';']);
+  rows.push(['CSS','\\'+h]);
+  rows.push(['JavaScript',cp>0xFFFF?'\\u{'+trim+'}':'\\u'+it.id]);
+  rows.push(['Python',cp>0xFFFF?'\\U'+h.padStart(8,'0'):'\\u'+it.id.toLowerCase()]);
+  rows.push(['Swift','\\u{'+trim+'}']);
+  return rows;
+}
+function renderDetail(keepOpen){
+  const it=BYID[state.sel];if(!it)return;
+  const wasOpen=keepOpen&&el.detail.classList.contains('open');
+  const fav=state.favs.indexOf(it.id)>-1;
+  let shapes='';
+  if(it.cat==='letters'||it.cat==='extra'){
+    const J='\u200D';let forms=null;
+    if(DUAL.indexOf(it.id)>-1)forms=[['منفصل',it.ch],['أول الكلمة',it.ch+J],['وسط الكلمة',J+it.ch+J],['آخر الكلمة',J+it.ch]];
+    else if(RIGHTJ.indexOf(it.id)>-1)forms=[['منفصل',it.ch],['آخر الكلمة',J+it.ch]];
+    if(forms)shapes='<div class="sect"><h3>أشكال الحرف (للعرض فقط)</h3><div class="shapes">'+forms.map(f=>'<div class="shp"><b>'+esc(f[1])+'</b><span>'+f[0]+'</span></div>').join('')+'</div></div>';
+  }
+  const grp=SIM.filter(g=>g.indexOf(it.id)>-1)[0];
+  let sim='';
+  if(grp){
+    const others=grp.filter(x=>x!==it.id&&BYID[x]);
+    if(others.length)sim='<div class="sect"><h3>رموز مشابهة</h3><div class="simrow">'+others.map(x=>{const o=BYID[x];return '<button type="button" data-goto="'+x+'" title="'+esc(o.ar)+'" aria-label="'+esc(o.ar)+'">'+disp(o)+'</button>';}).join('')+'</div></div>';
+  }
+  const keys=[{k:'fav',n:'المفضلة',has:fav}].concat(state.lists.map((l,i)=>({k:'L'+i,n:l.n,has:l.ids.indexOf(it.id)>-1})));
+  const lists='<div class="sect"><h3>القوائم</h3><div class="lrow">'+keys.map(x=>'<button type="button" class="chip" data-lk="'+x.k+'" aria-pressed="'+x.has+'">'+esc(x.n)+'</button>').join('')+
+    (state.lists.length?'':'<span class="note">أنشئ قائمة من زر «＋ قائمة» أعلى الصفحة.</span>')+'</div></div>';
+  const codeTxt=it.id;
+  const word='<details class="tip"><summary>كيف أدخله في Word وصفحات الويب؟</summary><ul>'+
+    '<li><b>Word (ويندوز):</b> اكتب <code>'+codeTxt+'</code> ثم اضغط <code>Alt+X</code>. إن سبقه رقم أو حرف a–f فضع مسافة قبله.</li>'+
+    '<li><b>Word (القائمة):</b> إدراج ← رمز ← رموز أخرى، ثم اكتب الكود في خانة Character code واختر Unicode (hex).</li>'+
+    '<li><b>Word (ماك):</b> إدراج ← رمز متقدم، ثم اكتب الكود.</li>'+
+    '<li><b>صفحات الويب:</b> ضع <code>&lt;meta charset="utf-8"&gt;</code> ثم الصق الرمز نفسه، أو استعمل <code>&amp;#x'+it.id.replace(/^0+/,'').toLowerCase()+';</code>.</li>'+
+    '<li><b>CSS:</b> <code>content:"\\'+it.id.toLowerCase()+'"</code></li></ul></details>';
+  el.detail.innerHTML=
+    '<div class="dhead"><div class="glyphbox"><span class="g">'+disp(it)+'</span></div>'+
+    '<div class="names"><h2>'+esc(it.ar)+'</h2><p><bdi dir="ltr">'+esc(it.en)+'</bdi></p>'+
+    '<p><bdi dir="ltr">U+'+it.id+'</bdi> · '+esc(CATNAME[it.cat])+'</p></div></div>'+
+    '<div class="actions">'+
+      '<button type="button" class="btn primary" data-act="copy">نسخ الرمز</button>'+
+      '<button type="button" class="btn" data-act="add">أضف إلى النص</button>'+
+      '<button type="button" class="btn'+(fav?' favon':'')+'" data-act="fav">'+starSVG()+(fav?'في المفضلة':'أضف للمفضلة')+'</button>'+
+      '<button type="button" class="btn mobonly" data-act="more">تفاصيل</button>'+
+    '</div>'+
+    '<div class="xtra">'+
+      (it.note?'<p class="note">'+esc(it.note)+'</p>':'')+
+      '<div class="codes">'+codeRows(it).map(r=>'<div class="row"><span class="k">'+r[0]+'</span><code dir="ltr">'+esc(r[1])+'</code><button type="button" class="mini" data-copy="'+esc(r[1])+'">نسخ</button></div>').join('')+
+      '<div class="row"><span class="k">الكتلة</span><code dir="ltr">'+esc(blockOf(it.cp))+'</code></div></div>'+
+      shapes+sim+lists+word+
+    '</div>';
+  if(wasOpen)el.detail.classList.add('open');
+}
+
+/* helpers */
+let toastTimer;
+function toast(m){el.toast.textContent=m;el.toast.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{el.toast.hidden=true;},2000);}
+function copyText(t){
+  let p;
+  try{p=navigator.clipboard.writeText(t);}catch(e){p=Promise.reject(e);}
+  return p.then(()=>true,()=>{
+    try{
+      const ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');
+      ta.style.cssText='position:fixed;top:0;left:0;opacity:0';
+      document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');ta.remove();return ok;
+    }catch(e2){return false;}
+  });
+}
+function pushRecent(id){
+  state.recent=[id].concat(state.recent.filter(x=>x!==id)).slice(0,24);save();
+  const rc=el.chips.querySelector('[data-cat="recent"] small');if(rc)rc.textContent=state.recent.length;
+}
+let hashLock=false;
+function select(id){
+  const old=el.grid.querySelector('.cell.sel');if(old)old.classList.remove('sel');
+  state.sel=id;
+  const now=el.grid.querySelector('[data-id="'+id+'"]');if(now)now.classList.add('sel');
+  renderDetail(true);
+  try{hashLock=true;location.hash='s-'+id;setTimeout(()=>{hashLock=false;},0);}catch(e){hashLock=false;}
+}
+function goTo(id){
+  if(!el.grid.querySelector('[data-id="'+id+'"]')){state.cat='all';state.q='';el.q.value='';renderChips();renderGrid();}
+  select(id);
+  const c=el.grid.querySelector('[data-id="'+id+'"]');
+  if(c)c.scrollIntoView({block:'nearest'});
+}
+function copyChar(it){
+  copyText(it.ch).then(ok=>toast(ok?'تم نسخ «'+it.ar+'»':'تعذّر النسخ تلقائياً. حدّد الرمز وانسخه يدوياً.'));
+  pushRecent(it.id);
+}
+
+/* compose */
+const caret={s:0,e:0};
+const rememberCaret=()=>{caret.s=el.compose.selectionStart;caret.e=el.compose.selectionEnd;};
+['select','keyup','click','input','blur','focus'].forEach(ev=>el.compose.addEventListener(ev,rememberCaret));
+const undoStack=[];
+function pushUndo(){undoStack.push(el.compose.value);if(undoStack.length>30)undoStack.shift();}
+function setCompose(v,pos){
+  el.compose.value=v;caret.s=caret.e=(pos==null?v.length:pos);
+  try{el.compose.setSelectionRange(caret.s,caret.e);}catch(x){}
+}
+function insertAtCaret(str){
+  pushUndo();
+  const v=el.compose.value,s=Math.min(caret.s,v.length),e=Math.min(caret.e,v.length);
+  setCompose(v.slice(0,s)+str+v.slice(e),s+str.length);
+}
+setCompose('\u0627\u0644\u0633\u0651\u064E\u0644\u064E\u0627\u0645\u064F \u0639\u064E\u0644\u064E\u064A\u0652\u0643\u064F\u0645\u0652');
+
+const VOW=/[\u064B-\u0650\u0652]/g;
+function applyMark(h){
+  const m=String.fromCharCode(parseInt(h,16));
+  const v=el.compose.value,pos=Math.min(caret.e,v.length);
+  let rs=pos;
+  while(rs>0&&/[\u064B-\u065F\u0670]/.test(v[rs-1]))rs--;
+  if(rs===0||/\s/.test(v[rs-1])){toast('ضع المؤشر بعد حرف أولاً');return;}
+  const run=v.slice(rs,pos);let nr;
+  if(run.indexOf(m)>-1)nr=run.split(m).join('');
+  else if(h==='0651')nr=m+run;
+  else if(h==='0653'||h==='0670')nr=run+m;
+  else nr=run.replace(VOW,'')+m;
+  pushUndo();setCompose(v.slice(0,rs)+nr+v.slice(pos),rs+nr.length);
+}
+const QUICK=[['064E','فتحة'],['064F','ضمة'],['0650','كسرة'],['0652','سكون'],['0651','شدّة'],['064B','فتحتان'],['064C','ضمتان'],['064D','كسرتان'],['0653','مدّة'],['0670','ألف خنجرية']];
+$('quick').innerHTML=QUICK.map(q=>'<button type="button" class="qbtn" data-mark="'+q[0]+'"><b>'+esc('\u0640'+String.fromCharCode(parseInt(q[0],16)))+'</b><span>'+q[1]+'</span></button>').join('');
+$('quick').addEventListener('mousedown',ev=>ev.preventDefault());
+$('quick').addEventListener('click',ev=>{const b=ev.target.closest('[data-mark]');if(b)applyMark(b.dataset.mark);});
+
+$('phrases').innerHTML=PHRASES.map((p,i)=>'<button type="button" class="chip" data-ph="'+i+'">'+esc(p.length>24?p.slice(0,22)+'…':p)+'</button>').join('');
+$('phrases').addEventListener('click',ev=>{const b=ev.target.closest('[data-ph]');if(!b)return;insertAtCaret(PHRASES[+b.dataset.ph]);toast('أُضيفت العبارة إلى النص');});
+
+function renderSaved(){
+  $('savedBox').hidden=!state.saved.length;
+  $('saved').innerHTML=state.saved.map((t,i)=>'<span class="sv"><button type="button" class="chip" data-sv="'+i+'">'+esc(t.length>20?t.slice(0,18)+'…':t)+'</button><button type="button" class="x" data-svdel="'+i+'" aria-label="حذف النص المحفوظ">×</button></span>').join('');
+}
+$('saved').addEventListener('click',ev=>{
+  const d=ev.target.closest('[data-svdel]');
+  if(d){state.saved.splice(+d.dataset.svdel,1);save();renderSaved();return;}
+  const b=ev.target.closest('[data-sv]');
+  if(b){pushUndo();setCompose(state.saved[+b.dataset.sv]);toast('تم تحميل النص');}
+});
+$('cSave').addEventListener('click',()=>{
+  const t=el.compose.value.trim();
+  if(!t){toast('مربع النص فارغ');return;}
+  state.saved=[t].concat(state.saved.filter(x=>x!==t)).slice(0,10);save();renderSaved();toast('تم حفظ النص');
+});
+$('cCopy').addEventListener('click',()=>{
+  const t=el.compose.value;
+  if(!t){toast('مربع النص فارغ');return;}
+  copyText(t).then(ok=>toast(ok?'تم نسخ النص':'تعذّر النسخ تلقائياً. حدّد النص وانسخه يدوياً.'));
+});
+$('cUndo').addEventListener('click',()=>{
+  if(!undoStack.length){toast('لا شيء للتراجع عنه');return;}
+  setCompose(undoStack.pop());
+});
+$('cClear').addEventListener('click',()=>{pushUndo();setCompose('');el.compose.focus();});
+
+/* text tools */
+const INVRE=/[\u00AD\u061C\u200B-\u200F\u202A-\u202E\u2060-\u2069\uFEFF]/g;
+const SPACERE=/[\u00A0\u202F\u2009\u2002\u2003]/g;
+const ALLINV=/[\u00AD\u061C\u200B-\u200F\u202A-\u202E\u2060-\u2069\uFEFF\u00A0\u202F\u2009\u2002\u2003]/g;
+function tagOf(ch){const h=hex4(ch.codePointAt(0));return INV[h]||('U+'+h);}
+function toHTMLEnt(t){return Array.from(t).map(c=>{const cp=c.codePointAt(0);if(c==='&')return '&amp;';if(c==='<')return '&lt;';if(c==='>')return '&gt;';return cp>127?'&#x'+cp.toString(16).toUpperCase()+';':c;}).join('');}
+function toJSEsc(t){return Array.from(t).map(c=>{const cp=c.codePointAt(0);if(cp>0xFFFF)return '\\u{'+cp.toString(16).toUpperCase()+'}';if(cp>127)return '\\u'+hex4(cp);if(c==='\n')return '\\n';return c;}).join('');}
+function inspect(){
+  const v=el.compose.value,box=$('insp'),found=v.match(ALLINV)||[];
+  box.hidden=false;
+  if(!found.length){box.innerHTML='<span>لا توجد أحرف غير مرئية في النص.</span>';return;}
+  const counts={};found.forEach(c=>{const t=tagOf(c);counts[t]=(counts[t]||0)+1;});
+  const summary=Object.keys(counts).map(k=>'<mark class="iv">'+esc(k)+'</mark> × '+counts[k]).join(' ');
+  const prev=esc(v).replace(ALLINV,m=>'<mark class="iv">'+esc(tagOf(m))+'</mark>');
+  const warn=(counts.ZWNJ||counts.ZWJ)?'<span class="note">ZWNJ وZWJ قد تكونان مقصودتين، لذلك لا تحذفهما أداة التنظيف.</span>':'';
+  box.innerHTML='<span>وُجد '+found.length+' حرفاً غير مرئي: '+summary+'</span><div class="prev">'+prev+'</div>'+warn;
+}
+function tool(name){
+  const v=el.compose.value;
+  if(name==='inspect'){inspect();return;}
+  if(name==='exphtml'||name==='expjs'){
+    if(!v){toast('مربع النص فارغ');return;}
+    copyText(name==='exphtml'?toHTMLEnt(v):toJSEsc(v)).then(ok=>toast(ok?'تم النسخ':'تعذّر النسخ تلقائياً'));
+    return;
+  }
+  let out=v,msg='';
+  if(name==='strip'){out=v.replace(/[\u064B-\u065F\u0670]/g,'');msg='تم حذف التشكيل';}
+  else if(name==='tatweel'){out=v.replace(/\u0640/g,'');msg='تم حذف التطويل';}
+  else if(name==='hindi'){out=v.replace(/[0-9\u06F0-\u06F9]/g,c=>{const d=c>='0'&&c<='9'?+c:c.charCodeAt(0)-0x6F0;return String.fromCharCode(0x660+d);});msg='تم التحويل إلى الأرقام الهندية';}
+  else if(name==='persian'){out=v.replace(/[0-9\u0660-\u0669]/g,c=>{const d=c>='0'&&c<='9'?+c:c.charCodeAt(0)-0x660;return String.fromCharCode(0x6F0+d);});msg='تم التحويل إلى الأرقام الفارسية';}
+  else if(name==='west'){out=v.replace(/[\u0660-\u0669\u06F0-\u06F9]/g,c=>{const k=c.charCodeAt(0);return String(k>=0x6F0?k-0x6F0:k-0x660);});msg='تم التحويل إلى الأرقام الغربية';}
+  else if(name==='clean'){
+    let n=0;
+    out=v.replace(INVRE,m=>{if(m==='\u200C'||m==='\u200D')return m;n++;return '';});
+    msg=n?('تم حذف '+n+' حرفاً غير مرئي'):'لا توجد أحرف غير مرئية للحذف';
+  }
+  if(out===v){toast(msg&&name==='clean'?msg:'لا تغيير: لم يُعثر على ما يُحوَّل');if(name==='clean')inspect();return;}
+  pushUndo();setCompose(out);toast(msg);
+  if(name==='clean')inspect();
+}
+document.querySelector('details.tools:nth-of-type(2)').addEventListener('click',ev=>{
+  const b=ev.target.closest('[data-tool]');if(b)tool(b.dataset.tool);
+});
+
+/* controls: font, size, theme */
+function applyFont(){
+  const f=FONTS.filter(x=>x.id===state.font)[0]||FONTS[0];
+  el.wrap.style.setProperty('--glyph',f.f+FALLBACK);
+  $('fontSeg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.font===state.font)));
+}
+$('fontSeg').innerHTML=FONTS.map(f=>'<button type="button" data-font="'+f.id+'" aria-pressed="false">'+f.n+'</button>').join('');
+$('fontSeg').addEventListener('click',ev=>{const b=ev.target.closest('[data-font]');if(!b)return;state.font=b.dataset.font;save();applyFont();});
+function applySize(){
+  el.grid.dataset.size=state.size;
+  $('sizeSeg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.size===state.size)));
+}
+$('sizeSeg').addEventListener('click',ev=>{const b=ev.target.closest('[data-size]');if(!b)return;state.size=b.dataset.size;save();applySize();});
+function isDark(){
+  const t=document.documentElement.getAttribute('data-theme');
+  if(t)return t==='dark';
+  return !!(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+}
+function themeLabel(){$('themeBtn').textContent=isDark()?'الوضع الفاتح':'الوضع الداكن';}
+if(state.theme)document.documentElement.setAttribute('data-theme',state.theme);
+$('themeBtn').addEventListener('click',()=>{
+  const nt=isDark()?'light':'dark';
+  document.documentElement.setAttribute('data-theme',nt);state.theme=nt;save();themeLabel();
+});
+
+/* lists */
+function toggleIn(arr,id){const k=arr.indexOf(id);if(k>-1){arr.splice(k,1);return false;}arr.unshift(id);return true;}
+$('newList').addEventListener('submit',ev=>{
+  ev.preventDefault();
+  const n=$('newListName').value.trim();
+  if(!n){toast('اكتب اسم القائمة أولاً');return;}
+  state.lists.push({n:n,ids:[]});save();
+  $('newListName').value='';$('newList').hidden=true;
+  state.cat='L'+(state.lists.length-1);state.q='';el.q.value='';
+  renderChips();renderGrid();renderDetail(true);toast('تم إنشاء القائمة «'+n+'»');
+});
+
+/* events */
+el.q.addEventListener('input',()=>{state.q=el.q.value;renderChips();renderGrid();});
+el.q.addEventListener('keydown',ev=>{
+  if(ev.key==='Enter'){const r=visible();if(r.length===1){select(r[0].id);copyChar(r[0]);}}
+  else if(ev.key==='Escape'){el.q.value='';state.q='';renderChips();renderGrid();}
+});
+document.addEventListener('keydown',ev=>{
+  if(ev.key==='/'&&!/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)){ev.preventDefault();el.q.focus();el.q.select();}
+});
+el.chips.addEventListener('click',ev=>{
+  if(ev.target.closest('#addListBtn')){const f=$('newList');f.hidden=!f.hidden;if(!f.hidden)$('newListName').focus();return;}
+  const b=ev.target.closest('[data-cat]');if(!b)return;
+  state.cat=b.dataset.cat;state.q='';el.q.value='';delArm=0;
+  renderChips();renderGrid();
+});
+el.acts.addEventListener('click',ev=>{
+  const b=ev.target.closest('[data-lact]');if(!b)return;
+  if(b.dataset.lact==='copyall'){
+    const ids=catIds()||[];
+    copyText(ids.map(x=>BYID[x]).filter(Boolean).map(i=>i.ch).join(' ')).then(ok=>toast(ok?'تم نسخ رموز القائمة':'تعذّر النسخ تلقائياً'));
+  }else if(b.dataset.lact==='del'){
+    if(!delArm){delArm=1;renderGrid();setTimeout(()=>{if(delArm){delArm=0;renderGrid();}},3500);return;}
+    const idx=+state.cat.slice(1);state.lists.splice(idx,1);save();delArm=0;state.cat='all';
+    renderChips();renderGrid();renderDetail(true);toast('تم حذف القائمة');
+  }
+});
+el.grid.addEventListener('click',ev=>{
+  const b=ev.target.closest('[data-id]');if(!b)return;
+  const it=BYID[b.dataset.id];select(it.id);copyChar(it);
+});
+el.grid.addEventListener('keydown',ev=>{
+  const k=ev.key;
+  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].indexOf(k)<0)return;
+  const cur=ev.target.closest('.cell');if(!cur)return;
+  ev.preventDefault();
+  const cells=Array.from(el.grid.querySelectorAll('.cell')),i=cells.indexOf(cur);let next=null;
+  if(k==='ArrowRight')next=cells[i-1];
+  else if(k==='ArrowLeft')next=cells[i+1];
+  else{
+    const r=cur.getBoundingClientRect(),dir=k==='ArrowDown'?1:-1;let bd=1e12;
+    cells.forEach(c=>{const b=c.getBoundingClientRect(),dy=(b.top-r.top)*dir;if(dy>5){const sc=dy*1000+Math.abs(b.left-r.left);if(sc<bd){bd=sc;next=c;}}});
+  }
+  if(next)next.focus();
+});
+el.detail.addEventListener('click',ev=>{
+  const c=ev.target.closest('[data-copy]');
+  if(c){copyText(c.dataset.copy).then(ok=>toast(ok?'تم نسخ الكود':'تعذّر النسخ تلقائياً'));return;}
+  const g=ev.target.closest('[data-goto]');
+  if(g){goTo(g.dataset.goto);return;}
+  const lk=ev.target.closest('[data-lk]');
+  if(lk){
+    const it=BYID[state.sel];let added;
+    if(lk.dataset.lk==='fav')added=toggleIn(state.favs,it.id);
+    else added=toggleIn(state.lists[+lk.dataset.lk.slice(1)].ids,it.id);
+    save();renderChips();renderGrid();renderDetail(true);
+    toast(added?'تمت الإضافة':'تمت الإزالة');return;
+  }
+  const a=ev.target.closest('[data-act]');if(!a)return;
+  const it=BYID[state.sel];
+  if(a.dataset.act==='copy')copyChar(it);
+  else if(a.dataset.act==='add'){insertAtCaret(it.ch);pushRecent(it.id);toast('أُضيف «'+it.ar+'» إلى النص');}
+  else if(a.dataset.act==='more'){el.detail.classList.toggle('open');}
+  else if(a.dataset.act==='fav'){
+    const added=toggleIn(state.favs,it.id);save();renderChips();renderGrid();renderDetail(true);
+    toast(added?'أُضيف إلى المفضلة':'أُزيل من المفضلة');
+  }
+});
+
+function applyHash(){
+  const m=location.hash.match(/^#s-([0-9A-Fa-f]{4,6})$/);
+  if(m&&BYID[m[1].toUpperCase()]&&m[1].toUpperCase()!==state.sel)goTo(m[1].toUpperCase());
+}
+window.addEventListener('hashchange',()=>{if(!hashLock)applyHash();});
+
+applyFont();applySize();themeLabel();renderSaved();
+(function(){
+  const m=location.hash.match(/^#s-([0-9A-Fa-f]{4,6})$/);
+  if(m&&BYID[m[1].toUpperCase()])state.sel=m[1].toUpperCase();
+})();
+renderChips();renderGrid();renderDetail();
+})();
+</script>
+</body>
+</html>
