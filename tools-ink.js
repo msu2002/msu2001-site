@@ -21,7 +21,8 @@ var css='#tools.ink-grid{display:grid;grid-template-columns:1fr;gap:14px}'+
 '#tools.ink-grid>a[data-ink]>div.flex-1{width:100%}'+
 '#tools.ink-grid>a[data-ink]>svg.lucide-arrow-left{position:absolute;inset-inline-end:auto;left:18px;top:20px;opacity:.85}'+
 '.ink-tile{flex:none;width:84px;height:84px;border-radius:26px;padding:19px;background:radial-gradient(circle at 30% 20%,#17a35a,#0a4d2b);box-shadow:0 10px 26px #0009,inset 0 0 0 1.5px #ffffff26}'+
-'.ink-tile svg{width:100%;height:100%;fill:none;stroke:#fff;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;filter:url(#ink-rough)}';
+'.ink-tile svg{width:100%;height:100%;fill:none;stroke:#fff;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;filter:url(#ink-rough)}'+
+'#tools.ink-grid>a[data-ink="rumooz"] .ink-tile{padding:9px}#tools.ink-grid>a[data-ink="rumooz"] .ink-tile svg{filter:none}';
 function key(a){var h=(a.getAttribute('href')||'').replace(/^\.?\/?/,'').replace(/\.html$/,'').replace(/\/$/,'');return ICON[h]?h:null}
 
 var PS={id:"frm-card7",u:"/photo-studio/",k:"فهد فوتو أستديو",t:"فهد فوتو أستديو: تحرير الصور والتصميم",p:"استوديو عربي في المتصفح: تحرير الصور، خطوط عربية بتأثيرات وقوالب جاهزة، توقيع وختم وعلامة مائية وQR، وتصدير PNG وJPG وPDF — بدون حساب وبمعالجة محلية على جهازك."},psOk=0,psTried=0;
