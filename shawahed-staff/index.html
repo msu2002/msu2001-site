@@ -30,6 +30,18 @@
 .clsbox{padding:12px 14px 4px}.clsbox label{display:block;font-weight:700;color:var(--t-d);font-size:15.5px;margin-bottom:4px}
 tr.fx td.v input{background:transparent}
 #done{position:fixed;inset:0;z-index:99998;display:none;align-items:center;justify-content:center;background:#06282ccc;padding:20px}#done.show{display:flex}#done .box{width:min(400px,100%);background:#fff;border-radius:24px;padding:28px 22px;text-align:center;box-shadow:0 20px 60px #0008}#done .ok{width:88px;height:88px;margin:0 auto 10px;border-radius:50%;background:#1fb66b;display:grid;place-items:center}#done h3{font-family:'Noto Kufi Arabic',Cairo,sans-serif;font-weight:800;font-size:24px;color:#1d7d7e;margin:8px 0}#done .path{background:#f4f7f7;border:1.5px solid #cfe3e1;border-radius:14px;padding:10px 14px;text-align:right;line-height:2;font-weight:600;font-size:14.5px;margin:12px 0;word-break:break-word}#done button{width:100%;font:inherit;font-size:17px;font-weight:700;border:0;border-radius:14px;padding:12px;margin-top:8px;cursor:pointer;background:#279a9b;color:#fff}#done button.g{background:#e9eeee;color:#1d7d7e}#done .dmsg{min-height:20px;margin-top:10px;font-size:14.5px;font-weight:700;color:#1d7d7e;line-height:1.7}
+#prev{position:fixed;inset:0;z-index:99997;display:none;align-items:center;justify-content:center;background:#06282ce8;padding:12px}#prev.show{display:flex}
+#prev .pbox{width:min(780px,100%);max-height:94vh;background:#fff;border-radius:22px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px #0009}
+#prev .phd{padding:13px 18px;border-bottom:1.5px solid #cfe3e1;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#prev .phd b{font-family:'Noto Kufi Arabic',Cairo,sans-serif;font-size:17px;color:#1d7d7e}
+#prev .phd span{margin-inline-start:auto;font-size:13.5px;font-weight:700;color:#4a6a69}
+#prev .pbody{overflow:auto;-webkit-overflow-scrolling:touch;padding:14px;background:#eef3f3;display:flex;flex-direction:column;gap:12px}
+#prev .pg{position:relative;background:#fff;border:1.5px solid #cfe3e1;border-radius:12px;overflow:hidden}
+#prev .pg img{display:block;width:100%}
+#prev .pg i{position:absolute;top:8px;inset-inline-start:8px;background:#1d7d7ee6;color:#fff;font-style:normal;font-size:12px;font-weight:700;padding:3px 11px;border-radius:999px}
+#prev .pft{padding:12px 14px;border-top:1.5px solid #cfe3e1;display:flex;gap:8px;flex-wrap:wrap}
+#prev .pft button{flex:1 1 150px;font:inherit;font-size:16px;font-weight:700;border:0;border-radius:14px;padding:12px;cursor:pointer;background:#279a9b;color:#fff}
+#prev .pft button.g{background:#e9eeee;color:#1d7d7e}
 .userbar{display:flex;gap:10px;align-items:center;justify-content:center;font-weight:700;color:#1d7d7e;font-size:14px;margin:8px 0 0}
 </style>
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -174,6 +186,10 @@ html.dk #lock .lnk2,html.dk #lock .adl a{color:#E8C87A}html.dk #lock .adl{border
 html.dk #done{background:#000c}
 html.dk #done .box{background:#0b1a10;border:1.5px solid #C59B3F55}html.dk #done h3{color:#E8C87A}
 html.dk #done .path{background:#0c1d11;border-color:#C59B3F44;color:#FAF7F2}html.dk #done .dmsg{color:#E8C87A}
+html.dk #prev{background:#000d}html.dk #prev .pbox{background:#0b1a10;border:1.5px solid #C59B3F55}
+html.dk #prev .phd,html.dk #prev .pft{border-color:#C59B3F44}html.dk #prev .phd b{color:#E8C87A}html.dk #prev .phd span{color:#cbbb9c}
+html.dk #prev .pbody{background:#071009}html.dk #prev .pg{border-color:#C59B3F44}
+html.dk #prev .pft button{background:#005C29;color:#fff;border:1.5px solid #4ADE8055}html.dk #prev .pft button.g{background:#0c1d11;color:#E8C87A;border-color:#C59B3F55}
 html.dk #done button{background:#005C29;color:#fff;border:1.5px solid #4ADE8055}html.dk #done button.g{background:#0c1d11;color:#E8C87A;border-color:#C59B3F55}
 html.dk .ov{background:#000c}
 html.dk .ov .box{background:#0b1a10;border:1.5px solid #C59B3F55;color:#FAF7F2}
@@ -184,14 +200,14 @@ html.dk .ov td,html.dk .ov th{border-bottom-color:#C59B3F22}html.dk .ov th{backg
 html.dk .ov .t1{background:#005C2944;color:#4ADE80}html.dk .ov .t2{background:#C59B3F22;color:#E8C87A}
 html.dk .ov .cf{background:#0c1d11;color:#FAF7F2}html.dk .ov .er{color:#ff8a80}
 html.dk body{font-weight:500}
-html.dk #lock,html.dk .ov,html.dk #done,html.dk .actions,html.dk #status,html.dk #sheet{font-family:'IBM Plex Sans Arabic','Noto Kufi Arabic',sans-serif;font-weight:500}
-html.dk #lock h2,html.dk .ov h3,html.dk #done h3,html.dk h1{font-family:'Noto Kufi Arabic','IBM Plex Sans Arabic',sans-serif;font-weight:800}
+html.dk #lock,html.dk .ov,html.dk #done,html.dk #prev,html.dk .actions,html.dk #status,html.dk #sheet{font-family:'IBM Plex Sans Arabic','Noto Kufi Arabic',sans-serif;font-weight:500}
+html.dk #lock h2,html.dk .ov h3,html.dk #done h3,html.dk #prev .phd b,html.dk h1{font-family:'Noto Kufi Arabic','IBM Plex Sans Arabic',sans-serif;font-weight:800}
 html.dk #lock h2{font-size:28px}html.dk #lock p{font-size:16px;font-weight:500}
 html.dk #lock label.l,html.dk .ov label{font-size:16px;font-weight:700}
 html.dk #lock input,html.dk .ov input{font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:600}
 html.dk #lock .hintb{font-size:15px;font-weight:500}
 html.dk #lock .lnk2,html.dk #lock .adl a{font-size:16px;font-weight:700}
-html.dk #lock button,html.dk .btn,html.dk .ov .b1,html.dk #done button{font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:700}
+html.dk #lock button,html.dk .btn,html.dk .ov .b1,html.dk #done button,html.dk #prev .pft button{font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:700}
 }
 </style>
 </head>
@@ -201,6 +217,11 @@ html.dk #lock button,html.dk .btn,html.dk .ov .b1,html.dk #done button{font-fami
 <label class="l" for="lkId">اسم المستخدم (السجل المدني)</label><input id="lkId" inputmode="numeric" autocomplete="username" maxlength="10" aria-label="السجل المدني">
 <label class="l" for="lkPw">كلمة المرور</label><input id="lkPw" type="password" autocomplete="current-password" maxlength="40" aria-label="كلمة المرور"><div class="hintb">ℹ️ أول دخول: كلمة المرور هي <b>رقم جوالك المسجّل</b> ويبدأ بصفر</div>
 <label class="eye"><input type="checkbox" id="lkEye"> إظهار كلمة المرور</label><button id="lkGo" type="button">دخول</button><div class="err" id="lkErr"></div><a href="#" class="lnk2" id="lkForgot">نسيت كلمة المرور؟</a><a href="#" class="lnk2" id="lkPwChg">🔑 تغيير كلمة المرور</a><div class="adl">🛠️ <a href="#" id="lkAdm">دخول المسؤول</a></div></div></div>
+<div id="prev" dir="rtl"><div class="pbox">
+  <div class="phd"><b>معاينة النموذج قبل الإرسال</b><span id="pvN"></span></div>
+  <div class="pbody" id="pvBody"></div>
+  <div class="pft"><button id="pvOk" type="button">✔ تأكيد وإرسال</button><button class="g" id="pvBack" type="button">↩︎ رجوع للتعديل</button></div>
+</div></div>
 <div id="done" dir="rtl"><div class="box"><div class="ok"><svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h3 id="dnT">تم حفظ شاهدك</h3><div class="path" id="dnP"></div><button id="dnSave" type="button">📥 حفظ في الجهاز</button><button class="g" id="dnShare" type="button">📤 مشاركة</button><div class="dmsg" id="dnM"></div><button class="g" id="dnNew" type="button">إضافة شاهد جديد</button></div></div>
 
 <div id="cp" class="ov" dir="rtl"><div class="box"><h3>🔑 تغيير كلمة المرور</h3>
@@ -360,6 +381,61 @@ function toPdf(canvas){
   }
   return pdf;
 }
+/* ملف PDF واحد: صفحات النموذج ثم كل شاهد في صفحة كاملة */
+async function buildPages(){
+  const canvas=await snapshot();
+  const W=210,H=297,ih=canvas.height*W/canvas.width,out=[];
+  let y=0;
+  while(y<ih-0.5){
+    const sh=Math.min(H,ih-y),c=document.createElement('canvas');
+    c.width=canvas.width;c.height=Math.round(sh*canvas.width/W);
+    const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);
+    x.drawImage(canvas,0,Math.round(y*canvas.width/W),canvas.width,c.height,0,0,c.width,c.height);
+    out.push({u:c.toDataURL('image/jpeg',0.93),fit:false,mm:sh});
+    y+=H;
+  }
+  for(const t of [...thumbs.querySelectorAll('.th img')]){
+    const u=t.src;if(!u)continue;
+    const im=new Image();
+    await new Promise(ok=>{im.onload=ok;im.onerror=ok;im.src=u});
+    if(!im.naturalWidth||!im.naturalHeight)continue;
+    out.push({u:u,fit:true,w:im.naturalWidth,h:im.naturalHeight});
+  }
+  return out;
+}
+function pagesToPdf(pages){
+  const {jsPDF}=window.jspdf,pdf=new jsPDF('p','mm','a4');
+  const W=210,H=297,M=7,aw=W-M*2,ah=H-M*2;
+  pages.forEach((p,i)=>{
+    if(i)pdf.addPage();
+    if(!p.fit){pdf.addImage(p.u,'JPEG',0,0,W,p.mm);return}
+    const k=Math.min(aw/p.w,ah/p.h),w=p.w*k,h=p.h*k;
+    pdf.addImage(p.u,'JPEG',(W-w)/2,(H-h)/2,w,h);
+  });
+  return pdf;
+}
+/* معاينة قبل الإرسال */
+let PAGES=null,PMODE=null;
+function showPreview(pages,mode){
+  PAGES=pages;PMODE=mode;
+  const body=$('#pvBody');body.innerHTML='';
+  pages.forEach((p,i)=>{
+    const d=document.createElement('div');d.className='pg';
+    d.innerHTML='<i>صفحة '+(i+1)+' من '+pages.length+'</i><img alt="معاينة الصفحة">';
+    d.querySelector('img').src=p.u;body.appendChild(d);
+  });
+  $('#pvN').textContent='عدد الصفحات: '+pages.length;
+  $('#pvOk').textContent=mode==='drive'?'✔ تأكيد وإرسال':'✔ تأكيد ومشاركة';
+  body.scrollTop=0;$('#prev').classList.add('show');
+}
+async function review(mode){
+  if(!validate())return;
+  const b=mode==='drive'?$('#btnPdf'):$('#btnSave');b.disabled=true;
+  msg('جاري تجهيز المعاينة…');
+  try{showPreview(await buildPages(),mode);msg('راجع الصفحات ثم اضغط «تأكيد».')}
+  catch(e){msg(e.message||'تعذّر تجهيز المعاينة.','bad')}
+  finally{b.disabled=false}
+}
 function collect(){
   const goals={الفصل:selC.value===OTHER?(cx.value.trim()||OTHER):selC.value,
     'عدد الشواهد (صور)':thumbs.querySelectorAll('.th').length,'ملاحظات':$('#f_notes').value};
@@ -376,12 +452,16 @@ function dl(f){const u=URL.createObjectURL(f),a=document.createElement('a');a.hr
 async function saveAll(files){for(const f of files){dl(f);await new Promise(r=>setTimeout(r,600))}}
 let LAST=null;
 function showDone(t,p){$('#dnT').textContent=t;$('#dnP').innerHTML=p.replace(/(\d{4}-\d\d-\d\d\.pdf)/g,'<bdi dir="ltr">$1</bdi>');$('#done').classList.add('show')}
-$('#btnPdf').onclick=async()=>{if(!validate())return;const b=$('#btnPdf');b.disabled=true;msg('جاري تجهيز ملف PDF بصورك…');
+$('#btnPdf').onclick=()=>review('drive');
+$('#btnSave').onclick=()=>review('share');
+$('#pvBack').onclick=()=>{$('#prev').classList.remove('show');msg('رجعت للتعديل — لم يُرسل شيء.')};
+$('#pvOk').onclick=async()=>{const m=PMODE;$('#prev').classList.remove('show');if(m==='drive')await sendDrive();else await shareNow()};
+async function sendDrive(){const b=$('#btnPdf');b.disabled=true;msg('جاري تجهيز ملف PDF بشواهدك…');
   try{
-    const blob=toPdf(await snapshot()).output('blob'),name=fname(),file=new File([blob],name,{type:'application/pdf'});LAST=[file,...usedDocs()];
+    const blob=pagesToPdf(PAGES).output('blob'),name=fname(),file=new File([blob],name,{type:'application/pdf'});LAST=[file];
     let saved=false,why='';
     if(ENDPOINT){msg('جاري الحفظ في مجلدك على Drive…');
-      try{const body=JSON.stringify({id:USER.id,pw:USER.pw||USER.ph,pn:pnorm(USER.pw||USER.ph),fn:name,pdf:await b64(blob),extra:await Promise.all(usedDocs().map(async d=>({n:d.name,b:await b64(d)})))});
+      try{const body=JSON.stringify({id:USER.id,pw:USER.pw||USER.ph,pn:pnorm(USER.pw||USER.ph),fn:name,pdf:await b64(blob),extra:[]});
         const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body});const j=await r.json();
         if(j&&j.ok)saved=true;else why=(j&&j.error)||'تعذّر الحفظ'}catch(e){why='تعذّر الاتصال بالخادم'}}
     dl(file);
@@ -389,10 +469,10 @@ $('#btnPdf').onclick=async()=>{if(!validate())return;const b=$('#btnPdf');b.disa
     else if(ENDPOINT)showDone('نُزِّل الملف على جوالك','⚠️ لم يُحفظ في Drive: '+esc(why)+'<br>📄 '+esc(name));
     else showDone('نُزِّل الملف على جوالك','📄 '+esc(name)+'<br>الحفظ في Drive غير مفعّل بعد.');
     msg(saved?'تم الحفظ في Drive ✔':'تم تنزيل الملف.',saved?'ok':'');
-  }catch(e){msg(e.message,'bad')}finally{b.disabled=false}};
-$('#btnSave').onclick=async()=>{if(!validate())return;$('#btnSave').disabled=true;msg('جاري التجهيز…');
+  }catch(e){msg(e.message,'bad')}finally{b.disabled=false}}
+async function shareNow(){$('#btnSave').disabled=true;msg('جاري التجهيز…');
   try{
-    const blob=toPdf(await snapshot()).output('blob'),files=[new File([blob],fname(),{type:'application/pdf'}),...usedDocs()];
+    const blob=pagesToPdf(PAGES).output('blob'),files=[new File([blob],fname(),{type:'application/pdf'})];
     if(navigator.canShare&&navigator.canShare({files})){try{await navigator.share({files,title:'شواهد الإداريين'});msg('تمت المشاركة ✔','ok');return}catch(e){if(e&&e.name==='AbortError'){msg('أُلغيت المشاركة.');return}}}
     await saveAll(files);
     msg('تم حفظ الملف في جهازك — شاركه حيث تشاء ✔','ok');
