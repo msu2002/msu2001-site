@@ -103,6 +103,13 @@ input[type=url]::placeholder{color:#6f8678}
 .qrprev.on{display:grid}
 #qrhost{position:fixed;left:0;top:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;z-index:-1}
 .qrprev canvas,.qrprev svg{width:100%!important;height:100%!important;display:block}
+.qrbig{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:16px;background:#0b1a11}
+.qrbig .box{width:168px;height:168px;border-radius:14px;background:#fff;padding:10px;display:none;place-items:center;flex:none}
+.qrbig .box.on{display:grid}
+.qrbig .box img{width:100%;height:100%;display:block}
+.qrbig .side{flex:1 1 210px;min-width:0}
+.qrbig .side b{display:block;font-family:"Noto Kufi Arabic";font-size:15px;margin-bottom:4px}
+.qrbig .side p{margin:0 0 10px;font-size:12.5px;color:var(--mu);line-height:1.7}
 .foot{margin-top:22px;text-align:center;color:var(--mu);font-size:12.5px;line-height:2}
 .sep{height:1px;background:var(--line);margin:14px 0}
 @media(max-width:560px){.card{padding:14px;border-radius:18px}}
@@ -139,16 +146,29 @@ input[type=url]::placeholder{color:#6f8678}
       <label class="chk" style="margin-top:10px"><input type="checkbox" id="useShort" checked> استخدم الرابط المختصر داخل الباركود</label>
     </div>
     <div class="msg" id="m1"></div>
+
+    <div class="qrbig">
+      <div class="box" id="qrprev"></div>
+      <div class="side">
+        <b>الباركود يُصنع تلقائيًا من الرابط</b>
+        <p>يظهر هنا بمجرد كتابة الرابط، وتستطيع تحميله واستخدامه وحده. أمّا وضعه على شهادة أو صورة فخطوة اختيارية بالأسفل.</p>
+        <div class="row" style="margin-top:0">
+          <button class="btn g sm" id="bQr" disabled>تحميل الباركود PNG</button>
+          <button class="btn sm" id="bSvg" disabled>تحميل SVG للطباعة</button>
+        </div>
+      </div>
+    </div>
+
     <div class="note">الاختصار يتم عبر خدمة <b>is.gd</b> العامة (وبديلها TinyURL)، أي أن الرابط يُرسل إليها. أمّا الباركود والصور والملفات فتُعالج داخل جهازك ولا تُرفع لأي خادم.</div>
   </section>
 
   <!-- 2) الملف -->
   <section class="card">
-    <div class="ch"><i>٢</i><h2>الشهادة أو الصورة</h2><span>اختياري</span></div>
+    <div class="ch"><i>٢</i><h2>الشهادة أو الصورة أو الملف</h2><span>خطوة اختيارية</span></div>
     <label class="drop" id="drop">
-      <b>اختر صورة أو ملف PDF</b>
-      <span>JPG · PNG · WEBP · PDF — أو اسحب الملف وأفلته هنا</span>
-      <input type="file" id="file" accept="image/*,application/pdf,.pdf">
+      <b>اختر صورة أو ملف PDF أو Word (اختياري)</b>
+      <span>JPG · PNG · WEBP · PDF · DOCX — أو اسحب الملف وأفلته هنا</span>
+      <input type="file" id="file" accept="image/*,application/pdf,.pdf,.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
     </label>
     <div class="pages" id="pagesBox" style="display:none">
       <span>صفحة الملف:</span>
@@ -230,11 +250,7 @@ input[type=url]::placeholder{color:#6f8678}
           <label class="lb">كلمة تحت الباركود (اختياري)</label>
           <input type="text" id="cap" maxlength="40" placeholder="امسح الرمز للتحقق" style="direction:rtl;text-align:right">
         </div>
-        <div class="fld">
-          <label class="lb">معاينة الباركود</label>
-          <div class="qrprev" id="qrprev"></div>
-          <div id="qrhost" aria-hidden="true"></div>
-        </div>
+        <div id="qrhost" aria-hidden="true"></div>
       </div>
     </div>
 
@@ -242,7 +258,6 @@ input[type=url]::placeholder{color:#6f8678}
     <div class="row">
       <button class="btn g" id="bPng" disabled>تحميل الشهادة صورة PNG</button>
       <button class="btn g" id="bPdf" disabled>تحميل الشهادة PDF</button>
-      <button class="btn" id="bQr" disabled>تحميل الباركود وحده</button>
       <button class="btn" id="bShare" disabled>مشاركة</button>
     </div>
     <div class="msg" id="m3"></div>
@@ -269,7 +284,7 @@ var S={
   url:'', short:'', useShort:true,
   kind:null,            // 'img' | 'pdf'
   img:null,             // Image للمعاينة والتصدير (صورة أو صفحة PDF مُصوَّرة)
-  pdfBytes:null, pdfDoc:null, pageIndex:0, pageCount:1, pagePx:{w:0,h:0},
+  pdfBytes:null, pdfDoc:null, docPages:null, pageIndex:0, pageCount:1, pagePx:{w:0,h:0},
   size:18, padPct:4, pos:'br',
   x:null, y:null,       // نسبة 0..1 لمركز الباركود (null = استخدم المكان الجاهز)
   dot:'square', corner:'square', frame:'soft',
@@ -329,8 +344,10 @@ async function handleFile(f){
   msg('m2','جاري فتح الملف…');
   try{
     if(/pdf$/i.test(f.name)||f.type==='application/pdf'){ await openPdf(f) }
+    else if(/\.docx$/i.test(f.name)){ msg('m2','جاري تحويل ملف Word…'); await openDocx(f) }
+    else if(/\.doc$/i.test(f.name)){ msg('m2','صيغة Word القديمة (doc) غير مدعومة — احفظ الملف بصيغة docx ثم أعد المحاولة.','bad'); return }
     else if(/^image\//.test(f.type)){ await openImg(f) }
-    else { msg('m2','صيغة غير مدعومة — اختر صورة أو ملف PDF.','bad'); return }
+    else { msg('m2','صيغة غير مدعومة — اختر صورة أو ملف PDF أو Word (docx).','bad'); return }
     msg('m2','تم تحميل الملف ✔','ok');
     $('stage').classList.add('on'); enableOut(true); layout();
   }catch(e){ msg('m2', e.message||'تعذّر فتح الملف.','bad') }
@@ -341,12 +358,44 @@ function openImg(f){
     r.onerror=function(){no(new Error('تعذّر قراءة الصورة.'))};
     r.onload=function(){
       var im=new Image();
-      im.onload=function(){ S.kind='img'; S.img=im; S.pdfBytes=null; S.pageCount=1; $('pagesBox').style.display='none'; ok() };
+      im.onload=function(){ S.kind='img'; S.img=im; S.pdfBytes=null; S.docPages=null; S.pageCount=1; $('pagesBox').style.display='none'; ok() };
       im.onerror=function(){no(new Error('تعذّر عرض الصورة.'))};
       im.src=r.result;
     };
     r.readAsDataURL(f);
   });
+}
+function fillPages(n){
+  var sel=$('pageSel'); sel.innerHTML='';
+  for(var i=1;i<=n;i++){ var o=document.createElement('option'); o.value=i-1; o.textContent='صفحة '+i; sel.appendChild(o) }
+  $('pagesBox').style.display=n>1?'flex':'none';
+  $('pageInfo').textContent='عدد الصفحات: '+n;
+}
+async function openDocx(f){
+  if(!window.mammoth) await load('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');
+  if(!window.html2canvas) await load('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+  var buf=await f.arrayBuffer();
+  var html=(await mammoth.convertToHtml({arrayBuffer:buf})).value;
+  if(!html || !html.replace(/<[^>]*>/g,'').trim()) throw new Error('ملف Word يبدو فارغًا أو تعذّرت قراءته.');
+  var box=document.createElement('div'); box.dir='rtl';
+  box.style.cssText='position:fixed;left:-99999px;top:0;width:794px;background:#fff;padding:52px 48px;font:15px/1.9 "IBM Plex Sans Arabic",sans-serif;color:#000';
+  box.innerHTML='<style>table{border-collapse:collapse;width:100%}td,th{border:1px solid #999;padding:5px 8px;font-size:13px}img{max-width:100%}h1,h2,h3{font-family:"Noto Kufi Arabic",sans-serif;margin:14px 0 8px}p{margin:0 0 8px}</style>'+html;
+  document.body.appendChild(box);
+  var c=await html2canvas(box,{scale:2,backgroundColor:'#ffffff',logging:false});
+  box.remove();
+  var ph=Math.round(c.width*1.414), pages=[];
+  for(var y=0;y<c.height&&pages.length<20;y+=ph){
+    var hh=Math.min(ph,c.height-y);
+    var pc=document.createElement('canvas'); pc.width=c.width; pc.height=ph;
+    var g2=pc.getContext('2d'); g2.fillStyle='#fff'; g2.fillRect(0,0,pc.width,ph);
+    g2.drawImage(c,0,y,c.width,hh,0,0,c.width,hh);
+    var im=new Image();
+    await new Promise(function(ok){ im.onload=ok; im.src=pc.toDataURL('image/jpeg',0.93) });
+    pages.push(im);
+  }
+  if(!pages.length) throw new Error('تعذّر تحويل ملف Word.');
+  S.kind='doc'; S.docPages=pages; S.pdfBytes=null; S.pageCount=pages.length; S.pageIndex=0; S.img=pages[0];
+  fillPages(pages.length);
 }
 async function openPdf(f){
   if(!window.pdfjsLib){
@@ -356,11 +405,8 @@ async function openPdf(f){
   var buf=await f.arrayBuffer();
   S.pdfBytes=buf.slice(0);
   S.pdfDoc=await pdfjsLib.getDocument({data:new Uint8Array(buf)}).promise;
-  S.kind='pdf'; S.pageCount=S.pdfDoc.numPages; S.pageIndex=0;
-  var sel=$('pageSel'); sel.innerHTML='';
-  for(var i=1;i<=S.pageCount;i++){ var o=document.createElement('option'); o.value=i-1; o.textContent='صفحة '+i; sel.appendChild(o) }
-  $('pagesBox').style.display=S.pageCount>1?'flex':'none';
-  $('pageInfo').textContent='عدد الصفحات: '+S.pageCount;
+  S.kind='pdf'; S.docPages=null; S.pageCount=S.pdfDoc.numPages; S.pageIndex=0;
+  fillPages(S.pageCount);
   await renderPdfPage(0);
 }
 async function renderPdfPage(i){
@@ -377,8 +423,10 @@ async function renderPdfPage(i){
   S.pageIndex=i; S.img=im;
 }
 $('pageSel').addEventListener('change',async function(){
+  var i=+this.value;
+  if(S.kind==='doc'){ S.pageIndex=i; S.img=S.docPages[i]; layout(); return }
   msg('m2','جاري فتح الصفحة…');
-  await renderPdfPage(+this.value); msg('m2','',''); layout();
+  await renderPdfPage(i); msg('m2','',''); layout();
 });
 
 /* ============ ٣) الباركود ============ */
@@ -420,7 +468,7 @@ function qrOpts(data){
 }
 async function drawQR(){
   var data=currentData();
-  if(!validUrl(data)){ S.qrImg=null; $('qrprev').classList.remove('on'); $('bQr').disabled=true; layout(); return }
+  if(!validUrl(data)){ S.qrImg=null; $('qrprev').classList.remove('on'); $('bQr').disabled=true; $('bSvg').disabled=true; layout(); return }
   if(S.qrBusy){ S.qrAgain=true; return }
   S.qrBusy=true;
   try{
@@ -430,7 +478,7 @@ async function drawQR(){
     await new Promise(function(ok,no){ im.onload=ok; im.onerror=no; im.src=URL.createObjectURL(blob) });
     S.qrImg=im;
     var p=$('qrprev'); p.innerHTML=''; var pi=new Image(); pi.src=im.src; pi.style.width='100%'; pi.style.height='100%'; p.appendChild(pi);
-    p.classList.add('on'); $('bQr').disabled=false; $('bShare').disabled=!navigator.share;
+    p.classList.add('on'); $('bQr').disabled=false; $('bSvg').disabled=false; $('bShare').disabled=!navigator.share;
   }catch(e){ msg('m3','تعذّر توليد الباركود.','bad') }
   S.qrBusy=false;
   if(S.qrAgain){ S.qrAgain=false; drawQR(); return }
@@ -562,6 +610,18 @@ $('bQr').addEventListener('click',function(){
   }
   c.toBlob(function(b){ dl(b,'باركود.png'); msg('m3','تم تحميل الباركود ✔','ok') },'image/png');
 });
+$('bSvg').addEventListener('click',async function(){
+  var data=currentData();
+  if(!validUrl(data)){msg('m3','أدخل رابطًا صحيحًا أولًا.','bad');return}
+  this.disabled=true;
+  try{
+    var o=qrOpts(data); o.type='svg';
+    var sv=new QRCodeStyling(o);
+    var b=await sv.getRawData('svg');
+    dl(b,'باركود.svg'); msg('m3','تم تحميل ملف SVG ✔','ok');
+  }catch(e){ msg('m3','تعذّر إنشاء ملف SVG.','bad') }
+  this.disabled=false;
+});
 $('bPdf').addEventListener('click',async function(){
   if(!S.img){msg('m3','اختر صورة أو ملف PDF أولًا.','bad');return}
   this.disabled=true; msg('m3','جاري إنشاء ملف PDF…');
@@ -571,6 +631,17 @@ $('bPdf').addEventListener('click',async function(){
     if(S.kind==='pdf'&&S.pdfBytes){
       doc=await PDFLib.PDFDocument.load(S.pdfBytes.slice(0));
       page=doc.getPages()[S.pageIndex]; var sz=page.getSize(); PW=sz.width; PH=sz.height;
+    }else if(S.kind==='doc'){
+      doc=await PDFLib.PDFDocument.create();
+      for(var i=0;i<S.docPages.length;i++){
+        var pim=S.docPages[i];
+        var w=595.28, h=Math.round(w*pim.naturalHeight/pim.naturalWidth);
+        var pg2=doc.addPage([w,h]);
+        var bl=await (await fetch(pim.src)).blob();
+        var eb=await doc.embedJpg(new Uint8Array(await bl.arrayBuffer()));
+        pg2.drawImage(eb,{x:0,y:0,width:w,height:h});
+        if(i===S.pageIndex){ page=pg2; PW=w; PH=h }
+      }
     }else{
       doc=await PDFLib.PDFDocument.create();
       PW=S.img.naturalWidth*0.75; PH=S.img.naturalHeight*0.75;
