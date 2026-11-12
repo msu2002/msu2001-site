@@ -29,7 +29,7 @@
 #lock input{font-size:21px;letter-spacing:1px;text-align:center}#lock label.l{display:block;text-align:right;font-weight:700;color:#1d7d7e;font-size:14px;margin:4px 4px 4px}#lock .eye{display:flex;align-items:center;gap:8px;font-size:14px;color:#555;margin:0 0 12px;justify-content:flex-start;cursor:pointer}#lock .eye input{width:auto;margin:0;font-size:inherit;letter-spacing:0}
 .clsbox{padding:12px 14px 4px}.clsbox label{display:block;font-weight:700;color:var(--t-d);font-size:15.5px;margin-bottom:4px}
 tr.fx td.v input{background:transparent}
-#done{position:fixed;inset:0;z-index:99998;display:none;align-items:center;justify-content:center;background:#06282ccc;padding:20px}#done.show{display:flex}#done .box{width:min(400px,100%);background:#fff;border-radius:24px;padding:28px 22px;text-align:center;box-shadow:0 20px 60px #0008}#done .ok{width:88px;height:88px;margin:0 auto 10px;border-radius:50%;background:#1fb66b;display:grid;place-items:center}#done h3{font-family:'Noto Kufi Arabic',Cairo,sans-serif;font-weight:800;font-size:24px;color:#1d7d7e;margin:8px 0}#done .path{background:#f4f7f7;border:1.5px solid #cfe3e1;border-radius:14px;padding:10px 14px;text-align:right;line-height:2;font-weight:600;font-size:14.5px;margin:12px 0;word-break:break-word}#done button{width:100%;font:inherit;font-size:17px;font-weight:700;border:0;border-radius:14px;padding:12px;margin-top:8px;cursor:pointer;background:#279a9b;color:#fff}#done button.g{background:#e9eeee;color:#1d7d7e}
+#done{position:fixed;inset:0;z-index:99998;display:none;align-items:center;justify-content:center;background:#06282ccc;padding:20px}#done.show{display:flex}#done .box{width:min(400px,100%);background:#fff;border-radius:24px;padding:28px 22px;text-align:center;box-shadow:0 20px 60px #0008}#done .ok{width:88px;height:88px;margin:0 auto 10px;border-radius:50%;background:#1fb66b;display:grid;place-items:center}#done h3{font-family:'Noto Kufi Arabic',Cairo,sans-serif;font-weight:800;font-size:24px;color:#1d7d7e;margin:8px 0}#done .path{background:#f4f7f7;border:1.5px solid #cfe3e1;border-radius:14px;padding:10px 14px;text-align:right;line-height:2;font-weight:600;font-size:14.5px;margin:12px 0;word-break:break-word}#done button{width:100%;font:inherit;font-size:17px;font-weight:700;border:0;border-radius:14px;padding:12px;margin-top:8px;cursor:pointer;background:#279a9b;color:#fff}#done button.g{background:#e9eeee;color:#1d7d7e}#done .dmsg{min-height:20px;margin-top:10px;font-size:14.5px;font-weight:700;color:#1d7d7e;line-height:1.7}
 .userbar{display:flex;gap:10px;align-items:center;justify-content:center;font-weight:700;color:#1d7d7e;font-size:14px;margin:8px 0 0}
 </style>
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -173,7 +173,7 @@ html.dk #lock .hintb{background:#C59B3F18;border:1px solid #C59B3F40;color:#E8C8
 html.dk #lock .lnk2,html.dk #lock .adl a{color:#E8C87A}html.dk #lock .adl{border-top-color:#C59B3F33;color:#D9C3A3}
 html.dk #done{background:#000c}
 html.dk #done .box{background:#0b1a10;border:1.5px solid #C59B3F55}html.dk #done h3{color:#E8C87A}
-html.dk #done .path{background:#0c1d11;border-color:#C59B3F44;color:#FAF7F2}
+html.dk #done .path{background:#0c1d11;border-color:#C59B3F44;color:#FAF7F2}html.dk #done .dmsg{color:#E8C87A}
 html.dk #done button{background:#005C29;color:#fff;border:1.5px solid #4ADE8055}html.dk #done button.g{background:#0c1d11;color:#E8C87A;border-color:#C59B3F55}
 html.dk .ov{background:#000c}
 html.dk .ov .box{background:#0b1a10;border:1.5px solid #C59B3F55;color:#FAF7F2}
@@ -201,7 +201,7 @@ html.dk #lock button,html.dk .btn,html.dk .ov .b1,html.dk #done button{font-fami
 <label class="l" for="lkId">اسم المستخدم (السجل المدني)</label><input id="lkId" inputmode="numeric" autocomplete="username" maxlength="10" aria-label="السجل المدني">
 <label class="l" for="lkPw">كلمة المرور</label><input id="lkPw" type="password" autocomplete="current-password" maxlength="40" aria-label="كلمة المرور"><div class="hintb">ℹ️ أول دخول: كلمة المرور هي <b>رقم جوالك المسجّل</b> ويبدأ بصفر</div>
 <label class="eye"><input type="checkbox" id="lkEye"> إظهار كلمة المرور</label><button id="lkGo" type="button">دخول</button><div class="err" id="lkErr"></div><a href="#" class="lnk2" id="lkForgot">نسيت كلمة المرور؟</a><a href="#" class="lnk2" id="lkPwChg">🔑 تغيير كلمة المرور</a><div class="adl">🛠️ <a href="#" id="lkAdm">دخول المسؤول</a></div></div></div>
-<div id="done" dir="rtl"><div class="box"><div class="ok"><svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h3 id="dnT">تم حفظ شاهدك</h3><div class="path" id="dnP"></div><button id="dnShare" type="button">📤 مشاركة</button><button class="g" id="dnNew" type="button">إضافة شاهد جديد</button></div></div>
+<div id="done" dir="rtl"><div class="box"><div class="ok"><svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h3 id="dnT">تم حفظ شاهدك</h3><div class="path" id="dnP"></div><button id="dnSave" type="button">📥 حفظ في الجهاز</button><button class="g" id="dnShare" type="button">📤 مشاركة</button><div class="dmsg" id="dnM"></div><button class="g" id="dnNew" type="button">إضافة شاهد جديد</button></div></div>
 
 <div id="cp" class="ov" dir="rtl"><div class="box"><h3>🔑 تغيير كلمة المرور</h3>
 <div id="cpIdW" style="display:none"><label for="cpId">السجل المدني</label><input id="cpId" inputmode="numeric" maxlength="10" autocomplete="username"></div>
@@ -372,7 +372,8 @@ const ENDPOINT='https://script.google.com/macros/s/AKfycbw_Mwc6xZCIPBTSGrtrkpsOr
 const fname=()=>'شاهد - '+USER.n+' - '+new Date().toISOString().slice(0,10)+'.pdf';
 const b64=b=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(String(r.result).split(',')[1]);r.onerror=no;r.readAsDataURL(b)});
 const usedDocs=()=>[...new Set([...thumbs.querySelectorAll('.th[data-doc]')].map(x=>+x.dataset.doc))].map(k=>DOCS[k]);
-function dl(f){const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove()}
+function dl(f){const u=URL.createObjectURL(f),a=document.createElement('a');a.href=u;a.download=f.name;a.rel='noopener';document.body.appendChild(a);a.click();setTimeout(()=>{a.remove();URL.revokeObjectURL(u)},9000)}
+async function saveAll(files){for(const f of files){dl(f);await new Promise(r=>setTimeout(r,600))}}
 let LAST=null;
 function showDone(t,p){$('#dnT').textContent=t;$('#dnP').innerHTML=p.replace(/(\d{4}-\d\d-\d\d\.pdf)/g,'<bdi dir="ltr">$1</bdi>');$('#done').classList.add('show')}
 $('#btnPdf').onclick=async()=>{if(!validate())return;const b=$('#btnPdf');b.disabled=true;msg('جاري تجهيز ملف PDF بصورك…');
@@ -393,11 +394,36 @@ $('#btnSave').onclick=async()=>{if(!validate())return;$('#btnSave').disabled=tru
   try{
     const blob=toPdf(await snapshot()).output('blob'),files=[new File([blob],fname(),{type:'application/pdf'}),...usedDocs()];
     if(navigator.canShare&&navigator.canShare({files})){try{await navigator.share({files,title:'شواهد الإداريين'});msg('تمت المشاركة ✔','ok');return}catch(e){if(e&&e.name==='AbortError'){msg('أُلغيت المشاركة.');return}}}
-    for(const f of files){dl(f);await new Promise(r=>setTimeout(r,400))}
-    msg('تم تنزيل الملف — شاركه حيث تشاء ✔','ok');
+    await saveAll(files);
+    msg('تم حفظ الملف في جهازك — شاركه حيث تشاء ✔','ok');
   }catch(e){msg(e.message,'bad')}finally{$('#btnSave').disabled=false}};
-$('#dnShare').onclick=async()=>{if(!LAST)return;try{if(navigator.canShare&&navigator.canShare({files:LAST}))await navigator.share({files:LAST,title:'شواهد الإداريين'});else LAST.forEach(dl)}catch(e){}};
-$('#dnNew').onclick=()=>{$('#done').classList.remove('show');thumbs.innerHTML='';DOCS.length=0;$('#f_notes').value='';selC.value='';selC.dispatchEvent(new Event('change'));msg('')};
+function dnMsg(t,bad){const e=$('#dnM');if(e){e.textContent=t||'';e.style.color=bad?'#c1121f':''}}
+function dnBusy(on){$('#dnSave').disabled=on;$('#dnShare').disabled=on}
+$('#dnSave').onclick=async()=>{
+  if(!LAST||!LAST.length){dnMsg('لا يوجد ملف للحفظ — أعد إنشاء الشاهد.',1);return}
+  dnBusy(true);dnMsg('جاري الحفظ في جهازك…');
+  try{await saveAll(LAST);dnMsg(LAST.length>1?'تم حفظ '+LAST.length+' ملفات في مجلد التنزيلات ✔':'تم حفظ الملف في مجلد التنزيلات ✔')}
+  catch(e){dnMsg('تعذّر الحفظ: '+(e.message||''),1)}
+  finally{dnBusy(false)}
+};
+$('#dnShare').onclick=async()=>{
+  if(!LAST||!LAST.length){dnMsg('لا يوجد ملف للمشاركة — أعد إنشاء الشاهد.',1);return}
+  let shared=false,why='';
+  try{
+    if(navigator.canShare&&navigator.canShare({files:LAST})){await navigator.share({files:LAST,title:'شواهد الإداريين'});shared=true}
+    else if(navigator.canShare&&navigator.canShare({files:[LAST[0]]})){await navigator.share({files:[LAST[0]],title:'شواهد الإداريين'});shared=true;why='شُورك ملف الشاهد فقط؛ بقية المرفقات تُحفظ في جهازك.'}
+  }catch(e){
+    if(e&&e.name==='AbortError'){dnMsg('أُلغيت المشاركة — يمكنك الحفظ في الجهاز.');return}
+    why='تعذّرت المشاركة في هذا المتصفح.';
+  }
+  if(shared&&!why){dnMsg('تمت المشاركة ✔');return}
+  dnBusy(true);
+  dnMsg((why||'المشاركة غير مدعومة في هذا المتصفح.')+' جاري الحفظ في جهازك…');
+  try{await saveAll(shared?LAST.slice(1):LAST);dnMsg((why?why+' ':'')+'تم الحفظ في مجلد التنزيلات ✔')}
+  catch(e){dnMsg('تعذّر الحفظ: '+(e.message||''),1)}
+  finally{dnBusy(false)}
+};
+$('#dnNew').onclick=()=>{dnMsg('');$('#done').classList.remove('show');thumbs.innerHTML='';DOCS.length=0;$('#f_notes').value='';selC.value='';selC.dispatchEvent(new Event('change'));msg('')};
 $('#btnReset').onclick=()=>{if(confirm('مسح جميع البيانات؟')){
   document.querySelectorAll('input:not([readonly]):not([type=file]),textarea,select').forEach(x=>{x.value=x.id==='f_year'?'١٤٤٨هـ':(x.classList.contains('y')?DEF_YEAR:'');x.style.height=''});
   DOCS.length=0;selC.dispatchEvent(new Event('change'));document.querySelectorAll('.thumbs').forEach(t=>t.innerHTML='');msg('')}};
