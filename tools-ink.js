@@ -11,6 +11,7 @@ var ICON={
 "shawahed":'<rect x="5" y="4.5" width="14" height="17" rx="2.5"/><path d="M9 4.5h6v-1.2a.8.8 0 0 0-.8-.8H9.8a.8.8 0 0 0-.8.8z"/><path d="M8.5 11l1.3 1.3 2.2-2.4M8.5 16l1.3 1.3 2.2-2.4M14 11.2h2.5M14 16.2h2.5"/>',
 "shawahed-staff":'<rect x="5" y="4.5" width="14" height="17" rx="2.5"/><path d="M9 4.5h6v-1.2a.8.8 0 0 0-.8-.8H9.8a.8.8 0 0 0-.8.8z"/><circle cx="12" cy="10.2" r="1.9"/><path d="M8.6 17c.5-2 1.9-3 3.4-3s2.9 1 3.4 3"/>',
 "rumooz":'<g fill="#fff" stroke="none"><path d="M12.19 5.09A5.44 5.44 0 1 0 13.68 15.53 5.44 5.44 0 0 1 12.19 5.09z"/><path d="M17.62 6.75l.79 1.61 1.78.26-1.29 1.26.3 1.78-1.58-.84-1.59.84.3-1.78-1.29-1.26 1.78-.26z"/></g><g fill="#fff" fill-opacity=".72" stroke="none"><rect x="4.9" y="17.25" width="3" height="3" rx=".75"/><rect x="9" y="17.25" width="3" height="3" rx=".75"/><rect x="13.1" y="17.25" width="3" height="3" rx=".75"/><rect x="17.25" y="17.25" width="3" height="3" rx=".75"/></g>',
+"qr":'<rect x="3.4" y="3.4" width="7" height="7" rx="1.7"/><rect x="13.6" y="3.4" width="7" height="7" rx="1.7"/><rect x="3.4" y="13.6" width="7" height="7" rx="1.7"/><path d="M6.5 6.5h.8v.8h-.8zM16.7 6.5h.8v.8h-.8zM6.5 16.7h.8v.8h-.8z"/><path d="M13.6 13.6h3.1M20.6 13.6h-1.4M13.6 17.1h1.7M17.5 17.1h3.1M13.6 20.6h2.7M18.9 20.6h1.7M18.4 13.6v3M16.3 18.8v1.8"/>',
 "fahad-studio":'<path d="M4 10.5h16V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M3.6 7.2l15.3-3.5.7 3.1-15.3 3.5z"/><path d="M7.7 6.7l2.1 3M12.2 5.7l2.1 3M16.7 4.7l2.1 3"/><path d="M10.5 13.4v4.2l3.8-2.1z"/>'
 };
 var css='#tools.ink-grid{display:grid;grid-template-columns:1fr;gap:14px}'+
@@ -49,6 +50,12 @@ function rzPut(){if(!rzOk||document.getElementById(RZ.id))return;var ref=documen
  var n=ref.cloneNode(true);n.id=RZ.id;n.href=RZ.u;n.setAttribute("data-ink","rumooz");
  var h=n.querySelector("h3"),p=n.querySelector("p"),v=n.querySelector(".ink-tile svg");if(!h||!p||!v)return;
  h.textContent=RZ.t;p.textContent=RZ.p;v.innerHTML=ICON["rumooz"];n.querySelector(".ink-tile").style.removeProperty("background");h.style.removeProperty("color");ref.after(n)}
+var QB={id:"frm-card11",u:"/qr/",k:"باركود الشهادات",t:"باركود الشهادات والصور",p:"اصنع باركود أي رابط بشكل ولون ومقاس تختاره، واختصر الرابط، وضع الباركود على الشهادة أو الصورة أو ملف PDF أو Word، ثم حمّله صورة أو PDF — والمعالجة كلها داخل جهازك."},qbOk=0,qbTried=0;
+function qbCheck(){if(qbTried)return;qbTried=1;fetch(QB.u,{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(x){if(x.indexOf(QB.k)>-1){qbOk=1;apply()}}).catch(function(){})}
+function qbPut(){if(!qbOk||document.getElementById(QB.id))return;var ref=document.getElementById(RZ.id)||document.getElementById(SF.id)||document.getElementById(SH.id)||document.getElementById(PS.id);if(!ref||!ref.getAttribute("data-ink"))return;
+ var n=ref.cloneNode(true);n.id=QB.id;n.href=QB.u;n.setAttribute("data-ink","qr");
+ var h=n.querySelector("h3"),p=n.querySelector("p"),v=n.querySelector(".ink-tile svg");if(!h||!p||!v)return;
+ h.textContent=QB.t;p.textContent=QB.p;v.innerHTML=ICON["qr"];n.querySelector(".ink-tile").style.removeProperty("background");h.style.removeProperty("color");ref.after(n)}
 function apply(){
  var s=document.getElementById('tools');if(!s)return;
  if(!document.getElementById('ink-css')){var st=document.createElement('style');st.id='ink-css';st.textContent=css;document.head.appendChild(st);
@@ -60,7 +67,7 @@ function apply(){
   var old=a.firstElementChild;if(old&&old.tagName==='DIV'&&!old.classList.contains('flex-1'))old.classList.add('ink-old');
   var t=document.createElement('div');t.className='ink-tile';t.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+ICON[k]+'</svg>';
   a.insertBefore(t,a.firstChild)});
- if(any)s.classList.add('ink-grid');psCheck();psPut(s);shCheck();shPut();sfCheck();sfPut();rzCheck();rzPut()}
+ if(any)s.classList.add('ink-grid');psCheck();psPut(s);shCheck();shPut();sfCheck();sfPut();rzCheck();rzPut();qbCheck();qbPut()}
 apply();
 new MutationObserver(apply).observe(document.documentElement,{childList:true,subtree:true});
 })();
