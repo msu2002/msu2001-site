@@ -67,7 +67,7 @@ function apply(){
   var old=a.firstElementChild;if(old&&old.tagName==='DIV'&&!old.classList.contains('flex-1'))old.classList.add('ink-old');
   var t=document.createElement('div');t.className='ink-tile';t.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+ICON[k]+'</svg>';
   a.insertBefore(t,a.firstChild)});
- if(any)s.classList.add('ink-grid');psCheck();psPut(s);shCheck();shPut();sfCheck();sfPut();rzCheck();rzPut();qbCheck();qbPut()}
+ if(any)s.classList.add('ink-grid');psCheck();psPut(s);sfCheck();sfPut();rzCheck();rzPut();qbCheck();qbPut()}
 apply();
 new MutationObserver(apply).observe(document.documentElement,{childList:true,subtree:true});
 })();
