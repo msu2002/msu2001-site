@@ -56,6 +56,12 @@ function qbPut(){if(!qbOk||document.getElementById(QB.id))return;var ref=documen
  var n=ref.cloneNode(true);n.id=QB.id;n.href=QB.u;n.setAttribute("data-ink","qr");
  var h=n.querySelector("h3"),p=n.querySelector("p"),v=n.querySelector(".ink-tile svg");if(!h||!p||!v)return;
  h.textContent=QB.t;p.textContent=QB.p;v.innerHTML=ICON["qr"];n.querySelector(".ink-tile").style.removeProperty("background");h.style.removeProperty("color");ref.after(n)}
+var CD={id:"frm-card12",u:"https://cloud.msu2001.com/",t:"خاص",p:"مساحة خاصة برقم سري: ارفع أي ملف، واحصل على رابط مختصر أو باركود للمشاركة."};
+ICON["cloud"]='<path d="M7 18a4 4 0 0 1-.6-7.96A5.5 5.5 0 0 1 17 8.6 4.7 4.7 0 0 1 17.5 18z"/><rect x="9.6" y="12.2" width="4.8" height="3.6" rx=".8"/><path d="M10.6 12.2v-1a1.4 1.4 0 0 1 2.8 0v1"/>';
+function cdPut(){if(document.getElementById(CD.id))return;var ref=document.getElementById(QB.id)||document.getElementById(RZ.id)||document.getElementById(SF.id)||document.getElementById(PS.id);if(!ref||!ref.getAttribute("data-ink"))return;
+ var n=ref.cloneNode(true);n.id=CD.id;n.href=CD.u;n.setAttribute("data-ink","cloud");n.setAttribute("rel","noopener");
+ var h=n.querySelector("h3"),p=n.querySelector("p"),s=n.querySelector(".ink-tile svg");if(!h||!p||!s)return;
+ h.textContent=CD.t;p.textContent=CD.p;s.innerHTML=ICON["cloud"];n.querySelector(".ink-tile").style.removeProperty("background");h.style.removeProperty("color");ref.after(n)}
 function apply(){
  var s=document.getElementById('tools');if(!s)return;
  if(!document.getElementById('ink-css')){var st=document.createElement('style');st.id='ink-css';st.textContent=css;document.head.appendChild(st);
@@ -67,7 +73,7 @@ function apply(){
   var old=a.firstElementChild;if(old&&old.tagName==='DIV'&&!old.classList.contains('flex-1'))old.classList.add('ink-old');
   var t=document.createElement('div');t.className='ink-tile';t.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+ICON[k]+'</svg>';
   a.insertBefore(t,a.firstChild)});
- if(any)s.classList.add('ink-grid');psCheck();psPut(s);sfCheck();sfPut();rzCheck();rzPut();qbCheck();qbPut()}
+ if(any)s.classList.add('ink-grid');psCheck();psPut(s);sfCheck();sfPut();rzCheck();rzPut();qbCheck();qbPut();cdPut()}
 apply();
 new MutationObserver(apply).observe(document.documentElement,{childList:true,subtree:true});
 })();
