@@ -480,7 +480,8 @@ function renderSpread(hourly,start){
  totals.sort(function(a,b){return a-b});
  var low=totals[Math.floor((totals.length-1)*0.1)];
  var high=totals[Math.ceil((totals.length-1)*0.9)];
- $('mmspread').textContent='نطاق المطر خلال ٧٢ ساعة من ECMWF · '+N1(low)+' إلى '+N1(high)+' ملم · نطاق تقريبي لأوسط ٨٠٪ من '+N(totals.length)+' مسارًا.';
+ var pct=Math.round(totals.filter(function(x){return x>=1}).length/totals.length*100);
+ $('mmspread').textContent='احتمال هطول ١ ملم أو أكثر خلال ٧٢ ساعة: '+N(pct)+'٪ من مسارات ECMWF · نطاق المطر '+N1(low)+' إلى '+N1(high)+' ملم · نطاق تقريبي لأوسط ٨٠٪ من '+N(totals.length)+' مسارًا.';
 }
 function updateModels(){
  var now=Date.now();
