@@ -61,7 +61,7 @@ ICON["cloud"]='<path d="M7 18a4 4 0 0 1-.6-7.96A5.5 5.5 0 0 1 17 8.6 4.7 4.7 0 0
 function cdPut(){if(document.getElementById(CD.id))return;var ref=document.getElementById(QB.id)||document.getElementById(RZ.id)||document.getElementById(SF.id)||document.getElementById(PS.id);if(!ref||!ref.getAttribute("data-ink"))return;
  var n=ref.cloneNode(true);n.id=CD.id;n.href=CD.u;n.setAttribute("data-ink","cloud");n.setAttribute("rel","noopener");
  var h=n.querySelector("h3"),p=n.querySelector("p"),s=n.querySelector(".ink-tile svg");if(!h||!p||!s)return;
- h.textContent=CD.t;p.textContent=CD.p;s.innerHTML=ICON["cloud"];n.querySelector(".ink-tile").style.removeProperty("background");h.style.removeProperty("color");ref.after(n)}
+ h.textContent=CD.t;p.textContent="";p.style.display="none";s.innerHTML=ICON["cloud"];n.querySelector(".ink-tile").style.removeProperty("background");h.style.removeProperty("color");ref.after(n)}
 function apply(){
  var s=document.getElementById('tools');if(!s)return;
  if(!document.getElementById('ink-css')){var st=document.createElement('style');st.id='ink-css';st.textContent=css;document.head.appendChild(st);
