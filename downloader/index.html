@@ -125,7 +125,7 @@ footer{text-align:center;font-size:12.5px;color:var(--mute);padding-top:8px}
   /* ---------- الوضع الليلي/النهاري ---------- */
   var root = document.documentElement;
   try { var sv = localStorage.getItem('fvd-theme'); if (sv) root.setAttribute('data-theme', sv); } catch (e) {}
-  if (!root.getAttribute('data-theme') && window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches) root.setAttribute('data-theme', 'light');
+  /* الوضع الليلي هو الافتراضي دائمًا؛ النهاري فقط إذا اختاره المستخدم */
   $('theme').onclick = function () {
     var n = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
     root.setAttribute('data-theme', n);
