@@ -62,12 +62,6 @@ function cdPut(){if(document.getElementById(CD.id))return;var ref=document.getEl
  var n=ref.cloneNode(true);n.id=CD.id;n.href=CD.u;n.setAttribute("data-ink","cloud");n.setAttribute("rel","noopener");
  var h=n.querySelector("h3"),p=n.querySelector("p"),s=n.querySelector(".ink-tile svg");if(!h||!p||!s)return;
  h.textContent=CD.t;p.textContent="";p.style.display="none";s.innerHTML=ICON["cloud"];n.querySelector(".ink-tile").style.removeProperty("background");h.style.removeProperty("color");ref.after(n)}
-var VD={id:"frm-card13",u:"/downloader/",t:"FAHAD Video Downloader",p:"تحميل الفيديوهات: احفظ ملف الفيديو الأصلي كما هو، دون أي علامة مائية منّا. مجاني بلا تسجيل."};
-ICON["vd"]='<path d="M12 4v11m-4.5-4.5L12 15l4.5-4.5"/><path d="M5 19h14"/><rect x="3.5" y="3" width="17" height="14" rx="3" stroke-opacity=".35"/>';
-function vdPut(){if(document.getElementById(VD.id))return;var ref=document.getElementById(CD.id)||document.getElementById(QB.id)||document.getElementById(RZ.id);if(!ref||!ref.getAttribute("data-ink"))return;
- var n=ref.cloneNode(true);n.id=VD.id;n.href=VD.u;n.removeAttribute("rel");n.removeAttribute("target");n.setAttribute("data-ink","vd");
- var h=n.querySelector("h3"),p=n.querySelector("p"),s=n.querySelector(".ink-tile svg");if(!h||!p||!s)return;
- h.textContent=VD.t;h.style.direction="ltr";h.style.textAlign="right";p.textContent=VD.p;p.style.display="";s.innerHTML=ICON["vd"];n.querySelector(".ink-tile").style.removeProperty("background");h.style.removeProperty("color");ref.after(n)}
 function apply(){
  var s=document.getElementById('tools');if(!s)return;
  if(!document.getElementById('ink-css')){var st=document.createElement('style');st.id='ink-css';st.textContent=css;document.head.appendChild(st);
@@ -79,7 +73,7 @@ function apply(){
   var old=a.firstElementChild;if(old&&old.tagName==='DIV'&&!old.classList.contains('flex-1'))old.classList.add('ink-old');
   var t=document.createElement('div');t.className='ink-tile';t.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+ICON[k]+'</svg>';
   a.insertBefore(t,a.firstChild)});
- if(any)s.classList.add('ink-grid');psCheck();psPut(s);sfCheck();sfPut();rzCheck();rzPut();qbCheck();qbPut();cdPut();vdPut()}
+ if(any)s.classList.add('ink-grid');psCheck();psPut(s);sfCheck();sfPut();rzCheck();rzPut();qbCheck();qbPut();cdPut()}
 apply();
 new MutationObserver(apply).observe(document.documentElement,{childList:true,subtree:true});
 })();
