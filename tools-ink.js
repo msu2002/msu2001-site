@@ -1,6 +1,7 @@
 /* Ink-style icon cards for the #tools list — white line icons on green tiles. Fahad Al-Jarwan */
 (function(){
 var ICON={
+"mdm":'<path d="M12 4v11"/><path d="M7.8 10.8L12 15l4.2-4.2"/><path d="M5 19.5h14"/>',
 "pdf-studio":'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 17.5l5.6-5.6 1.6 1.6-5.6 5.6H9z"/>',
 "digital-contract":'<path d="M12 3l7 3v5.2c0 4.4-3 7.9-7 9.8-4-1.9-7-5.4-7-9.8V6z"/><path d="M8.7 12.2l2.4 2.4 4.3-4.7"/>',
 "manahej-form":'<path d="M7 5.5H6a1 1 0 0 0-1 1V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6.5a1 1 0 0 0-1-1h-1"/><rect x="8" y="3.5" width="8" height="4" rx="1"/><path d="M8.5 12.5h7M8.5 16.5h4.5"/>',
