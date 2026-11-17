@@ -89,6 +89,7 @@ dialog iframe{width:100%;height:calc(100% - 63px);border:0}
     <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="ابحث باسم الكتاب أو المادة..." autocomplete="off"></label>
   </section>
   <div class="bar"><div class="tabs" id="tabs" role="tablist" aria-label="الصفوف"></div></div>
+  <div class="kinds" id="views" aria-label="العرض"></div><div id="cont"></div>
   <div class="kinds" id="kinds" aria-label="نوع الكتاب"></div>
   <div class="meta"><h2><span id="ttl">كل الكتب</span><span class="cnt" id="cnt"></span></h2><label class="sw"><input type="checkbox" id="all"> إظهار غير المتوفر</label></div>
   <section class="grid" id="grid" aria-live="polite"></section>
@@ -103,7 +104,7 @@ const SHEET='https://docs.google.com/spreadsheets/d/1ZaD5P-gHeqJDwRX2Tcwy6dWb47C
 const GRADES={1:'الأول',2:'الثاني',3:'الثالث',4:'الرابع',5:'الخامس',6:'السادس'};
 const KINDS={student_book:'كتاب الطالب',workbook:'كتاب النشاط',teacher_guide:'دليل المعلم',solutions:'الحلول'};
 const $=id=>document.getElementById(id);
-const st={q:'',grade:'all',kind:'all',all:false,n:24,fav:new Set(),cover:{},drive:{},byId:{},ready:false};
+const st={q:'',view:'all',grade:'all',kind:'all',all:false,n:24,fav:new Set(),cover:{},drive:{},byId:{},ready:false};
 try{st.fav=new Set(JSON.parse(localStorage.getItem('msu-fav')||'[]'))}catch(e){}
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s||'').replace(/[ً-ْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').toLowerCase().replace(/\s+/g,' ').trim();
@@ -119,7 +120,7 @@ async function load(){
   st.ready=true;render();
 }
 const avail=r=>!!(r.drive||r.pdf_url);
-function list(base){const w=norm(st.q).split(' ').filter(Boolean);return RECORDS.filter(r=>{if(!base&&st.grade!=='all'&&String(r.grade)!==st.grade)return false;if(st.kind!=='all'&&r.kind!==st.kind)return false;if(st.ready&&!st.all&&!avail(r))return false;if(w.length){const h=norm([r.title,r.subject,KINDS[r.kind],'الصف '+GRADES[r.grade]].join(' '));if(!w.every(x=>h.includes(x)))return false}return true})}
+function list(base){const w=norm(st.q).split(' ').filter(Boolean);return RECORDS.filter(r=>{if(!base&&st.grade!=='all'&&String(r.grade)!==st.grade)return false;if(st.kind!=='all'&&r.kind!==st.kind)return false;if(st.view==='new'&&!(r.kind==='solutions'&&/1448/.test(r.title)))return false;if(st.view==='feat'&&!(r.kind==='student_book'&&/1448/.test(r.title)))return false;if(st.view==='fav'&&!st.fav.has(r.id))return false;if(st.ready&&!st.all&&!avail(r))return false;if(w.length){const h=norm([r.title,r.subject,KINDS[r.kind],'الصف '+GRADES[r.grade]].join(' '));if(!w.every(x=>h.includes(x)))return false}return true})}
 const IC={dl:'<svg viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 20h16"/></svg>',eye:'<svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',ext:'<svg viewBox="0 0 24 24"><path d="M14 4h6v6m0-6-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>',heart:'<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.3-9A5.3 5.3 0 0 1 12 6.3 5.3 5.3 0 0 1 21.3 11C19 15.6 12 20 12 20z"/></svg>'};
 function card(r){
   const cov=st.cover[r.id],fav=st.fav.has(r.id),t=term(r);
@@ -135,6 +136,9 @@ function render(){
   const c={all:all.length};all.forEach(r=>c[r.grade]=(c[r.grade]||0)+1);
   $('tabs').innerHTML=[['all','الكل']].concat(Object.keys(GRADES).map(g=>[g,'الصف '+GRADES[g]])).map(([g,n])=>'<button class="tab '+(st.grade===g?'on':'')+'" data-grade="'+g+'" role="tab" aria-selected="'+(st.grade===g)+'">'+n+'<small>'+(c[g]||0)+'</small></button>').join('');
   $('kinds').innerHTML=[['all','كل الأنواع']].concat(Object.entries(KINDS)).map(([k,n])=>'<button class="kind '+(st.kind===k?'on':'')+'" data-kind="'+k+'">'+n+'</button>').join('');
+  $('views').innerHTML=[['all','الكل'],['new','أُضيف حديثاً'],['feat','كتب الفصل الحالي'],['fav','مفضلتي ('+st.fav.size+')']].map(([v,n])=>'<button class="kind '+(st.view===v?'on':'')+'" data-view2="'+v+'">'+n+'</button>').join('');
+  let lr=null;try{lr=RECORDS.find(x=>x.id===localStorage.getItem('msu-last'))}catch(e){}
+  $('cont').innerHTML=(lr&&st.view==='all'&&!st.q)?'<div class="meta"><button class="btn" data-view="'+esc(lr.id)+'">⏵ تابع من حيث توقفت: '+esc(title(lr))+'</button></div>':'';
   $('ttl').textContent=st.grade==='all'?'كل الكتب':'كتب الصف '+GRADES[st.grade];
   $('cnt').textContent=L.length+' كتاب';
   $('grid').innerHTML=L.slice(0,st.n).map(card).join('');
@@ -144,13 +148,15 @@ document.addEventListener('click',e=>{
   const g=e.target.closest('[data-grade]');if(g){st.grade=g.dataset.grade;st.n=24;render();return}
   const k=e.target.closest('[data-kind]');if(k){st.kind=k.dataset.kind;st.n=24;render();return}
   const f=e.target.closest('[data-fav]');if(f){const id=f.dataset.fav;st.fav.has(id)?st.fav.delete(id):st.fav.add(id);try{localStorage.setItem('msu-fav',JSON.stringify([...st.fav]))}catch(e){}f.classList.toggle('on');return}
-  const v=e.target.closest('[data-view]');if(v){const r=RECORDS.find(x=>x.id===v.dataset.view);if(!r)return;$('dt').textContent=title(r);if(r.drive){$('fr').src='https://drive.google.com/file/d/'+r.drive+'/preview';$('dd').href='https://drive.google.com/uc?export=download&id='+r.drive}else{$('fr').src='https://docs.google.com/viewer?embedded=true&url='+encodeURIComponent(r.pdf_url);$('dd').href=r.pdf_url}$('dlg').showModal();return}
+  const v2=e.target.closest('[data-view2]');if(v2){st.view=v2.dataset.view2;st.n=24;render();return}
+  const v=e.target.closest('[data-view]');if(v){const r=RECORDS.find(x=>x.id===v.dataset.view);if(!r)return;try{localStorage.setItem('msu-last',r.id)}catch(e){}$('dt').textContent=title(r);if(r.drive){$('fr').src='https://drive.google.com/file/d/'+r.drive+'/preview';$('dd').href='https://drive.google.com/uc?export=download&id='+r.drive}else{$('fr').src='https://docs.google.com/viewer?embedded=true&url='+encodeURIComponent(r.pdf_url);$('dd').href=r.pdf_url}$('dlg').showModal();return}
 });
 $('dc').onclick=()=>$('dlg').close();$('dlg').addEventListener('close',()=>{$('fr').src='about:blank'});
 $('q').addEventListener('input',e=>{st.q=e.target.value;st.n=24;render()});
 $('all').addEventListener('change',e=>{st.all=e.target.checked;st.n=24;render()});
 $('moreb').onclick=()=>{st.n+=24;render()};
 $('theme').onclick=()=>{const d=document.documentElement;const dark=getComputedStyle(d).getPropertyValue('--bg').trim()==='#0e1511';d.dataset.theme=dark?'light':'dark'};
+try{const pq=new URLSearchParams(location.search).get('q');if(pq){st.q=pq;$('q').value=pq}}catch(e){}
 render();load();
 </script>
 <script src="/home-btn.js"></script>
