@@ -1,0 +1,52 @@
+(function(){
+if(window.__sp)return;window.__sp=1;
+var P=location.pathname.replace(/index\.html$/,'');
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){})})}
+var dip=null;window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dip=e;var b=document.getElementById('sp-inst');if(b)b.hidden=false});
+if(P!=='/'&&P!=='')return;
+var TOOLS=[["pdf-studio/", "محرر PDF — برنامج عربي متكامل", "برنامج مجاني لتحرير ملفات PDF بالكامل: قص وتحرير وإزالة العلامات المائية. من تصميم وبناء فهد الجروان لنظامي ويندوز وماك، وهو خاص بالمدرسة فقط."], ["/waraq/", "أداة ورق: أدوات PDF والصور", "أدوات المعلم: دمج وتنظيم PDF، التوقيع والختم، إزالة العلامة، استخراج النص، الشواهد والتلوين، بمعالجة محلية على جهازك."], ["/fahad-studio/", "فهد أستديو: مونتاج الفيديو", "محرر فيديو عربي يعمل في المتصفح: قص وترتيب المقاطع، نصوص وترجمة تلقائية بالعربية، قوالب وموشن وانتقالات وتصدير — بدون حساب وبمعالجة محلية على جهازك."], ["/photo-studio/", "فهد فوتو أستديو: تحرير الصور والتصميم", "استوديو عربي في المتصفح: تحرير الصور، خطوط عربية بتأثيرات وقوالب جاهزة، توقيع وختم وعلامة مائية وQR، وتصدير PNG وJPG وPDF — بدون حساب وبمعالجة محلية على جهازك."], ["/qr/", "باركود الشهادات والصور", "اصنع باركود أي رابط بشكل ولون ومقاس تختاره، واختصر الرابط، وضع الباركود على الشهادة أو الصورة أو ملف PDF أو Word، ثم حمّله صورة أو PDF — والمعالجة كلها داخل جهازك."], ["/rumooz/", "فهد رموز: الحروف والرموز العربية", "ابحث عن الحروف والرموز العربية وانسخها بنقرة: التشكيل، الرموز الإسلامية، العملات، وأكواد Word وصفحات الويب، مع مربع لتجميع النص وتنظيفه."], ["/quran/", "المصحف الشريف", "قراءة القرآن الكريم والبحث والتفسير الميسر والاستماع للتلاوة، مع مواقيت الصلاة والأذكار والمسبحة — يعمل من الجوال والحاسوب."], ["/msu-library.html", "مكتبة المحمدية: الكتب الدراسية", "فهرس منظم لمصادر الكتب والأدلة والحلول للصفوف الستة، مع بحث وتصفية ومفضلة."], ["/digital-contract.html", "عقد السلوك الرقمي لطلاب المدرسة", "ابتدائية المحمدية بالرس: يعبّئه الطالب وولي الأمر ويوقّعانه إلكترونيًا، وتُحفظ نسخة PDF في سجل المدرسة."], ["/manahej-form.html", "استمارة متابعة إنهاء المناهج الدراسية", "خاصة بمعلمي المدرسة الابتدائية المحمدية: تعبئة وتوقيع إلكتروني، وتُحفظ نسخة PDF واحدة لكل معلم."], ["/shawahed-staff/", "شواهد الإداريين", "سجل متابعة المهام للإداريين: يكتب كل موظف اسمه ومسماه، ويرفق شواهده بالصور أو ملفات Word وExcel، مقفل برقم سري مع تصدير PDF ومشاركة."], ["/forms/", "نماذج مدرسية جاهزة للطباعة", "جدول حصص أسبوعي، شهادة شكر، وسجل متابعة: عبّئها في المتصفح ثم اطبعها أو احفظها PDF."], ["/mdm/", "داونلود مانيجر — عربي بالكامل ومجاني", "بديل IDM بواجهة عربية كاملة، مجاني بالكامل وبلا إعلانات. تنزيل أسرع، فيديو وتورنت، لويندوز وماك."]];
+var PAGES=[["/all-tools/","فهرس أدوات الموقع","كل الأدوات في مكان واحد"],["/faq/","الأسئلة الشائعة","إجابات عن المكتبة والأدوات والتثبيت"],["/forms/","نماذج مدرسية جاهزة","جدول حصص، شهادة شكر، سجل متابعة"],["/msu-library.html","مكتبة المحمدية","كتب الطالب وأدلة المعلم والحلول للمرحلة الابتدائية"]];
+var MEM=[["العصر الجاهلي ومملكة كِندة القديمة","ما قبل الإسلام (أكثر من 300 سنة قبل الهجرة)","عُرفت الرس في العصر الجاهلي كأحد أشهر موارد المياه العذبة ومناهل الجزيرة العربية، وورد ذكرها في قصائد فحول شعراء المعلقات كزهير بن أبي سلمى وامرئ القيس."],
+["العصور الإسلامية المبكرة","القرن الأول إلى القرن التاسع الهجري","ظلت الرس محطة مهمة على دروب الحج والتجارة القادمة من البصرة وشرق الجزيرة عبر نجد نحو مكة المكرمة والمدينة المنورة."],
+["إعادة إعمار وتأسيس البلدة الحديثة","قرابة عام 900 هـ (1495م)","انطلقت مرحلة البناء والاستقرار الحضري الحديث للرس بنزول الأسر الكريمة واستصلاح الأراضي وبناء الأسوار والمزارع والقلاع."],
+["ملحمة الصمود: معركة وحصار الرس","1232 هـ - 1233 هـ (1817م)","استبسل فيها أهالي الرس بقيادة الشيخ قرناس بن عبدالرحمن والأمير منصور العساف في صد جيش إبراهيم باشا لمدة 105 أيام، وأجبروه على توقيع صلح مشرّف."],
+["العهد السعودي المبارك ورؤية 2030","من توحيد المملكة على يد الملك عبدالعزيز إلى اليوم","تحولت محافظة الرس إلى ثالث أكبر مدن منطقة القصيم وعاصمة للتعليم والرياضة والتراث العريق ومشاريع النهضة الحديثة."]];
+var css='#sp{max-width:64rem;margin:0 auto;padding:18px 16px 4px;direction:rtl;font-family:"IBM Plex Sans Arabic",sans-serif;color:#faf7f2}#sp *{box-sizing:border-box}'+
+'#sp .box{position:relative}#sp input{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(197,155,63,.35);border-radius:16px;padding:13px 16px;color:#faf7f2;font:inherit;font-size:16px}#sp input::placeholder{color:#d9c3a3}'+
+'#sp .res{display:none;margin-top:8px;background:rgba(10,24,14,.97);border:1px solid rgba(197,155,63,.35);border-radius:16px;max-height:340px;overflow:auto}#sp .res a{color:#faf7f2;text-decoration:none;display:block;padding:10px 14px;border-bottom:1px solid rgba(197,155,63,.14)}#sp .res a:last-child{border:0}#sp .res a:hover{background:rgba(197,155,63,.12)}#sp .res b{display:block;font-size:14.5px}#sp .res small{color:#d9c3a3;font-size:12px}#sp .res i{font-style:normal;color:#e8c87a;font-size:11px;margin-inline-start:6px}'+
+'#sp .lk{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}#sp .lk a,#sp .lk button{text-decoration:none;border:1px solid rgba(197,155,63,.35);background:rgba(255,255,255,.05);border-radius:999px;padding:5px 14px;font-size:13px;color:#e8c87a;cursor:pointer;font-family:inherit}'+
+'#sp .mem{margin-top:14px;border:1px solid rgba(232,200,122,.55);background:linear-gradient(135deg,rgba(197,155,63,.14),rgba(14,28,18,.85));border-radius:20px;padding:14px 16px}#sp .mem h3{margin:0;font:800 16px "Noto Kufi Arabic",sans-serif}#sp .mem small{color:#e8c87a;font-weight:600}#sp .mem p{margin:6px 0 0;color:#d9c3a3;font-size:14px;line-height:1.8}'+
+'#sp .fv a{display:inline-block;margin:4px 0 0 8px;color:#faf7f2;font-size:13px;text-decoration:underline}.sp-star{position:absolute;top:10px;left:12px;z-index:2;background:rgba(0,0,0,.25);border:0;color:#e8c87a;font-size:20px;line-height:1;border-radius:10px;padding:2px 6px;cursor:pointer}';
+function n(s){return String(s||'').replace(/[ً-ْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').toLowerCase().replace(/\s+/g,' ').trim()}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+var FK='msu-tools-fav',fav=[];try{fav=JSON.parse(localStorage.getItem(FK)||'[]')}catch(e){}
+function saveFav(){try{localStorage.setItem(FK,JSON.stringify(fav))}catch(e){}}
+var books=null,loading=false,cbs=[];
+function loadBooks(cb){if(books)return cb();cbs.push(cb);if(loading)return;loading=true;fetch('/msu-library_2.html').then(function(r){return r.text()}).then(function(t){var a=t.indexOf('const RECORDS='),b=t.indexOf('];\nconst SHEET');if(a<0||b<0)throw 0;var R=JSON.parse(t.slice(a+14,b+1));var G={1:'الأول',2:'الثاني',3:'الثالث',4:'الرابع',5:'الخامس',6:'السادس'};var K={student_book:'كتاب الطالب',workbook:'كتاب النشاط',teacher_guide:'دليل المعلم',solutions:'الحلول'};books=R.map(function(r){return{t:r.title.replace(/\s*pdf\s*$/i,''),s:'الصف '+G[r.grade]+' · '+(K[r.kind]||'')}});cbs.splice(0).forEach(function(f){f()})}).catch(function(){books=[];cbs.splice(0).forEach(function(f){f()})})}
+function build(){
+var tools=document.getElementById('tools');if(!tools||document.getElementById('sp'))return;
+var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
+var d=document.createElement('div');d.id='sp';
+var m=MEM[Math.floor(Date.now()/864e5)%MEM.length];
+d.innerHTML='<div class="box"><input id="sp-q" type="search" placeholder="ابحث في الكتب والأدوات وصفحات الموقع…" autocomplete="off"><div class="res" id="sp-r"></div></div><div class="lk"><a href="/all-tools/">فهرس الأدوات</a><a href="/forms/">نماذج مدرسية</a><a href="/faq/">الأسئلة الشائعة</a><button id="sp-inst" hidden>ثبّت الموقع كتطبيق</button></div><div class="fv" id="sp-fv"></div><div class="mem"><small>من ذاكرة الرس</small><h3>'+esc(m[0])+'</h3><small>'+esc(m[1])+'</small><p>'+esc(m[2])+'</p></div>';
+tools.parentNode.insertBefore(d,tools);
+var q=d.querySelector('#sp-q'),r=d.querySelector('#sp-r');
+function show(items){if(!items.length){r.innerHTML='<a><b>لا نتائج مطابقة</b></a>'}else r.innerHTML=items.map(function(x){return'<a href="'+x[0]+'"><b>'+esc(x[1])+'<i>'+x[3]+'</i></b><small>'+esc(x[2])+'</small></a>'}).join('');r.style.display='block'}
+function run(){var w=n(q.value).split(' ').filter(Boolean);if(!w.length){r.style.display='none';return}
+function ok(s){s=n(s);return w.every(function(x){return s.indexOf(x)>-1})}
+var out=[];TOOLS.forEach(function(t){if(ok(t[1]+' '+t[2]))out.push([t[0].charAt(0)=='/'||t[0].indexOf('http')==0?t[0]:'/'+t[0],t[1],t[2].slice(0,80),'أداة'])});
+PAGES.forEach(function(t){if(ok(t[1]+' '+t[2]))out.push([t[0],t[1],t[2],'صفحة'])});
+MEM.forEach(function(t){if(ok(t[0]+' '+t[2]))out.push(['/',t[0],t[1],'الموسوعة'])});
+loadBooks(function(){var c=0;books.forEach(function(b){if(c<12&&ok(b.t+' '+b.s)){c++;out.push(['/msu-library_2.html?q='+encodeURIComponent(q.value),b.t,b.s,'كتاب'])}});show(out.slice(0,24))});
+show(out)}
+q.addEventListener('input',run);q.addEventListener('focus',function(){loadBooks(function(){})});
+document.addEventListener('click',function(e){if(!d.contains(e.target))r.style.display='none'});
+d.querySelector('#sp-inst').onclick=function(){if(dip){dip.prompt();dip=null;this.hidden=true}};
+if(dip)d.querySelector('#sp-inst').hidden=false;
+renderFav();
+}
+function renderFav(){var f=document.getElementById('sp-fv');if(!f)return;f.innerHTML=fav.length?'<small style="color:#e8c87a">مفضلتي: </small>'+fav.map(function(h){var t=TOOLS.filter(function(x){return x[0]==h})[0];return t?'<a href="'+(h.charAt(0)=='/'||h.indexOf('http')==0?h:'/'+h)+'">'+esc(t[1].split(/[:—]/)[0].trim())+'</a>':''}).join(''):''}
+function stars(){var tools=document.getElementById('tools');if(!tools)return;[].forEach.call(tools.querySelectorAll('a[href]'),function(a){if(a.__st)return;var h=a.getAttribute('href');if(!TOOLS.some(function(x){return x[0]==h}))return;a.__st=1;if(getComputedStyle(a).position==='static')a.style.position='relative';var b=document.createElement('button');b.className='sp-star';b.type='button';b.setAttribute('aria-label','إضافة إلى المفضلة');b.textContent=fav.indexOf(h)>-1?'★':'☆';b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var i=fav.indexOf(h);if(i>-1)fav.splice(i,1);else fav.push(h);b.textContent=i>-1?'☆':'★';saveFav();renderFav()});a.appendChild(b)})}
+function tick(){build();stars()}
+tick();new MutationObserver(tick).observe(document.documentElement,{childList:true,subtree:true});
+})();
