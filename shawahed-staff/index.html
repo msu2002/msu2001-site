@@ -222,7 +222,7 @@ html.dk #lock button,html.dk .btn,html.dk .ov .b1,html.dk #done button,html.dk #
   <div class="pbody" id="pvBody"></div>
   <div class="pft"><button id="pvOk" type="button">✔ تأكيد وإرسال</button><button class="g" id="pvBack" type="button">↩︎ رجوع للتعديل</button></div>
 </div></div>
-<div id="done" dir="rtl"><div class="box"><div class="ok"><svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h3 id="dnT">تم حفظ شاهدك</h3><div class="path" id="dnP"></div><button id="dnSave" type="button">📥 حفظ في الجهاز</button><button class="g" id="dnShare" type="button">📤 مشاركة</button><div class="dmsg" id="dnM"></div><button class="g" id="dnNew" type="button">إضافة شاهد جديد</button></div></div>
+<div id="done" dir="rtl"><div class="box"><div class="ok"><svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h3 id="dnT">تم حفظ شاهدك</h3><div class="path" id="dnP"></div><button id="dnSave" type="button">📥 حفظ في الجهاز</button><div class="dmsg" id="dnM"></div><button class="g" id="dnNew" type="button">إضافة شاهد جديد</button></div></div>
 
 <div id="cp" class="ov" dir="rtl"><div class="box"><h3>🔑 تغيير كلمة المرور</h3>
 <div id="cpIdW" style="display:none"><label for="cpId">السجل المدني</label><input id="cpId" inputmode="numeric" maxlength="10" autocomplete="username"></div>
@@ -283,7 +283,6 @@ html.dk #lock button,html.dk .btn,html.dk .ov .b1,html.dk #done button,html.dk #
 <div class="actions">
   <button class="btn" id="btnPrint">🖨️ طباعة A4</button>
   <button class="btn primary" id="btnPdf">💾 حفظ PDF</button>
-  <button class="btn" id="btnSave">📤 مشاركة</button>
   <button class="btn" id="btnInstall">📲 إضافة إلى الشاشة الرئيسية</button>
   <button class="btn danger" id="btnReset">🔄 مسح البيانات</button>
   <button class="btn" id="btnPw">🔑 تغيير كلمة المرور</button>
@@ -364,7 +363,7 @@ async function snapshot0(){
   });
   const hide=[...document.querySelectorAll('.evbtn,.evhint,.th button,.homeTop')];if(!selC.value)hide.push($('.clsbox'));hide.forEach(x=>x.style.display='none');
   await document.fonts.ready;
-  const c=await html2canvas(sheet,{scale:2.5,backgroundColor:'#fff',useCORS:true});
+  const c=await html2canvas(sheet,{scale:2,backgroundColor:'#fff',useCORS:true});
   swaps.forEach(f=>f());hide.forEach(x=>x.style.display='');return c;
 }
 function toPdf(canvas){
@@ -376,7 +375,7 @@ function toPdf(canvas){
     c.width=canvas.width;c.height=Math.round(sh*canvas.width/W);
     const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);
     x.drawImage(canvas,0,Math.round(y*canvas.width/W),canvas.width,c.height,0,0,c.width,c.height);
-    if(!first)pdf.addPage();pdf.addImage(c.toDataURL('image/jpeg',0.93),'JPEG',0,0,W,sh);
+    if(!first)pdf.addPage();pdf.addImage(c.toDataURL('image/jpeg',0.8),'JPEG',0,0,W,sh);
     y+=H;first=false;
   }
   return pdf;
@@ -391,7 +390,7 @@ async function buildPages(){
     c.width=canvas.width;c.height=Math.round(sh*canvas.width/W);
     const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);
     x.drawImage(canvas,0,Math.round(y*canvas.width/W),canvas.width,c.height,0,0,c.width,c.height);
-    out.push({u:c.toDataURL('image/jpeg',0.93),fit:false,mm:sh});
+    out.push({u:c.toDataURL('image/jpeg',0.8),fit:false,mm:sh});
     y+=H;
   }
   for(const t of [...thumbs.querySelectorAll('.th img')]){
@@ -425,12 +424,12 @@ function showPreview(pages,mode){
     d.querySelector('img').src=p.u;body.appendChild(d);
   });
   $('#pvN').textContent='عدد الصفحات: '+pages.length;
-  $('#pvOk').textContent=mode==='drive'?'✔ تأكيد وإرسال':'✔ تأكيد ومشاركة';
+  $('#pvOk').textContent='✔ تأكيد وحفظ';
   body.scrollTop=0;$('#prev').classList.add('show');
 }
 async function review(mode){
   if(!validate())return;
-  const b=mode==='drive'?$('#btnPdf'):$('#btnSave');b.disabled=true;
+  const b=$('#btnPdf');b.disabled=true;
   msg('جاري تجهيز المعاينة…');
   try{showPreview(await buildPages(),mode);msg('راجع الصفحات ثم اضغط «تأكيد».')}
   catch(e){msg(e.message||'تعذّر تجهيز المعاينة.','bad')}
@@ -453,53 +452,31 @@ async function saveAll(files){for(const f of files){dl(f);await new Promise(r=>s
 let LAST=null;
 function showDone(t,p){$('#dnT').textContent=t;$('#dnP').innerHTML=p.replace(/(\d{4}-\d\d-\d\d\.pdf)/g,'<bdi dir="ltr">$1</bdi>');$('#done').classList.add('show')}
 $('#btnPdf').onclick=()=>review('drive');
-$('#btnSave').onclick=()=>review('share');
 $('#pvBack').onclick=()=>{$('#prev').classList.remove('show');msg('رجعت للتعديل — لم يُرسل شيء.')};
-$('#pvOk').onclick=async()=>{const m=PMODE;$('#prev').classList.remove('show');if(m==='drive')await sendDrive();else await shareNow()};
+$('#pvOk').onclick=async()=>{$('#prev').classList.remove('show');await sendDrive()};
 async function sendDrive(){const b=$('#btnPdf');b.disabled=true;msg('جاري تجهيز ملف PDF بشواهدك…');
   try{
     const blob=pagesToPdf(PAGES).output('blob'),name=fname(),file=new File([blob],name,{type:'application/pdf'});LAST=[file];
     let saved=false,why='';
     if(ENDPOINT){msg('جاري الحفظ في مجلدك على Drive…');
-      try{const body=JSON.stringify({id:USER.id,pw:USER.pw||USER.ph,pn:pnorm(USER.pw||USER.ph),fn:name,pdf:await b64(blob),extra:[]});
-        const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body});const j=await r.json();
-        if(j&&j.ok)saved=true;else why=(j&&j.error)||'تعذّر الحفظ'}catch(e){why='تعذّر الاتصال بالخادم'}}
+      const body=JSON.stringify({id:USER.id,pw:USER.pw||USER.ph,pn:pnorm(USER.pw||USER.ph),fn:name,pdf:await b64(blob),extra:[]});
+      for(let t=1;t<=2&&!saved;t++){
+        try{if(t>1)msg('إعادة محاولة الإرسال للمدير…');
+          const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body});const j=await r.json();
+          if(j&&j.ok)saved=true;else{why=(j&&j.error)||'تعذّر الحفظ';if(why==='غير مصرّح')break}}
+        catch(e){why='تعذّر الاتصال بالخادم'}}}
     dl(file);
-    if(saved)showDone('تم حفظ شاهدك','📁 شواهد الاداريين<br>↳ 📁 '+esc(USER.n)+'<br>&nbsp;&nbsp;&nbsp;↳ 📄 '+esc(name));
-    else if(ENDPOINT)showDone('نُزِّل الملف على جوالك','⚠️ لم يُحفظ في Drive: '+esc(why)+'<br>📄 '+esc(name));
+    if(saved)showDone('تم الإرسال للمدير وحُفظ في جهازك ✔','📁 شواهد الاداريين<br>↳ 📁 '+esc(USER.n)+'<br>&nbsp;&nbsp;&nbsp;↳ 📄 '+esc(name));
+    else if(ENDPOINT)showDone('حُفظ في جهازك فقط','⚠️ لم يصل المدير: '+esc(why)+'<br>أعد المحاولة لاحقًا.<br>📄 '+esc(name));
     else showDone('نُزِّل الملف على جوالك','📄 '+esc(name)+'<br>الحفظ في Drive غير مفعّل بعد.');
-    msg(saved?'تم الحفظ في Drive ✔':'تم تنزيل الملف.',saved?'ok':'');
+    msg(saved?'تم الإرسال للمدير وحُفظ في جهازك ✔':'حُفظ في جهازك — تعذّر الإرسال للمدير.',saved?'ok':'bad');
   }catch(e){msg(e.message,'bad')}finally{b.disabled=false}}
-async function shareNow(){$('#btnSave').disabled=true;msg('جاري التجهيز…');
-  try{
-    const blob=pagesToPdf(PAGES).output('blob'),files=[new File([blob],fname(),{type:'application/pdf'})];
-    if(navigator.canShare&&navigator.canShare({files})){try{await navigator.share({files,title:'شواهد الإداريين'});msg('تمت المشاركة ✔','ok');return}catch(e){if(e&&e.name==='AbortError'){msg('أُلغيت المشاركة.');return}}}
-    await saveAll(files);
-    msg('تم حفظ الملف في جهازك — شاركه حيث تشاء ✔','ok');
-  }catch(e){msg(e.message,'bad')}finally{$('#btnSave').disabled=false}};
 function dnMsg(t,bad){const e=$('#dnM');if(e){e.textContent=t||'';e.style.color=bad?'#c1121f':''}}
-function dnBusy(on){$('#dnSave').disabled=on;$('#dnShare').disabled=on}
+function dnBusy(on){$('#dnSave').disabled=on}
 $('#dnSave').onclick=async()=>{
   if(!LAST||!LAST.length){dnMsg('لا يوجد ملف للحفظ — أعد إنشاء الشاهد.',1);return}
   dnBusy(true);dnMsg('جاري الحفظ في جهازك…');
   try{await saveAll(LAST);dnMsg(LAST.length>1?'تم حفظ '+LAST.length+' ملفات في مجلد التنزيلات ✔':'تم حفظ الملف في مجلد التنزيلات ✔')}
-  catch(e){dnMsg('تعذّر الحفظ: '+(e.message||''),1)}
-  finally{dnBusy(false)}
-};
-$('#dnShare').onclick=async()=>{
-  if(!LAST||!LAST.length){dnMsg('لا يوجد ملف للمشاركة — أعد إنشاء الشاهد.',1);return}
-  let shared=false,why='';
-  try{
-    if(navigator.canShare&&navigator.canShare({files:LAST})){await navigator.share({files:LAST,title:'شواهد الإداريين'});shared=true}
-    else if(navigator.canShare&&navigator.canShare({files:[LAST[0]]})){await navigator.share({files:[LAST[0]],title:'شواهد الإداريين'});shared=true;why='شُورك ملف الشاهد فقط؛ بقية المرفقات تُحفظ في جهازك.'}
-  }catch(e){
-    if(e&&e.name==='AbortError'){dnMsg('أُلغيت المشاركة — يمكنك الحفظ في الجهاز.');return}
-    why='تعذّرت المشاركة في هذا المتصفح.';
-  }
-  if(shared&&!why){dnMsg('تمت المشاركة ✔');return}
-  dnBusy(true);
-  dnMsg((why||'المشاركة غير مدعومة في هذا المتصفح.')+' جاري الحفظ في جهازك…');
-  try{await saveAll(shared?LAST.slice(1):LAST);dnMsg((why?why+' ':'')+'تم الحفظ في مجلد التنزيلات ✔')}
   catch(e){dnMsg('تعذّر الحفظ: '+(e.message||''),1)}
   finally{dnBusy(false)}
 };
