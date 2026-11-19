@@ -17,4 +17,18 @@
 @font-face{font-family:'lib-scheherazadenew';src:url(fonts/scheherazadenew-700.woff2) format('woff2');font-weight:700;font-display:swap}
 @font-face{font-family:'lib-scheherazadenew';src:url(fonts/scheherazadenew-400.woff2) format('woff2');font-weight:400;font-display:swap}
 @font-face{font-family:'lib-tajawal';src:url(fonts/tajawal-700.woff2) format('woff2');font-weight:700;font-display:swap}
-@font-face{font-family:'lib-tajawal';src:url(fonts/tajawal-400.woff2) format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'lib-tajawal';src:url(fonts/tajawal-400.woff2) format('woff2');font-weight:400;font-display:swap}@font-face{font-family:'lib-alexandria';src:url(fonts/alexandria-var.woff2) format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'lib-gulzar';src:url(fonts/gulzar-400.woff2) format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'lib-harmattan';src:url(fonts/harmattan-400.woff2) format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'lib-harmattan';src:url(fonts/harmattan-700.woff2) format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'lib-ibmplexsansarabic';src:url(fonts/ibmplexsansarabic-400.woff2) format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'lib-ibmplexsansarabic';src:url(fonts/ibmplexsansarabic-700.woff2) format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'lib-katibeh';src:url(fonts/katibeh-400.woff2) format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'lib-mada';src:url(fonts/mada-var.woff2) format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'lib-markazitext';src:url(fonts/markazitext-var.woff2) format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'lib-mirza';src:url(fonts/mirza-400.woff2) format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'lib-mirza';src:url(fonts/mirza-700.woff2) format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'lib-notokufiarabic';src:url(fonts/notokufiarabic-var.woff2) format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'lib-notosansarabic';src:url(fonts/notosansarabic-var.woff2) format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'lib-rakkas';src:url(fonts/rakkas-400.woff2) format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'lib-vibes';src:url(fonts/vibes-400.woff2) format('woff2');font-weight:400;font-display:swap}
