@@ -59,7 +59,7 @@ dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);co
 <div class="app" dir="rtl">
 <aside class="pn">
 <h3>نوع الشهادة</h3><div class="seg" id="kt"><span class="on" data-k="all">الكل</span><span data-k="tq">شكر وتقدير</span><span data-k="gr">تخرج ونجاح</span><span data-k="ex">تميّز وتفوق</span><span data-k="at">حضور ودورات</span></div>
-<h3>المصدر</h3><div class="seg" id="ks"><span class="on" data-s="all">الكل</span><span data-s="pp">نموذجك</span><span data-s="cv">كانفا</span><span data-s="ef">تعليمية</span></div>
+
 <h3>القوالب <span id="gc"></span></h3><div class="gal" id="gal"></div>
 <p class="note" id="lic"></p>
 </aside>
@@ -229,16 +229,16 @@ $('#aSig').onclick=()=>$('#dlg').showModal();$('#pX').onclick=()=>$('#dlg').clos
 $('#pOk').onclick=()=>{addImg(pad.toDataURL('image/png'),'توقيع',130,{x:W*.2,y:H*.78});$('#dlg').close();pc.clearRect(0,0,pad.width,pad.height)};
 /* ---- templates ---- */
 const cnt={};D.T.forEach(t=>{cnt[t.k]=(cnt[t.k]||0)+1;t.n=t.t+(t.src==='ef'?' '+cnt[t.k]:'')});
-function gallery(){const g=$('#gal');g.innerHTML='';let n=0;D.T.forEach(t=>{if((kk!=='all'&&t.k!==kk)||(ss!=='all'&&t.src!==ss))return;n++;const d=document.createElement('div');d.className='th'+(cur===t?' on':'');d.title=t.n;d.innerHTML=`<img loading="lazy" src="tpl/t/${t.id}.jpg" alt="${t.n}"><i class="i-${t.src}">${({cv:'كانفا',pp:'نموذجك',ef:'تعليمي'})[t.src]}</i>`;d.onclick=()=>loadT(t);g.appendChild(d)});$('#gc').textContent='('+n+')'}
+function gallery(){const g=$('#gal');g.innerHTML='';let n=0;D.T.forEach(t=>{if((kk!=='all'&&t.k!==kk)||(ss!=='all'&&t.src!==ss))return;n++;const d=document.createElement('div');d.className='th'+(cur===t?' on':'');d.title=t.n;d.innerHTML=`<img loading="lazy" src="tpl/t/${t.id}.jpg" alt="${t.n}">`;d.onclick=()=>loadT(t);g.appendChild(d)});$('#gc').textContent='('+n+')'}
 function loadT(t){
  snap();cur=t;W=t.w;H=t.h;bg.src='tpl/'+t.id+'.jpg';bg.style.display='';
  layers=t.layers.map(o=>{const nameL=/اسم المكرم/.test(o.t)||o.s>=45;const title=/^شهادة|^شهـ/.test(o.t)&&o.s>=24;
   return{id:++uid,type:'text',t:(o.t==='اسم المدرسة أو الجهة'?$('#sn').value:o.t),x:o.x,y:o.y,s:o.s,w:Math.max(60,o.w*1.18),c:o.c,fam:o.fam||(nameL?'lib-arefruqaa':title?'lib-reemkufi':'lib-cairo'),b:o.b||(title?1:0),wrap:(o.lines>1||o.t.length>70)?1:0,fx:'',r:0,isName:nameL?1:0}});
  (t.ex||[]).forEach(o=>{if(o.kind==='title')layers.push({id:++uid,type:'text',t:o.t,x:o.x,y:o.y,s:60,w:Math.max(120,o.w*1.25),c:o.c,fam:'lib-arefruqaa',b:1,wrap:0,fx:'',r:0,isName:0});else layers.push({id:++uid,type:'img',src:o.src,nm:o.nm,x:o.x,y:o.y,iw:o.iw,ih:o.ih,r:0,op:1})});
- sel=null;fit();render();props();gallery();$('#lic').textContent=SN[t.src]+'. الخطوط: OFL — الإطارات: OpenClipart (CC0).';
+ sel=null;fit();render();props();gallery();
 }
 $$('#kt span').forEach(s=>s.onclick=()=>{$$('#kt span').forEach(x=>x.classList.remove('on'));s.classList.add('on');kk=s.dataset.k;gallery()});
-$$('#ks span').forEach(s=>s.onclick=()=>{$$('#ks span').forEach(x=>x.classList.remove('on'));s.classList.add('on');ss=s.dataset.s;gallery()});
+
 $('#bClr').onclick=()=>{snap();cur=null;W=W0;H=H0;bg.style.display='none';layers=[];sel=null;fit();render();props();gallery()};
 /* ---- export (canvas, vector-quality text) ---- */
 function wrapLines(ctx,t,w){const ws=t.split(/\s+/),out=[];let c='';ws.forEach(x=>{const n=c?c+' '+x:x;if(ctx.measureText(n).width>w&&c){out.push(c);c=x}else c=n});if(c)out.push(c);return out}
