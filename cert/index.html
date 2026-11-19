@@ -85,11 +85,11 @@ dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);co
 </div>
 <div id="pAll" class="hide">
 <label>التدوير <b id="vR"></b></label><input type="range" id="rR" min="-180" max="180">
-<div class="row" style="margin-top:8px"><button class="btn o" id="bDup">نسخ</button><button class="btn o" id="bFw">للأمام</button><button class="btn o" id="bBk">للخلف</button><button class="btn o" id="bDel">حذف</button></div>
+<div class="row" style="margin-top:8px"><button class="btn o" id="bDup">نسخ</button><button class="btn o" id="bFw">للأمام</button><button class="btn o" id="bBk">للخلف</button><button class="btn o" id="bDel">حذف</button></div><button class="btn o hide" id="bRep">استبدال الصورة/الشعار/التوقيع</button><input type="file" id="fr" accept="image/*" class="hide">
 </div>
 <h3>أختام</h3>
 <div class="seg" id="scol"><span class="on" data-c="#1b3f8f" style="color:#1b3f8f">أزرق</span><span data-c="#9b1c1c" style="color:#9b1c1c">أحمر</span><span data-c="#0f5c3a" style="color:#0f5c3a">أخضر</span></div>
-<label>اسم الجهة</label><input class="in" id="sn" value="مدرسة الرس الابتدائية"><label>أسفل الختم</label><input class="in" id="sb" value="١٤٤٨هـ">
+<label>اسم الجهة</label><input class="in" id="sn" value="المدرسة الابتدائية المحمدية"><label>أسفل الختم</label><input class="in" id="sb" value="١٤٤٨هـ">
 <div class="sw" id="sw" style="margin-top:8px"></div>
 <h3>إطارات وزخارف (٦)</h3><div class="fr" id="fr"></div>
 <p class="note">الأختام والتواقيع والشعارات تتحرك وتُكبَّر كأي عنصر. ارفع ختمك الحقيقي بزر «صورة/شعار».</p>
@@ -141,7 +141,7 @@ function chips(){$('#chips').innerHTML='';layers.forEach((l,i)=>{const s=documen
 /* ---- selection / props ---- */
 function select(l){sel=l;render();props()}
 function props(){
- const l=sel;$('#props').classList.toggle('hide',!!l);$('#pAll').classList.toggle('hide',!l);$('#pTxt').classList.toggle('hide',!l||l.type!=='text');
+ const l=sel;$('#bRep').classList.toggle('hide',!l||l.type!=='img'||!!l.frame);$('#props').classList.toggle('hide',!!l);$('#pAll').classList.toggle('hide',!l);$('#pTxt').classList.toggle('hide',!l||l.type!=='text');
  if(!l)return;
  $('#rR').value=l.r||0;$('#vR').textContent=(l.r||0)+'°';
  if(l.type==='text'){
@@ -198,6 +198,8 @@ function styleSample(el,e){el.style.fontSize='22px';el.style.display='inline-blo
 /* ---- add ---- */
 function addText(o){snap();const l=Object.assign({id:++uid,type:'text',t:'نص جديد',x:W/2,y:H/2,s:28,w:260,c:'#1d2a22',fam:'lib-cairo',b:0,wrap:0,fx:'',r:0},o);layers.push(l);select(l);return l}
 function addImg(src,nm,wmax,pos){const im=new Image();im.onload=()=>{snap();const k=Math.min(1,wmax/im.naturalWidth);const l={id:++uid,type:'img',src,nm,x:pos?.x??W/2,y:pos?.y??H/2,iw:im.naturalWidth*k,ih:im.naturalHeight*k,r:0,op:1,nat:[im.naturalWidth,im.naturalHeight]};layers.push(l);select(l)};im.src=src}
+$('#bRep').onclick=()=>$('#fr').click();
+$('#fr').onchange=e=>{const f=e.target.files[0];e.target.value='';if(!f||!sel)return;const l=sel,rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{snap();const r=im.naturalHeight/im.naturalWidth;const w=Math.max(l.iw,l.ih/r*1);let nw=l.iw,nh=nw*r;if(nh>l.ih*1.6){nh=l.ih*1.6;nw=nh/r}l.src=rd.result;l.iw=nw;l.ih=nh;render();props()};im.src=rd.result};rd.readAsDataURL(f)};
 $('#aTxt').onclick=()=>addText({});
 $('#aImg').onclick=()=>$('#fl').click();
 $('#fl').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>addImg(r.result,f.name,160);r.readAsDataURL(f);e.target.value=''};
@@ -231,7 +233,8 @@ function gallery(){const g=$('#gal');g.innerHTML='';let n=0;D.T.forEach(t=>{if((
 function loadT(t){
  snap();cur=t;W=t.w;H=t.h;bg.src='tpl/'+t.id+'.jpg';bg.style.display='';
  layers=t.layers.map(o=>{const nameL=/اسم المكرم/.test(o.t)||o.s>=45;const title=/^شهادة|^شهـ/.test(o.t)&&o.s>=24;
-  return{id:++uid,type:'text',t:o.t,x:o.x,y:o.y,s:o.s,w:Math.max(60,o.w*1.18),c:o.c,fam:o.fam||(nameL?'lib-arefruqaa':title?'lib-reemkufi':'lib-cairo'),b:o.b||(title?1:0),wrap:(o.lines>1||o.t.length>70)?1:0,fx:'',r:0,isName:nameL?1:0}});
+  return{id:++uid,type:'text',t:(o.t==='اسم المدرسة أو الجهة'?$('#sn').value:o.t),x:o.x,y:o.y,s:o.s,w:Math.max(60,o.w*1.18),c:o.c,fam:o.fam||(nameL?'lib-arefruqaa':title?'lib-reemkufi':'lib-cairo'),b:o.b||(title?1:0),wrap:(o.lines>1||o.t.length>70)?1:0,fx:'',r:0,isName:nameL?1:0}});
+ (t.ex||[]).forEach(o=>{if(o.kind==='title')layers.push({id:++uid,type:'text',t:o.t,x:o.x,y:o.y,s:60,w:Math.max(120,o.w*1.25),c:o.c,fam:'lib-arefruqaa',b:1,wrap:0,fx:'',r:0,isName:0});else layers.push({id:++uid,type:'img',src:o.src,nm:o.nm,x:o.x,y:o.y,iw:o.iw,ih:o.ih,r:0,op:1})});
  sel=null;fit();render();props();gallery();$('#lic').textContent=SN[t.src]+'. الخطوط: OFL — الإطارات: OpenClipart (CC0).';
 }
 $$('#kt span').forEach(s=>s.onclick=()=>{$$('#kt span').forEach(x=>x.classList.remove('on'));s.classList.add('on');kk=s.dataset.k;gallery()});
