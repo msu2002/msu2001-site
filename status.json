@@ -1,21 +1,21 @@
 {
- "checkedAt": "2026-11-19T08:53:25.351Z",
+ "checkedAt": "2026-11-19T18:02:15.249Z",
  "sources": [
   {
    "id": "qassim",
    "name": "إدارة تعليم القصيم",
    "url": "https://sites.moe.gov.sa/Qassim/news/",
-   "ok": true,
+   "ok": false,
    "status": 200,
-   "itemCount": 9
+   "error": "HTTP 200"
   },
   {
    "id": "rass",
    "name": "إدارة تعليم الرس",
    "url": "https://sites.moe.gov.sa/Rass/",
-   "ok": true,
+   "ok": false,
    "status": 200,
-   "itemCount": 5
+   "error": "HTTP 200"
   },
   {
    "id": "moe",
