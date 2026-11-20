@@ -172,6 +172,12 @@
   .foot{text-align:center;color:var(--muted);font-size:.8rem;margin-top:26px}
   @media print{.theme,.evmore,#details .row,.head button{display:none}.card{box-shadow:none}}
 </style>
+<script>
+(function(){if(!/[?&]embed=1/.test(location.search))return;var d=document.documentElement;d.classList.add('embed');
+var st=document.createElement('style');st.textContent='html.embed,html.embed body{background:transparent!important}html.embed .top{display:none!important}html.embed .wrap{padding-top:0!important}';document.head.appendChild(st);
+function send(){try{parent.postMessage({hjH:Math.ceil(document.body.getBoundingClientRect().height+24)},location.origin)}catch(e){}}
+addEventListener('load',send);if(window.ResizeObserver)new ResizeObserver(send).observe(document.body);setInterval(send,1500);})();
+</script>
 </head>
 <body>
 <div class="wrap">
