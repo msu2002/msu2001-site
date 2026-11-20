@@ -18,7 +18,17 @@ var css='#events>*:not(.hj-wrap){display:none!important}'+
 '@keyframes hjp{0%,100%{box-shadow:0 0 0 0 rgba(232,200,122,.5)}50%{box-shadow:0 0 0 10px rgba(232,200,122,0)}}'+
 '@media(prefers-reduced-motion:reduce){.hj-rib.ad a{animation:none}}'+
 '@media(max-width:520px){.hj-rib a{border-radius:18px;padding:8px 12px;font-size:13px}.hj-rib .m{display:none}}';
-function addCss(){if(document.getElementById("hj-css"))return;var s=document.createElement("style");s.id="hj-css";s.textContent=css;document.head.appendChild(s)}
+var css2='main{display:flex!important;flex-direction:column}main>*{width:100%}main>footer{order:100}'+
+'#moe-guide{order:99;max-width:48rem;margin:0 auto;padding:24px 16px!important}'+
+'#moe-guide *{background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important}'+
+'#moe-guide small,#moe-guide>div>p{display:none!important}'+
+'#moe-guide h2{font-size:1.15rem!important;margin:0 0 10px!important;text-align:start!important}'+
+'#moe-guide h3{font-size:1rem!important;margin:14px 0 4px!important;color:#E8C87A!important;border-bottom:1px solid rgba(197,155,63,.25)!important;padding-bottom:4px!important}'+
+'#moe-guide a{display:flex!important;justify-content:space-between;gap:12px;padding:4px 0!important;text-decoration:none;font-size:.95rem}'+
+'#moe-guide a>span:last-child{direction:ltr;opacity:.85}'+
+'#moe-guide>div:nth-of-type(2){display:block!important}'+
+'#moe-guide>div:nth-of-type(2)>div{margin:0 0 6px!important;padding:0!important}';
+function addCss(){if(document.getElementById("hj-css"))return;var s=document.createElement("style");s.id="hj-css";s.textContent=css+css2;document.head.appendChild(s)}
 function big(){var ev=document.getElementById("events");if(!ev)return;addCss();var w=ev.querySelector(".hj-wrap");
  if(!w){w=document.createElement("div");w.className="hj-wrap";
   w.innerHTML='<div class="hj-head"><span class="hj-eye">التقويم الهجري</span><h2>التقويم الهجري وأوقات الصلاة والمناسبات</h2></div><iframe id="hj-frame" class="hj-frame" src="'+U+'?embed=1" title="التقويم الهجري وأوقات الصلاة" loading="lazy" scrolling="no"></iframe>';
@@ -52,6 +62,7 @@ function ribbon(){if(document.getElementById("hj-rib"))return;var main=document.
  d.firstChild.onclick=function(e){var ev=document.getElementById("events");if(ev){e.preventDefault();ev.scrollIntoView({behavior:"smooth",block:"start"})}};
  main.insertBefore(d,main.children[1]);fetchT();ribTick();
  if(!ribMade){ribMade=true;setInterval(ribTick,1000);setInterval(fetchT,600000);addEventListener("storage",function(e){if(e.key==="hc_place"||e.key==="hc_method")fetchT()})}}
-function run(){big();ribbon()}
+function moe(){var g=document.getElementById("moe-guide");if(!g)return;g.querySelectorAll("h3").forEach(function(h){if(!h.dataset.p){h.dataset.p=1;h.textContent=h.textContent.replace(/^\S+\s+/,"")}})}
+function run(){big();ribbon();moe()}
 run();new MutationObserver(run).observe(document.documentElement,{childList:true,subtree:true});
 })();
