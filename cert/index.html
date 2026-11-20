@@ -26,9 +26,9 @@ input[type=range]{width:100%}input[type=color]{width:100%;height:34px;padding:0;
 .seg{display:flex;flex-wrap:wrap;gap:5px}.seg span{padding:4px 11px;border-radius:99px;border:1px solid var(--line);font-size:.78rem;cursor:pointer;user-select:none}.seg .on{background:var(--ac);color:#06210f;border-color:var(--ac)}:root[data-theme="light"] .seg .on{color:#fff}
 .btn{border:0;border-radius:9px;padding:8px 12px;font:700 .82rem Cairo;cursor:pointer;background:var(--ac);color:#06210f;text-decoration:none;display:inline-block;text-align:center}:root[data-theme="light"] .btn{color:#fff}.btn.o{background:transparent;color:var(--fg);border:1px solid var(--line)}.btn.w{width:100%;margin-top:6px}
 .row{display:flex;gap:6px;flex-wrap:wrap}.row .btn{flex:1;min-width:70px}
-.gal{display:grid;grid-template-columns:1fr 1fr;gap:7px;max-height:520px;overflow:auto;padding:2px}
-.th{position:relative;border:2px solid transparent;border-radius:7px;overflow:hidden;cursor:pointer;aspect-ratio:1.414;background:#0001}.th.on{border-color:var(--gold)}
-.th img{width:100%;height:100%;object-fit:cover;display:block}
+.gal{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:max-content;align-content:start;gap:7px;max-height:520px;overflow:auto;padding:2px;-webkit-overflow-scrolling:touch}
+.th{position:relative;border:2px solid transparent;border-radius:7px;overflow:hidden;cursor:pointer;background:#0001;align-self:start;min-width:0}.th.on{border-color:var(--gold)}
+.th img{width:100%;height:auto;aspect-ratio:1.414/1;object-fit:cover;display:block}
 .th i{position:absolute;top:3px;right:3px;font:700 9px Cairo;color:#fff;padding:1px 6px;border-radius:99px;font-style:normal}
 .i-cv{background:#7d2ae8}.i-pp{background:#c2410c}.i-ef{background:#0f5c3a}
 .wrap{background:repeating-conic-gradient(#0000000a 0 25%,#0000 0 50%) 0 0/20px 20px;border-radius:14px;padding:12px}
@@ -53,6 +53,30 @@ input[type=range]{width:100%}input[type=color]{width:100%;height:34px;padding:0;
 dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--fg);padding:14px;max-width:96vw}dialog canvas{border:1px dashed var(--mut);border-radius:8px;background:#fff;touch-action:none;max-width:100%}
 
 #pz{display:none}
+/* تحسين الجوال والآيباد */
+header>.row{flex:1 1 auto!important;min-width:0}
+header .row select.in{max-width:100%}
+body{padding-bottom:max(14px,env(safe-area-inset-bottom,0px))}
+@media(max-width:1100px){.app{grid-template-columns:minmax(0,1fr)}.app>main{order:-1}}
+@media(min-width:700px) and (max-width:1100px){.app{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.app>main{grid-column:1/-1}.gal{max-height:340px;grid-template-columns:repeat(3,1fr)}}
+@media(max-width:699px){
+ h1{font-size:1.25rem}
+ header{gap:8px}header>.row{flex:1 1 100%!important}
+ header>.row:first-child{justify-content:space-between}
+ header>.row:last-child .btn{flex:1 1 30%}header>.row:last-child select.in{flex:1 1 100%;width:100%!important}
+ .wrap{padding:6px}
+ .gal{display:flex;gap:7px;max-height:none;overflow-x:auto;overflow-y:hidden;padding:2px 2px 8px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+ .gal .th{flex:0 0 46%;scroll-snap-align:start}
+ .tools .note{flex:1 1 100%}
+ .app>main{display:contents}.app>main>*{order:1}.app>aside:first-of-type{order:2}.app>main>section{order:3;margin-top:0!important}.app>aside:last-of-type{order:4}
+ .chips span{max-width:46%}
+}
+@media(pointer:coarse){
+ .in,select.in,textarea.in{font-size:16px}
+ .btn{min-height:42px;padding:9px 14px}
+ .seg span{padding:7px 14px}
+ .hd{width:24px;height:24px}.hd.rs{right:-14px;bottom:-14px}.hd.ro{top:-38px;margin-left:-12px}
+}
 @media print{body>*:not(#pz){display:none!important}html,body{background:#fff!important;margin:0!important;padding:0!important}#pz{display:flex!important;position:fixed;inset:0;align-items:center;justify-content:center;background:#fff;z-index:99999}#pz img{display:block;width:100%;height:100%;object-fit:contain}}
 </style>
 <header><div class="row" style="flex:0 0 auto;align-items:center"><a class="btn o" href="../" id="bHome">🏠 الصفحة الرئيسية</a><h1>صانع الشهادات</h1></div><div class="row" style="flex:0 0 auto"><button class="btn o" id="bTheme" title="الوضع الليلي / النهاري">☀️</button><button class="btn o" id="bClr">شهادة فارغة</button><select class="in" id="pm" style="width:auto;padding:7px 8px" title="هامش الطباعة"><option value="0">بدون هامش (ملء الورقة)</option><option value="4">هامش 4 مم</option><option value="8">هامش 8 مم</option><option value="12">هامش 12 مم</option></select><button class="btn" id="bPrint">🖨️ طباعة</button><button class="btn" id="bPng">تصدير PNG</button><button class="btn" id="bPdf">تصدير PDF</button></div></header>
