@@ -12,7 +12,8 @@ function big(){var ev=document.getElementById("events");if(!ev)return;addCss();v
  if(!w){w=document.createElement("div");w.className="hj-wrap";
   w.innerHTML='<div class="hj-head"><span class="hj-eye">التقويم الهجري</span><h2>التقويم الهجري وأوقات الصلاة والمناسبات</h2></div><iframe id="hj-frame" class="hj-frame" src="'+U+'?embed=1" title="التقويم الهجري وأوقات الصلاة" scrolling="no"></iframe>';
   ev.appendChild(w);
-  addEventListener("message",function(e){if(e.origin!==location.origin||!e.data||!e.data.hjH)return;var f=document.getElementById("hj-frame");if(f)f.style.height=Math.max(600,e.data.hjH)+"px"})}}
+  var f=document.getElementById("hj-frame");function fit(){try{var x=f.contentDocument;if(x&&x.body)f.style.height=Math.max(600,Math.ceil(x.body.getBoundingClientRect().height+24))+"px"}catch(e){}}
+  f.addEventListener("load",fit);setInterval(fit,700)}}
 function run(){big()}
 run();new MutationObserver(run).observe(document.documentElement,{childList:true,subtree:true});
 })();
