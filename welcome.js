@@ -8,7 +8,7 @@ function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorag
 if(ls('wl_d')===D)return;
 var rm=false;try{rm=matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
 function ar(n){return String(n).replace(/\d/g,function(s){return '٠١٢٣٤٥٦٧٨٩'[+s]})}
-function api(a){return fetch('https://abacus.jasoncameron.dev/'+a+'/msu2001-com/visitors').then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){return j.value})}
+function api(a){return Promise.race([fetch('https://abacus.jasoncameron.dev/'+a+'/msu2001-com/visitors').then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){return j.value}),new Promise(function(_,x){setTimeout(x,a==='hit'?6000:2500)})])}
 var had=ls('msu_counted')==='1'&&ls('msu_no');
 var info=null,ready=false;
 function getInfo(cb){var n=0;(function w(){
