@@ -588,7 +588,7 @@ function escapeHtml(s){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt
 function renderDateBar(){
   const t = localToday(), hp = hijriParts(t);
   $('hNum').textContent = hp.y + '/' + pad(hp.m) + '/' + pad(hp.d) + ' هـ';
-  $('gNum').textContent = pad(t.getUTCDate()) + '/' + pad(t.getUTCMonth() + 1) + '/' + t.getUTCFullYear() + ' م';
+  $('gNum').textContent = t.getUTCFullYear() + '/' + pad(t.getUTCMonth() + 1) + '/' + pad(t.getUTCDate()) + ' م';
   $('hName').textContent = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura-nu-latn', {weekday:'long', day:'numeric', month:'long', year:'numeric', timeZone:'UTC'}).format(t);
   $('gName').textContent = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', {day:'numeric', month:'long', year:'numeric', timeZone:'UTC'}).format(t) + ' م';
 }
