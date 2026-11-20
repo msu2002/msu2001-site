@@ -171,6 +171,82 @@
   @media(max-width:600px){.yb-months span:nth-child(even){display:none}}
   .foot{text-align:center;color:var(--muted);font-size:.8rem;margin-top:26px}
   @media print{.theme,.evmore,#details .row,.head button{display:none}.card{box-shadow:none}}
+  [hidden]{display:none!important}
+  select{font:inherit;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);min-width:110px;flex:1;font-size:16px}
+  input[type=number],input[type=date]{font:inherit;font-size:16px;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);min-width:0;flex:1;width:100%}
+  input[type=text]{font-size:16px}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @keyframes bump{0%{transform:translateY(-6px);opacity:.3}100%{transform:none;opacity:1}}
+  @keyframes pulseG{0%,100%{box-shadow:0 0 0 0 rgba(232,200,122,.5)}50%{box-shadow:0 0 0 10px rgba(232,200,122,0)}}
+  @keyframes slN{from{opacity:.2;transform:translateX(-28px)}to{opacity:1;transform:none}}
+  @keyframes slP{from{opacity:.2;transform:translateX(28px)}to{opacity:1;transform:none}}
+  .dayinfo,.live,.rem{animation:rise .35s ease both}
+  #days.sl-n{animation:slN .3s ease both}#days.sl-p{animation:slP .3s ease both}
+  .bump{animation:bump .28s ease both}
+  .swipehint{display:none;text-align:center;color:var(--muted);font-size:.78rem;margin-top:8px}
+  @media(pointer:coarse){.swipehint{display:block}}
+  /* أقرب مناسبة — عدّ تنازلي حيّ */
+  .live{margin-bottom:18px;border-color:rgba(197,155,63,.5);background:radial-gradient(700px 220px at 90% -20%,rgba(197,155,63,.18),transparent 60%),linear-gradient(135deg,var(--green-soft),var(--card))}
+  .lv-eye{display:inline-block;font-size:.76rem;font-weight:800;color:var(--gold-ink);border:1px solid rgba(197,155,63,.45);border-radius:999px;padding:1px 12px}
+  .lv-title{font-family:var(--font-display);font-weight:800;font-size:clamp(1.3rem,4.4vw,2rem);line-height:1.35;margin:8px 0 2px}
+  .lv-sub{color:var(--muted);font-size:.9rem}
+  .units{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:16px 0 4px}
+  .u{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:14px;padding:12px 4px 8px;text-align:center}
+  :root[data-theme="light"] .u{background:rgba(0,0,0,.03)}
+  .u b{display:block;font-family:var(--font-display);font-size:clamp(1.7rem,7.5vw,3rem);font-weight:800;line-height:1.1;color:var(--gold-ink);direction:ltr}
+  .u small{color:var(--muted);font-size:.8rem}
+  .lv-today{font-family:var(--font-display);font-weight:800;font-size:clamp(2rem,9vw,3.4rem);color:var(--gold-ink);margin:14px 0 4px}
+  .lv-og{margin-top:10px;font-size:.85rem;color:var(--blue)}
+  .lv-next{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .chip2{font-size:.78rem;border:1px solid var(--line);border-radius:999px;padding:2px 12px;color:var(--muted);background:var(--card)}
+  /* أزرار الإجراءات */
+  .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}
+  .cd .acts{justify-content:center}
+  .ab{font-size:.78rem;padding:5px 11px;border-radius:999px;font-family:var(--font-display);font-weight:700}
+  .ab.on{background:linear-gradient(135deg,var(--green-2),var(--green));color:#fff;border-color:transparent}
+  .hint{font-size:.76rem;color:var(--green-2);font-weight:700}
+  .rem{margin-bottom:14px;border:1px solid var(--gold);border-radius:14px;padding:10px 14px;background:var(--gold-soft);display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-weight:700}
+  .rem button{margin-inline-start:auto;padding:4px 12px;border-radius:999px;font-size:.8rem}
+  /* صلوات اليوم المحدد */
+  .dpray{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:12px}
+  .dpray div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:5px 4px;text-align:center;font-size:.8rem;color:var(--muted)}
+  .dpray b{display:block;font-family:var(--font-display);color:var(--ink);font-size:.95rem}
+  .dpl{margin-top:8px;font-size:.78rem;color:var(--muted)}
+  .dev{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
+  /* الإعدادات */
+  details.set{margin:10px 0;border:1px solid var(--line);border-radius:12px;padding:6px 12px;background:var(--bg)}
+  details.set summary{cursor:pointer;font-family:var(--font-display);font-weight:700;padding:4px 0}
+  .setbody{padding:6px 0 4px;display:grid;gap:10px}
+  .setbody label{font-size:.82rem;color:var(--muted);display:block;margin-bottom:4px}
+  .ck{display:flex;gap:8px;align-items:center;font-size:.92rem;color:var(--ink);margin:2px 0}
+  .ck input{width:18px;height:18px;accent-color:var(--green-2)}
+  .prayer-now.adhan{background:linear-gradient(135deg,var(--green),var(--gold));animation:pulseG 1.4s ease infinite}
+  .prayer-now.adhan .count{color:#fff;font-size:1.5rem}
+  /* المحوّل */
+  .cv-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  @media(max-width:700px){.cv-grid{grid-template-columns:minmax(0,1fr)}}
+  .cv{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--bg)}
+  .cv label{font-family:var(--font-display);font-weight:700;display:block;margin-bottom:8px}
+  .cv-out{margin-top:10px;font-family:var(--font-display);font-weight:700;line-height:1.6;min-height:1.6em}
+  .cv-out small{display:block;color:var(--muted);font-family:var(--font-body);font-weight:400}
+  /* العام الدراسي */
+  .yb-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:26px}
+  .yb-stats div{border:1px solid var(--line);border-radius:12px;padding:8px 6px;text-align:center;background:var(--bg)}
+  .yb-stats b{display:block;font-family:var(--font-display);font-size:clamp(1.2rem,5vw,1.7rem);color:var(--gold-ink);line-height:1.2}
+  .yb-stats small{color:var(--muted);font-size:.74rem}
+  .yb-track{cursor:pointer;overflow:visible}
+  .yb-track .fill{position:absolute;top:0;bottom:0;inset-inline-start:0;border-radius:10px 0 0 10px;background:linear-gradient(90deg,rgba(23,163,90,.35),rgba(23,163,90,.12));pointer-events:none}
+  .yb-track .seg{cursor:pointer;transition:transform .15s}
+  .yb-track .seg:hover,.yb-track .seg.on{transform:scaleY(1.25);outline:2px solid var(--gold)}
+  .yb-info{margin-top:6px;font-size:.84rem;color:var(--ink);min-height:2.6em;border-top:1px dashed var(--line);padding-top:8px}
+  .yb-note{font-size:.74rem;color:var(--muted);margin-top:4px}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+  .grid>*,.card{min-width:0}
+  @media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+  .row>select,.row>input{min-width:0}
+  #citySel{flex:1 1 140px}
+  .dow,.days{grid-template-columns:repeat(7,minmax(0,1fr))}
+  .day{min-width:0}
 </style>
 <script>
 (function(){if(!/[?&]embed=1/.test(location.search))return;var d=document.documentElement;d.classList.add('embed');
@@ -201,6 +277,9 @@ addEventListener('load',send);if(window.ResizeObserver)new ResizeObserver(send).
     </div>
   </section>
 
+  <div id="remBanner"></div>
+  <section class="card live" id="live" hidden></section>
+
   <div class="grid">
     <section class="card">
       <div class="head">
@@ -213,16 +292,28 @@ addEventListener('load',send);if(window.ResizeObserver)new ResizeObserver(send).
       </div>
       <div class="dow" id="dow"></div>
       <div class="days" id="days"></div>
+      <div class="swipehint">اسحب يمينًا أو يسارًا للتنقل بين الأشهر</div>
       <div id="details"></div>
     </section>
 
     <aside class="card">
       <h2>أوقات الصلاة</h2>
       <div class="row">
-        <input type="text" id="city" placeholder="المدينة (بالإنجليزية)" value="Ar Rass">
-        <input type="text" id="country" placeholder="الدولة" value="Saudi Arabia">
+        <select id="citySel" aria-label="المدينة"></select>
         <button id="loadTimes" class="primary">تحديث</button>
       </div>
+      <div class="row" id="customRow" hidden>
+        <input type="text" id="city" placeholder="المدينة (بالإنجليزية)" value="Ar Rass">
+        <input type="text" id="country" placeholder="الدولة" value="Saudi Arabia">
+      </div>
+      <details class="set"><summary>⚙️ الإعدادات</summary><div class="setbody">
+        <div><label for="methodSel">طريقة حساب الأوقات</label><select id="methodSel"></select></div>
+        <div><label>المناسبات التي تظهر لك</label>
+          <label class="ck"><input type="checkbox" id="ckEv"> المناسبات الوطنية والدينية والفصول</label>
+          <label class="ck"><input type="checkbox" id="ckMo"> الرواتب والدعم</label>
+          <label class="ck"><input type="checkbox" id="ckSc"> إجازات المدارس</label></div>
+        <div class="muted">تُحفظ اختياراتك في متصفحك فقط.</div>
+      </div></details>
       <div id="timesErr" class="err"></div>
       <div class="prayer-now">
         <div class="muted" id="nextLabel">&nbsp;</div>
@@ -233,8 +324,17 @@ addEventListener('load',send);if(window.ResizeObserver)new ResizeObserver(send).
     </aside>
   </div>
 
+  <section class="card conv" id="conv" style="margin-top:18px">
+    <h2>محوّل التاريخ</h2>
+    <div class="cv-grid">
+      <div class="cv"><label for="cvG">من الميلادي إلى الهجري</label><input type="date" id="cvG" min="1900-01-01" max="2100-12-31"><div class="cv-out" id="cvGo"></div></div>
+      <div class="cv"><label>من الهجري إلى الميلادي</label><div class="row" style="margin:0"><input type="number" id="cvHy" min="1300" max="1600" placeholder="السنة" inputmode="numeric" aria-label="السنة الهجرية"><select id="cvHm" aria-label="الشهر الهجري"></select><input type="number" id="cvHd" min="1" max="30" placeholder="اليوم" inputmode="numeric" aria-label="اليوم"></div><div class="cv-out" id="cvHo"></div></div>
+    </div>
+  </section>
+
   <section class="card" style="margin-top:18px">
     <h2>المناسبات القادمة</h2>
+    <div class="row"><button id="icsAll">📅 تنزيل كل المناسبات القادمة (ملف تقويم ICS)</button><span class="muted" id="icsHint"></span></div>
     <div class="evlist" id="evList"></div>
     <button class="evmore" id="evMore" style="display:none"></button>
     <div id="evFull" hidden></div>
@@ -638,15 +738,466 @@ function tick(){
   $('countdown').textContent = pad(Math.floor(s / 3600)) + ':' + pad(Math.floor(s % 3600 / 60)) + ':' + pad(s % 60);
   if (s === 0) renderTimes();
 }
-setInterval(tick, 1000);
+/* tick في الإصدار التفاعلي */
 
 const place = load('hc_place', null);
 if (place){ $('city').value = place.city; $('country').value = place.country; }
 $('loadTimes').onclick = loadTimes;
 
-renderDateBar();
-render();
-loadTimes();
+</script>
+<script>
+/* ===== الإصدار التفاعلي ===== */
+const CITIES = [['الرس','Ar Rass'],['بريدة','Buraydah'],['عنيزة','Unayzah'],['الرياض','Riyadh'],['جدة','Jeddah'],['مكة المكرمة','Makkah'],['المدينة المنورة','Madinah'],['الدمام','Dammam'],['الخبر','Khobar'],['الطائف','Taif'],['أبها','Abha'],['تبوك','Tabuk'],['حائل','Hail'],['جازان','Jazan'],['نجران','Najran']].map(([ar, city]) => ({ar, city, country:'Saudi Arabia'}));
+const METHODS = [[4,'أم القرى (مكة)'],[3,'رابطة العالم الإسلامي'],[5,'الهيئة المصرية'],[2,'أمريكا الشمالية (ISNA)'],[1,'جامعة كراتشي']];
+const HM_NAMES = ['محرم','صفر','ربيع الأول','ربيع الآخر','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
+const RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+let method = +load('hc_method', 4) || 4;
+let cats = Object.assign({events:true, money:true, school:true}, load('hc_cats', {}));
+let placeAr = (load('hc_place', null) || {}).ar || '';
+const catOf = t => t === 'money' ? 'money' : t === 'school' ? 'school' : 'events';
+const h32 = s => { let h = 0; for (const c of s) h = (h * 31 + c.codePointAt(0)) | 0; return (h >>> 0).toString(16); };
+const gNumY = d => d.getUTCFullYear() + '/' + pad(d.getUTCMonth() + 1) + '/' + pad(d.getUTCDate()) + ' م';
+const dayDiff = (d, t) => Math.round((d - (t || localToday())) / DAY_MS);
+
+function relPast(n){ n = -n; return n === 1 ? 'أمس' : n === 2 ? 'قبل يومين' : 'قبل ' + n + (n <= 10 ? ' أيام' : ' يومًا'); }
+
+/* ---------- فلترة الفئات ---------- */
+function eventsOnDay(date){
+  const out = upcomingEvents(date, [], 0).map(e => ({title:e.title, type:e.type, approx:e.approx, date:e.date, hijri:e.hijri}));
+  for (const b of SCHOOL_BREAKS) if (date >= parseYmd(b.from) && date <= parseYmd(b.to)) out.push({title:b.title, type:'school', date:parseYmd(b.from), to:parseYmd(b.to), approx:b.approx});
+  return out.filter(e => cats[catOf(e.type)]);
+}
+function monthEventMap(month){
+  const first = month.days[0].date, last = month.days[month.days.length - 1].date;
+  const map = {}, add = (d, t) => { const k = ymd(d); (map[k] = map[k] || []).push(t); };
+  for (const e of upcomingEvents(first, [], Math.round((last - first) / DAY_MS))) if (cats[catOf(e.type)]) add(e.date, e.title);
+  if (cats.school) for (const b of SCHOOL_BREAKS){
+    const f = parseYmd(b.from), t = parseYmd(b.to);
+    for (let d = new Date(Math.max(f, first)); d <= Math.min(t, last); d = new Date(d.getTime() + DAY_MS)) add(d, b.title);
+  }
+  return map;
+}
+function buildSections(today, custom){
+  const list = upcomingEvents(today, custom, 365), seen = new Set(), ev = [], mo = [];
+  for (const e of list){ if (seen.has(e.title)) continue; seen.add(e.title); (e.type === 'money' ? mo : ev).push(e); }
+  return {events:cats.events ? ev : [], money:cats.money ? mo : [], school:cats.school ? schoolItems(today) : []};
+}
+
+/* ---------- سجل الأحداث + أزرار الإجراءات ---------- */
+const REG = {};
+const evKey = e => ymd(e.date) + '|' + e.title;
+function actsHtml(e){
+  const k = evKey(e); REG[k] = e;
+  const on = rems.includes(k);
+  return '<div class="acts"><button class="ab' + (on ? ' on' : '') + '" data-a="rem" data-k="' + escapeHtml(k) + '" aria-label="ذكّرني بـ ' + escapeHtml(e.title) + '">' + (on ? '🔔 تمّ التذكير' : '🔔 ذكّرني') + '</button>' +
+         '<button class="ab" data-a="ics" data-k="' + escapeHtml(k) + '" aria-label="أضف ' + escapeHtml(e.title) + ' إلى تقويمي">📅 أضف لتقويمي</button>' +
+         '<button class="ab" data-a="img" data-k="' + escapeHtml(k) + '" aria-label="شارك ' + escapeHtml(e.title) + ' كصورة">🖼 صورة</button></div>';
+}
+function cardHtml(big, cap, sub, soon, tags, e){
+  return '<div class="cd' + (soon ? ' soon' : '') + '">' + (tags || '') + '<div class="cdn">' + big + '</div><div class="cdt">' + cap + '</div><div class="cds">' + sub + '</div>' + (e ? actsHtml(e) : '') + '</div>';
+}
+function eventCard(e, today){
+  const n = dayDiff(e.date, today), w = cdWords(n);
+  const sub = e.hijri ? hDMY.format(e.date) + ' • ' + gShort(e.date, today) : gShort(e.date, today);
+  let tags = '';
+  if (e.approx) tags = '<span class="tagc">تقريبي</span>';
+  else if (e.every) tags = '<span class="tagc">كل ' + e.every + ' من الشهر</span>';
+  return cardHtml(w.big, w.cap + escapeHtml(e.title), sub, n <= 7, tags, e);
+}
+function schoolCard(e, today){
+  const n = dayDiff(e.date, today);
+  const tags = e.nearest ? '<span class="tagc near">الأقرب</span>' : (e.approx ? '<span class="tagc">تقديرية</span>' : '');
+  if (e.single){ const w = cdWords(n); return cardHtml(w.big, w.cap + escapeHtml(e.title), gFull.format(e.date), false, tags, e); }
+  const range = gShort(e.date, today) + ' — ' + gShort(e.to, today);
+  if (e.ongoing) return cardHtml('الآن', escapeHtml(e.title) + ' — جارية', range, true, tags, e);
+  const w = cdWords(n);
+  return cardHtml(w.big, w.cap + escapeHtml(e.title), range, n <= 7, tags, e);
+}
+function hintNear(btn, msg){
+  const box = btn.closest('.acts'); if (!box) return;
+  let h = box.querySelector('.hint'); if (!h){ h = document.createElement('span'); h.className = 'hint'; box.appendChild(h); }
+  h.textContent = msg; clearTimeout(h._t); h._t = setTimeout(() => h.remove(), 3500);
+}
+
+/* ---------- ملفات التقويم ICS ---------- */
+function icsEsc(s){ return String(s).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n'); }
+function fold(line){
+  const enc = new TextEncoder(); let out = '', cur = '', bytes = 0, first = true;
+  for (const ch of line){
+    const b = enc.encode(ch).length;
+    if (bytes + b > (first ? 73 : 72)){ out += (first ? '' : '\r\n ') + cur; first = false; cur = ''; bytes = 0; }
+    cur += ch; bytes += b;
+  }
+  return out + (first ? '' : '\r\n ') + cur;
+}
+const icsD = d => d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate());
+function buildIcs(list){
+  const L = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//msu2001.com//Hijri Calendar//AR','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:' + icsEsc('مناسبات التقويم الهجري — msu2001.com'),'X-WR-TIMEZONE:Asia/Riyadh'];
+  const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+  for (const e of list){
+    const end = new Date((e.to || e.date).getTime() + DAY_MS);
+    const note = e.approx ? 'الموعد تقريبي وقد يختلف بيوم؛ يُرجع للإعلان الرسمي.' : 'يُرجع للإعلان الرسمي عند الحاجة.';
+    L.push('BEGIN:VEVENT', 'UID:' + icsD(e.date) + '-' + h32(e.title) + '@msu2001.com', 'DTSTAMP:' + stamp,
+      'DTSTART;VALUE=DATE:' + icsD(e.date), 'DTEND;VALUE=DATE:' + icsD(end),
+      'SUMMARY:' + icsEsc(e.title + (e.approx ? ' (تقريبي)' : '')),
+      'DESCRIPTION:' + icsEsc(hDMY.format(e.date) + ' — ' + note + ' | msu2001.com/hijri/'),
+      'TRANSP:TRANSPARENT', 'BEGIN:VALARM', 'TRIGGER:-PT15H', 'ACTION:DISPLAY', 'DESCRIPTION:' + icsEsc(e.title), 'END:VALARM', 'END:VEVENT');
+  }
+  L.push('END:VCALENDAR');
+  return L.map(fold).join('\r\n') + '\r\n';
+}
+function dl(name, blob){
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.style.display = 'none';
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+}
+function downloadIcs(list, name){ dl(name + '.ics', new Blob([buildIcs(list)], {type:'text/calendar;charset=utf-8'})); }
+function allIcsList(){
+  const today = localToday(), out = upcomingEvents(today, [], 365).filter(e => cats[catOf(e.type)]);
+  if (cats.school) for (const s of schoolItems(today)) out.push({title:s.title, date:s.date, to:s.to, type:'school', approx:s.approx});
+  out.sort((a, b) => a.date - b.date);
+  return out;
+}
+
+/* ---------- التذكيرات (تعمل أثناء فتح الصفحة) ---------- */
+let rems = load('hc_rem', []);
+function toggleRem(k, btn){
+  const i = rems.indexOf(k); if (i >= 0) rems.splice(i, 1); else rems.push(k);
+  save('hc_rem', rems);
+  document.querySelectorAll('[data-a="rem"]').forEach(b => { const on = rems.includes(b.dataset.k); b.classList.toggle('on', on); b.textContent = on ? '🔔 تمّ التذكير' : '🔔 ذكّرني'; });
+  hintNear(btn, i >= 0 ? 'أُلغي التذكير' : 'سيظهر تنبيه هنا قبل الموعد بيوم (والصفحة مفتوحة)');
+  checkRems();
+}
+function checkRems(){
+  const today = localToday(), td = ymd(today), dis = load('hc_remd', {});
+  const keep = rems.filter(k => parseYmd(k.split('|')[0]) >= today);
+  if (keep.length !== rems.length){ rems = keep; save('hc_rem', rems); }
+  const items = [];
+  for (const k of rems){
+    const [ds, ...t] = k.split('|'), n = dayDiff(parseYmd(ds), today);
+    if (n <= 1 && dis[k] !== td) items.push({k, title:t.join('|'), n});
+  }
+  $('remBanner').innerHTML = items.map(x => '<div class="rem"><span>🔔 تذكير: ' + escapeHtml(x.title) + ' — ' + (x.n === 0 ? 'اليوم' : 'غدًا') + '</span><button data-dis="' + escapeHtml(x.k) + '">تمّ</button></div>').join('');
+}
+
+/* ---------- العدّ التنازلي الحيّ لأقرب مناسبة ---------- */
+let liveTarget = null;
+function nextEvent(today){
+  const sec = buildSections(today, events);
+  const all = [...sec.events, ...sec.money, ...sec.school.filter(e => !e.ongoing)].filter(e => e.date >= today).sort((a, b) => a.date - b.date);
+  return {next:all[0], rest:all.slice(1, 4), ongoing:sec.school.find(e => e.ongoing)};
+}
+function renderLive(){
+  const el = $('live'), today = localToday(), {next, rest, ongoing} = nextEvent(today);
+  if (!next){ el.hidden = true; liveTarget = null; return; }
+  el.hidden = false;
+  const n = dayDiff(next.date, today);
+  liveTarget = n > 0 ? new Date(next.date.getUTCFullYear(), next.date.getUTCMonth(), next.date.getUTCDate()) : null;
+  const sub = (next.hijri ? hDMY.format(next.date) + ' • ' : '') + gFull.format(next.date) + (next.to ? ' — ' + gShort(next.to, today) : '');
+  let html = '<span class="lv-eye">أقرب مناسبة</span><div class="lv-title">' + escapeHtml(next.title) + (next.approx ? ' <small class="muted">(تقريبي)</small>' : '') + '</div><div class="lv-sub">' + sub + '</div>';
+  html += n > 0
+    ? '<div class="units"><div class="u"><b data-u="d">0</b><small>يوم</small></div><div class="u"><b data-u="h">00</b><small>ساعة</small></div><div class="u"><b data-u="m">00</b><small>دقيقة</small></div><div class="u"><b data-u="s">00</b><small>ثانية</small></div></div>'
+    : '<div class="lv-today">اليوم 🎉</div>';
+  if (ongoing) html += '<div class="lv-og">🏫 ' + escapeHtml(ongoing.title) + ' جارية الآن — حتى ' + gShort(ongoing.to, today) + '</div>';
+  html += actsHtml(next);
+  if (rest.length) html += '<div class="lv-next">' + rest.map(e => '<span class="chip2">' + escapeHtml(e.title) + ' · ' + relLabel(dayDiff(e.date, today)) + '</span>').join('') + '</div>';
+  el.innerHTML = html;
+  liveTick(true);
+}
+function setU(k, v){
+  const e = document.querySelector('[data-u="' + k + '"]'); if (!e || e.textContent === v) return;
+  e.textContent = v; if (!RM){ e.classList.remove('bump'); void e.offsetWidth; e.classList.add('bump'); }
+}
+function liveTick(first){
+  if (!liveTarget) return;
+  const diff = liveTarget - new Date();
+  if (diff <= 0){ renderLive(); return; }
+  const s = Math.floor(diff / 1000);
+  const set = first ? (k, v) => { const e = document.querySelector('[data-u="' + k + '"]'); if (e) e.textContent = v; } : setU;
+  set('d', String(Math.floor(s / 86400))); set('h', pad(Math.floor(s % 86400 / 3600))); set('m', pad(Math.floor(s % 3600 / 60))); set('s', pad(s % 60));
+}
+
+/* ---------- بطاقة اليوم المحدد + صلوات ذلك اليوم ---------- */
+const dayCache = {};
+const curPlace = () => ({city:$('city').value.trim(), country:$('country').value.trim()});
+async function dayTimes(date){
+  if (ymd(date) === ymd(localToday()) && timings) return timings;
+  const p = curPlace(), key = p.city + '|' + method + '|' + ymd(date);
+  if (dayCache[key]) return dayCache[key];
+  const url = 'https://api.aladhan.com/v1/timingsByCity/' + pad(date.getUTCDate()) + '-' + pad(date.getUTCMonth() + 1) + '-' + date.getUTCFullYear() + '?city=' + encodeURIComponent(p.city) + '&country=' + encodeURIComponent(p.country) + '&method=' + method;
+  const r = await fetch(url), j = await r.json();
+  if (!r.ok || !j.data) throw new Error('bad');
+  return (dayCache[key] = j.data.timings);
+}
+function renderDetails(){
+  const [y, m, d] = selected.split('-').map(Number), date = utcNoon(y, m - 1, d), n = dayDiff(date);
+  const rel = n === 0 ? 'اليوم' : n > 0 ? relLabel(n) : relPast(n);
+  const evs = eventsOnDay(date);
+  let html = '<div class="dayinfo"><div class="di-h"><b>' + hFullFmt.format(date) + '</b><span class="badge">' + rel + '</span></div>' +
+             '<div class="muted">الموافق ' + gFull.format(date) + ' • ' + gNumY(date) + '</div>';
+  if (evs.length) html += evs.map(e => '<div class="dev"><span class="pill ' + e.type + '">' + escapeHtml(e.title) + (e.approx ? ' <small>(تقريبي)</small>' : '') + '</span></div>' + (e.date >= localToday() || e.to ? actsHtml(e) : '')).join('');
+  else html += '<div class="muted" style="margin-top:8px">لا توجد مناسبات في هذا اليوم.</div>';
+  html += '<div id="dpray" class="dpl">جارٍ جلب أوقات الصلاة…</div></div>';
+  $('details').innerHTML = html;
+  const mark = selected;
+  dayTimes(date).then(t => {
+    if (selected !== mark || !$('dpray')) return;
+    $('dpray').className = '';
+    $('dpray').innerHTML = '<div class="dpl" style="margin-top:10px">أوقات الصلاة في ' + escapeHtml(placeAr || curPlace().city) + '</div><div class="dpray">' + PRAYERS.map(([k, nm]) => '<div>' + nm + '<b>' + t[k].slice(0, 5) + '</b></div>').join('') + '</div>';
+  }).catch(() => { if (selected === mark && $('dpray')) $('dpray').textContent = 'تعذر جلب أوقات الصلاة لهذا اليوم.'; });
+}
+function go(dir){
+  view = shiftMonth(view.y, view.m, dir); render();
+  if (!RM){ const e = $('days'); e.classList.remove('sl-n', 'sl-p'); void e.offsetWidth; e.classList.add(dir > 0 ? 'sl-n' : 'sl-p'); }
+}
+$('prev').onclick = () => go(-1);
+$('next').onclick = () => go(1);
+(function(){
+  let sx = 0, sy = 0, st = 0; const el = $('days');
+  el.addEventListener('touchstart', e => { const t = e.touches[0]; sx = t.clientX; sy = t.clientY; st = Date.now(); }, {passive:true});
+  el.addEventListener('touchend', e => {
+    const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5 && Date.now() - st < 700) go(dx > 0 ? 1 : -1);
+  }, {passive:true});
+})();
+
+/* ---------- المحوّل ---------- */
+function setupConv(){
+  const hm = $('cvHm'); hm.innerHTML = HM_NAMES.map((n, i) => '<option value="' + (i + 1) + '">' + n + '</option>').join('');
+  const t = localToday(), hp = hijriParts(t);
+  $('cvG').value = ymd(t); $('cvHy').value = hp.y; hm.value = hp.m; $('cvHd').value = hp.d;
+  const jump = date => { const p = hijriParts(date); view = {y:p.y, m:p.m}; selected = ymd(date); render(); const c = $('days'); if (c && c.scrollIntoView) c.scrollIntoView({behavior:RM ? 'auto' : 'smooth', block:'center'}); };
+  const g2h = () => {
+    const v = $('cvG').value, o = $('cvGo');
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(v)){ o.textContent = ''; return; }
+    const [y, m, d] = v.split('-').map(Number); if (y < 1900 || y > 2100){ o.textContent = 'اختر تاريخًا بين 1900 و2100.'; return; }
+    const date = utcNoon(y, m - 1, d), hp2 = hijriParts(date);
+    o.innerHTML = hFullFmt.format(date) + '<small>' + hp2.y + '/' + pad(hp2.m) + '/' + pad(hp2.d) + ' هـ</small><button class="ab" id="cvGj">عرض في التقويم</button>';
+    $('cvGj').onclick = () => jump(date);
+  };
+  const h2g = () => {
+    const y = +$('cvHy').value, m = +hm.value, d = +$('cvHd').value, o = $('cvHo');
+    if (!y || !d){ o.textContent = ''; return; }
+    if (y < 1300 || y > 1600 || d < 1 || d > 30){ o.textContent = 'أدخل سنة بين 1300 و1600 ويومًا من 1 إلى 30.'; return; }
+    try {
+      const date = new Date(firstOfHijriMonth(y, m).getTime() + (d - 1) * DAY_MS), p = hijriParts(date);
+      if (p.y !== y || p.m !== m || p.d !== d){ o.textContent = 'هذا اليوم غير موجود في ذلك الشهر (الشهر 29 يومًا).'; return; }
+      o.innerHTML = gFull.format(date) + '<small>' + gNumY(date) + '</small><button class="ab" id="cvHj">عرض في التقويم</button>';
+      $('cvHj').onclick = () => jump(date);
+    } catch(e){ o.textContent = 'تعذر الحساب.'; }
+  };
+  $('cvG').oninput = g2h; ['cvHy', 'cvHd'].forEach(i => $(i).oninput = h2g); hm.onchange = h2g;
+  g2h(); h2g();
+}
+
+/* ---------- العام الدراسي ---------- */
+const inBreak = d => SCHOOL_BREAKS.some(b => d >= parseYmd(b.from) && d <= parseYmd(b.to));
+function schoolDays(from, to){ let n = 0; for (let d = new Date(from); d <= to; d = new Date(d.getTime() + DAY_MS)){ const w = d.getUTCDay(); if (w <= 4 && !inBreak(d)) n++; } return n; }
+function yearBar(today){
+  const s = parseYmd(SCHOOL_YEAR.start), e = parseYmd(SCHOOL_YEAR.end);
+  if (today < s || today > e) return '';
+  const span = e - s, pos = d => Math.max(0, Math.min(100, (d - s) / span * 100));
+  let segs = '';
+  SCHOOL_BREAKS.forEach((b, i) => {
+    const f = parseYmd(b.from), t = parseYmd(b.to), w = Math.max(1.2, pos(new Date(t.getTime() + DAY_MS)) - pos(f));
+    segs += '<i class="seg" data-bi="' + i + '" tabindex="0" role="button" aria-label="' + escapeHtml(b.title) + '" style="inset-inline-start:' + pos(f).toFixed(2) + '%;width:' + w.toFixed(2) + '%"></i>';
+  });
+  const mf = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', {month:'long', timeZone:'UTC'});
+  let months = '', c = new Date(Date.UTC(s.getUTCFullYear(), s.getUTCMonth() + 1, 1, 12));
+  while (c < e){ months += '<span style="inset-inline-start:' + pos(c).toFixed(2) + '%">' + mf.format(c) + '</span>'; c = new Date(Date.UTC(c.getUTCFullYear(), c.getUTCMonth() + 1, 1, 12)); }
+  const total = schoolDays(s, e), left = schoolDays(new Date(Math.max(today, s)), e), pct = Math.round((total - left) / total * 100);
+  return '<div class="yearbar"><div class="yb-stats"><div><b class="cnt" data-to="' + pct + '" data-suf="٪">' + pct + '٪</b><small>أُنجز من الأيام الدراسية</small></div>' +
+    '<div><b class="cnt" data-to="' + left + '">' + left + '</b><small>يوم دراسي متبقٍ</small></div>' +
+    '<div><b class="cnt" data-to="' + dayDiff(e, today) + '">' + dayDiff(e, today) + '</b><small>يومًا حتى نهاية العام</small></div></div>' +
+    '<div class="yb-track" id="ybTrack"><i class="fill" style="width:' + pos(today).toFixed(2) + '%"></i>' + segs + '<em class="here" style="inset-inline-start:' + pos(today).toFixed(2) + '%"><small>أنت هنا</small></em></div>' +
+    '<div class="yb-months">' + months + '</div><div class="yb-info" id="ybInfo">اضغط على أي إجازة (المظلّلة بالذهبي) أو أي نقطة على الشريط لعرض التفاصيل.</div>' +
+    '<div class="yb-note">الأيام الدراسية = الأحد إلى الخميس عدا الإجازات المسجّلة فقط، ولا تشمل أي تعليق أو اختبارات غير مدرجة. المتبقي يشمل اليوم.</div></div>';
+}
+function bindYear(today){
+  const tr = $('ybTrack'); if (!tr) return;
+  const info = $('ybInfo'), s = parseYmd(SCHOOL_YEAR.start), e = parseYmd(SCHOOL_YEAR.end);
+  tr.querySelectorAll('.seg').forEach(sg => {
+    const show = ev => {
+      ev.stopPropagation(); tr.querySelectorAll('.seg').forEach(x => x.classList.remove('on')); sg.classList.add('on');
+      const b = SCHOOL_BREAKS[+sg.dataset.bi], f = parseYmd(b.from), t = parseYmd(b.to), days = Math.round((t - f) / DAY_MS) + 1, n = dayDiff(f, today);
+      info.innerHTML = '<b>' + escapeHtml(b.title) + '</b> — ' + gShort(f, today) + ' إلى ' + gShort(t, today) + ' (' + days + ' يومًا) • ' + (today >= f && today <= t ? 'جارية الآن' : n > 0 ? relLabel(n) : 'انتهت') + (b.approx ? ' • تقديرية' : '');
+    };
+    sg.onclick = show; sg.onkeydown = ev => { if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); show(ev); } };
+  });
+  tr.onclick = ev => {
+    const r = tr.getBoundingClientRect(), rtl = getComputedStyle(tr).direction === 'rtl';
+    const fr = Math.max(0, Math.min(1, (rtl ? r.right - ev.clientX : ev.clientX - r.left) / r.width));
+    const d = new Date(s.getTime() + Math.round(fr * (e - s) / DAY_MS) * DAY_MS), n = dayDiff(d, today);
+    tr.querySelectorAll('.seg').forEach(x => x.classList.remove('on'));
+    info.innerHTML = '<b>' + gFull.format(d) + '</b> • ' + hDMY.format(d) + ' • ' + (n === 0 ? 'اليوم' : n > 0 ? relLabel(n) : relPast(n)) + (inBreak(d) ? ' • ضمن إجازة' : (d.getUTCDay() > 4 ? ' • عطلة أسبوعية' : ' • يوم دراسي'));
+  };
+}
+function runCounters(){
+  document.querySelectorAll('.cnt[data-to]').forEach(el => {
+    const to = +el.dataset.to, suf = el.dataset.suf || ''; if (RM || !to){ return; }
+    const t0 = performance.now(); el.textContent = '0' + suf;
+    const step = t => { const k = Math.min(1, (t - t0) / 700); el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))) + suf; if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  });
+}
+const _renderFull = renderFull;
+renderFull = function(today, sec){ _renderFull(today, sec); bindYear(today); runCounters(); };
+
+/* ---------- قائمة المناسبات (تحترم الفئات) ---------- */
+function renderEvents(){
+  const today = localToday(), list = upcomingEvents(today, events, 365).filter(e => cats[catOf(e.type)]), sec = buildSections(today, events);
+  const total = sec.events.length + sec.money.length + sec.school.length;
+  const featured = list.find(e => e.title === RULES.gMonthly[0].title) || list[0];
+  let html = '<div class="evrow today"><div class="evt">تاريخ اليوم</div><div class="evd"><span>' + hFullFmt.format(today) + '</span><span>' + gNumY(today) + '</span></div></div>';
+  if (!showAllEvents && featured){
+    const n = dayDiff(featured.date, today);
+    html += '<div class="evrow ' + featured.type + '"><div class="evt">' + escapeHtml(featured.title) + (featured.approx ? ' <small class="muted">(تقريبي)</small>' : '') + '<span class="badge">' + relLabel(n) + '</span></div><div class="evd"><span>' + hFullFmt.format(featured.date) + '</span><span>' + gNumY(featured.date) + '</span></div></div>';
+  }
+  $('evList').innerHTML = html;
+  $('evFull').hidden = !showAllEvents;
+  if (showAllEvents) renderFull(today, sec);
+  const more = $('evMore'), rest = Math.max(0, total - (featured ? 1 : 0));
+  if (rest){ more.style.display = ''; more.textContent = showAllEvents ? 'إخفاء باقي المناسبات' : 'عرض باقي المناسبات (' + rest + ')'; more.onclick = () => { showAllEvents = !showAllEvents; renderEvents(); }; }
+  else more.style.display = 'none';
+}
+
+/* ---------- أوقات الصلاة: مدن + طريقة حساب + أذان ---------- */
+let tz = null;
+function nowSecIn(){
+  try {
+    if (tz){
+      const p = new Intl.DateTimeFormat('en-GB', {timeZone:tz, hour:'2-digit', minute:'2-digit', second:'2-digit', hourCycle:'h23'}).formatToParts(new Date());
+      const g = t => +p.find(x => x.type === t).value; return g('hour') * 3600 + g('minute') * 60 + g('second');
+    }
+  } catch(e){}
+  const n = new Date(); return n.getHours() * 3600 + n.getMinutes() * 60 + n.getSeconds();
+}
+const hs = hhmm => { const [h, m] = hhmm.slice(0, 5).split(':').map(Number); return h * 3600 + m * 60; };
+function nextPrayer(){
+  const now = nowSecIn();
+  for (const [k, name] of PRAYERS){ const t = hs(timings[k]); if (t > now) return {k, name, secs:t - now}; }
+  return {k:'Fajr', name:'الفجر', secs:86400 - now + hs(timings.Fajr)};
+}
+function adhanNow(){
+  const now = nowSecIn();
+  for (const [k, name] of PRAYERS){ if (k === 'Sunrise') continue; const t = hs(timings[k]); if (now >= t && now - t < 90) return name; }
+  return null;
+}
+function renderTimes(){
+  if (!timings) return;
+  const nxt = nextPrayer();
+  $('times').innerHTML = PRAYERS.map(([k, name]) => '<li class="' + (k === nxt.k ? 'next' : '') + '"><span>' + name + '</span><span>' + timings[k].slice(0, 5) + '</span></li>').join('');
+  $('nextLabel').textContent = 'المتبقي على ' + nxt.name;
+}
+let lastAdhan = null;
+function tick(){
+  if (!timings) return;
+  const nxt = nextPrayer(), ad = adhanNow(), box = document.querySelector('.prayer-now');
+  box.classList.toggle('adhan', !!ad);
+  if (ad){ $('nextLabel').textContent = 'حان الآن موعد أذان ' + ad; $('countdown').textContent = '🕌 الله أكبر'; }
+  else {
+    const s = nxt.secs;
+    $('countdown').textContent = pad(Math.floor(s / 3600)) + ':' + pad(Math.floor(s % 3600 / 60)) + ':' + pad(s % 60);
+    if (lastAdhan) renderTimes();
+  }
+  lastAdhan = ad;
+}
+async function loadTimes(){
+  const p = curPlace();
+  $('timesErr').textContent = '';
+  if (!p.city || !p.country){ $('timesErr').textContent = 'أدخل المدينة والدولة.'; return; }
+  save('hc_place', {city:p.city, country:p.country, ar:placeAr}); save('hc_method', method);
+  try {
+    const url = 'https://api.aladhan.com/v1/timingsByCity?city=' + encodeURIComponent(p.city) + '&country=' + encodeURIComponent(p.country) + '&method=' + method;
+    const r = await fetch(url), j = await r.json();
+    if (!r.ok || !j.data) throw new Error('bad');
+    timings = j.data.timings; tz = (j.data.meta && j.data.meta.timezone) || null;
+    save('hc_tm', {k:p.city + '|' + method + '|' + ymd(localToday()), t:timings, tz});
+    renderTimes(); tick(); renderDetails();
+  } catch(e){
+    $('timesErr').textContent = 'تعذر جلب الأوقات. تأكد من اسم المدينة (بالإنجليزية) والاتصال بالإنترنت.';
+  }
+}
+$('loadTimes').onclick = loadTimes;
+function setupSettings(){
+  const sel = $('citySel');
+  sel.innerHTML = CITIES.map((c, i) => '<option value="' + i + '">' + c.ar + '</option>').join('') + '<option value="x">مدينة أخرى…</option>';
+  const p = load('hc_place', null);
+  let i = p ? CITIES.findIndex(c => c.city.toLowerCase() === p.city.toLowerCase()) : 0;
+  if (i < 0){ sel.value = 'x'; $('customRow').hidden = false; } else { sel.value = String(i); placeAr = CITIES[i].ar; $('city').value = CITIES[i].city; $('country').value = CITIES[i].country; }
+  sel.onchange = () => {
+    if (sel.value === 'x'){ $('customRow').hidden = false; placeAr = ''; $('city').focus(); return; }
+    $('customRow').hidden = true; const c = CITIES[+sel.value]; placeAr = c.ar; $('city').value = c.city; $('country').value = c.country; loadTimes();
+  };
+  const ms = $('methodSel'); ms.innerHTML = METHODS.map(([v, n]) => '<option value="' + v + '">' + n + '</option>').join(''); ms.value = String(method);
+  ms.onchange = () => { method = +ms.value; loadTimes(); };
+  [['events', 'ckEv'], ['money', 'ckMo'], ['school', 'ckSc']].forEach(([k, id]) => { $(id).checked = !!cats[k]; $(id).onchange = () => { cats[k] = $(id).checked; save('hc_cats', cats); render(); renderLive(); }; });
+}
+
+/* ---------- صورة المشاركة ---------- */
+function rr(x, a, b, w, h, r){ x.beginPath(); x.moveTo(a + r, b); x.arcTo(a + w, b, a + w, b + h, r); x.arcTo(a + w, b + h, a, b + h, r); x.arcTo(a, b + h, a, b, r); x.arcTo(a, b, a + w, b, r); x.closePath(); }
+function wrapText(x, text, maxW){
+  const words = text.split(' '), lines = []; let cur = '';
+  for (const w of words){ const t = cur ? cur + ' ' + w : w; if (x.measureText(t).width > maxW && cur){ lines.push(cur); cur = w; } else cur = t; }
+  if (cur) lines.push(cur); return lines;
+}
+async function shareImg(e, btn){
+  const FONT = '"Cairo","IBM Plex Sans Arabic","Segoe UI",Tahoma,Arial,sans-serif', W = 1080, H = 1350;
+  try { if (document.fonts && document.fonts.load) await Promise.race([document.fonts.load('800 80px Cairo'), new Promise(r => setTimeout(r, 600))]); } catch(_){}
+  const c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
+  const g = x.createLinearGradient(0, 0, W, H); g.addColorStop(0, '#0b3b2d'); g.addColorStop(.55, '#0a2a1c'); g.addColorStop(1, '#08130B'); x.fillStyle = g; x.fillRect(0, 0, W, H);
+  x.strokeStyle = 'rgba(232,200,122,.07)'; x.lineWidth = 2;
+  for (let i = 0; i < 9; i++){ const r = 120 + i * 110; x.beginPath(); x.moveTo(W / 2, 560 - r); x.lineTo(W / 2 + r, 560); x.lineTo(W / 2, 560 + r); x.lineTo(W / 2 - r, 560); x.closePath(); x.stroke(); }
+  x.strokeStyle = '#C59B3F'; x.lineWidth = 5; rr(x, 44, 44, W - 88, H - 88, 40); x.stroke();
+  x.strokeStyle = 'rgba(197,155,63,.4)'; x.lineWidth = 2; rr(x, 62, 62, W - 124, H - 124, 30); x.stroke();
+  x.fillStyle = '#E8C87A'; x.beginPath(); x.arc(W / 2, 196, 60, 0, Math.PI * 2); x.fill(); x.fillStyle = '#0a2a1c'; x.beginPath(); x.arc(W / 2 + 24, 180, 52, 0, Math.PI * 2); x.fill();
+  x.fillStyle = '#E8C87A'; x.beginPath(); x.arc(W / 2 + 62, 140, 9, 0, Math.PI * 2); x.fill();
+  x.direction = 'rtl'; x.textAlign = 'center'; x.textBaseline = 'alphabetic';
+  x.fillStyle = '#E8C87A'; x.font = '700 40px ' + FONT; x.fillText('موسوعة الرس التاريخية', W / 2, 330);
+  const today = localToday(), n = dayDiff(e.date, today);
+  x.fillStyle = '#FAF7F2';
+  let y = 520;
+  if (e.to && n <= 0 && today <= e.to){ x.font = '800 150px ' + FONT; x.fillStyle = '#E8C87A'; x.fillText('الآن', W / 2, y); y += 60; }
+  else if (n === 0){ x.font = '800 150px ' + FONT; x.fillStyle = '#E8C87A'; x.fillText('اليوم', W / 2, y); y += 60; }
+  else if (n === 1){ x.font = '800 150px ' + FONT; x.fillStyle = '#E8C87A'; x.fillText('غدًا', W / 2, y); y += 60; }
+  else if (n > 1){ x.font = '800 230px ' + FONT; x.fillStyle = '#E8C87A'; x.fillText(String(n), W / 2, y + 30); x.fillStyle = '#FAF7F2'; x.font = '600 48px ' + FONT; x.fillText(n <= 10 ? 'أيام على' : 'يومًا على', W / 2, y + 110); y += 150; }
+  else { x.font = '700 70px ' + FONT; x.fillStyle = '#E8C87A'; x.fillText('مضت', W / 2, y); y += 50; }
+  x.fillStyle = '#FAF7F2'; x.font = '800 92px ' + FONT;
+  const lines = wrapText(x, e.title, W - 220); y += 100;
+  for (const l of lines){ x.fillText(l, W / 2, y); y += 112; }
+  x.fillStyle = 'rgba(250,247,242,.85)'; x.font = '600 46px ' + FONT; y += 20;
+  if (e.hijri || true) { x.fillText(hDMY.format(e.date) + (e.to ? ' ←' : ''), W / 2, y); y += 66; }
+  x.fillText(gFull.format(e.date), W / 2, y); y += 62;
+  x.fillStyle = 'rgba(232,200,122,.9)'; x.font = '600 42px ' + FONT; x.fillText(gNumY(e.date), W / 2, y); y += 70;
+  if (e.approx){ x.fillStyle = '#E8C87A'; x.font = '600 34px ' + FONT; x.fillText('الموعد تقريبي وقد يختلف بيوم', W / 2, y); }
+  x.fillStyle = '#E8C87A'; x.font = '700 40px ' + FONT; x.fillText('msu2001.com/hijri', W / 2, H - 120);
+  const blob = await new Promise(r => c.toBlob(r, 'image/png'));
+  if (!blob){ hintNear(btn, 'تعذر إنشاء الصورة'); return; }
+  const name = 'msu-' + h32(e.title) + '-' + ymd(e.date) + '.png', file = new File([blob], name, {type:'image/png'});
+  try {
+    if (navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file], title:e.title, text:e.title + ' — ' + gNumY(e.date) + ' • msu2001.com/hijri'}); hintNear(btn, 'تمت المشاركة'); return; }
+  } catch(err){ if (err && err.name === 'AbortError') return; }
+  dl(name, blob); hintNear(btn, 'نُزّلت الصورة على جهازك');
+}
+
+/* ---------- ربط الأحداث العامة ---------- */
+document.addEventListener('click', ev => {
+  const b = ev.target.closest('[data-a]');
+  if (b){ const k = b.dataset.k, e = REG[k]; if (!e) return; const a = b.dataset.a;
+    if (a === 'ics'){ downloadIcs([e], 'msu-' + ymd(e.date)); hintNear(b, 'نُزّل الملف — افتحه لإضافته إلى تقويمك'); }
+    else if (a === 'rem') toggleRem(k, b);
+    else if (a === 'img') shareImg(e, b);
+    return; }
+  const d = ev.target.closest('[data-dis]');
+  if (d){ const dis = load('hc_remd', {}); dis[d.dataset.dis] = ymd(localToday()); save('hc_remd', dis); checkRems(); }
+});
+$('icsAll').onclick = () => { const l = allIcsList(); if (!l.length){ $('icsHint').textContent = 'لا توجد مناسبات ضمن الفئات المختارة.'; return; } downloadIcs(l, 'msu-hijri-events'); $('icsHint').textContent = 'نُزّل ملف يضم ' + l.length + ' مناسبة للسنة القادمة.'; };
+$('todayBtn').onclick = () => { const p = hijriParts(localToday()); view = {y:p.y, m:p.m}; selected = ymd(localToday()); render(); };
+
+setupSettings(); setupConv();
+renderDateBar(); render(); renderLive(); checkRems(); loadTimes();
+setInterval(() => { tick(); liveTick(); }, 1000);
+setInterval(() => { checkRems(); renderDateBar(); }, 60000);
+
 </script>
 </body>
 </html>
