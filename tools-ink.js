@@ -94,3 +94,6 @@ function add(){
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",add);else add();
 })();
+
+/* التقويم الهجري على الرئيسية — Fahad Al-Jarwan */
+(function(){var s=document.createElement("script");s.src="/hijri-home.js?v=1";document.head.appendChild(s)})();
