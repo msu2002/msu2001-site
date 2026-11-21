@@ -1,5 +1,5 @@
 {
- "checkedAt": "2026-11-21T03:34:16.666Z",
+ "checkedAt": "2026-11-21T11:46:12.395Z",
  "sources": [
   {
    "id": "qassim",
@@ -21,9 +21,9 @@
    "id": "moe",
    "name": "وزارة التعليم",
    "url": "https://www.moe.gov.sa/",
-   "ok": true,
-   "status": 200,
-   "itemCount": 118
+   "ok": false,
+   "status": 503,
+   "error": "HTTP 503"
   }
  ],
  "candidates": [],
