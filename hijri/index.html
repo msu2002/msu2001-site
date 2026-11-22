@@ -700,6 +700,8 @@ $('todayBtn').onclick = () => { const p = hijriParts(localToday()); view = {y:p.
 
 // ---------- أوقات الصلاة ----------
 const PRAYERS = [['Fajr','الفجر'],['Sunrise','الشروق'],['Dhuhr','الظهر'],['Asr','العصر'],['Maghrib','المغرب'],['Isha','العشاء']];
+// عرض الوقت بنظام ١٢ ساعة (ص/م)
+function t12(hhmm){ const [h, m] = hhmm.slice(0, 5).split(':').map(Number); const h12 = h % 12 || 12; return h12 + ':' + String(m).padStart(2, '0') + ' ' + (h < 12 ? 'ص' : 'م'); }
 let timings = null;
 
 async function loadTimes(){
@@ -728,7 +730,7 @@ function nextPrayer(){
 function renderTimes(){
   if (!timings) return;
   const nxt = nextPrayer();
-  $('times').innerHTML = PRAYERS.map(([k, name]) => '<li class="' + (k === nxt.k ? 'next' : '') + '"><span>' + name + '</span><span>' + timings[k].slice(0, 5) + '</span></li>').join('');
+  $('times').innerHTML = PRAYERS.map(([k, name]) => '<li class="' + (k === nxt.k ? 'next' : '') + '"><span>' + name + '</span><span>' + t12(timings[k]) + '</span></li>').join('');
   $('nextLabel').textContent = 'المتبقي على ' + nxt.name;
 }
 function tick(){
@@ -942,7 +944,7 @@ function renderDetails(){
   dayTimes(date).then(t => {
     if (selected !== mark || !$('dpray')) return;
     $('dpray').className = '';
-    $('dpray').innerHTML = '<div class="dpl" style="margin-top:10px">أوقات الصلاة في ' + escapeHtml(placeAr || curPlace().city) + '</div><div class="dpray">' + PRAYERS.map(([k, nm]) => '<div>' + nm + '<b>' + t[k].slice(0, 5) + '</b></div>').join('') + '</div>';
+    $('dpray').innerHTML = '<div class="dpl" style="margin-top:10px">أوقات الصلاة في ' + escapeHtml(placeAr || curPlace().city) + '</div><div class="dpray">' + PRAYERS.map(([k, nm]) => '<div>' + nm + '<b>' + t12(t[k]) + '</b></div>').join('') + '</div>';
   }).catch(() => { if (selected === mark && $('dpray')) $('dpray').textContent = 'تعذر جلب أوقات الصلاة لهذا اليوم.'; });
 }
 function go(dir){
@@ -1085,7 +1087,7 @@ function adhanNow(){
 function renderTimes(){
   if (!timings) return;
   const nxt = nextPrayer();
-  $('times').innerHTML = PRAYERS.map(([k, name]) => '<li class="' + (k === nxt.k ? 'next' : '') + '"><span>' + name + '</span><span>' + timings[k].slice(0, 5) + '</span></li>').join('');
+  $('times').innerHTML = PRAYERS.map(([k, name]) => '<li class="' + (k === nxt.k ? 'next' : '') + '"><span>' + name + '</span><span>' + t12(timings[k]) + '</span></li>').join('');
   $('nextLabel').textContent = 'المتبقي على ' + nxt.name;
 }
 let lastAdhan = null;
