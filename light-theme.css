@@ -1,0 +1,8 @@
+/* الوضع النهاري: قلب ألوان الصفحة المصممة داكنة، مع إبقاء الصور والرسوم والمرشد والمفتاح بألوانها الأصلية */
+html.light{filter:invert(1) hue-rotate(180deg);color-scheme:dark;background-color:#08130b}
+html.light body{color:#faf7f2!important;background-color:#08130b!important}
+html.light img,html.light video,html.light canvas,html.light picture,html.light iframe,html.light [style*="background-image"],html.light #pullTheme,html.light #fxGuide,html.light #fxLoad,html.light .fx-ring{filter:invert(1) hue-rotate(180deg)}
+html.light .saudi-card{background:#0e1c12b3!important;border:1px solid #c59b3f2e!important}
+html.light .saudi-card-subtle{background:#0a140d80!important;border:1px solid #ffffff14!important}
+html.light #fxGuide .fx-bub{background:#10281a!important;color:#faf7f2!important}
+html.light #fxLoad{background:#08130b!important;color:#faf7f2!important}
