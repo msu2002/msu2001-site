@@ -50,3 +50,5 @@ function stars(){var tools=document.getElementById('tools');if(!tools)return;[].
 function tick(){build();stars()}
 tick();new MutationObserver(tick).observe(document.documentElement,{childList:true,subtree:true});
 })();
+
+;(function(){var s=document.createElement("script");s.src="/theme-pull.js?v=1";s.defer=true;document.head.appendChild(s)})();
