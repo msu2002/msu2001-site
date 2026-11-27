@@ -1,12 +1,13 @@
 {
- "checkedAt": "2026-11-27T11:27:59.857Z",
+ "checkedAt": "2026-11-27T20:15:20.894Z",
  "sources": [
   {
    "id": "qassim",
    "name": "إدارة تعليم القصيم",
    "url": "https://sites.moe.gov.sa/Qassim/news/",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "status": 200,
+   "itemCount": 9
   },
   {
    "id": "rass",
@@ -20,8 +21,9 @@
    "id": "moe",
    "name": "وزارة التعليم",
    "url": "https://www.moe.gov.sa/",
-   "ok": false,
-   "error": "fetch failed"
+   "ok": true,
+   "status": 200,
+   "itemCount": 118
   }
  ],
  "candidates": [],
